@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Apps list.</title>
+    <!-- CSS files -->
+    <link href="./css/tabler.min.css?1685973381" rel="stylesheet"/>
+    <link href="./css/demo.min.css?1685973381" rel="stylesheet"/>
+    <style>
+      @import url('https://rsms.me/inter/inter.css');
+      :root {
+      	--tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+      }
+      body {
+      	font-feature-settings: "cv03", "cv04", "cv11";
+      }
+    </style>
+  </head>
+  <body >
+    <script src="./js/demo-theme.min.js?1685973381"></script>
+    <div class="page">
+      <!-- Navbar -->
+
+      <%- include('../partials/navbar.ejs') %>
+
+      <div class="page-wrapper">
+        <!-- Page header -->
+        <div class="page-header d-print-none">
+          <div class="container-xl">
+            <div class="row g-2 align-items-center">
+              <div class="col">
+                <h2 class="page-title">
+                  Apps
+                </h2>
+                <div class="text-secondary mt-1"><%= list_start %> - <%= list_end %> of <%= app_count %> Apps.</div>
+              </div>
+              <!-- Page title actions -->
+              <div class="col-auto ms-auto d-print-none">
+                <div class="d-flex">
+                  <form action="/apps" id="search" name="search" method="POST">
+                    <input type="search" class="form-control" name="search" placeholder="Search apps…"/>
+                  </form>
+                   <input type="submit" form="search" class="btn btn-outline-success h-50" value="search"/>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Page body -->
+        <div class="page-body">
+          <div class="container-xl">
+            <div class="row row-cards">
+
+              <%- apps_list %>
+              
+            </div>
+            <div class="d-flex mt-4">
+              <ul class="pagination ms-auto">
+                <li class="page-item">
+                  <a class="page-link" href="<%- prev %>" tabindex="-1" aria-disabled="true">
+                    <!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>
+                    prev
+                  </a>
+                </li>
+                <li class="page-item"><a class="page-link" href="/apps?page=1">1</a></li>
+                <li class="page-item"><a class="page-link" href="/apps?page=2">2</a></li>
+                <li class="page-item"><a class="page-link" href="/apps?page=3">3</a></li>
+                <li class="page-item"><a class="page-link" href="/apps?page=4">4</a></li>
+                <li class="page-item"><a class="page-link" href="/apps?page=5">5</a></li>
+                <li class="page-item">
+                  <a class="page-link" href="<%- next %>">
+                    next <!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <%- include('../partials/footer.ejs') %>
+
+      </div>
+    </div>
+    <!-- Libs JS -->
+    <!-- Tabler Core -->
+    <script src="./js/tabler.min.js?1685973381" defer></script>
+    <script src="./js/demo.min.js?1685973381" defer></script>
+  </body>
+</html>

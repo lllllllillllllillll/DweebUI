@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>DweebUI - Register</title>
+    <!-- CSS files -->
+    <link href="./css/tabler.min.css?1684106062" rel="stylesheet"/>
+    <link href="./css/demo.min.css?1684106062" rel="stylesheet"/>
+    <style>
+      @import url('https://rsms.me/inter/inter.css');
+      :root {
+      	--tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+      }
+      body {
+      	font-feature-settings: "cv03", "cv04", "cv11";
+      }
+    </style>
+  </head>
+  <body  class=" d-flex flex-column">
+    <script src="./js/demo-theme.js?1684106062"></script>
+    <div class="page page-center">
+
+      
+      <form class="container container-tight py-4" action="/register" method="POST" novalidate>
+        
+        <!-- <div class="text-center mb-4">
+          <a href="." class="navbar-brand navbar-brand-autodark"><img src="./static/logo.svg" height="36" alt=""></a>
+        </div> -->
+
+        <div class="card">
+          
+          <div class="card-body text-center py-4">
+            <h1 class="mt-1">Welcome to DweebUI!</h1>
+            <p class="text-muted">A Docker Web Interface</p>
+
+            <% if(error) { %>
+              <div class="alert alert-danger" role="alert">
+                  <%= error %>
+              </div>
+            <% } %>
+
+          </div>
+          <div class="card-body">
+            
+
+            <div class="row row-cards">
+              <div class="col-sm-6 col-md-6">
+                <div class="mb-2">
+                  <label class="form-label">First Name</label>
+                  <input type="text" class="form-control" id="first_name" name="first_name">
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-6">
+                <div class="mb-2">
+                  <label class="form-label">Last Name</label>
+                  <input type="text" class="form-control" id="last_name" name="last_name">
+                </div>
+              </div>
+            </div>
+            <div class="mb-2">
+              <label class="form-label">Username</label>
+              <input type="email" class="form-control" id="username" name="username">
+            </div>
+            <div class="mb-2">
+              <label class="form-label">Email address</label>
+              <input type="email" class="form-control" id="email" name="email">
+            </div>
+            <div class="mb-2">
+              <label class="form-label">Password</label>
+              <div class="input-group input-group-flat">
+                <input type="password" class="form-control" id="password" name="password"  autocomplete="off">
+                <span class="input-group-text">
+                  <a href="#" class="link-secondary" title="Show password" data-bs-toggle="tooltip"><!-- Download SVG icon from http://tabler-icons.io/i/eye -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" /></svg>
+                  </a>
+                </span>
+              </div>
+            </div>
+
+            <label class="form-label">Avatar</label>
+            <div class="mb-2">
+              <div class="row g-2">
+                <div class="col-6 col-sm-4">
+                  <label class="form-imagecheck mb-2">
+                    <input name="avatar" type="radio" value="rus.jpg" class="form-imagecheck-input" checked/>
+                    <span class="form-imagecheck-figure">
+                      <img src="./static/avatars/rus.jpg" alt="Group of people sightseeing in the city" class="form-imagecheck-image">
+                    </span>
+                  </label>
+                </div>
+                <div class="col-6 col-sm-4">
+                  <label class="form-imagecheck mb-2">
+                    <input name="avatar" type="radio" value="burns.jpg" class="form-imagecheck-input"/>
+                    <span class="form-imagecheck-figure">
+                      <img src="./static/avatars/burns.jpg" alt="Color Palette Guide. Sample Colors Catalog." class="form-imagecheck-image">
+                    </span>
+                  </label>
+                </div>
+                <div class="col-6 col-sm-4">
+                  <label class="form-imagecheck mb-2">
+                    <input name="avatar" type="radio" value="frank.jpg" class="form-imagecheck-input" />
+                    <span class="form-imagecheck-figure">
+                      <img src="./static/avatars/frank.jpg" alt="Stylish workplace with computer at home" class="form-imagecheck-image">
+                    </span>
+                  </label>
+                </div>
+                <div class="col-6 col-sm-4">
+                  <label class="form-imagecheck mb-2">
+                    <input name="avatar" type="radio" value="moe.jpg" class="form-imagecheck-input"/>
+                    <span class="form-imagecheck-figure">
+                      <img src="./static/avatars/moe.jpg" alt="Pink desk in the home office" class="form-imagecheck-image">
+                    </span>
+                  </label>
+                </div>
+                <div class="col-6 col-sm-4">
+                  <label class="form-imagecheck mb-2">
+                    <input name="avatar" type="radio" value="poochie.jpg" class="form-imagecheck-input" />
+                    <span class="form-imagecheck-figure">
+                      <img src="./static/avatars/poochie.jpg" alt="Young woman sitting on the sofa and working on her laptop" class="form-imagecheck-image">
+                    </span>
+                  </label>
+                </div>
+                <div class="col-6 col-sm-4">
+                  <label class="form-imagecheck mb-2">
+                    <input name="avatar" type="radio" value="skinner.jpg" class="form-imagecheck-input" />
+                    <span class="form-imagecheck-figure">
+                      <img src="./static/avatars/skinner.jpg" alt="Coffee on a table with other items" class="form-imagecheck-image">
+                    </span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-2">
+              <label class="form-check">
+                <input type="checkbox" class="form-check-input" name="tos"/>
+                <span class="form-check-label">Agree to <a href="/TOS" tabindex="-1">Terms of Service.</a>.</span>
+              </label>
+            </div>
+
+          </div>
+        </div>
+        
+        
+        <div class="row align-items-center mt-2">
+          
+          <div class="col">
+            <a href="/login">Sign-in</a>
+          </div>
+
+          <div class="col">
+            <div class="btn-list justify-content-end">
+
+              <div class="d-none d-md-flex">
+                
+                <a href="?theme=dark" class="nav-link px-0 hide-theme-dark" title="Enable dark mode" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                  <!-- Download SVG icon from http://tabler-icons.io/i/moon -->
+                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" /></svg>
+                </a>
+                <a href="?theme=light" class="nav-link px-0 hide-theme-light" title="Enable light mode" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                  <!-- Download SVG icon from http://tabler-icons.io/i/sun -->
+                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" /></svg>
+                </a>
+              </div>
+
+              <button type="submit" class="btn btn-primary">Install</button>
+              
+            </div>
+          </div>
+        </div>
+
+
+      </form>
+    </div>
+    <!-- Libs JS -->
+    <!-- Tabler Core -->
+    <script src="./js/tabler.min.js?1684106062" defer></script>
+    <script src="./js/demo.min.js?1684106062" defer></script>
+  </body>
+</html>
