@@ -6,7 +6,7 @@ DweebUI is a simple docker web interface created using Node.js.
 Pre-Pre-Pre-Pre-Pre Alpha v 0.01 (Experimental. Don't install on any servers you care about)
 
 * I haven't used Github very much, and I'm still new to Javascript
-*This is the first project I've ever released, and I'm sure it's full of plenty of bugs and mistakes.
+* This is the first project I've ever released, and I'm sure it's full of plenty of bugs and mistakes.
 
 Requirements: Fresh Install of Debian 12.2
 
