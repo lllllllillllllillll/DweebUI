@@ -1,7 +1,7 @@
 # DweebUI
 Pre-Pre-Pre-Pre-Pre Alpha v 0.01 (Experimental. Don't install on any servers you care about)
 
-The code is a tremendous mess and definitely full of mistakes. I have a lot to fix.
+This is the first project I've ever released and I'm sure it's full of plenty of mistakes. 
 
 DweebUI is a simple docker web interface created using Node.js. 
 
