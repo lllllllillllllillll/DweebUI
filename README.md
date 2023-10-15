@@ -7,6 +7,7 @@ Pre-Pre-Pre-Pre-Pre Alpha v 0.01 ( :fire: Experimental. Don't install on any ser
 
 * I haven't used Github very much, and I'm still new to Javascript
 * This is the first project I've ever released, and I'm sure it's full of plenty of bugs and mistakes.
+* I probably should have waited a lot longer to share this :|
 
 Requirements: Fresh Install of Debian 12.2
 
@@ -29,6 +30,8 @@ cd DweebUI
 chmod +x setup.sh
 sudo ./setup.sh
 ```
+Once setup is complete, I recommend installing Caddy first, then something like code-server. 
+The template is very rough. 
 
 ## Credit
 
