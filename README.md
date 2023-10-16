@@ -1,7 +1,7 @@
 # DweebUI
 
 
-DweebUI is a simple docker web interface created using Node.js. 
+DweebUI is a simple docker web interface created with Javascript and Node.js
 
 Pre-Pre-Pre-Pre-Pre Alpha v 0.01 ( :fire: Experimental. Don't install on any servers you care about :fire: )
 
