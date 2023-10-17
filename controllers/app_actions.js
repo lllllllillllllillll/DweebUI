@@ -88,6 +88,12 @@ exports.Install = async function (req, res) {
             }
         }
 
+        // Add privileged mode 
+
+        if (req.body.privileged == 'on') {
+            compose_file += `\n    privileged: true`
+        }
+
 
         // Add hardware acceleration to the docker-compose file if one of the environment variables has the label DRINODE
         if (env_0_check == 'on' || env_1_check == 'on' || env_2_check == 'on' || env_3_check == 'on' || env_4_check == 'on' || env_5_check == 'on' || env_6_check == 'on' || env_7_check == 'on' || env_8_check == 'on' || env_9_check == 'on' || env_10_check == 'on' || env_11_check == 'on') {

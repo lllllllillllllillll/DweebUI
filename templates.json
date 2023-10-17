@@ -284,20 +284,20 @@
       "ports": [],
       "volumes": [
         {
-          "container": "/config",
-          "bind": "/opt/mediadepot/apps/plex"
+          "bind": "/home/docker/plex",
+          "container": "/config"
         },
         {
-          "container": "/data/tvshows",
-          "bind": "/media/tvshows"
+          "bind": "/media/tvshows",
+          "container": "/data/tvshows"
         },
         {
-          "container": "/data/movies",
-          "bind": "/media/movies"
+          "bind": "/media/movies",
+          "container": "/data/movies"
         },
         {
-          "container": "/data/music",
-          "bind": "/media/music"
+          "bind": "/media/music",
+          "container": "/data/music"
         },
         {
           "container": "/transcode"
@@ -344,12 +344,12 @@
       ],
       "volumes": [
         {
-          "container": "/config",
-          "bind": "/opt/mediadepot/apps/prowlarr"
+          "bind": "/home/docker/prowlarr",
+          "container": "/config"
         },
         {
-          "container": "/etc/localtime",
-          "bind": "/etc/localtime",
+          "bind": "/etc/localtime:ro",
+          "container": "/etc/localtime:ro",
           "readonly": true
         }
       ],
@@ -427,12 +427,12 @@
       ],
       "volumes": [
         {
-          "container": "/config",
-          "bind": "/opt/mediadepot/apps/readarr"
+          "bind": "/home/docker/readarr",
+          "container": "/config"
         },
         {
-          "container": "/downloads",
-          "bind": "/media/storage/downloads/ebooks"
+          "bind": "/media/downloads/ebooks",
+          "container": "/downloads"
         },
         {
           "container": "/books",
@@ -674,12 +674,12 @@
       ],
       "volumes": [
         {
-          "container": "/data/database",
-          "bind": "/opt/mediadepot/apps/wizarr"
+          "bind": "/home/docker/wizarr",
+          "container": "/data/database"
         },
         {
+          "bind": "/etc/localtime:ro",
           "container": "/etc/localtime",
-          "bind": "/etc/localtime",
           "readonly": true
         }
       ],
@@ -744,9 +744,11 @@
       "type": 1,
       "volumes": [
         {
+          "bind": "/home/docker/transmission",
           "container": "/config"
         },
         {
+          "bind": "/media",
           "container": "/downloads"
         },
         {
@@ -758,7 +760,7 @@
       "categories": [
         "Video"
       ],
-      "description": "Headless installation of Kodi\u00ef\u00bf\u00bd (formerly known as XBMC\u00ef\u00bf\u00bd), to enable library updates.",
+      "description": "Headless installation of Kodi.",
       "env": [
         {
           "label": "PUID",
@@ -1356,7 +1358,7 @@
       "volumes": [
         {
           "container": "/config",
-          "bind": "/volume1/docker/apprise-api/config"
+          "bind": "/home/docker/apprise-api"
         }
       ],
       "restart_policy": "unless-stopped"
@@ -1400,7 +1402,7 @@
       "volumes": [
         {
           "container": "/config",
-          "bind": "/volume1/docker/audacity/config"
+          "bind": "/home/docker/audacity/config"
         }
       ],
       "restart_policy": "unless-stopped"
@@ -1444,16 +1446,16 @@
       ],
       "volumes": [
         {
-          "container": "/config",
-          "bind": "/volume1/docker/bazarr/config"
+          "bind": "/home/docker/bazarr",
+          "container": "/config"
         },
         {
-          "container": "/movies",
-          "bind": "/volume1/docker/bazarr/movies"
+          "bind": "/home/docker/bazarr/movies",
+          "container": "/movies"
         },
         {
           "container": "/tv",
-          "bind": "/volume1/docker/bazarr/tv"
+          "bind": "/home/docker/bazarr/tv"
         }
       ],
       "restart_policy": "unless-stopped"
@@ -1499,7 +1501,7 @@
       "volumes": [
         {
           "container": "/config",
-          "bind": "/volume1/docker/changedetection.io/config"
+          "bind": "/home/docker/changedetection.io"
         }
       ],
       "restart_policy": "unless-stopped"
@@ -1514,7 +1516,7 @@
         "Development"
       ],
       "platform": "linux",
-      "logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/code-server-banner.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/code-server.png",
       "image": "linuxserver/code-server:latest",
       "env": [
         {
@@ -1561,7 +1563,7 @@
         {
           "name": "PROXY_DOMAIN",
           "label": "PROXY_DOMAIN",
-          "default": "code-server.my.domain",
+          "default": "code-server.mydomain",
           "description": "If this optional variable is set, this domain will be proxied for subdomain proxying. See [Documentation](https://github.com/cdr/code-server/blob/master/docs/FAQ.md#sub-domains)"
         },
         {
@@ -1622,7 +1624,7 @@
       "volumes": [
         {
           "container": "/config",
-          "bind": "/volume1/docker/dokuwiki/config"
+          "bind": "/home/docker/dokuwiki"
         }
       ],
       "restart_policy": "unless-stopped"
@@ -1770,7 +1772,7 @@
       "volumes": [
         {
           "container": "/config",
-          "bind": "/volume1/docker/doplarr/config"
+          "bind": "/home/docker/doplarr"
         }
       ],
       "restart_policy": "unless-stopped"
@@ -1867,7 +1869,7 @@
       "volumes": [
         {
           "container": "/config",
-          "bind": "/volume1/docker/embystat/config"
+          "bind": "/home/docker/embystat"
         }
       ],
       "restart_policy": "unless-stopped"
@@ -1918,11 +1920,11 @@
       "volumes": [
         {
           "container": "/config",
-          "bind": "/volume1/docker/emulatorjs/config"
+          "bind": "/home/docker/emulatorjs"
         },
         {
           "container": "/data",
-          "bind": "/volume1/docker/emulatorjs/data"
+          "bind": "/home/docker/emulatorjs/data"
         }
       ],
       "restart_policy": "unless-stopped"
@@ -1969,79 +1971,79 @@
       "volumes": [
         {
           "container": "/config",
-          "bind": "/volume1/docker/fail2ban/config"
+          "bind": "/home/docker/fail2ban/config"
         },
         {
           "container": "/var/log:ro",
-          "bind": "/volume1/docker/fail2ban/var/log:ro"
+          "bind": "/home/docker/fail2ban/var/log:ro"
         },
         {
           "container": "/remotelogs/airsonic:ro",
-          "bind": "/volume1/docker/fail2ban/remotelogs/airsonic:ro"
+          "bind": "/home/docker/fail2ban/remotelogs/airsonic:ro"
         },
         {
           "container": "/remotelogs/apache2:ro",
-          "bind": "/volume1/docker/fail2ban/remotelogs/apache2:ro"
+          "bind": "/home/docker/fail2ban/remotelogs/apache2:ro"
         },
         {
           "container": "/remotelogs/authelia:ro",
-          "bind": "/volume1/docker/fail2ban/remotelogs/authelia:ro"
+          "bind": "/home/docker/fail2ban/remotelogs/authelia:ro"
         },
         {
           "container": "/remotelogs/emby:ro",
-          "bind": "/volume1/docker/fail2ban/remotelogs/emby:ro"
+          "bind": "/home/docker/fail2ban/remotelogs/emby:ro"
         },
         {
           "container": "/remotelogs/filebrowser:ro",
-          "bind": "/volume1/docker/fail2ban/remotelogs/filebrowser:ro"
+          "bind": "/home/docker/fail2ban/remotelogs/filebrowser:ro"
         },
         {
           "container": "/remotelogs/homeassistant:ro",
-          "bind": "/volume1/docker/fail2ban/remotelogs/homeassistant:ro"
+          "bind": "/home/docker/fail2ban/remotelogs/homeassistant:ro"
         },
         {
           "container": "/remotelogs/lighttpd:ro",
-          "bind": "/volume1/docker/fail2ban/remotelogs/lighttpd:ro"
+          "bind": "/home/docker/fail2ban/remotelogs/lighttpd:ro"
         },
         {
           "container": "/remotelogs/nextcloud:ro",
-          "bind": "/volume1/docker/fail2ban/remotelogs/nextcloud:ro"
+          "bind": "/home/docker/fail2ban/remotelogs/nextcloud:ro"
         },
         {
           "container": "/remotelogs/nginx:ro",
-          "bind": "/volume1/docker/fail2ban/remotelogs/nginx:ro"
+          "bind": "/home/docker/fail2ban/remotelogs/nginx:ro"
         },
         {
           "container": "/remotelogs/nzbget:ro",
-          "bind": "/volume1/docker/fail2ban/remotelogs/nzbget:ro"
+          "bind": "/home/docker/fail2ban/remotelogs/nzbget:ro"
         },
         {
           "container": "/remotelogs/overseerr:ro",
-          "bind": "/volume1/docker/fail2ban/remotelogs/overseerr:ro"
+          "bind": "/home/docker/fail2ban/remotelogs/overseerr:ro"
         },
         {
           "container": "/remotelogs/prowlarr:ro",
-          "bind": "/volume1/docker/fail2ban/remotelogs/prowlarr:ro"
+          "bind": "/home/docker/fail2ban/remotelogs/prowlarr:ro"
         },
         {
           "container": "/remotelogs/radarr:ro",
-          "bind": "/volume1/docker/fail2ban/remotelogs/radarr:ro"
+          "bind": "/home/docker/fail2ban/remotelogs/radarr:ro"
         },
         {
           "container": "/remotelogs/sabnzbd:ro",
-          "bind": "/volume1/docker/fail2ban/remotelogs/sabnzbd:ro"
+          "bind": "/home/docker/fail2ban/remotelogs/sabnzbd:ro"
         },
         {
           "container": "/remotelogs/sonarr:ro",
-          "bind": "/volume1/docker/fail2ban/remotelogs/sonarr:ro"
+          "bind": "/home/docker/fail2ban/remotelogs/sonarr:ro"
         },
         {
           "container": "/remotelogs/unificontroller:ro",
-          "bind": "/volume1/docker/fail2ban/remotelogs/unificontroller:ro"
+          "bind": "/home/docker/fail2ban/remotelogs/unificontroller:ro"
         },
         {
           "container": "/remotelogs/vaultwarden:ro",
-          "bind": "/volume1/docker/fail2ban/remotelogs/vaultwarden:ro"
+          "bind": "/home/docker/fail2ban/remotelogs/vaultwarden:ro"
         }
       ],
       "restart_policy": "unless-stopped"
@@ -2085,7 +2087,7 @@
       "volumes": [
         {
           "container": "/config",
-          "bind": "/volume1/docker/homeassistant/config"
+          "bind": "/home/docker/homeassistant"
         }
       ],
       "restart_policy": "unless-stopped"
@@ -2107,13 +2109,13 @@
         {
           "name": "PUID",
           "label": "PUID",
-          "default": "1024",
+          "default": "1000",
           "description": "for UserID"
         },
         {
           "name": "PGID",
           "label": "PGID",
-          "default": "100",
+          "default": "1000",
           "description": "for GroupID"
         },
         {
@@ -2138,16 +2140,16 @@
       ],
       "volumes": [
         {
-          "container": "/config",
-          "bind": "/volume1/docker/jellyfin/config"
+          "bind": "/home/docker/jellyfin",
+          "container": "/config"
         },
         {
-          "container": "/data/tvshows",
-          "bind": "/volume1/docker/jellyfin/data/tvshows"
+          "bind": "/media/tvshows",
+          "container": "/data/tvshows"
         },
         {
-          "container": "/data/movies",
-          "bind": "/volume1/docker/jellyfin/data/movies"
+          "bind": "/media/movies",
+          "container": "/data/movies"
         }
       ],
       "restart_policy": "unless-stopped"
@@ -2195,11 +2197,11 @@
       "volumes": [
         {
           "container": "/opt",
-          "bind": "/volume1/docker/kasm/opt"
+          "bind": "/home/docker/kasm/opt"
         },
         {
           "container": "/profiles",
-          "bind": "/volume1/docker/kasm/profiles"
+          "bind": "/home/docker/kasm/profiles"
         },
         {
           "container": "/dev/input",
@@ -2251,7 +2253,7 @@
       ],
       "volumes": [
         {
-          "bind": "/volume1/docker/libreoffice/config",
+          "bind": "/home/docker/libreoffice/config",
           "container": "/config"
         }
       ],
@@ -2494,7 +2496,7 @@
       "volumes": [
         {
           "container": "/config",
-          "bind": "/volume1/docker/mastodon/config"
+          "bind": "/home/docker/mastodon/config"
         }
       ],
       "restart_policy": "unless-stopped"
@@ -2549,7 +2551,7 @@
       "volumes": [
         {
           "container": "/config",
-          "bind": "/volume1/docker/phpmyadmin/config"
+          "bind": "/home/docker/phpmyadmin/config"
         }
       ],
       "restart_policy": "unless-stopped"
@@ -2590,7 +2592,7 @@
       "volumes": [
         {
           "container": "/config",
-          "bind": "/volume1/docker/pidgin/config"
+          "bind": "/home/docker/pidgin/config"
         }
       ],
       "restart_policy": "unless-stopped"
@@ -2631,7 +2633,7 @@
       "volumes": [
         {
           "container": "/config",
-          "bind": "/volume1/docker/remmina/config"
+          "bind": "/home/docker/remmina/config"
         }
       ],
       "restart_policy": "unless-stopped"
@@ -2672,7 +2674,7 @@
       "volumes": [
         {
           "container": "/config",
-          "bind": "/volume1/docker/sqlitebrowser/config"
+          "bind": "/home/docker/sqlitebrowser/config"
         }
       ],
       "restart_policy": "unless-stopped"
@@ -2986,8 +2988,8 @@
       ],
       "volumes": [
         {
-          "container": "/config",
-          "bind": "/volume1/docker/wireshark/config"
+          "bind": "/home/docker/wireshark",
+          "container": "/config"
         }
       ],
       "restart_policy": "unless-stopped"
@@ -3238,7 +3240,7 @@
           "container": "/www/assets"
         },
         {
-          "bind": "/home/docker/homer",
+          "bind": "/home/docker/homer/config",
           "container": "/www/config.yml"
         }
       ]
@@ -3533,12 +3535,12 @@
       ],
       "volumes": [
         {
-          "container": "/config",
-          "bind": "/volume1/docker/paperless-ng/config"
+          "bind": "/home/docker/paperless-ng/config",
+          "container": "/config"
         },
         {
           "container": "/data",
-          "bind": "/volume1/docker/paperless-ng/data"
+          "bind": "/home/docker/paperless-ng/data"
         }
       ],
       "restart_policy": "unless-stopped"
@@ -4588,10 +4590,9 @@
     },
     {
       "categories": [
-        "Networking",
-        "VPN"
+        "Networking"
       ],
-      "description": "Fast VPN Server with easy to use User Interface",
+      "description": "Quickly and easily configure Wireguard through a web browser.",
       "env": [
         {
           "default": "example.domain.com",
@@ -4626,14 +4627,11 @@
           "name": "WG_ALLOWED_IPS"
         }
       ],
-      "logo": "https://raw.githubusercontent.com/pi-hosted/pi-hosted/master/images/wireguard.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/wireguard.png",
       "name": "wg-easy",
       "platform": "linux",
-      "repository": {
-        "stackfile": "stack/wireguard-easy.yml",
-        "url": "https://github.com/pi-hosted/pi-hosted"
-      },
-      "title": "Wireguard Server",
+      "image": "weejewel/wg-easy",
+      "title": "WireGuard-Easy",
       "type": 3,
       "note": ""
     },
@@ -5065,16 +5063,45 @@
         "LDAP"
       ],
       "description": "Tubearchivist is your self hosted YouTube media server",
-      "note": "Require a Redis and Elasticsearch database. Tube Archivist needs around 2GB of available memory for a small testing setup and around 4GB of available memory for a mid to large sized installation. Minimal with dual core with 4 threads, better quad core plus.",
+      "note": "Requires a Redis and Elasticsearch database. Tube Archivist needs around 2GB of available memory for a small testing setup and around 4GB of available memory for a mid to large sized installation. Minimal with dual core with 4 threads, better quad core plus.",
       "logo": "https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/tube-archivist.png",
       "name": "tubearchivist",
       "platform": "linux",
-      "repository": {
-        "stackfile": "Template/Stack/tubearchivist.yml",
-        "url": "https://github.com/xneo1/portainer_templates"
-      },
+      "image": "bbilly1/tubearchivist",
       "title": "Tubearchivist",
-      "type": 3
+      "type": 3,
+      "ports": [
+        "8080:8080/tcp"
+      ],
+      "volumes": [
+        {
+          "bind": "/media/youtube",
+          "container": "/youtube"
+        }
+      ],
+      "env": [
+        {
+          "name": "INFLUXDB_ADMIN_USER",
+          "label": "Admin User",
+          "description": "Admin user for InfluxDB",
+          "type": "text",
+          "default": "admin"
+        },
+        {
+          "name": "INFLUXDB_ADMIN_PASSWORD",
+          "label": "Admin Password",
+          "description": "Admin password for InfluxDB",
+          "type": "password",
+          "default": "password"
+        },
+        {
+          "name": "INFLUXDB_DB",
+          "label": "Database",
+          "description": "Database name",
+          "type": "text",
+          "default": "mydb"
+        }
+      ]
     },
     {
       "categories": [
@@ -5250,18 +5277,49 @@
     },
     {
       "categories": [
-        "Other"
+        "Productivity"
       ],
-      "description": "Leantime is an open source project management solution to make your ideas reality.",
-      "logo": "https://s3-us-west-2.amazonaws.com/leantime-website/wp-content/uploads/2022/07/24022056/logo-large.png",
+      "note": "Requires a MySQL database. Create a database first.",
+      "description": "Leantime is an open source project management system for small teams and startups written in PHP, Javascript using MySQL. https://leantime.io",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/leantime.png",
       "name": "leantime",
       "platform": "linux",
-      "repository": {
-        "stackfile": "Template/Stack/leantime.yml",
-        "url": "https://github.com/xneo1/portainer_templates"
-      },
+      "image": "leantime/leantime:latest",
       "title": "Leantime",
-      "type": 3
+      "type": 3,
+      "ports": [
+        "80:80/tcp"
+      ],
+      "env": [
+        {
+          "name": "MYSQL_HOST",
+          "label": "Database Host",
+          "description": "Database host",
+          "type": "text",
+          "default": "mysql_leantime"
+        },
+        {
+          "name": "MYSQL_USER",
+          "label": "Database User",
+          "description": "Database user",
+          "type": "text",
+          "default": "leantime_user"
+        },
+        {
+          "name": "MYSQL_PASSWORD",
+          "label": "Database Password",
+          "description": "Database password",
+          "type": "password",
+          "default": "choose.a.long.random.password"
+        },
+        {
+          "name": "MYSQL_DATABASE",
+          "label": "Database Name",
+          "description": "Database name",
+          "type": "text",
+          "default": "leantime_database"
+        }
+      ]
     },
     {
       "categories": [
@@ -5305,15 +5363,22 @@
         "Dashboard"
       ],
       "description": "Dashdot is a modern server dashboard, running on the latest tech, designed with glassmorphism in mind. It is intended to be used for smaller VPS and private servers.",
-      "logo": "https://getdashdot.com/img/logo512.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/dashdot.png",
       "name": "dashdot",
       "platform": "linux",
-      "repository": {
-        "stackfile": "Template/Stack/dashdot.yml",
-        "url": "https://github.com/xneo1/portainer_templates"
-      },
+      "image": "mauricenino/dashdot",
       "title": "Dashdot",
-      "type": 3
+      "type": 3,
+      "ports": [
+        "80:3001/tcp"
+      ],
+      "volumes": [
+        {
+          "bind": "/",
+          "container": "/mnt/host:ro"
+        }
+      ],
+      "privileged": true
     },
     {
       "categories": [

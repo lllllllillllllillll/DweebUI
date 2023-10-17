@@ -10,7 +10,8 @@ function appCard(data) {
   let description = data.description.replaceAll(". ", ".\n") || "no description available";
   let command = data.command ? data.command : "";
   let command_check = command ? "checked" : "";
-
+  let privileged = data.privileged || "";
+  let privileged_check = privileged ? "checked" : "";
 
   // if data.network is set to host, bridge, or docker set the radio button to checked
   let net_host, net_bridge, net_docker = '';
@@ -33,7 +34,7 @@ function appCard(data) {
     shortened_name = data.title;
   }
 
-  
+
   function CatagoryColor(category) {
     switch (category) {
       case 'Other':
@@ -936,13 +937,13 @@ function appCard(data) {
                                 </div>
                               </div>
 
+
                               <div class="row mb-1 align-items-end">
                                 <div class="col-auto">
-                                  <input class="form-check-input" name="hwa_check" type="checkbox">
+                                  <input class="form-check-input" name="privileged" type="checkbox" ${privileged_check}>
                                 </div>
                                 <div class="col">
-                                  <label class="form-label">Nvidia Hardware Acceleration</label>
-                                  <input type="text" class="form-control" name="command" value="Nvidia"/>
+                                  <label class="form-label">Privileged Mode</label>
                                 </div>
                               </div>
             
