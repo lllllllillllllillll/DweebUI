@@ -8,8 +8,8 @@ exports.Install = async function (req, res) {
     
     if (req.session.role == "admin") {
 
-        console.log(req.body);
         
+
         let { service_name, name, image, command_check, command, net_mode, restart_policy } = req.body;
 
         let { port0, port1, port2, port3, port4, port5 } = req.body;

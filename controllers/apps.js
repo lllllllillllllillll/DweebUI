@@ -35,6 +35,20 @@ exports.Apps = async function(req, res) {
         let apps_list = '';
         for (let i = list_start; i < list_end && i < templates.length; i++) {
             let app_card = appCard(templates[i]);
+
+
+        if (templates[i].repository) {
+
+            try {
+                console.log(templates[i].repository.stackfile)
+            } catch { console.log('no stackfile found') }
+
+            try {
+                console.log(templates[i].repository.url)
+            } catch { console.log('no url found') }
+
+        }
+
             apps_list += app_card;
         }
         

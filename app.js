@@ -82,7 +82,7 @@ io.on('connection', (socket) => {
             for (const container of data) {
                 
                 let imageVersion = container.Image.split('/');
-                let dockerService = imageVersion[imageVersion.length - 1].split(":")[0];
+                let service = imageVersion[imageVersion.length - 1].split(":")[0];
 
                 
                 let containerId = docker.getContainer(container.Id);
@@ -97,12 +97,24 @@ io.on('connection', (socket) => {
                     console.log(`${value[0].HostPort}:${key}`);
                     external_port = value[0].HostPort;
                     internal_port = key;
+
+                    if (( external_port == undefined) || (internal_port == undefined)) {
+                        external_port = 0;
+                        internal_port = 0;
+                    }
                 }
                 
-                // console.log('Volumes:');
-                // for (const [key, value] of Object.entries(containerInfo.Mounts)) {
-                //     console.log(`${value.Source}: ${value.Destination}: ${value.RW}`);
-                // }
+                let volumes = [];
+
+                console.log('Volumes:');
+                for (const [key, value] of Object.entries(containerInfo.Mounts)) {
+                    // console.log(`${value.Source}: ${value.Destination}: ${value.RW}`);
+                    volumes.push(`${value.Source}: ${value.Destination}: ${value.RW}`);
+                }
+
+                console.log(volumes[0])
+                console.log(volumes[1])
+                console.log(volumes[2])
 
 
                 // console.log('Environment Variables:');
@@ -119,7 +131,7 @@ io.on('connection', (socket) => {
                 //     console.log(`${container.Names[0].slice(1)} // CPU: ${Math.round(data[0].cpuPercent)} // RAM: ${Math.round(data[0].memPercent)}`);
                 // });
                 
-                let dockerCard = dashCard(container.Names[0].slice(1), dockerService, container.Id, container.State, container.Image, external_port, internal_port);
+                let dockerCard = dashCard(container.Names[0].slice(1), service, container.Id, container.State, container.Image, external_port, internal_port);
                 // open_ports += `-L ${external_port}:localhost:${external_port} `
                 card_list += dockerCard;
             }
