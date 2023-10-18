@@ -1,4 +1,5 @@
 const User = require('../database/UserModel.js');
+const Server = require('../database/ServerSettings.js');
 
 exports.Settings = async function(req, res) {
     if (req.session.role == "admin") {

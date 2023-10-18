@@ -340,7 +340,7 @@ function appCard(data) {
 
                               <div class="row mb-1 align-items-end">
                                 <div class="col-auto">
-                                  <input class="form-check-input" name="port_0_check" type="checkbox" ${ports_data[0].check}>
+                                  <input class="form-check-input" name="port0" type="checkbox" ${ports_data[0].check}>
                                 </div>
                                 <div class="col">
                                   <label class="form-label">External Port</label>
@@ -362,7 +362,7 @@ function appCard(data) {
             
                               <div class="row mb-1 align-items-end">
                                 <div class="col-auto">
-                                  <input class="form-check-input" name="port_1_check" type="checkbox" ${ports_data[1].check}>
+                                  <input class="form-check-input" name="port1" type="checkbox" ${ports_data[1].check}>
                                 </div>
                                 <div class="col">
                                   <input type="text" class="form-control" name="port_1_external" value="${ports_data[1].external}"/>
@@ -381,7 +381,7 @@ function appCard(data) {
             
                               <div class="row mb-1 align-items-end">
                                 <div class="col-auto">
-                                  <input class="form-check-input" name="port_2_check" type="checkbox" ${ports_data[2].check}>
+                                  <input class="form-check-input" name="port2" type="checkbox" ${ports_data[2].check}>
                                 </div>
                                 <div class="col">
                                   <input type="text" class="form-control" name="port_2_external" value="${ports_data[2].external}"/>
@@ -400,7 +400,7 @@ function appCard(data) {
             
                               <div class="row mb-1 align-items-end">
                                 <div class="col-auto">
-                                  <input class="form-check-input" name="port_3_check" type="checkbox" ${ports_data[3].check}>
+                                  <input class="form-check-input" name="port3" type="checkbox" ${ports_data[3].check}>
                                 </div>
                                 <div class="col">
                                   <input type="text" class="form-control" name="port_3_external" value="${ports_data[3].external}"/>
@@ -419,7 +419,7 @@ function appCard(data) {
             
                               <div class="row mb-1 align-items-end">
                                 <div class="col-auto">
-                                  <input class="form-check-input" name="port_4_check" type="checkbox" ${ports_data[4].check}>
+                                  <input class="form-check-input" name="port4" type="checkbox" ${ports_data[4].check}>
                                 </div>
                                 <div class="col">
                                   <input type="text" class="form-control" name="port_4_external" value="${ports_data[4].external}"/>
@@ -438,7 +438,7 @@ function appCard(data) {
             
                               <div class="row mb-1 align-items-end">
                                 <div class="col-auto">
-                                  <input class="form-check-input" name="port_5_check" type="checkbox" ${ports_data[5].check}>
+                                  <input class="form-check-input" name="port5" type="checkbox" ${ports_data[5].check}>
                                 </div>
                                 <div class="col">
                                   <input type="text" class="form-control" name="port_5_external" value="${ports_data[5].external}"/>
@@ -471,7 +471,7 @@ function appCard(data) {
             
                             <div class="row mb-1 align-items-end">
                             <div class="col-auto">
-                              <input class="form-check-input" name="volume_0_check" type="checkbox" ${volumes_data[0].check}>
+                              <input class="form-check-input" name="volume0" type="checkbox" ${volumes_data[0].check}>
                             </div>
                             <div class="col">
                               <input type="text" class="form-control" name="volume_0_bind" value="${volumes_data[0].bind}"/>
@@ -490,7 +490,7 @@ function appCard(data) {
             
                           <div class="row mb-1 align-items-end">
                             <div class="col-auto">
-                              <input class="form-check-input" name="volume_1_check" type="checkbox" ${volumes_data[1].check}>
+                              <input class="form-check-input" name="volume1" type="checkbox" ${volumes_data[1].check}>
                             </div>
                             <div class="col">
                               <input type="text" class="form-control" name="volume_1_bind" value="${volumes_data[1].bind}"/>
@@ -509,7 +509,7 @@ function appCard(data) {
             
                           <div class="row mb-1 align-items-end">
                             <div class="col-auto">
-                              <input class="form-check-input" name="volume_2_check" type="checkbox" ${volumes_data[2].check}>
+                              <input class="form-check-input" name="volume2" type="checkbox" ${volumes_data[2].check}>
                             </div>
                             <div class="col">
                               <input type="text" class="form-control" name="volume_2_bind" value="${volumes_data[2].bind}"/>
@@ -528,7 +528,7 @@ function appCard(data) {
             
                           <div class="row mb-1 align-items-end">
                             <div class="col-auto">
-                              <input class="form-check-input" name="volume_3_check" type="checkbox" ${volumes_data[3].check}>
+                              <input class="form-check-input" name="volume3" type="checkbox" ${volumes_data[3].check}>
                             </div>
                             <div class="col">
                               <input type="text" class="form-control" name="volume_3_bind" value="${volumes_data[3].bind}"/>
@@ -547,7 +547,7 @@ function appCard(data) {
             
                           <div class="row mb-1 align-items-end">
                             <div class="col-auto">
-                              <input class="form-check-input" name="volume_4_check" type="checkbox" ${volumes_data[4].check}>
+                              <input class="form-check-input" name="volume4" type="checkbox" ${volumes_data[4].check}>
                             </div>
                             <div class="col">
                               <input type="text" class="form-control" name="volume_4_bind" value="${volumes_data[4].bind}"/>
@@ -566,7 +566,7 @@ function appCard(data) {
             
                           <div class="row mb-1 align-items-end">
                           <div class="col-auto">
-                            <input class="form-check-input" name="volume_5_check" type="checkbox" ${volumes_data[5].check}>
+                            <input class="form-check-input" name="volume5" type="checkbox" ${volumes_data[5].check}>
                           </div>
                           <div class="col">
                             <input type="text" class="form-control" name="volume_5_bind" value="${volumes_data[5].bind}"/>
@@ -599,7 +599,7 @@ function appCard(data) {
             
                               <div class="row mb-1 align-items-end">
                                 <div class="col-auto">
-                                  <input class="form-check-input" type="checkbox" name="env_0_check" ${env_data[0].check}>
+                                  <input class="form-check-input" type="checkbox" name="env0" ${env_data[0].check}>
                                 </div>
                                 <div class="col">
                                   <label class="form-label">Variable</label>
@@ -613,7 +613,7 @@ function appCard(data) {
             
                               <div class="row mb-1 align-items-end">
                                 <div class="col-auto">
-                                  <input class="form-check-input" type="checkbox" name="env_1_check" ${env_data[1].check}>
+                                  <input class="form-check-input" type="checkbox" name="env1" ${env_data[1].check}>
                                 </div>
                                 <div class="col">
                                   <input type="text" class="form-control" name="env_1_name" value="${env_data[1].name}"/>
@@ -625,7 +625,7 @@ function appCard(data) {
             
                               <div class="row mb-1 align-items-end">
                                 <div class="col-auto">
-                                  <input class="form-check-input" type="checkbox" name="env_2_check" ${env_data[2].check}>
+                                  <input class="form-check-input" type="checkbox" name="env2" ${env_data[2].check}>
                                 </div>
                                 <div class="col">
                                   <input type="text" class="form-control" name="env_2_name" value="${env_data[2].name}"/>
@@ -637,7 +637,7 @@ function appCard(data) {
             
                               <div class="row mb-1 align-items-end">
                                 <div class="col-auto">
-                                  <input class="form-check-input" type="checkbox" name="env_3_check" ${env_data[3].check}>
+                                  <input class="form-check-input" type="checkbox" name="env3" ${env_data[3].check}>
                                 </div>
                                 <div class="col">
                                   <input type="text" class="form-control" name="env_3_name" value="${env_data[3].name}"/>
@@ -649,7 +649,7 @@ function appCard(data) {
             
                               <div class="row mb-1 align-items-end">
                                 <div class="col-auto">
-                                  <input class="form-check-input" type="checkbox" name="env_4_check" ${env_data[4].check}>
+                                  <input class="form-check-input" type="checkbox" name="env4" ${env_data[4].check}>
                                 </div>
                                 <div class="col">
                                   <input type="text" class="form-control" name="env_4_name" value="${env_data[4].name}"/>
@@ -661,7 +661,7 @@ function appCard(data) {
             
                               <div class="row mb-1 align-items-end">
                                 <div class="col-auto">
-                                  <input class="form-check-input" type="checkbox" name="env_5_check" ${env_data[5].check}>
+                                  <input class="form-check-input" type="checkbox" name="env5" ${env_data[5].check}>
                                 </div>
                                 <div class="col">
                                   <input type="text" class="form-control" name="env_5_name" value="${env_data[5].name}"/>
@@ -673,7 +673,7 @@ function appCard(data) {
             
                               <div class="row mb-1 align-items-end">
                                 <div class="col-auto">
-                                  <input class="form-check-input" type="checkbox" name="env_6_check" ${env_data[6].check}>
+                                  <input class="form-check-input" type="checkbox" name="env6" ${env_data[6].check}>
                                 </div>
                                 <div class="col">
                                   <input type="text" class="form-control" name="env_6_name" value="${env_data[6].name}"/>
@@ -686,7 +686,7 @@ function appCard(data) {
             
                               <div class="row mb-1 align-items-end">
                                 <div class="col-auto">
-                                  <input class="form-check-input" type="checkbox" name="env_7_check" ${env_data[7].check}>
+                                  <input class="form-check-input" type="checkbox" name="env7" ${env_data[7].check}>
                                 </div>
                                 <div class="col">
                                   <input type="text" class="form-control" name="env_7_name" value="${env_data[7].name}"/>
@@ -699,7 +699,7 @@ function appCard(data) {
             
                               <div class="row mb-1 align-items-end">
                                 <div class="col-auto">
-                                  <input class="form-check-input" type="checkbox" name="env_8_check" ${env_data[8].check}>
+                                  <input class="form-check-input" type="checkbox" name="env8" ${env_data[8].check}>
                                 </div>
                                 <div class="col">
                                   <input type="text" class="form-control" name="env_8_name" value="${env_data[8].name}"/>
@@ -712,7 +712,7 @@ function appCard(data) {
             
                               <div class="row mb-1 align-items-end">
                                 <div class="col-auto">
-                                  <input class="form-check-input" type="checkbox" name="env_9_check" ${env_data[9].check}>
+                                  <input class="form-check-input" type="checkbox" name="env9" ${env_data[9].check}>
                                 </div>
                                 <div class="col">
                                   <input type="text" class="form-control" name="env_9_name" value="${env_data[9].name}"/>
@@ -725,7 +725,7 @@ function appCard(data) {
             
                               <div class="row mb-1 align-items-end">
                                 <div class="col-auto">
-                                  <input class="form-check-input" type="checkbox" name="env_10_check" ${env_data[10].check}>
+                                  <input class="form-check-input" type="checkbox" name="env10" ${env_data[10].check}>
                                 </div>
                                 <div class="col">
                                   <input type="text" class="form-control" name="env_10_name" value="${env_data[10].name}"/>
@@ -738,7 +738,7 @@ function appCard(data) {
             
                               <div class="row mb-1 align-items-end">
                                 <div class="col-auto">
-                                  <input class="form-check-input" type="checkbox" name="env_11_check" ${env_data[11].check}>
+                                  <input class="form-check-input" type="checkbox" name="env11" ${env_data[11].check}>
                                 </div>
                                 <div class="col">
                                   <input type="text" class="form-control" name="env_11_name" value="${env_data[11].name}"/>
@@ -766,7 +766,7 @@ function appCard(data) {
             
                             <div class="row mb-1 align-items-end">
                               <div class="col-auto">
-                                <input class="form-check-input" type="checkbox" name="label_0_check" ${label_data[0].check}>
+                                <input class="form-check-input" type="checkbox" name="label0" ${label_data[0].check}>
                               </div>
                               <div class="col">
                                 <label class="form-label">Variable</label>
@@ -780,7 +780,7 @@ function appCard(data) {
             
                             <div class="row mb-1 align-items-end">
                               <div class="col-auto">
-                                <input class="form-check-input" type="checkbox" name="label_1_check" ${label_data[1].check}>
+                                <input class="form-check-input" type="checkbox" name="label1" ${label_data[1].check}>
                               </div>
                               <div class="col">
                                 <input type="text" class="form-control" name="label_1_name" value="${label_data[1].name}"/>
@@ -793,7 +793,7 @@ function appCard(data) {
                               
                             <div class="row mb-1 align-items-end">
                               <div class="col-auto">
-                                <input class="form-check-input" type="checkbox" name="label_2_check" ${label_data[2].check}>
+                                <input class="form-check-input" type="checkbox" name="label2" ${label_data[2].check}>
                               </div>
                               <div class="col">
                                 <input type="text" class="form-control" name="label_2_name" value="${label_data[2].name}"/>
@@ -805,7 +805,7 @@ function appCard(data) {
             
                             <div class="row mb-1 align-items-end">
                               <div class="col-auto">
-                                <input class="form-check-input" type="checkbox" name="label_3_check" ${label_data[3].check}>
+                                <input class="form-check-input" type="checkbox" name="label3" ${label_data[3].check}>
                               </div>
                               <div class="col">
                                 <input type="text" class="form-control" name="label_3_name" value="${label_data[3].name}"/>
@@ -817,7 +817,7 @@ function appCard(data) {
             
                             <div class="row mb-1 align-items-end">
                               <div class="col-auto">
-                                <input class="form-check-input" type="checkbox" name="label_4_check" ${label_data[4].check}>
+                                <input class="form-check-input" type="checkbox" name="label4" ${label_data[4].check}>
                               </div>
                               <div class="col">
                                 <input type="text" class="form-control" name="label_4_name" value="${label_data[4].name}"/>
@@ -829,7 +829,7 @@ function appCard(data) {
 
                             <div class="row mb-1 align-items-end">
                               <div class="col-auto">
-                                <input class="form-check-input" type="checkbox" name="label_5_check" ${label_data[5].check}>
+                                <input class="form-check-input" type="checkbox" name="label5" ${label_data[5].check}>
                               </div>
                               <div class="col">
                                 <input type="text" class="form-control" name="label_5_name" value="${label_data[5].name}"/>
@@ -841,7 +841,7 @@ function appCard(data) {
 
                             <div class="row mb-1 align-items-end">
                               <div class="col-auto">
-                                <input class="form-check-input" type="checkbox" name="label_6_check" ${label_data[6].check}>
+                                <input class="form-check-input" type="checkbox" name="label6" ${label_data[6].check}>
                               </div>
                               <div class="col">
                                 <input type="text" class="form-control" name="label_6_name" value="${label_data[6].name}"/>
@@ -853,7 +853,7 @@ function appCard(data) {
 
                             <div class="row mb-1 align-items-end">
                               <div class="col-auto">
-                                <input class="form-check-input" type="checkbox" name="label_7_check" ${label_data[7].check}>
+                                <input class="form-check-input" type="checkbox" name="label7" ${label_data[7].check}>
                               </div>
                               <div class="col">
                                 <input type="text" class="form-control" name="label_7_name" value="${label_data[7].name}"/>
@@ -865,7 +865,7 @@ function appCard(data) {
 
                             <div class="row mb-1 align-items-end">
                               <div class="col-auto">
-                                <input class="form-check-input" type="checkbox" name="label_8_check" ${label_data[8].check}>
+                                <input class="form-check-input" type="checkbox" name="label8" ${label_data[8].check}>
                               </div>
                               <div class="col">
                                 <input type="text" class="form-control" name="label_8_name" value="${label_data[8].name}"/>
@@ -877,7 +877,7 @@ function appCard(data) {
 
                             <div class="row mb-1 align-items-end">
                               <div class="col-auto">
-                                <input class="form-check-input" type="checkbox" name="label_9_check" ${label_data[9].check}>
+                                <input class="form-check-input" type="checkbox" name="label9" ${label_data[9].check}>
                               </div>
                               <div class="col">
                                 <input type="text" class="form-control" name="label_9_name" value="${label_data[9].name}"/>
@@ -889,7 +889,7 @@ function appCard(data) {
 
                             <div class="row mb-1 align-items-end">
                               <div class="col-auto">
-                                <input class="form-check-input" type="checkbox" name="label_10_check" ${label_data[10].check}>
+                                <input class="form-check-input" type="checkbox" name="label10" ${label_data[10].check}>
                               </div>
                               <div class="col">
                                 <input type="text" class="form-control" name="label_10_name" value="${label_data[10].name}"/>
@@ -901,7 +901,7 @@ function appCard(data) {
 
                             <div class="row mb-1 align-items-end">
                               <div class="col-auto">
-                                <input class="form-check-input" type="checkbox" name="label_11_check" ${label_data[11].check}>
+                                <input class="form-check-input" type="checkbox" name="label11" ${label_data[11].check}>
                               </div>
                               <div class="col">
                                 <input type="text" class="form-control" name="label_11_name" value="${label_data[11].name}"/>

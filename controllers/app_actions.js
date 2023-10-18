@@ -12,10 +12,10 @@ exports.Install = async function (req, res) {
         
         let { service_name, name, image, command_check, command, net_mode, restart_policy } = req.body;
 
-        let { port_0_check, port_1_check, port_2_check, port_3_check, port_4_check, port_5_check } = req.body;
-        let { volume_0_check, volume_1_check, volume_2_check, volume_3_check, volume_4_check, volume_5_check } = req.body;
-        let { env_0_check, env_1_check, env_2_check, env_3_check, env_4_check, env_5_check, env_6_check, env_7_check, env_8_check, env_9_check, env_10_check, env_11_check } = req.body;
-        let { label_0_check, label_1_check, label_2_check, label_3_check, label_4_check, label_5_check, label_6_check, label_7_check, label_8_check, label_9_check, label_10_check, label_11_check } = req.body;
+        let { port0, port1, port2, port3, port4, port5 } = req.body;
+        let { volume0, volume1, volume2, volume3, volume4, volume5 } = req.body;
+        let { env0, env1, env2, env3, env4, env5, env6, env7, env8, env9, env10, env11 } = req.body;
+        let { label0, label1, label2, label3, label4, label5, label6, label7, label8, label9, label10, label11 } = req.body;
 
 
         let installCard = dashCard(req.body.name, req.body.service_name, '', 'installing', req.body.image, 0, 0);
@@ -46,44 +46,44 @@ exports.Install = async function (req, res) {
         }
 
         // Ports
-        if ((port_0_check == 'on' || port_1_check == 'on' || port_2_check == 'on' || port_3_check == 'on' || port_4_check == 'on' || port_5_check == 'on') && (net_mode != 'host')) {
+        if ((port0 == 'on' || port1 == 'on' || port2 == 'on' || port3 == 'on' || port4 == 'on' || port5 == 'on') && (net_mode != 'host')) {
             compose_file += `\n    ports:`
 
                 for (let i = 0; i < 6; i++) {
-                    if (req.body[`port_${i}_check`] == 'on') {
+                    if (req.body[`port${i}`] == 'on') {
                         compose_file += `\n      - ${req.body[`port_${i}_external`]}:${req.body[`port_${i}_internal`]}/${req.body[`port_${i}_protocol`]}`
                     }
                 }
         }
 
         // Volumes
-        if (volume_0_check == 'on' || volume_1_check == 'on' || volume_2_check == 'on' || volume_3_check == 'on' || volume_4_check == 'on' || volume_5_check == 'on') {
+        if (volume0 == 'on' || volume1 == 'on' || volume2 == 'on' || volume3 == 'on' || volume4 == 'on' || volume5 == 'on') {
             compose_file += `\n    volumes:`
 
             for (let i = 0; i < 6; i++) {
-                if (req.body[`volume_${i}_check`] == 'on') {
+                if (req.body[`volume${i}`] == 'on') {
                     compose_file += `\n      - ${req.body[`volume_${i}_bind`]}:${req.body[`volume_${i}_container`]}:${req.body[`volume_${i}_readwrite`]}`
                 }
             }
         }
 
         // Environment variables
-        if (env_0_check == 'on' || env_1_check == 'on' || env_2_check == 'on' || env_3_check == 'on' || env_4_check == 'on' || env_5_check == 'on' || env_6_check == 'on' || env_7_check == 'on' || env_8_check == 'on' || env_9_check == 'on' || env_10_check == 'on' || env_11_check == 'on') {
+        if (env0 == 'on' || env1 == 'on' || env2 == 'on' || env3 == 'on' || env4 == 'on' || env5 == 'on' || env6 == 'on' || env7 == 'on' || env8 == 'on' || env9 == 'on' || env10 == 'on' || env11 == 'on') {
             compose_file += `\n    environment:`
         }
         for (let i = 0; i < 12; i++) {
-            if (req.body[`env_${i}_check`] == 'on') {
+            if (req.body[`env${i}`] == 'on') {
                 compose_file += `\n      - ${req.body[`env_${i}_name`]}=${req.body[`env_${i}_default`]}`
 
             }
         }
 
         // Add labels
-        if (label_0_check == 'on' || label_1_check == 'on' || label_2_check == 'on' || label_3_check == 'on' || label_4_check == 'on' || label_5_check == 'on' || label_6_check == 'on' || label_7_check == 'on' || label_8_check == 'on' || label_9_check == 'on' || label_10_check == 'on' || label_11_check == 'on') {
+        if (label0 == 'on' || label1 == 'on' || label2 == 'on' || label3 == 'on' || label4 == 'on' || label5 == 'on' || label6 == 'on' || label7 == 'on' || label8 == 'on' || label9 == 'on' || label10 == 'on' || label11 == 'on') {
             compose_file += `\n    labels:`
         }   
         for (let i = 0; i < 12; i++) {
-            if (req.body[`label_${i}_check`] == 'on') {
+            if (req.body[`label${i}`] == 'on') {
                 compose_file += `\n      - ${req.body[`label_${i}_name`]}=${req.body[`label_${i}_value`]}`
             }
         }
@@ -96,9 +96,9 @@ exports.Install = async function (req, res) {
 
 
         // Add hardware acceleration to the docker-compose file if one of the environment variables has the label DRINODE
-        if (env_0_check == 'on' || env_1_check == 'on' || env_2_check == 'on' || env_3_check == 'on' || env_4_check == 'on' || env_5_check == 'on' || env_6_check == 'on' || env_7_check == 'on' || env_8_check == 'on' || env_9_check == 'on' || env_10_check == 'on' || env_11_check == 'on') {
+        if (env0 == 'on' || env1 == 'on' || env2 == 'on' || env3 == 'on' || env4 == 'on' || env5 == 'on' || env6 == 'on' || env7 == 'on' || env8 == 'on' || env9 == 'on' || env10 == 'on' || env11 == 'on') {
             for (let i = 0; i < 12; i++) {
-                if (req.body[`env_${i}_check`] == 'on') {
+                if (req.body[`env${i}`] == 'on') {
                     if (req.body[`env_${i}_name`] == 'DRINODE') {
                         compose_file += `\n    deploy:`
                         compose_file += `\n      resources:`
