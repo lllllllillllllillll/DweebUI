@@ -11,6 +11,8 @@ Pre-Pre-Pre-Pre-Pre Alpha v 0.01 ( :fire: Experimental. Don't install on any ser
 
 Requirements: Fresh Install of Debian 12.2
 
+![DweebUI](https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/DweebUI.png)
+
 ## Features
 
 * Dashboard provides server metrics (cpu, ram, network, disk) and container controls on a single page.
