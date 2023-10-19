@@ -12,6 +12,8 @@ function appCard(data) {
   let command_check = command ? "checked" : "";
   let privileged = data.privileged || "";
   let privileged_check = privileged ? "checked" : "";
+  let repository = data.repository || "";
+  let source = data.image || "";
 
   // if data.network is set to host, bridge, or docker set the radio button to checked
   let net_host, net_bridge, net_docker = '';
@@ -35,6 +37,11 @@ function appCard(data) {
   }
 
 
+  if (repository != "") {
+    source = `${repository.url}/raw/master/${repository.stackfile}`;
+  }
+
+
   function CatagoryColor(category) {
     switch (category) {
       case 'Other':
@@ -47,6 +54,8 @@ function appCard(data) {
         return '<span class="badge bg-blue-lt">Dashboard</span> ';
       case 'Communication':
         return '<span class="badge bg-azure-lt">Communication</span> ';
+      case 'Media':
+        return '<span class="badge bg-azure-lt">Media</span> ';
       case 'CMS':
         return '<span class="badge bg-azure-lt">CMS</span> ';
       case 'Monitoring':
@@ -263,7 +272,7 @@ function appCard(data) {
                         </div>
                         <div class="col-lg-3">
                           <label class="form-label">Image: </label>
-                          <input type="text" class="form-control" name="image" value="${data.image}"/>
+                          <input type="text" class="form-control" name="image" value="${source}"/>
                         </div>
                         <div class="col-lg-3">
                           <label class="form-label">Restart Policy: </label>
