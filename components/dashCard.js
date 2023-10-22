@@ -150,7 +150,7 @@ function dashCard(name, service, id, state, image, external_port, internal_port)
               </span>
             </div>
           </div>
-          <div id="cardChart" class="chart-sm"></div>
+          <div id="${name}_chart" class="chart-sm"></div>
         </div>
       </div>
     </div>

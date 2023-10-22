@@ -15,6 +15,7 @@ function appCard(data) {
   let repository = data.repository || "";
   let source = data.image || "";
 
+
   // if data.network is set to host, bridge, or docker set the radio button to checked
   let net_host, net_bridge, net_docker = '';
   let net_name = 'AppBridge';
@@ -38,7 +39,7 @@ function appCard(data) {
 
 
   if (repository != "") {
-    source = `${repository.url}/raw/master/${repository.stackfile}`;
+    source = (`${repository.url}/raw/master/${repository.stackfile}`);
   }
 
 

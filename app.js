@@ -112,11 +112,6 @@ io.on('connection', (socket) => {
                     volumes.push(`${value.Source}: ${value.Destination}: ${value.RW}`);
                 }
 
-                console.log(volumes[0])
-                console.log(volumes[1])
-                console.log(volumes[2])
-
-
                 // console.log('Environment Variables:');
                 // for (const [key, value] of Object.entries(containerInfo.Config.Env)) {
                 //     console.log(`${key}: ${value}`);
@@ -127,13 +122,20 @@ io.on('connection', (socket) => {
                 //     console.log(`${key}: ${value}`);
                 // }
 
-                // dockerContainerStats(container.Id).then((data) => {
-                //     console.log(`${container.Names[0].slice(1)} // CPU: ${Math.round(data[0].cpuPercent)} // RAM: ${Math.round(data[0].memPercent)}`);
-                // });
+                dockerContainerStats(container.Id).then((data) => {
+                    let container_stats = {
+                        name: container.Names[0].slice(1),
+                        cpu: Math.round(data[0].cpuPercent),
+                        ram: Math.round(data[0].memPercent)
+                    }
+                    console.log(container_stats);
+                    socket.emit('container_stats', container_stats);
+                });
                 
                 let dockerCard = dashCard(container.Names[0].slice(1), service, container.Id, container.State, container.Image, external_port, internal_port);
                 // open_ports += `-L ${external_port}:localhost:${external_port} `
                 card_list += dockerCard;
+                
             }
 
             // emit card list is it's different from what was sent last time, then clear install local
