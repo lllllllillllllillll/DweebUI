@@ -122,7 +122,7 @@ socket.on('cards', (data) => {
   });
  
   dockerCards.insertAdjacentHTML("afterend", data);
-  // drawCharts('#cardChart');
+  
 });
 
 
@@ -133,16 +133,21 @@ socket.on('container_stats', (data) => {
   // get cpu and ram array of the container from local storage
   var cpu_array = JSON.parse(localStorage.getItem(`${name}_cpu`));
   var ram_array = JSON.parse(localStorage.getItem(`${name}_ram`));
-  
+  console.log(`#1: ${name} cpu: ${cpu_array} ram: ${ram_array}`);
+
   // if the cpu and ram arrays are null, create both arrays with 30 values of 0
   if (cpu_array == null) { cpu_array = Array(30).fill(0); }
   if (ram_array == null) { ram_array = Array(30).fill(0); }
+  console.log(`#2: ${name} cpu: ${cpu_array} ram: ${ram_array}`);
 
   // add the new cpu and ram values to the arrays, but limit the array to 30 values
   cpu_array.push(cpu);
   ram_array.push(ram);
+  console.log(`#3: ${name} cpu: ${cpu_array} ram: ${ram_array}`);
+
   cpu_array = cpu_array.slice(-30);
   ram_array = ram_array.slice(-30);
+  console.log(`#4: ${name} cpu: ${cpu_array} ram: ${ram_array}`);
 
   // save the arrays to local storage
   localStorage.setItem(`${name}_cpu`, JSON.stringify(cpu_array));

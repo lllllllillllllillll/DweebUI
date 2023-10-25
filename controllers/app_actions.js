@@ -33,8 +33,17 @@ exports.Install = async function (req, res) {
             
         } else {
 
+            let container_info = {
+                name: name,
+                service: service_name,
+                state: 'installing',
+                image: image,
+                restart_policy: restart_policy
+            }
+            
 
-            let installCard = dashCard(req.body.name, req.body.service_name, '', 'installing', req.body.image, 0, 0);
+            let installCard = dashCard(container_info);
+
             req.app.locals.install = installCard;
 
             let compose_file = `version: '3'`;

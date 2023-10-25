@@ -3720,8 +3720,8 @@
         "Tools"
       ],
       "description": "ClamAV is an open source antivirus engine for detecting trojans, viruses, malware & other malicious threats.",
-      "image": "mkodockx/docker-clamav:alpine",
-      "logo": "http://www.clamav.net/assets/clamav-trademark.png",
+      "image": "clamav/clamav",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/clamav.png",
       "name": "clamav",
       "platform": "linux",
       "ports": [
@@ -3733,19 +3733,15 @@
       "volumes": [
         {
           "bind": "/etc/timezone",
-          "container": "/etc/timezone"
-        },
-        {
-          "bind": "/etc/localtime",
-          "container": "/etc/localtime"
-        },
-        {
-          "bind": "/home/docker/clamav/config",
-          "container": "/etc/clamav"
+          "container": "/etc/timezone:ro"
         },
         {
           "bind": "/home/docker/clamav/virus_definitions",
           "container": "/var/lib/clamav"
+        },
+        {
+          "bind": "/home/docker",
+          "container": "/scandir"
         }
       ],
       "note": ""

@@ -141,7 +141,11 @@ function appCard(data) {
       let volume_check = volumes ? "checked" : "";
       let volume_bind = volumes.bind.split(":")[0] ? volumes.bind.split(":")[0] : "";
       let volume_container = volumes.container.split(":")[0] ? volumes.container.split(":")[0] : "";
-      let volume_readwrite = volumes.container.endsWith(":ro") ? "ro" : "rw";
+      let volume_readwrite = "rw"
+
+      if ((volumes.readonly == true) || (volumes.container.endsWith(":ro"))) {
+        volume_readwrite = "ro";
+      }
 
       volumes_data.push({
         check: volume_check,

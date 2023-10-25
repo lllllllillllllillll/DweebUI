@@ -10,6 +10,7 @@ var docker = new Docker({ socketPath: '/var/run/docker.sock' });
 const { dashCard } = require('./components/dashCard');
 
 let DockerContainers, sent_list, clicked, open_ports, ServerMetrics, card_list, external_port, internal_port;
+let container_stats = {};
 
 const redisClient = require('redis').createClient({
     legacyMode:true
@@ -79,8 +80,11 @@ io.on('connection', (socket) => {
         internal_port;
 
         docker.listContainers({ all: true }, async function (err, data) {
+            
             for (const container of data) {
                 
+                console.log(container);
+
                 let imageVersion = container.Image.split('/');
                 let service = imageVersion[imageVersion.length - 1].split(":")[0];
 
@@ -104,13 +108,13 @@ io.on('connection', (socket) => {
                     }
                 }
                 
-                let volumes = [];
+                // let volumes = [];
 
-                console.log('Volumes:');
-                for (const [key, value] of Object.entries(containerInfo.Mounts)) {
-                    // console.log(`${value.Source}: ${value.Destination}: ${value.RW}`);
-                    volumes.push(`${value.Source}: ${value.Destination}: ${value.RW}`);
-                }
+                // console.log('Volumes:');
+                // for (const [key, value] of Object.entries(containerInfo.Mounts)) {
+                //     console.log(`${value.Source}: ${value.Destination}: ${value.RW}`);
+                //     volumes.push(`${value.Source}: ${value.Destination}: ${value.RW}`);
+                // }
 
                 // console.log('Environment Variables:');
                 // for (const [key, value] of Object.entries(containerInfo.Config.Env)) {
@@ -123,16 +127,29 @@ io.on('connection', (socket) => {
                 // }
 
                 dockerContainerStats(container.Id).then((data) => {
-                    let container_stats = {
+                    container_stats = {
                         name: container.Names[0].slice(1),
                         cpu: Math.round(data[0].cpuPercent),
                         ram: Math.round(data[0].memPercent)
                     }
-                    console.log(container_stats);
                     socket.emit('container_stats', container_stats);
                 });
                 
-                let dockerCard = dashCard(container.Names[0].slice(1), service, container.Id, container.State, container.Image, external_port, internal_port);
+                
+
+                let container_info = {
+                    name: container.Names[0].slice(1),
+                    service: service,
+                    id: container.Id,
+                    state: container.State,
+                    image: container.Image,
+                    external_port: external_port,
+                    internal_port: internal_port
+                }
+
+                let dockerCard = dashCard(container_info);
+
+
                 // open_ports += `-L ${external_port}:localhost:${external_port} `
                 card_list += dockerCard;
                 
@@ -145,6 +162,7 @@ io.on('connection', (socket) => {
                 socket.emit('cards', card_list);
                 console.log('Cards updated');
             }
+
         });
     }
 
