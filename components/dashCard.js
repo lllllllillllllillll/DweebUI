@@ -1,4 +1,4 @@
-function dashCard(data) {
+module.exports.dashCard = function dashCard(data) {
   
   let { name, service, id, state, image, external_port, internal_port } = data;
   
@@ -1065,5 +1065,3 @@ function dashCard(data) {
                 </div>
               </div>`;
 }
-
-module.exports = { dashCard };

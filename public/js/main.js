@@ -25,7 +25,10 @@ const dockerCards = document.getElementById('cards');
 // create
 
 //Update usage bars
-socket.on('metrics', ({ cpu, ram, tx, rx, disk}) => {
+socket.on('metrics', (data) => {
+
+    let {cpu, ram, tx, rx, disk} = data;
+
     cpuText.innerHTML = `<span>CPU ${cpu} %</span>`;
     cpuBar.innerHTML = `<span style="width: ${cpu}%"><span></span></span>`;
     ramText.innerHTML = `<span>RAM ${ram} %</span>`;
