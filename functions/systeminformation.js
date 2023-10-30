@@ -119,9 +119,9 @@ module.exports.containerStats = async function () {
 
 module.exports.containerAction = async function (data) {
 
-    let { name, role, action, container, state } = data;
+    let { user, role, action, container, state } = data;
 
-    console.log(`${name} wants to: ${action} ${container}`);
+    console.log(`${user} wants to: ${action} ${container}`);
     
     if (role == 'admin') {
         var containerName = docker.getContainer(container);
