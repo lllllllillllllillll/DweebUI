@@ -1,5 +1,12 @@
 const User = require('../database/UserModel');
 const { appCard } = require('../components/appCard')
+const { exec, execSync } = require("child_process");
+const { dashCard } = require('../components/dashCard');
+const yaml = require('js-yaml');
+
+const { install } = require('../functions/package_manager');
+
+
 const templates_json = require('../templates.json');
 let templates = templates_json.templates;
 
@@ -60,7 +67,7 @@ exports.Apps = async function(req, res) {
 
 
 
-exports.processApps = async function(req, res) {
+exports.searchApps = async function(req, res) {
     if (req.session.role == "admin") {
 
         // Get the user.
@@ -123,6 +130,65 @@ exports.processApps = async function(req, res) {
             next: next,
             apps_list: apps_list
         });
+    } else {
+        // Redirect to the login page
+        res.redirect("/login");
+    }
+}
+
+
+
+
+
+
+
+
+
+exports.Install = async function (req, res) {
+    
+    if (req.session.role == "admin") {
+
+        install(req.body);
+
+        let container_info = {
+            name: req.body.name,
+            service: req.body.service_name,
+            state: 'installing',
+            image: req.body.image,
+            restart_policy: req.body.restart_policy
+        }
+
+        let installCard = dashCard(container_info);
+
+        req.app.locals.install = installCard;
+
+        
+        // Redirect to the home page
+        res.redirect("/");
+    } else {
+        // Redirect to the login page
+        res.redirect("/login");
+    }
+}
+
+
+
+exports.Uninstall = async function (req, res) {
+    
+    if (req.session.role == "admin") {
+
+
+        if (req.body.confirm == 'Yes') {
+            exec(`docker compose -f ./appdata/${req.body.service_name}/docker-compose.yml down`, (error, stdout, stderr) => {
+                if (error) { console.error(`error: ${error.message}`); return; }
+                if (stderr) { console.error(`stderr: ${stderr}`); return; }
+                console.log(`stdout:\n${stdout}`);
+            });
+        }
+
+
+        // Redirect to the home page
+        res.redirect("/");
     } else {
         // Redirect to the login page
         res.redirect("/login");

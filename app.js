@@ -4,7 +4,7 @@ const redis = require('connect-redis');
 const app = express();
 const routes = require("./routes");
 
-const { serverStats, containerList, containerStats, containerAction } = require('./functions/systeminformation');
+const { serverStats, containerList, containerStats, containerAction } = require('./functions/system_information');
 
 let sent_list, clicked;
 
@@ -43,8 +43,6 @@ const io = require('socket.io')(server);
 io.engine.use(sessionMiddleware);
 
 
-
-
 io.on('connection', (socket) => {
     // set user session
     const user_session = socket.request.session;
@@ -54,22 +52,16 @@ io.on('connection', (socket) => {
     if (sent_list != null) { socket.emit('cards', sent_list); }
 
     // check if an install card has to be sent
-    if((app.locals.install != '') && (app.locals.install != null)){
-        socket.emit('install', app.locals.install);
-    }    
+    if((app.locals.install != '') && (app.locals.install != null)){ socket.emit('install', app.locals.install); }
 
     // send server metrics
     let ServerStats = setInterval(async () => {
-
         socket.emit('metrics', await serverStats());
-
     }, 1000);
 
-    // send container metrics
+    // send container list
     let ContainerList = setInterval(async () => {
-
         let card_list = await containerList();
-
         if (sent_list !== card_list) {
             sent_list = card_list;
             app.locals.install = '';
@@ -80,20 +72,14 @@ io.on('connection', (socket) => {
     // send container metrics
     let ContainerStats = setInterval(async () => {
         let container_stats = await containerStats();
-
-
-        //split up the array to display the name and stats
         for (let i = 0; i < container_stats.length; i++) {
             socket.emit('container_stats', container_stats[i]);
         }
-
     }, 1000);
 
-
+    // play/pause/stop/restart container
     socket.on('clicked', (data) => {
-        // Prevent multiple clicks
         if (clicked == true) { return; } clicked = true;
-
         let buttonPress = {
             user: socket.request.session.user,
             role: socket.request.session.role,
@@ -101,22 +87,14 @@ io.on('connection', (socket) => {
             container: data.container,
             state: data.state
         }
-
-        console.log(buttonPress)
-
         containerAction(buttonPress);
-
         clicked = false;
     });
     
-
     socket.on('disconnect', () => {                
         clearInterval(ServerStats);
         clearInterval(ContainerList);
         clearInterval(ContainerStats);
     }); 
-
-
-    
 
 });

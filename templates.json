@@ -2196,20 +2196,20 @@
       ],
       "volumes": [
         {
-          "container": "/opt",
-          "bind": "/home/docker/kasm/opt"
+          "bind": "/home/docker/kasm/opt",
+          "container": "/opt"
         },
         {
-          "container": "/profiles",
-          "bind": "/home/docker/kasm/profiles"
+          "bind": "/home/docker/kasm/profiles",
+          "container": "/profiles"
         },
         {
-          "container": "/dev/input",
-          "bind": "/dev/input"
+          "bind": "/dev/input",
+          "container": "/dev/input"
         },
         {
-          "container": "/run/udev/data",
-          "bind": "/run/udev/data"
+          "bind": "/run/udev/data",
+          "container": "/run/udev/data"
         }
       ],
       "restart_policy": "unless-stopped"
@@ -2225,7 +2225,7 @@
         "Tools"
       ],
       "platform": "linux",
-      "logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/libreoffice-logo.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/libreoffice.png",
       "image": "linuxserver/libreoffice:latest",
       "env": [
         {
@@ -2511,7 +2511,7 @@
         "Tools"
       ],
       "platform": "linux",
-      "logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/phpmyadmin-logo.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/phpmyadmin.png",
       "image": "linuxserver/phpmyadmin:latest",
       "env": [
         {
@@ -2561,9 +2561,9 @@
       "title": "Pidgin",
       "name": "pidgin",
       "note": "",
-      "description": "Pidgin (https://pidgin.im/) is a chat program which lets you log into accounts on multiple chat networks simultaneously. This means that you can be chatting with friends on XMPP and sitting in an IRC channel at the same time.",
+      "description": "Pidgin is a chat program which lets you log into accounts on multiple chat networks simultaneously. This means that you can be chatting with friends on XMPP and sitting in an IRC channel at the same time.",
       "platform": "linux",
-      "logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/pidgin-logo.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/pidgin.png",
       "image": "linuxserver/pidgin:latest",
       "env": [
         {
@@ -2591,8 +2591,8 @@
       ],
       "volumes": [
         {
-          "container": "/config",
-          "bind": "/home/docker/pidgin/config"
+          "bind": "/home/docker/pidgin",
+          "container": "/config"
         }
       ],
       "restart_policy": "unless-stopped"
@@ -2602,9 +2602,9 @@
       "title": "Remmina",
       "name": "remmina",
       "note": "",
-      "description": "[Remmina](https://remmina.org/) is a remote desktop client written in GTK, aiming to be useful for system administrators and travellers, who need to work with lots of remote computers in front of either large or tiny screens. Remmina supports multiple network protocols, in an integrated and consistent user interface. Currently RDP, VNC, SPICE, NX, XDMCP, SSH and EXEC are supported.",
+      "description": "Remmina is a remote desktop client written in GTK, aiming to be useful for system administrators and travellers, who need to work with lots of remote computers in front of either large or tiny screens. Remmina supports multiple network protocols, in an integrated and consistent user interface. Currently RDP, VNC, SPICE, NX, XDMCP, SSH and EXEC are supported.",
       "platform": "linux",
-      "logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/remmina-icon.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/remmina.png",
       "image": "linuxserver/remmina:latest",
       "env": [
         {
