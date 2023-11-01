@@ -337,7 +337,7 @@
       "image": "ghcr.io/linuxserver/prowlarr:develop",
       "categories": [
         "Downloaders",
-        "Tools"
+        "Arr"
       ],
       "ports": [
         "9696/tcp"
@@ -1144,7 +1144,7 @@
     },
     {
       "categories": [
-        "Multimedia"
+        "Media"
       ],
       "description": "Airsonic is a free, web-based media streamer, providing ubiqutious access to your music. Use it to share your music with friends, or to listen to your own music while at work. You can stream to multiple players simultaneously, for instance to one player in your kitchen and another in your living room.",
       "env": [
@@ -1371,7 +1371,7 @@
       "description": "Audacity is an easy-to-use, multi-track audio editor and recorder. Developed by a group of volunteers as open source. (https://www.audacityteam.org/)",
       "platform": "linux",
       "categories": [
-        "Multimedia"
+        "Media"
       ],
       "logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/audacity-logo.png",
       "image": "linuxserver/audacity:latest",
@@ -2161,7 +2161,7 @@
       "note": "",
       "description": "Kasm workspaces is a docker container streaming platform for delivering browser-based access to desktops, applications, and web services. Kasm uses devops-enabled Containerized Desktop Infrastructure (CDI) to create on-demand, disposable, docker containers that are accessible via web browser. Example use-cases include Remote Browser Isolation (RBI), Data Loss Prevention (DLP), Desktop as a Service (DaaS), Secure Remote Access Services (RAS), and Open Source Intelligence (OSINT) collections. The rendering of the graphical-based containers is powered by the open-source project [KasmVNC](https://www.kasmweb.com/kasmvnc.html?utm_campaign=LinuxServer&utm_source=kasmvnc).",
       "platform": "linux",
-      "logo": "https://kasm-ci.s3.amazonaws.com/kasm_wide.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/kasm.png",
       "image": "linuxserver/kasm:latest",
       "privileged": true,
       "env": [
@@ -2196,20 +2196,20 @@
       ],
       "volumes": [
         {
-          "container": "/opt",
-          "bind": "/home/docker/kasm/opt"
+          "bind": "/home/docker/kasm/opt",
+          "container": "/opt"
         },
         {
-          "container": "/profiles",
-          "bind": "/home/docker/kasm/profiles"
+          "bind": "/home/docker/kasm/profiles",
+          "container": "/profiles"
         },
         {
-          "container": "/dev/input",
-          "bind": "/dev/input"
+          "bind": "/dev/input",
+          "container": "/dev/input"
         },
         {
-          "container": "/run/udev/data",
-          "bind": "/run/udev/data"
+          "bind": "/run/udev/data",
+          "container": "/run/udev/data"
         }
       ],
       "restart_policy": "unless-stopped"
@@ -2225,7 +2225,7 @@
         "Tools"
       ],
       "platform": "linux",
-      "logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/libreoffice-logo.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/libreoffice.png",
       "image": "linuxserver/libreoffice:latest",
       "env": [
         {
@@ -2269,7 +2269,7 @@
         "Communication"
       ],
       "platform": "linux",
-      "logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/mastodon-banner.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/mastodon.png",
       "image": "linuxserver/mastodon:latest",
       "env": [
         {
@@ -2511,7 +2511,7 @@
         "Tools"
       ],
       "platform": "linux",
-      "logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/phpmyadmin-logo.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/phpmyadmin.png",
       "image": "linuxserver/phpmyadmin:latest",
       "env": [
         {
@@ -2561,9 +2561,9 @@
       "title": "Pidgin",
       "name": "pidgin",
       "note": "",
-      "description": "Pidgin (https://pidgin.im/) is a chat program which lets you log into accounts on multiple chat networks simultaneously. This means that you can be chatting with friends on XMPP and sitting in an IRC channel at the same time.",
+      "description": "Pidgin is a chat program which lets you log into accounts on multiple chat networks simultaneously. This means that you can be chatting with friends on XMPP and sitting in an IRC channel at the same time.",
       "platform": "linux",
-      "logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/pidgin-logo.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/pidgin.png",
       "image": "linuxserver/pidgin:latest",
       "env": [
         {
@@ -2591,8 +2591,8 @@
       ],
       "volumes": [
         {
-          "container": "/config",
-          "bind": "/home/docker/pidgin/config"
+          "bind": "/home/docker/pidgin",
+          "container": "/config"
         }
       ],
       "restart_policy": "unless-stopped"
@@ -2602,9 +2602,9 @@
       "title": "Remmina",
       "name": "remmina",
       "note": "",
-      "description": "[Remmina](https://remmina.org/) is a remote desktop client written in GTK, aiming to be useful for system administrators and travellers, who need to work with lots of remote computers in front of either large or tiny screens. Remmina supports multiple network protocols, in an integrated and consistent user interface. Currently RDP, VNC, SPICE, NX, XDMCP, SSH and EXEC are supported.",
+      "description": "Remmina is a remote desktop client written in GTK, aiming to be useful for system administrators and travellers, who need to work with lots of remote computers in front of either large or tiny screens. Remmina supports multiple network protocols, in an integrated and consistent user interface. Currently RDP, VNC, SPICE, NX, XDMCP, SSH and EXEC are supported.",
       "platform": "linux",
-      "logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/remmina-icon.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/remmina.png",
       "image": "linuxserver/remmina:latest",
       "env": [
         {
@@ -3016,7 +3016,7 @@
           "name": "PORT"
         }
       ],
-      "logo": "https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/authentik.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/authentik.png",
       "name": "authentik",
       "platform": "linux",
       "repository": {
@@ -3063,8 +3063,8 @@
       "categories": [
         "Communication"
       ],
-      "description": "Rocket.Chat Server",
-      "logo": "https://raw.githubusercontent.com/portapps/rocketchat-portable/master/res/papp.png",
+      "description": "Rocket.Chat is an open-source fully customizable communications platform developed in JavaScript for organizations with high standards of data protection.",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/rocketchat.png",
       "note": "Rocket.Chat Server Container",
       "platform": "linux",
       "repository": {
@@ -3720,8 +3720,8 @@
         "Tools"
       ],
       "description": "ClamAV is an open source antivirus engine for detecting trojans, viruses, malware & other malicious threats.",
-      "image": "mkodockx/docker-clamav:alpine",
-      "logo": "http://www.clamav.net/assets/clamav-trademark.png",
+      "image": "clamav/clamav",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/clamav.png",
       "name": "clamav",
       "platform": "linux",
       "ports": [
@@ -3733,19 +3733,15 @@
       "volumes": [
         {
           "bind": "/etc/timezone",
-          "container": "/etc/timezone"
-        },
-        {
-          "bind": "/etc/localtime",
-          "container": "/etc/localtime"
-        },
-        {
-          "bind": "/home/docker/clamav/config",
-          "container": "/etc/clamav"
+          "container": "/etc/timezone:ro"
         },
         {
           "bind": "/home/docker/clamav/virus_definitions",
           "container": "/var/lib/clamav"
+        },
+        {
+          "bind": "/home/docker",
+          "container": "/scandir"
         }
       ],
       "note": ""
@@ -4935,7 +4931,7 @@
     {
       "categories": [
         "Multimedia",
-        "AI"
+        "Productivity"
       ],
       "description": "PhotoPrism is an AI-powered app for browsing, organizing & sharing your photo collection. It makes use of the latest technologies to tag and find pictures automatically without getting in your way.| Copy as Custom stack and EDIT environment variables.",
       "logo": "https://photoprism.app/static/img/logo.svg",
@@ -5721,7 +5717,7 @@
         "CMS"
       ],
       "platform": "linux",
-      "logo": "https://portainer-io-assets.sfo2.digitaloceanspaces.com/logos/joomla.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/joomla.png",
       "image": "joomla:latest",
       "env": [
         {

@@ -1,4 +1,6 @@
-function dashCard(name, service, id, state, image, external_port, internal_port) {
+module.exports.dashCard = function dashCard(data) {
+  
+  let { name, service, id, state, image, external_port, internal_port } = data;
   
   //disable controls for a docker container depending on its name
   let enabled = "";
@@ -100,7 +102,7 @@ function dashCard(name, service, id, state, image, external_port, internal_port)
       <div class="card">
         <div class="card-body">
           <div class="card-stamp card-stamp-sm">
-            <img heigh="300px" width="300px" src="https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/${service}.png"></img>
+            <img heigh="150px" width="150px" src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/${service}.png"></img>
           </div>
           
           <div class="d-flex align-items-center">
@@ -150,7 +152,7 @@ function dashCard(name, service, id, state, image, external_port, internal_port)
               </span>
             </div>
           </div>
-          <div id="cardChart" class="chart-sm"></div>
+          <div id="${name}_chart" class="chart-sm"></div>
         </div>
       </div>
     </div>
@@ -1063,5 +1065,3 @@ function dashCard(name, service, id, state, image, external_port, internal_port)
                 </div>
               </div>`;
 }
-
-module.exports = { dashCard };

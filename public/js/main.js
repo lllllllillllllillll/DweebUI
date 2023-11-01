@@ -22,8 +22,13 @@ const diskBar = document.getElementById('disk-bar');
 
 const dockerCards = document.getElementById('cards');
 
+// create
+
 //Update usage bars
-socket.on('metrics', ({ cpu, ram, tx, rx, disk}) => {
+socket.on('metrics', (data) => {
+
+    let {cpu, ram, tx, rx, disk} = data;
+
     cpuText.innerHTML = `<span>CPU ${cpu} %</span>`;
     cpuBar.innerHTML = `<span style="width: ${cpu}%"><span></span></span>`;
     ramText.innerHTML = `<span>RAM ${ram} %</span>`;
@@ -32,8 +37,17 @@ socket.on('metrics', ({ cpu, ram, tx, rx, disk}) => {
     diskBar.innerHTML = `<span style="width: ${disk}%"><span></span></span>`;
 });
 
-function drawCharts() {
-  var elements = document.querySelectorAll("#cardChart");
+function drawCharts(name, cpu_array, ram_array) {
+  var elements = document.querySelectorAll(`${name}`);
+
+  if (cpu_array == undefined) {
+    cpu_array = [37, 35, 44, 28, 36, 24, 65, 31, 37, 39, 62, 51, 35, 41, 35, 27, 93, 53, 61, 27, 54, 43, 4, 46, 39, 62, 51, 35, 41, 67];
+  }
+
+  if (ram_array == undefined) {
+    ram_array = [93, 54, 51, 24, 35, 35, 31, 67, 19, 43, 28, 36, 62, 61, 27, 39, 35, 41, 27, 35, 51, 46, 62, 37, 44, 53, 41, 65, 39, 37];
+  }
+
 
   Array.from(elements).forEach(function(element) {
     if (window.ApexCharts) {
@@ -60,10 +74,10 @@ function drawCharts() {
         },
         series: [{
           name: "CPU",
-          data: [37, 35, 44, 28, 36, 24, 65, 31, 37, 39, 62, 51, 35, 41, 35, 27, 93, 53, 61, 27, 54, 43, 4, 46, 39, 62, 51, 35, 41, 67]
+          data: cpu_array
         }, {
           name: "RAM",
-          data: [93, 54, 51, 24, 35, 35, 31, 67, 19, 43, 28, 36, 62, 61, 27, 39, 35, 41, 27, 35, 51, 46, 62, 37, 44, 53, 41, 65, 39, 37]
+          data: ram_array
         }],
         tooltip: {
           theme: 'dark'
@@ -97,14 +111,8 @@ function drawCharts() {
   });
 }
 
+// container button actions
 function buttonAction(button) {
-
-// if the button name is 'CaddyProxyManager' and the value is 'install' grab the div with the id of 'sites' and remove d-none class. also add the d-none class to the div with the id of 'CaddyInstallCard'
-  if (button.name == 'CaddyProxyManager' && button.value == 'install') {
-    document.getElementById('sites').classList.remove('d-none');
-    document.getElementById('CaddyInstallCard').classList.add('d-none');
-  }
-
   socket.emit('clicked', {container: button.name, state: button.id, action: button.value});
 }
 
@@ -117,9 +125,44 @@ socket.on('cards', (data) => {
   });
  
   dockerCards.insertAdjacentHTML("afterend", data);
-  drawCharts();
+  
 });
 
+
+socket.on('container_stats', (data) => {
+
+  let {name, cpu, ram} = data;
+
+  // get cpu and ram array of the container from local storage
+  var cpu_array = JSON.parse(localStorage.getItem(`${name}_cpu`));
+  var ram_array = JSON.parse(localStorage.getItem(`${name}_ram`));
+  console.log(`#1: ${name} cpu: ${cpu_array} ram: ${ram_array}`);
+
+  // if the cpu and ram arrays are null, create both arrays with 30 values of 0
+  if (cpu_array == null) { cpu_array = Array(30).fill(0); }
+  if (ram_array == null) { ram_array = Array(30).fill(0); }
+  console.log(`#2: ${name} cpu: ${cpu_array} ram: ${ram_array}`);
+
+  // add the new cpu and ram values to the arrays, but limit the array to 30 values
+  cpu_array.push(cpu);
+  ram_array.push(ram);
+  console.log(`#3: ${name} cpu: ${cpu_array} ram: ${ram_array}`);
+
+  cpu_array = cpu_array.slice(-30);
+  ram_array = ram_array.slice(-30);
+  console.log(`#4: ${name} cpu: ${cpu_array} ram: ${ram_array}`);
+
+  // save the arrays to local storage
+  localStorage.setItem(`${name}_cpu`, JSON.stringify(cpu_array));
+  localStorage.setItem(`${name}_ram`, JSON.stringify(ram_array));
+
+  // replace the old chart with the new one without breaking the surrounding elements
+  let chart = document.getElementById(`${name}_chart`);
+  let newChart = document.createElement('div');
+  newChart.id = `${name}_chart`;
+  chart.parentNode.replaceChild(newChart, chart);
+  drawCharts(`#${name}_chart`, cpu_array, ram_array);  
+});
 
 socket.on('install', (data) => {
   
