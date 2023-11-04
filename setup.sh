@@ -31,12 +31,16 @@ sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plug
 # Create docker network
 docker network create -d bridge AppBridge 
 
+# Create a redis docker container with persistent storage and a password
+docker run -d --name DweebCache --restart unless-stopped -v /home/docker/redis:/data -p 6379:6379 redis redis-server --requirepass "somesupersecretpassword"
+
+
 # Install redis
-curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
-echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/redis.list
-apt-get update -y
-apt-get install -y redis
-systemctl enable --now redis-server
+# curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
+# echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/redis.list
+# apt-get update -y
+# apt-get install -y redis
+# systemctl enable --now redis-server
 
 # Install nodejs
 mkdir -p /etc/apt/keyrings
@@ -46,10 +50,7 @@ echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.co
 sudo apt-get update
 sudo apt-get install nodejs -y
 
-
-# Install pnpm and nodejs modules
-npm install -g pnpm
-pnpm i
+npm i
 
 # Prep for caddy
 mkdir -p /home/docker/caddy/sites

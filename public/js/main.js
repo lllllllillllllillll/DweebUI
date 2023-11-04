@@ -31,23 +31,22 @@ socket.on('metrics', (data) => {
 
     cpuText.innerHTML = `<span>CPU ${cpu} %</span>`;
     cpuBar.innerHTML = `<span style="width: ${cpu}%"><span></span></span>`;
+    
     ramText.innerHTML = `<span>RAM ${ram} %</span>`;
     ramBar.innerHTML = `<span style="width: ${ram}%"><span></span></span>`;
+
+    tx = Math.round(tx / 1024 / 1024);
+    rx = Math.round(rx / 1024 / 1024);
+
+    netText.innerHTML = `<span>Down: ${rx}MB</span><span>  Up: ${tx}MB</span>`;
+    netBar.innerHTML = `<span style="width: 50%"><span></span></span>`;
+
     diskText.innerHTML = `<span>DISK ${disk} %</span>`;
     diskBar.innerHTML = `<span style="width: ${disk}%"><span></span></span>`;
 });
 
 function drawCharts(name, cpu_array, ram_array) {
   var elements = document.querySelectorAll(`${name}`);
-
-  if (cpu_array == undefined) {
-    cpu_array = [37, 35, 44, 28, 36, 24, 65, 31, 37, 39, 62, 51, 35, 41, 35, 27, 93, 53, 61, 27, 54, 43, 4, 46, 39, 62, 51, 35, 41, 67];
-  }
-
-  if (ram_array == undefined) {
-    ram_array = [93, 54, 51, 24, 35, 35, 31, 67, 19, 43, 28, 36, 62, 61, 27, 39, 35, 41, 27, 35, 51, 46, 62, 37, 44, 53, 41, 65, 39, 37];
-  }
-
 
   Array.from(elements).forEach(function(element) {
     if (window.ApexCharts) {
@@ -125,6 +124,17 @@ socket.on('cards', (data) => {
   });
  
   dockerCards.insertAdjacentHTML("afterend", data);
+
+  // check localStorage for items ending with _cpu and redraw the charts
+  for (let i = 0; i < localStorage.length; i++) {
+    if (localStorage.key(i).endsWith('_cpu')) {
+      let name = localStorage.key(i).split('_')[0];
+      let cpu_array = JSON.parse(localStorage.getItem(`${name}_cpu`));
+      let ram_array = JSON.parse(localStorage.getItem(`${name}_ram`));
+      drawCharts(`#${name}_chart`, cpu_array, ram_array);
+    }
+  }
+  
   
 });
 
@@ -136,27 +146,23 @@ socket.on('container_stats', (data) => {
   // get cpu and ram array of the container from local storage
   var cpu_array = JSON.parse(localStorage.getItem(`${name}_cpu`));
   var ram_array = JSON.parse(localStorage.getItem(`${name}_ram`));
-  console.log(`#1: ${name} cpu: ${cpu_array} ram: ${ram_array}`);
 
   // if the cpu and ram arrays are null, create both arrays with 30 values of 0
   if (cpu_array == null) { cpu_array = Array(30).fill(0); }
   if (ram_array == null) { ram_array = Array(30).fill(0); }
-  console.log(`#2: ${name} cpu: ${cpu_array} ram: ${ram_array}`);
 
   // add the new cpu and ram values to the arrays, but limit the array to 30 values
   cpu_array.push(cpu);
   ram_array.push(ram);
-  console.log(`#3: ${name} cpu: ${cpu_array} ram: ${ram_array}`);
 
   cpu_array = cpu_array.slice(-30);
   ram_array = ram_array.slice(-30);
-  console.log(`#4: ${name} cpu: ${cpu_array} ram: ${ram_array}`);
 
   // save the arrays to local storage
   localStorage.setItem(`${name}_cpu`, JSON.stringify(cpu_array));
   localStorage.setItem(`${name}_ram`, JSON.stringify(ram_array));
 
-  // replace the old chart with the new one without breaking the surrounding elements
+  // replace the old chart with the new one
   let chart = document.getElementById(`${name}_chart`);
   let newChart = document.createElement('div');
   newChart.id = `${name}_chart`;
