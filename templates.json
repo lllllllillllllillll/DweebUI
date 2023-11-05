@@ -416,7 +416,7 @@
       "name": "readarr",
       "title": "Readarr",
       "description": "Readarr is an ebook and audiobook collection manager for Usenet and BitTorrent users. It can monitor multiple RSS feeds for new books from your favorite authors and will grab, sort, and rename them.",
-      "logo": "https://mediadepot.github.io/templates/img/readarr-logo.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/readarr.png",
       "image": "ghcr.io/linuxserver/readarr:nightly",
       "categories": [
         "Downloaders",
@@ -473,7 +473,7 @@
       "name": "scrutiny",
       "title": "Scrutiny",
       "description": "WebUI for smartd S.M.A.R.T monitoring",
-      "logo": "https://mediadepot.github.io/templates/img/scrutiny.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/scrutiny.png",
       "image": "analogj/scrutiny:latest",
       "categories": [
         "Monitoring"
@@ -516,8 +516,8 @@
       "type": 1,
       "name": "sonarr",
       "title": "Sonarr",
-      "description": "Sonarr (formerly NZBdrone) is a PVR for usenet and bittorrent users. It can monitor multiple RSS feeds for new episodes of your favorite shows and will grab, sort and rename them. It can also be configured to automatically upgrade the quality of files already downloaded when a better quality format becomes available.",
-      "logo": "https://mediadepot.github.io/templates/img/sonarr-icon.png",
+      "description": "Sonarr is a PVR for usenet and bittorrent users. It can monitor multiple RSS feeds for new episodes of your favorite shows and will grab, sort and rename them. It can also be configured to automatically upgrade the quality of files already downloaded when a better quality format becomes available.",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/sonarr.png",
       "image": "linuxserver/sonarr:latest",
       "categories": [
         "Downloaders",
@@ -587,7 +587,7 @@
       "name": "tautulli",
       "title": "Tautulli",
       "description": "A Python based monitoring and tracking tool for Plex Media Server.",
-      "logo": "https://mediadepot.github.io/templates/img/tautulli-icon.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/tautulli.png",
       "image": "linuxserver/tautulli:latest",
       "categories": [
         "MediaServer:Other",
@@ -645,7 +645,7 @@
       "name": "watchtower",
       "title": "Watchtower",
       "description": "Automatically update running Docker containers",
-      "logo": "https://mediadepot.github.io/templates/img/watchtower-logo.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/watchtower.png",
       "image": "containrrr/watchtower:latest",
       "command": "--cleanup --label-enable",
       "categories": [
@@ -664,7 +664,7 @@
       "name": "wizarr",
       "title": "Wizarr",
       "description": "Wizarr is an advanced user invitation and management system for Jellyfin, Plex, Emby etc. ",
-      "logo": "https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/wizarr.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/wizarr.png",
       "image": "ghcr.io/wizarrrr/wizarr",
       "categories": [
         "Arr"
@@ -732,7 +732,7 @@
         }
       ],
       "image": "linuxserver/transmission:latest",
-      "logo": "https://raw.githubusercontent.com/thesugarat/portainer_templates-1/master/Images/transmission-icon.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/transmission.png",
       "platform": "linux",
       "ports": [
         "9091/tcp",
@@ -779,7 +779,7 @@
         }
       ],
       "image": "linuxserver/kodi-headless:latest",
-      "logo": "https://raw.githubusercontent.com/thesugarat/portainer_templates-1/master/Images/kodi-icon.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/kodi.png",
       "platform": "linux",
       "ports": [
         "8080/tcp",
@@ -820,7 +820,7 @@
         }
       ],
       "image": "linuxserver/syncthing:latest",
-      "logo": "https://raw.githubusercontent.com/thesugarat/portainer_templates-1/master/Images/syncthing-icon.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/syncthing.png",
       "platform": "linux",
       "ports": [
         "8384/tcp",
@@ -922,7 +922,7 @@
         }
       ],
       "image": "linuxserver/deluge:latest",
-      "logo": "https://raw.githubusercontent.com/thesugarat/portainer_templates-1/master/Images/deluge-icon.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/deluge.png",
       "platform": "linux",
       "title": "Deluge",
       "name": "deluge",
@@ -4132,7 +4132,7 @@
         }
       ],
       "image": "hkotel/mealie:v0.4.3",
-      "logo": "https://raw.githubusercontent.com/pi-hosted/pi-hosted/master/images/mealie.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/mealie.png",
       "name": "mealie",
       "note": "",
       "platform": "linux",
@@ -4164,7 +4164,7 @@
         }
       ],
       "image": "itzg/minecraft-server:latest",
-      "logo": "https://raw.githubusercontent.com/pi-hosted/pi-hosted/master/images/minecraft.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/minecraft.png",
       "name": "minecraft",
       "platform": "linux",
       "ports": [
@@ -4200,7 +4200,7 @@
         }
       ],
       "image": "netdata/netdata:latest",
-      "logo": "https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/netdata.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/netdata.png",
       "name": "netdata",
       "note": "",
       "platform": "linux",
@@ -4260,7 +4260,7 @@
         }
       ],
       "image": "organizr/organizr:latest",
-      "logo": "https://raw.githubusercontent.com/pi-hosted/pi-hosted/master/images/organizr-icon.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/organizr.png",
       "name": "organizr-v2",
       "platform": "linux",
       "ports": [
@@ -4283,7 +4283,7 @@
       "title": "PostgreSQL",
       "note": "",
       "description": "PostgreSQL, also known as Postgres, is a free and open-source relational database management system emphasizing extensibility and SQL compliance. It was originally named POSTGRES, referring to its origins as a successor to the Ingres database developed at the University of California, Berkeley. <a href='https://www.postgresql.org/' target='_blank'>Website</a>. <a href='https://hub.docker.com/_/postgres' target='_blank'>Docker Hub</a>",
-      "logo": "https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/postgres.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/postgres.png",
       "image": "postgres",
       "categories": [
         "Database"
@@ -4358,7 +4358,7 @@
         }
       ],
       "image": "hotio/qflood:latest",
-      "logo": "https://raw.githubusercontent.com/jesec/flood/master/flood.svg",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/qflood.png",
       "name": "qflood",
       "note": "",
       "platform": "linux",
@@ -4508,7 +4508,7 @@
       ],
       "description": "Traefik is an open-source Edge Router that makes publishing your services a fun and easy experience. It receives requests on behalf of your system and finds out which components are responsible for handling them. ",
       "image": "traefik:latest",
-      "logo": "https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/traefik.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/traefik.png",
       "name": "traefik",
       "note": "",
       "platform": "linux",
@@ -4559,7 +4559,7 @@
         }
       ],
       "image": "josh5/unmanic:latest",
-      "logo": "https://docs.unmanic.app/img/icon.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/unmanic.png",
       "name": "unmanic",
       "platform": "linux",
       "ports": [
@@ -4658,7 +4658,7 @@
           "name": "WORDPRESS_DB_NAME"
         }
       ],
-      "logo": "https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/wordpress.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/wordpress.png",
       "note": "Create a mysql or mariadb database for the container first.",
       "platform": "linux",
       "image": "wordpress:latest",
@@ -4710,7 +4710,7 @@
           "name": "PORT"
         }
       ],
-      "logo": "https://raw.githubusercontent.com/SelfhostedPro/selfhosted_templates/master/Images/invoice_ninja.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/invoiceninja.png",
       "name": "invoice_ninja",
       "note": "The database user is invoice_ninja and the database is ninja_db. Please generate an app key following the documentation <a href='https://github.com/invoiceninja/dockerfiles'>here</a>. ",
       "platform": "linux",
@@ -4739,7 +4739,7 @@
         }
       ],
       "image": "linuxserver/mcmyadmin2:latest",
-      "logo": "https://raw.githubusercontent.com/SelfhostedPro/selfhosted_templates/master/Images/mcmyadmin-icon.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/mcmyadmin2.png",
       "name": "mcmyadmin2",
       "platform": "linux",
       "ports": [
