@@ -1,4 +1,4 @@
-## v0.03 (Nov 4th 2023)
+## v0.03 (Nov 5th 2023)
 * Container graphs now load instantly on refresh
 * Working net data for server dashboard
 * Redis is now installed as a docker container.
