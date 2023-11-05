@@ -1,12 +1,12 @@
 # DweebUI
 
 
-DweebUI is a simple docker web interface created with Javascript and Node.js
+DweebUI is a simple Docker web interface created with javascript and node.js
 
-Pre-Pre-Pre-Pre-Pre Alpha v 0.02 ( :fire: Experimental. Don't install on any servers you care about :fire: )
+Pre-Pre-Pre-Pre-Pre Alpha v 0.03 ( :fire: Experimental. Don't install on any servers you care about :fire: )
 
-* I haven't used Github very much, and I'm still new to Javascript
-* This is the first project I've ever released, and I'm sure it's full of plenty of bugs and mistakes.
+* I haven't used Github very much and I'm still new to javascript
+* This is the first project I've ever released and I'm sure it's full of plenty of bugs and mistakes.
 * I probably should have waited a lot longer to share this :|
 
 Requirements: Fresh Install of Debian 12.2
@@ -19,8 +19,8 @@ Requirements: Fresh Install of Debian 12.2
 * Partial Portainer Template Support (Network Mode, Ports, Volumes, Enviroment Variables, Labels, Commands, Restart Policy, Nvidia Hardware Acceleration).
 * Light/Dark Mode.
 * Support for multiple users is built in (but unused).
-* Caddy Proxy Manager
-* Pure Javascript. No Typescript. No Frameworks.
+* Caddy Proxy Manager (very simple. proof of concept)
+* Pure javascript. No frameworks or typescript.
 * User data is stored in a sqlite database and uses browser sessions and a redis store for authentication.
 * Templates.json maintains compatability with Portainer, so you can use the template without needing to use DweebUI.
 

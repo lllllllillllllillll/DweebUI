@@ -416,7 +416,7 @@
       "name": "readarr",
       "title": "Readarr",
       "description": "Readarr is an ebook and audiobook collection manager for Usenet and BitTorrent users. It can monitor multiple RSS feeds for new books from your favorite authors and will grab, sort, and rename them.",
-      "logo": "https://mediadepot.github.io/templates/img/readarr-logo.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/readarr.png",
       "image": "ghcr.io/linuxserver/readarr:nightly",
       "categories": [
         "Downloaders",
@@ -473,7 +473,7 @@
       "name": "scrutiny",
       "title": "Scrutiny",
       "description": "WebUI for smartd S.M.A.R.T monitoring",
-      "logo": "https://mediadepot.github.io/templates/img/scrutiny.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/scrutiny.png",
       "image": "analogj/scrutiny:latest",
       "categories": [
         "Monitoring"
@@ -516,8 +516,8 @@
       "type": 1,
       "name": "sonarr",
       "title": "Sonarr",
-      "description": "Sonarr (formerly NZBdrone) is a PVR for usenet and bittorrent users. It can monitor multiple RSS feeds for new episodes of your favorite shows and will grab, sort and rename them. It can also be configured to automatically upgrade the quality of files already downloaded when a better quality format becomes available.",
-      "logo": "https://mediadepot.github.io/templates/img/sonarr-icon.png",
+      "description": "Sonarr is a PVR for usenet and bittorrent users. It can monitor multiple RSS feeds for new episodes of your favorite shows and will grab, sort and rename them. It can also be configured to automatically upgrade the quality of files already downloaded when a better quality format becomes available.",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/sonarr.png",
       "image": "linuxserver/sonarr:latest",
       "categories": [
         "Downloaders",
@@ -587,7 +587,7 @@
       "name": "tautulli",
       "title": "Tautulli",
       "description": "A Python based monitoring and tracking tool for Plex Media Server.",
-      "logo": "https://mediadepot.github.io/templates/img/tautulli-icon.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/tautulli.png",
       "image": "linuxserver/tautulli:latest",
       "categories": [
         "MediaServer:Other",
@@ -645,7 +645,7 @@
       "name": "watchtower",
       "title": "Watchtower",
       "description": "Automatically update running Docker containers",
-      "logo": "https://mediadepot.github.io/templates/img/watchtower-logo.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/watchtower.png",
       "image": "containrrr/watchtower:latest",
       "command": "--cleanup --label-enable",
       "categories": [
@@ -664,7 +664,7 @@
       "name": "wizarr",
       "title": "Wizarr",
       "description": "Wizarr is an advanced user invitation and management system for Jellyfin, Plex, Emby etc. ",
-      "logo": "https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/wizarr.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/wizarr.png",
       "image": "ghcr.io/wizarrrr/wizarr",
       "categories": [
         "Arr"
@@ -732,7 +732,7 @@
         }
       ],
       "image": "linuxserver/transmission:latest",
-      "logo": "https://raw.githubusercontent.com/thesugarat/portainer_templates-1/master/Images/transmission-icon.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/transmission.png",
       "platform": "linux",
       "ports": [
         "9091/tcp",
@@ -779,7 +779,7 @@
         }
       ],
       "image": "linuxserver/kodi-headless:latest",
-      "logo": "https://raw.githubusercontent.com/thesugarat/portainer_templates-1/master/Images/kodi-icon.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/kodi.png",
       "platform": "linux",
       "ports": [
         "8080/tcp",
@@ -820,7 +820,7 @@
         }
       ],
       "image": "linuxserver/syncthing:latest",
-      "logo": "https://raw.githubusercontent.com/thesugarat/portainer_templates-1/master/Images/syncthing-icon.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/syncthing.png",
       "platform": "linux",
       "ports": [
         "8384/tcp",
@@ -922,7 +922,7 @@
         }
       ],
       "image": "linuxserver/deluge:latest",
-      "logo": "https://raw.githubusercontent.com/thesugarat/portainer_templates-1/master/Images/deluge-icon.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/deluge.png",
       "platform": "linux",
       "title": "Deluge",
       "name": "deluge",
@@ -960,7 +960,7 @@
         }
       ],
       "image": "linuxserver/nginx:latest",
-      "logo": "https://raw.githubusercontent.com/thesugarat/portainer_templates-1/master/Images/nginx-icon.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/nginx.png",
       "platform": "linux",
       "ports": [
         "80/tcp",
@@ -999,7 +999,7 @@
         }
       ],
       "image": "linuxserver/lidarr:latest",
-      "logo": "https://raw.githubusercontent.com/thesugarat/portainer_templates-1/master/Images/lidarr.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/lidarr.png",
       "platform": "linux",
       "ports": [
         "8686/tcp"
@@ -1042,7 +1042,7 @@
         }
       ],
       "image": "linuxserver/qbittorrent:latest",
-      "logo": "https://raw.githubusercontent.com/thesugarat/portainer_templates-1/master/Images/qbittorrent-icon.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/qbittorrent.png",
       "platform": "linux",
       "ports": [
         "6881/tcp",
@@ -1089,7 +1089,7 @@
         }
       ],
       "image": "linuxserver/openvpn-as:latest",
-      "logo": "https://raw.githubusercontent.com/thesugarat/portainer_templates-1/master/Images/openvpn-as-icon.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/openvpn.png",
       "platform": "linux",
       "ports": [
         "943/tcp",
@@ -1175,7 +1175,7 @@
         }
       ],
       "image": "linuxserver/airsonic:latest",
-      "logo": "https://raw.githubusercontent.com/thesugarat/portainer_templates-1/master/Images/airsonic-logo.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/airsonic.png",
       "platform": "linux",
       "ports": [
         "4040/tcp"
@@ -1302,7 +1302,7 @@
         }
       ],
       "image": "linuxserver/nextcloud:latest",
-      "logo": "https://raw.githubusercontent.com/thesugarat/portainer_templates-1/master/Images/nextcloud-icon.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/nextcloud.png",
       "platform": "linux",
       "ports": [
         "443/tcp"
@@ -1330,7 +1330,7 @@
         "Development"
       ],
       "platform": "linux",
-      "logo": "https://raw.githubusercontent.com/caronc/apprise-api/master/apprise_api/static/logo.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/apprise-api.png",
       "image": "linuxserver/apprise-api:latest",
       "env": [
         {
@@ -1373,7 +1373,7 @@
       "categories": [
         "Media"
       ],
-      "logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/audacity-logo.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/audacity.png",
       "image": "linuxserver/audacity:latest",
       "env": [
         {
@@ -1419,7 +1419,7 @@
         "Arr"
       ],
       "platform": "linux",
-      "logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/bazarr.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/bazarr.png",
       "image": "linuxserver/bazarr:latest",
       "env": [
         {
@@ -1595,7 +1595,7 @@
         "CMS"
       ],
       "platform": "linux",
-      "logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/dokuwiki-icon.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/dokuwiki.png",
       "image": "linuxserver/dokuwiki:latest",
       "env": [
         {
@@ -1639,7 +1639,7 @@
         "Arr"
       ],
       "platform": "linux",
-      "logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/doplarr-logo_title.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/doplarr.png",
       "image": "linuxserver/doplarr:latest",
       "env": [
         {
@@ -1782,13 +1782,13 @@
       "title": "Emby",
       "name": "emby",
       "note": "",
-      "description": "[Emby](https://emby.media/) organizes video, music, live TV, and photos from personal media libraries and streams them to smart TVs, streaming boxes and mobile devices. This container is packaged as a standalone emby Media Server.",
+      "description": "Emby organizes video, music, live TV, and photos from personal media libraries and streams them to smart TVs, streaming boxes and mobile devices. This container is packaged as a standalone emby Media Server.",
       "categories": [
         "Media Server",
         "Paid"
       ],
       "platform": "linux",
-      "logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/emby-logo.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/emby.png",
       "image": "linuxserver/emby:latest",
       "env": [
         {
@@ -1879,9 +1879,9 @@
       "title": "Emulatorjs",
       "name": "emulatorjs",
       "note": "",
-      "description": "[Emulatorjs](https://github.com/linuxserver/emulatorjs) - In browser web based emulation portable to nearly any device for many retro consoles. A mix of emulators is used between Libretro and EmulatorJS.",
+      "description": "Emulatorjs - In browser web based emulation portable to nearly any device for many retro consoles. A mix of emulators is used between Libretro and EmulatorJS.",
       "platform": "linux",
-      "logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/emulatorjs-logo.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/emulatorjs.png",
       "image": "linuxserver/emulatorjs:latest",
       "categories": [
         "Gaming"
@@ -1936,7 +1936,7 @@
       "note": "",
       "description": "Fail2ban is a daemon to ban hosts that cause multiple authentication errors.",
       "platform": "linux",
-      "logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/fail2ban-logo.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/fail2ban.png",
       "image": "linuxserver/fail2ban:latest",
       "network": "host",
       "env": [
@@ -2099,7 +2099,7 @@
       "note": "",
       "description": "Jellyfin is a Free Software Media System that puts you in control of managing and streaming your media. It is an alternative to the proprietary Emby and Plex, to provide media from a dedicated server to end-user devices via multiple apps. Jellyfin is descended from Emby's 3.5.2 release and ported to the .NET Core framework to enable full cross-platform support. There are no strings attached, no premium licenses or features, and no hidden agendas: just a team who want to build something better and work together to achieve it.",
       "platform": "linux",
-      "logo": "https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/jellyfin.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/jellyfin.png",
       "image": "linuxserver/jellyfin:latest",
       "categories": [
         "Media Server",
@@ -2643,9 +2643,9 @@
       "title": "Sqlitebrowser",
       "name": "sqlitebrowser",
       "note": "",
-      "description": "[DB Browser for SQLite](https://sqlitebrowser.org/) is a high quality, visual, open source tool to create, design, and edit database files compatible with SQLite.",
+      "description": "DB Browser for SQLite is a high quality, visual, open source tool to create, design, and edit database files compatible with SQLite.",
       "platform": "linux",
-      "logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/sqlitebrowser-banner.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/sqlitebrowser.png",
       "image": "linuxserver/sqlitebrowser:latest",
       "env": [
         {
@@ -2787,7 +2787,7 @@
       "note": "Setup mysql, postgres, mariadb, mssql database first, or use the default sqlite.",
       "description": "Wikijs is a modern, lightweight and powerful wiki app built on NodeJS. (https://wiki.js.org/)",
       "platform": "linux",
-      "logo": "https://static.requarks.io/logo/wikijs-full.svg",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/wikijs.png",
       "image": "linuxserver/wikijs:latest",
       "env": [
         {
@@ -2867,7 +2867,7 @@
       "note": "",
       "description": "WireGuard is an extremely simple yet fast and modern VPN that utilizes state-of-the-art cryptography. It aims to be faster, simpler, leaner, and more useful than IPsec, while avoiding the massive headache. It intends to be considerably more performant than OpenVPN. WireGuard is designed as a general purpose VPN for running on embedded interfaces and super computers alike, fit for many different circumstances. Initially released for the Linux kernel, it is now cross-platform (Windows, macOS, BSD, iOS, Android) and widely deployable. It is currently under heavy development, but already it might be regarded as the most secure, easiest to use, and simplest VPN solution in the industry.",
       "platform": "linux",
-      "logo": "https://www.wireguard.com/img/wireguard.svg",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/wireguard.png",
       "image": "linuxserver/wireguard:latest",
       "env": [
         {
@@ -2959,7 +2959,7 @@
       "note": "",
       "description": "Wireshark is the world's foremost and widely-used network protocol analyzer. It lets you see what's happening on your network at a microscopic level and is the de facto (and often de jure) standard across many commercial and non-profit enterprises, government agencies, and educational institutions.",
       "platform": "linux",
-      "logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/wireshark-icon.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/wireshark.png",
       "image": "linuxserver/wireshark:latest",
       "network": "host",
       "env": [
@@ -3108,7 +3108,7 @@
         "Dashboard"
       ],
       "description": "Helps you organize your self-hosted services by making them accessible from a single place.",
-      "logo": "https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/dashy.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/dashy.png",
       "name": "dashy",
       "platform": "linux",
       "image": "lissy93/dashy:latest",
@@ -3125,7 +3125,7 @@
       ],
       "description": "Flame is self-hosted startpage for your server. Its design is inspired (heavily) by SUI. Flame is very easy to setup and use. With built-in editors, it allows you to setup your very own application hub in no time - no file editing necessary.",
       "image": "pawelmalak/flame",
-      "logo": "https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/flame.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/flame.png",
       "name": "flame-dashboard",
       "platform": "linux",
       "ports": [
@@ -3153,7 +3153,7 @@
         }
       ],
       "image": "authelia/authelia:latest",
-      "logo": "https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/authelia.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/authelia.png",
       "name": "authelia",
       "note": "Requires a configuration.yml file in order to work. Documentation is available <a href='https://docs.authelia.com/deployment/deployment-ha'>here</a>.",
       "platform": "linux",
@@ -3177,7 +3177,7 @@
       ],
       "description": "This is a Bitwarden server API implementation written in Rust compatible with upstream Bitwarden clients*, perfect for self-hosted deployment where running the official resource-heavy service might not be ideal.",
       "image": "vaultwarden/server:latest",
-      "logo": "https://raw.githubusercontent.com/Qballjos/portainer_templates/master/Images/bitwarden.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/vaultwarden.png",
       "name": "vaultwarden",
       "note": "This project is not associated with the Bitwarden project nor 8bit Solutions LLC.",
       "platform": "linux",
@@ -3201,7 +3201,7 @@
       ],
       "description": "A clientless remote desktop gateway.",
       "image": "oznu/guacamole:latest",
-      "logo": "https://raw.githubusercontent.com/Qballjos/portainer_templates/master/Images/guacamole.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/guacamole.png",
       "name": "guacamole",
       "note": "The default login will be guacadmin/guacadmin. It is common practice to add a new admin user and remove the default user for Guacamole.",
       "platform": "linux",
@@ -3224,7 +3224,7 @@
       ],
       "description": "A dead simple static HOMepage for your servER to keep your s ervices on hand, from a simple yaml configuration file.",
       "image": "b4bz/homer:latest",
-      "logo": "https://raw.githubusercontent.com/Qballjos/portainer_templates/master/Images/homer.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/homer.png",
       "name": "homer",
       "note": "This container requires a yml file within the config volume. See the documentation here https://github.com/bastienwirtz/homer",
       "platform": "linux",
@@ -3274,7 +3274,7 @@
       ],
       "description": "Nginx Proxy Manager enables you to easily forward to your websites running at home or otherwise, including free SSL, without having to know too much about Nginx or Letsencrypt.",
       "image": "jc21/nginx-proxy-manager",
-      "logo": "https://raw.githubusercontent.com/Qballjos/portainer_templates/master/Images/proxy_mgr.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/nginx-proxy-manager.png",
       "name": "nginx-proxy-manager",
       "platform": "linux",
       "env": [
@@ -3344,7 +3344,7 @@
           "name": "PORT"
         }
       ],
-      "logo": "https://raw.githubusercontent.com/docker-library/docs/9d36b4ed7cabc35dbd3849272ba2bd7abe482172/owncloud/logo.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/owncloud.png",
       "name": "owncloud",
       "note": "The database user is owncloud and the database is owncloud.",
       "platform": "linux",
@@ -3358,7 +3358,7 @@
       ],
       "description": "A Linux network-level advertisement and Internet tracker blocking application which acts as a DNS sinkhole.",
       "image": "pihole/pihole:latest",
-      "logo": "https://raw.githubusercontent.com/Qballjos/portainer_templates/master/Images/pihole.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/pihole.png",
       "name": "pihole",
       "note": "When the installation is complete, navigate to your.ip.goes.here:1010/admin. Follow the article <a href='https://medium.com/@niktrix/getting-rid-of-systemd-resolved-consuming-port-53-605f0234f32f'>here</a> if you run into issues binding to port 53.",
       "platform": "linux",
@@ -3423,7 +3423,7 @@
         }
       ],
       "image": "haugene/transmission-openvpn:latest",
-      "logo": "https://raw.githubusercontent.com/Qballjos/portainer_templates/master/Images/transmission-icon.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/transmission.png",
       "name": "transmission-openvpn",
       "note": "List of supported providers available <a href='https://haugene.github.io/docker-transmission-openvpn/supported-providers'/>here</a>.",
       "platform": "linux",
@@ -3450,7 +3450,7 @@
       ],
       "description": "Self-hosted, ad-free, privacy-respecting Google metasearch engine.",
       "image": "benbusby/whoogle-search:latest",
-      "logo": "https://raw.githubusercontent.com/Qballjos/portainer_templates/master/Images/whoogle.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/whoogle-search.png",
       "name": "whoogle",
       "platform": "linux",
       "ports": [
@@ -3472,7 +3472,7 @@
       ],
       "description": "Yacht is a web interface for managing docker containers with an emphasis on templating to provide 1 click deployments. Think of it like a decentralized app store for servers that anyone can make packages for.",
       "image": "selfhostedpro/yacht:latest",
-      "logo": "https://raw.githubusercontent.com/SelfhostedPro/Yacht/master/readme_media/Yacht_logo_1_dark.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/yacht.png",
       "name": "yacht",
       "platform": "linux",
       "ports": [
@@ -3502,7 +3502,7 @@
       "note": "",
       "description": "Paperless-ng is an application by Daniel Quinn and contributors that indexes your scanned documents and allows you to easily search for documents and store metadata alongside your documents.'",
       "platform": "linux",
-      "logo": "https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/paperless-ng.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/paperless-ng.png",
       "image": "linuxserver/paperless-ng:latest",
       "env": [
         {
@@ -3604,7 +3604,7 @@
         }
       ],
       "image": "justarchi/archisteamfarm:latest",
-      "logo": "https://raw.githubusercontent.com/JustArchiNET/ArchiSteamFarm/main/resources/ASF_184x184.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/archisteamfarm.png",
       "name": "archisteamfarm",
       "platform": "linux",
       "ports": [
@@ -3686,7 +3686,7 @@
       ],
       "description": "Caddy is a powerful, enterprise-ready, open source web server with automatic HTTPS written in Go. ",
       "image": "caddy:latest",
-      "logo": "https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/caddy.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/caddy.png",
       "name": "caddy",
       "note": "Create firewall rule first: 'sudo ufw allow http' and 'sudo ufw allow https'. Add port 2019/tcp for admin endpoint",
       "platform": "linux",
@@ -3775,7 +3775,7 @@
         }
       ],
       "image": "ghcr.io/flaresolverr/flaresolverr:latest",
-      "logo": "https://raw.githubusercontent.com/FlareSolverr/FlareSolverr/c48d342b9cfb65d7696b96e9867fcff0ae87a0e2/resources/flaresolverr_logo.svg",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/flaresolverr.png",
       "name": "flaresolverr",
       "platform": "linux",
       "ports": [
@@ -3850,7 +3850,7 @@
         }
       ],
       "image": "ghost:latest",
-      "logo": "https://raw.githubusercontent.com/pi-hosted/pi-hosted/master/images/ghost.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/ghost.png",
       "name": "ghost",
       "platform": "linux",
       "ports": [
@@ -3888,7 +3888,7 @@
         }
       ],
       "image": "ghcr.io/ajnart/homarr:latest",
-      "logo": "https://raw.githubusercontent.com/pi-hosted/pi-hosted/master/images/homarr.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/homarr.png",
       "name": "homarr-secured",
       "platform": "linux",
       "ports": [
@@ -4132,7 +4132,7 @@
         }
       ],
       "image": "hkotel/mealie:v0.4.3",
-      "logo": "https://raw.githubusercontent.com/pi-hosted/pi-hosted/master/images/mealie.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/mealie.png",
       "name": "mealie",
       "note": "",
       "platform": "linux",
@@ -4164,7 +4164,7 @@
         }
       ],
       "image": "itzg/minecraft-server:latest",
-      "logo": "https://raw.githubusercontent.com/pi-hosted/pi-hosted/master/images/minecraft.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/minecraft.png",
       "name": "minecraft",
       "platform": "linux",
       "ports": [
@@ -4200,7 +4200,7 @@
         }
       ],
       "image": "netdata/netdata:latest",
-      "logo": "https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/netdata.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/netdata.png",
       "name": "netdata",
       "note": "",
       "platform": "linux",
@@ -4260,7 +4260,7 @@
         }
       ],
       "image": "organizr/organizr:latest",
-      "logo": "https://raw.githubusercontent.com/pi-hosted/pi-hosted/master/images/organizr-icon.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/organizr.png",
       "name": "organizr-v2",
       "platform": "linux",
       "ports": [
@@ -4283,7 +4283,7 @@
       "title": "PostgreSQL",
       "note": "",
       "description": "PostgreSQL, also known as Postgres, is a free and open-source relational database management system emphasizing extensibility and SQL compliance. It was originally named POSTGRES, referring to its origins as a successor to the Ingres database developed at the University of California, Berkeley. <a href='https://www.postgresql.org/' target='_blank'>Website</a>. <a href='https://hub.docker.com/_/postgres' target='_blank'>Docker Hub</a>",
-      "logo": "https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/postgres.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/postgres.png",
       "image": "postgres",
       "categories": [
         "Database"
@@ -4358,7 +4358,7 @@
         }
       ],
       "image": "hotio/qflood:latest",
-      "logo": "https://raw.githubusercontent.com/jesec/flood/master/flood.svg",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/qflood.png",
       "name": "qflood",
       "note": "",
       "platform": "linux",
@@ -4508,7 +4508,7 @@
       ],
       "description": "Traefik is an open-source Edge Router that makes publishing your services a fun and easy experience. It receives requests on behalf of your system and finds out which components are responsible for handling them. ",
       "image": "traefik:latest",
-      "logo": "https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/traefik.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/traefik.png",
       "name": "traefik",
       "note": "",
       "platform": "linux",
@@ -4559,7 +4559,7 @@
         }
       ],
       "image": "josh5/unmanic:latest",
-      "logo": "https://docs.unmanic.app/img/icon.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/unmanic.png",
       "name": "unmanic",
       "platform": "linux",
       "ports": [
@@ -4658,7 +4658,7 @@
           "name": "WORDPRESS_DB_NAME"
         }
       ],
-      "logo": "https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/wordpress.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/wordpress.png",
       "note": "Create a mysql or mariadb database for the container first.",
       "platform": "linux",
       "image": "wordpress:latest",
@@ -4710,7 +4710,7 @@
           "name": "PORT"
         }
       ],
-      "logo": "https://raw.githubusercontent.com/SelfhostedPro/selfhosted_templates/master/Images/invoice_ninja.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/invoiceninja.png",
       "name": "invoice_ninja",
       "note": "The database user is invoice_ninja and the database is ninja_db. Please generate an app key following the documentation <a href='https://github.com/invoiceninja/dockerfiles'>here</a>. ",
       "platform": "linux",
@@ -4739,7 +4739,7 @@
         }
       ],
       "image": "linuxserver/mcmyadmin2:latest",
-      "logo": "https://raw.githubusercontent.com/SelfhostedPro/selfhosted_templates/master/Images/mcmyadmin-icon.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/mcmyadmin2.png",
       "name": "mcmyadmin2",
       "platform": "linux",
       "ports": [

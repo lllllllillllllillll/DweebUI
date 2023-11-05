@@ -77,7 +77,6 @@ module.exports.containerList = async function () {
         }
 
         let dockerCard = dashCard(container_info);
-
         card_list += dockerCard;
         
     }

@@ -4,7 +4,7 @@ module.exports.dashCard = function dashCard(data) {
   
   //disable controls for a docker container depending on its name
   let enabled = "";
-  if (name.startsWith('dweeb')) {
+  if (name.startsWith('Dweeb')) {
     enabled = 'disabled=""';
   }
 

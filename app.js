@@ -9,6 +9,9 @@ const { serverStats, containerList, containerStats, containerAction } = require(
 let sent_list, clicked;
 
 const redisClient = require('redis').createClient({
+    host:'localhost',
+    port:6379,
+    password:'somesupersecretpassword',
     legacyMode:true
 });
 redisClient.connect().catch(console.log);
