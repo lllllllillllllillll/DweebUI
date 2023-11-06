@@ -78,8 +78,10 @@ module.exports.containerList = async function () {
         }
 
         let dockerCard = dashCard(container_info);
-        card_list += dockerCard;
-        
+
+        if ((container_info.name != 'DweebUI') && (container_info.name != 'DweebCache')) {
+            card_list += dockerCard;
+        }
     }
 
     return card_list;

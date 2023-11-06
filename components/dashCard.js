@@ -102,7 +102,7 @@ module.exports.dashCard = function dashCard(data) {
       <div class="card">
         <div class="card-body">
           <div class="card-stamp card-stamp-sm">
-            <img heigh="150px" width="150px" src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/${service}.png"></img>
+            <img heigh="150px" width="150px" src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/${service}.png" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/dweebui.png';"></img>
           </div>
           
           <div class="d-flex align-items-center">
