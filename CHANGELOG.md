@@ -1,3 +1,6 @@
+## v0.04 (dev)
+* Buildable Docker image.
+
 ## v0.03 (Nov 5th 2023)
 * Container graphs now load instantly on refresh
 * Working net data for server dashboard
