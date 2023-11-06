@@ -1,8 +1,10 @@
 const { writeFileSync, mkdirSync, readFileSync } = require("fs");
-const { exec, execSync } = require("child_process");
-const { dashCard } = require('../components/dashCard');
 const yaml = require('js-yaml');
 
+const { exec, execSync } = require("child_process");
+
+const { docker } = require('./system_information');
+var DockerodeCompose = require('dockerode-compose');
 
 
 module.exports.install = async function (data) {
@@ -124,12 +126,24 @@ module.exports.install = async function (data) {
                 mkdirSync(`./appdata/${name}`, { recursive: true });
                 writeFileSync(`./appdata/${name}/docker-compose.yml`, compose_file, function (err) { console.log(err) });
 
-                exec(`docker compose -f ./appdata/${name}/docker-compose.yml up -d`, (error, stdout, stderr) => {
-                    if (error) { console.error(`error: ${error.message}`); return; }
-                    if (stderr) { console.error(`stderr: ${stderr}`); return; }
-                    console.log(`stdout:\n${stdout}`);
-                });
+                // exec(`docker compose -f ./appdata/${name}/docker-compose.yml up -d`, (error, stdout, stderr) => {
+                //     if (error) { console.error(`error: ${error.message}`); return; }
+                //     if (stderr) { console.error(`stderr: ${stderr}`); return; }
+                //     console.log(`stdout:\n${stdout}`);
+                // });
+
             } catch { console.log('error creating directory or compose file') }
+
+            try {
+                var compose = new DockerodeCompose(docker, `./appdata/${name}/docker-compose.yml`, `${name}`);
+
+                (async () => {
+                await compose.pull();
+                var state = await compose.up();
+                console.log(state);
+                })();
+
+            } catch { console.log('error running compose file')}
 
         }
 

@@ -3,7 +3,8 @@ var Docker = require('dockerode');
 var docker = new Docker({ socketPath: '/var/run/docker.sock' });
 const { dashCard } = require('../components/dashCard');
 
-
+// export docker
+module.exports.docker = docker;
 
 module.exports.serverStats = async function () {
     const cpuUsage = await currentLoad();
