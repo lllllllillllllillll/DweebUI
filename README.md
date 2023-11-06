@@ -5,11 +5,11 @@ DweebUI is a simple Docker web interface created with javascript and node.js
 
 Pre-Pre-Pre-Pre-Pre Alpha v 0.04 ( :fire: Experimental. Don't install on any servers you care about :fire: )
 
-* I haven't used Github very much and I'm still new to javascript
+* I haven't used Github very much and I'm still new to javascript.
 * This is the first project I've ever released and I'm sure it's full of plenty of bugs and mistakes.
 * I probably should have waited a lot longer to share this :|
 
-Requirements: Fresh Install of Debian 12.2
+Requirements: Docker
 
 ![DweebUI](https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/DweebUI.png)
 
@@ -26,11 +26,10 @@ Requirements: Fresh Install of Debian 12.2
 
 ## Setup
 
-* Download and extract DweebUI.zip to a fresh Debian 12.2 Install
+* Download DweebUI.zip. 
 ```
-cd DweebUI
-chmod +x setup.sh
-sudo ./setup.sh
+Extract DweebUI.zip and navigate to /DweebUI/
+CMD: docker compose up --build
 ```
 Once setup is complete, I recommend installing Caddy first, then something like code-server. 
 The template is very rough. 
