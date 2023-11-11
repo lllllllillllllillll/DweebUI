@@ -126,12 +126,6 @@ module.exports.install = async function (data) {
                 mkdirSync(`./appdata/${name}`, { recursive: true });
                 writeFileSync(`./appdata/${name}/docker-compose.yml`, compose_file, function (err) { console.log(err) });
 
-                // exec(`docker compose -f ./appdata/${name}/docker-compose.yml up -d`, (error, stdout, stderr) => {
-                //     if (error) { console.error(`error: ${error.message}`); return; }
-                //     if (stderr) { console.error(`stderr: ${stderr}`); return; }
-                //     console.log(`stdout:\n${stdout}`);
-                // });
-
             } catch { console.log('error creating directory or compose file') }
 
             try {
@@ -139,8 +133,7 @@ module.exports.install = async function (data) {
 
                 (async () => {
                 await compose.pull();
-                var state = await compose.up();
-                console.log(state);
+                await compose.up();
                 })();
 
             } catch { console.log('error running compose file')}
@@ -154,22 +147,25 @@ module.exports.install = async function (data) {
 
 module.exports.uninstall = async function (data) {
     
-    if (req.session.role == "admin") {
-
 
         if (data.confirm == 'Yes') {
-            exec(`docker compose -f ./appdata/${data.service_name}/docker-compose.yml down`, (error, stdout, stderr) => {
-                if (error) { console.error(`error: ${error.message}`); return; }
-                if (stderr) { console.error(`stderr: ${stderr}`); return; }
-                console.log(`stdout:\n${stdout}`);
-            });
+
+
+            var containerName = docker.getContainer(`${data.service_name}`);
+
+            try {
+                containerName.stop(function (err, data) {
+                });
+            } catch { console.log('unable to stop container') }
+
+
+            try {
+                containerName.remove(function (err, data) {
+                });
+            } catch { console.log('unable to remove container') }
+
+
         }
 
-
-        // Redirect to the home page
-        res.redirect("/");
-    } else {
-        // Redirect to the login page
-        res.redirect("/login");
-    }
+   
 }

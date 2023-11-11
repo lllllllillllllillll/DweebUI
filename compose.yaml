@@ -1,7 +1,10 @@
 services:
   dweebui:
     container_name: DweebUI
-    image: lllllllillllllillll/dweebui:v0.04
+    build:
+      context: .
+    environment:
+      NODE_ENV: production
     ports:
       - 8000:8000
     depends_on:

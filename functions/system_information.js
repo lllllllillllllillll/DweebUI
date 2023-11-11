@@ -30,58 +30,129 @@ module.exports.containerList = async function () {
 
     const data = await docker.listContainers({ all: true });
     for (const container of data) {
-        let imageVersion = container.Image.split('/');
-        let service = imageVersion[imageVersion.length - 1].split(':')[0];
 
-        let containerId = docker.getContainer(container.Id);
-        let containerInfo = await containerId.inspect();
 
-        let open_ports = [];
-        let external_port = 0;
-        let internal_port = 0;
+        if ((container.Names[0].slice(1) != 'DweebUI') && (container.Names[0].slice(1) != 'DweebCache')) {
 
-        for (const [key, value] of Object.entries(containerInfo.HostConfig.PortBindings)) {
-            open_ports.push(`${value[0].HostPort}`);
-            external_port = value[0].HostPort;
-            internal_port = key;
+            let imageVersion = container.Image.split('/');
+            let service = imageVersion[imageVersion.length - 1].split(':')[0];
 
-            if ((external_port == undefined) || (internal_port == undefined)) {
-                external_port = 0;
-                internal_port = 0;
+            let containerId = docker.getContainer(container.Id);
+            let containerInfo = await containerId.inspect();
+
+            let external_port = 0;
+            let internal_port = 0;
+
+            // Get ports
+            let ports_list = [];
+            for (const [key, value] of Object.entries(containerInfo.HostConfig.PortBindings)) {
+                let ports = {
+                    check : 'checked',
+                    external: value[0].HostPort,
+                    internal: key.split('/')[0],
+                    protocol: key.split('/')[1]
+                }
+                ports_list.push(ports);
             }
-        }
-
-        let volumes = [];
-        for (const [key, value] of Object.entries(containerInfo.Mounts)) {
-            volumes.push(`${value.Source}: ${value.Destination}: ${value.RW}`);
-        }
-
-        let environment_variables = [];
-        for (const [key, value] of Object.entries(containerInfo.Config.Env)) {
-            environment_variables.push(`${key}: ${value}`);
-        }
-
-        let labels = [];
-        for (const [key, value] of Object.entries(containerInfo.Config.Labels)) {
-            labels.push(`${key}: ${value}`);
-        }
+            for (let i = 0; i < 12; i++) {
+                if (ports_list[i] == undefined) {
+                    let ports = {
+                        check : '',
+                        external: '',
+                        internal: '',
+                        protocol: ''
+                    }
+                    ports_list[i] = ports;
+                }
+            }
 
 
-        let container_info = {
-            name: container.Names[0].slice(1),
-            service: service,
-            id: container.Id,
-            state: container.State,
-            image: container.Image,
-            external_port: external_port,
-            internal_port: internal_port
-        }
+            // Get volumes.
+            let volumes_list = [];
+            for (const [key, value] of Object.entries(containerInfo.HostConfig.Binds)) {
+                let volumes = {
+                    check : 'checked',
+                    bind: value.split(':')[0],
+                    container: value.split(':')[1],
+                    readwrite: value.split(':')[2]
+                }
+                volumes_list.push(volumes);
+            }
+            for (let i = 0; i < 12; i++) {
+                if (volumes_list[i] == undefined) {
+                    let volumes = {
+                        check : '',
+                        bind: '',
+                        container: '',
+                        readwrite: ''
+                    }
+                    volumes_list[i] = volumes;
+                }
+            }
 
-        let dockerCard = dashCard(container_info);
 
-        if ((container_info.name != 'DweebUI') && (container_info.name != 'DweebCache')) {
+            // Get environment variables.
+            let environment_variables = [];
+            for (const [key, value] of Object.entries(containerInfo.Config.Env)) {
+                let env = {
+                    check : 'checked',
+                    name: value.split('=')[0],
+                    default: value.split('=')[1]
+                }
+                environment_variables.push(env);
+            }
+            for (let i = 0; i < 12; i++) {
+                if (environment_variables[i] == undefined) {
+                    let env = {
+                        check : '',
+                        name: '',
+                        default: ''
+                    }
+                    environment_variables[i] = env;
+                }
+            }
+
+            // Get labels.
+            let labels = [];
+            for (const [key, value] of Object.entries(containerInfo.Config.Labels)) {
+                let label = {
+                    check : 'checked',
+                    name: key,
+                    value: value
+                }
+                labels.push(label);
+            }
+            for (let i = 0; i < 12; i++) {
+                if (labels[i] == undefined) {
+                    let label = {
+                        check : '',
+                        name: '',
+                        value: ''
+                    }
+                    labels[i] = label;
+                }
+            }
+
+
+            let container_info = {
+                name: container.Names[0].slice(1),
+                service: service,
+                id: container.Id,
+                state: container.State,
+                image: container.Image,
+                external_port: external_port,
+                internal_port: internal_port, 
+                ports: ports_list,
+                volumes: volumes_list,
+                environment_variables: environment_variables,
+                labels: labels,
+            }
+
+            let dockerCard = dashCard(container_info);
+
             card_list += dockerCard;
         }
+        
     }
 
     return card_list;
