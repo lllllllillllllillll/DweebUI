@@ -1,6 +1,6 @@
 module.exports.dashCard = function dashCard(data) {
   
-  let { name, service, id, state, image, external_port, internal_port } = data;
+  let { name, service, id, state, image, external_port, internal_port, ports, volumes, environment_variables, labels } = data;
   
   //disable controls for a docker container depending on its name
   let enabled = "";
@@ -32,77 +32,90 @@ module.exports.dashCard = function dashCard(data) {
 
   let restart_policy = 'unless-stopped';
   
-
   let ports_data = [];
-  for (let i = 0; i < 12; i++) {
+  if (ports) {
+    ports_data = ports;
+  } else {
+    for (let i = 0; i < 12; i++) {
 
-    let port_check = "checked";
-    let external = i;
-    let internal = i;
-    let protocol = "tcp";
+      let port_check = "checked";
+      let external = i;
+      let internal = i;
+      let protocol = "tcp";
 
-    ports_data.push({
-      check: port_check,
-      external: external,
-      internal: internal,
-      protocol: protocol
-    });
+      ports_data.push({
+        check: port_check,
+        external: external,
+        internal: internal,
+        protocol: protocol
+      });
+    }
   }
 
-
   let volumes_data = [];
-  for (let i = 0; i < 12; i++) {
+  if (volumes) {
+    volumes_data = volumes;
+  } else {
+    for (let i = 0; i < 12; i++) {
 
-    let vol_check = "checked";
-    let bind = i;
-    let container = i;
-    let readwrite = "rw";
+      let vol_check = "checked";
+      let bind = i;
+      let container = i;
+      let readwrite = "rw";
 
-    volumes_data.push({
-      check: vol_check,
-      bind: bind,
-      container: container,
-      readwrite: readwrite
-    });
+      volumes_data.push({
+        check: vol_check,
+        bind: bind,
+        container: container,
+        readwrite: readwrite
+      });
+    }
   }
 
 
   let env_data = [];
-  for (let i = 0; i < 12; i++) {
+  if (environment_variables) {
+    env_data = environment_variables;
+  } else {
+    for (let i = 0; i < 12; i++) {
 
-    let env_check = "checked";
-    let env_name = i;
-    let env_default = i;
+      let env_check = "checked";
+      let env_name = i;
+      let env_default = i;
 
-    env_data.push({
-      env_check: env_check,
-      env_name: env_name,
-      env_default: env_default
-    });
+      env_data.push({
+        check: env_check,
+        name: env_name,
+        default: env_default
+      });
+    }
   }
 
 
   let label_data = [];
-  for (let i = 0; i < 12; i++) {
+  if (labels) {
+    label_data = labels;
+  } else {
+    for (let i = 0; i < 12; i++) {
 
-    let label_check = "checked";
-    let label_name = i;
-    let label_default = i;
-    
-    label_data.push({
-      label_check: label_check,
-      label_name: label_name,
-      label_default: label_default
-    });
+      let label_check = "checked";
+      let label_name = i;
+      let label_default = i;
+      
+      label_data.push({
+        check: label_check,
+        name: label_name,
+        value: label_default
+      });
+    }
   }
-
 
   return `
     <div class="col-sm-6 col-lg-3 deleteme">
       <div class="card">
         <div class="card-body">
           <div class="card-stamp card-stamp-sm">
-            <img heigh="150px" width="150px" src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/${service}.png"></img>
+            <img heigh="150px" width="150px" src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/${service}.png" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/dweebui.png';"></img>
           </div>
           
           <div class="d-flex align-items-center">

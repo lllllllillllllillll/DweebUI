@@ -9,9 +9,8 @@ const { serverStats, containerList, containerStats, containerAction } = require(
 let sent_list, clicked;
 
 const redisClient = require('redis').createClient({
-    host:'localhost',
-    port:6379,
-    password:'somesupersecretpassword',
+    url: 'redis://DweebCache:6379',
+    password:'eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81',
     legacyMode:true
 });
 redisClient.connect().catch(console.log);

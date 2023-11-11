@@ -1,11 +1,10 @@
 const User = require('../database/UserModel');
 const { appCard } = require('../components/appCard')
-const { exec, execSync } = require("child_process");
 const { dashCard } = require('../components/dashCard');
-const yaml = require('js-yaml');
 
-const { install } = require('../functions/package_manager');
+const { install, uninstall } = require('../functions/package_manager');
 
+// import { install, uninstall } from '../functions/package_manager';
 
 const templates_json = require('../templates.json');
 let templates = templates_json.templates;
@@ -29,7 +28,6 @@ exports.Apps = async function(req, res) {
         let list_end = (page * 28);
         let last_page = Math.ceil(templates.length / 28);
 
-        // generate values for prev and next buttons so that i can go back and forth between pages
         let prev = '/apps?page=' + (page - 1);
         let next = '/apps?page=' + (page + 1);
         if (page == 1) {
@@ -78,7 +76,6 @@ exports.searchApps = async function(req, res) {
         let list_end = (page * 28);
         let last_page = Math.ceil(templates.length / 28);
 
-        // generate values for prev and next buttons so that i can go back and forth between pages
         let prev = '/apps?page=' + (page - 1);
         let next = '/apps?page=' + (page + 1);
         if (page == 1) {
@@ -95,7 +92,6 @@ exports.searchApps = async function(req, res) {
 
         // split value of search into an array of words
         search = search.split(' ');
-
         try {console.log(search[0]);} catch (error) {}
         try {console.log(search[1]);} catch (error) {}
         try {console.log(search[2]);} catch (error) {}
@@ -179,11 +175,9 @@ exports.Uninstall = async function (req, res) {
 
 
         if (req.body.confirm == 'Yes') {
-            exec(`docker compose -f ./appdata/${req.body.service_name}/docker-compose.yml down`, (error, stdout, stderr) => {
-                if (error) { console.error(`error: ${error.message}`); return; }
-                if (stderr) { console.error(`stderr: ${stderr}`); return; }
-                console.log(`stdout:\n${stdout}`);
-            });
+
+            uninstall(req.body);
+
         }
 
 

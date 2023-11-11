@@ -51,8 +51,6 @@ exports.processRegister = async function(req,res){
                     avatar: `<img src="./static/avatars/${avatar}">`
                  });
 
-                console.log(`Created: ${user.first_name}`);
-
                 // set the session.
                 req.session.user = user.username;
                 req.session.UUID = user.UUID;

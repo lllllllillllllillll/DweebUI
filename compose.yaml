@@ -1,0 +1,27 @@
+services:
+  dweebui:
+    container_name: DweebUI
+    build:
+      context: .
+    environment:
+      NODE_ENV: production
+    ports:
+      - 8000:8000
+    depends_on:
+      - cache
+    links:
+      - cache
+    volumes:
+      - dweebui:/app
+      - /var/run/docker.sock:/var/run/docker.sock
+  cache:
+    container_name: DweebCache
+    image: redis:6.2-alpine
+    restart: always
+    command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+    volumes: 
+      - cache:/data
+  
+volumes:
+  dweebui:
+  cache:
