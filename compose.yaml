@@ -9,6 +9,7 @@ services:
     links:
       - cache
     volumes:
+      - dweebui:/app
       - /var/run/docker.sock:/var/run/docker.sock
   cache:
     container_name: DweebCache
@@ -19,4 +20,5 @@ services:
       - cache:/data
   
 volumes:
+  dweebui:
   cache:
