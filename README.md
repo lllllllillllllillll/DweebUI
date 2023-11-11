@@ -26,10 +26,40 @@ Requirements: Docker
 
 ## Setup
 
-* Download DweebUI.zip. 
+* Docker compose.yaml: 
 ```
-Extract DweebUI.zip and navigate to /DweebUI/
-CMD: docker compose up --build
+services:
+  dweebui:
+    container_name: DweebUI
+    image: lllllllillllllillll/dweebui:v0.04
+    ports:
+      - 8000:8000
+    depends_on:
+      - cache
+    links:
+      - cache
+    volumes:
+      - dweebui:/app
+      - /var/run/docker.sock:/var/run/docker.sock
+  cache:
+    container_name: DweebCache
+    image: redis:6.2-alpine
+    restart: always
+    command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+    volumes: 
+      - cache:/data
+  
+volumes:
+  dweebui:
+  cache:
+```
+
+* Using setup.sh: 
+```
+Extract DweebUI.zip and navigate to /DweebUI
+cd DweebUI
+chmod +x setup.sh
+sudo ./setup.sh
 ```
 Once setup is complete, I recommend installing Caddy first, then something like code-server. 
 The template is very rough. 
