@@ -154,16 +154,16 @@ module.exports.uninstall = async function (data) {
             var containerName = docker.getContainer(`${data.service_name}`);
 
             try {
-                containerName.stop(function (err, data) {
-                });
-            } catch { console.log('unable to stop container') }
-
-
-            try {
-                containerName.remove(function (err, data) {
-                });
-            } catch { console.log('unable to remove container') }
-
+                    containerName.stop(function (err, data) {
+                        if (data) {
+                            containerName.remove(function (err, data) {
+                            });
+                        }
+                    });
+                } catch { 
+                    containerName.remove(function (err, data) {
+                    });
+                }
 
         }
 

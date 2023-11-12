@@ -117,12 +117,10 @@ module.exports.dashCard = function dashCard(data) {
           <div class="card-stamp card-stamp-sm">
             <img heigh="150px" width="150px" src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/${service}.png" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/dweebui.png';"></img>
           </div>
-          
           <div class="d-flex align-items-center">
             <div class="subheader text-yellow">${external_port}:${internal_port}</div>
             <div class="ms-auto lh-1">
               <div class="card-actions btn-actions">
-                
                 <div class="card-actions btn-actions">
                   <button onclick="buttonAction(this)" name="${name}" value="start" id="${state}" class="btn-action" title="Start" ${enabled}><!-- player-play -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-player-play" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M7 4v16l13 -8z"></path></svg>
@@ -142,13 +140,13 @@ module.exports.dashCard = function dashCard(data) {
                     </a>
                     <div class="dropdown-menu dropdown-menu-end">
                       <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#${name}_modal-details" href="#">Details</a>
-                      <a class="dropdown-item" href="#">Logs</a>
+                      <a class="dropdown-item" onclick="viewLogs(this)" name="${name}" data-bs-toggle="modal" data-bs-target="#${name}_logs" href="#">Logs</a>
                       <a class="dropdown-item" href="#">Edit</a>
+                      <a class="dropdown-item text-primary" href="#">Update</a>
                       <a class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#${name}_modal-danger" href="#">Remove</a>
                     </div>
                   </div>
                 </div>
-
               </div>
             </div>
           </div>
@@ -170,84 +168,168 @@ module.exports.dashCard = function dashCard(data) {
       </div>
     </div>
     
+
+
+
+
+    
+
+
     <div class="modal modal-blur fade deleteme" id="${name}_modal-danger" tabindex="-1" style="display: none;" aria-hidden="true">
-                <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-                  <div class="modal-content">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    <div class="modal-status bg-danger"></div>
-                    <div class="modal-body text-center py-3">
-                      <!-- Download SVG icon from http://tabler-icons.io/i/alert-triangle -->
-                      <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 9v2m0 4v.01"></path><path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75"></path></svg>
-                      <h3>Remove ${name}?</h3>
-                      <form action="/uninstall" id="uninstall" method="POST">
-                      <input type="text" class="form-control" name="service_name" value="${app_name}" hidden/>
-                      <div class="mb-3"> </div>
-                      
-                      <div class="mb-2">
-                        <div class="divide-y">
-                          <div class="row">
-                            <div class="col-9">
-                              <label class="row text-start">
-                                <span class="col">Remove Volumes</span>
-                              </label>
-                            </div>
-                            <div class="col-3">
-                              <label class="form-check form-check-single form-switch text-end">
-                                <input class="form-check-input" type="checkbox" checked="" name="remove_volumes">
-                              </label>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-9">
-                              <label class="row text-start">
-                                <span class="col">Remove Image</span>
-                              </label>
-                            </div>
-                            <div class="col-3">
-                              <label class="form-check form-check-single form-switch text-end">
-                                <input class="form-check-input" type="checkbox" checked="" name="remove_image">
-                              </label>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-9">
-                              <label class="row text-start">
-                                <span class="col">Remove Backups</span>
-                              </label>
-                            </div>
-                            <div class="col-3">
-                              <label class="form-check form-check-single form-switch text-end">
-                                <input class="form-check-input" type="checkbox" checked="" name="remove_backups">
-                              </label>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <div class="mt-1"> </div>
-                      <div class="text-muted">Enter "Yes" below to remove the container.</div>
-                      <input type="text" class="form-control mb-2" name="confirm">
-
-                      </form>
-
-                    </div>
-                    <div class="modal-footer">
-                      <div class="w-100">
-                        <div class="row">
-                          <div class="col">
-                            <a href="#" class="btn w-100" data-bs-dismiss="modal">
-                              Cancel
-                            </a>
-                          </div>
-                          <div class="col">
-                            <input type="submit" form="uninstall" class="btn btn-danger w-100" value="Uninstall"/>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+      <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <div class="modal-status bg-danger"></div>
+          <div class="modal-body text-center py-3">
+            <!-- Download SVG icon from http://tabler-icons.io/i/alert-triangle -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 9v2m0 4v.01"></path><path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75"></path></svg>
+            <h3>Remove ${name}?</h3>
+            <form action="/uninstall" id="uninstall" method="POST">
+            <input type="text" class="form-control" name="service_name" value="${app_name}" hidden/>
+            <div class="mb-3"> </div>
+            
+            <div class="mb-2">
+              <div class="divide-y">
+                <div class="row">
+                  <div class="col-9">
+                    <label class="row text-start">
+                      <span class="col">Remove Volumes</span>
+                    </label>
+                  </div>
+                  <div class="col-3">
+                    <label class="form-check form-check-single form-switch text-end">
+                      <input class="form-check-input" type="checkbox" checked="" name="remove_volumes">
+                    </label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-9">
+                    <label class="row text-start">
+                      <span class="col">
+                        Remove Image
+                      </span>
+                    </label>
+                  </div>
+                  <div class="col-3">
+                    <label class="form-check form-check-single form-switch text-end">
+                      <input class="form-check-input" type="checkbox" checked="" name="remove_image">
+                    </label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-9">
+                    <label class="row text-start">
+                      <span class="col">
+                        Remove Backups
+                      </span>
+                    </label>
+                  </div>
+                  <div class="col-3">
+                    <label class="form-check form-check-single form-switch text-end">
+                      <input class="form-check-input" type="checkbox" checked="" name="remove_backups">
+                    </label>
                   </div>
                 </div>
               </div>
+            </div>
+            <div class="mt-1"> </div>
+            <div class="text-muted">Enter "Yes" below to remove the container.</div>
+            <input type="text" class="form-control mb-2" name="confirm" autocomplete="off">
+            </form>
+          </div>
+          <div class="modal-footer">
+            <div class="w-100">
+              <div class="row">
+                <div class="col">
+                  <a href="#" class="btn w-100" data-bs-dismiss="modal">
+                    Cancel
+                  </a>
+                </div>
+                <div class="col">
+                  <input type="submit" form="uninstall" class="btn btn-danger w-100" value="Uninstall"/>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    
+
+
+
+
+
+
+
+
+
+
+    <div class="modal modal-blur fade" id="${name}_logs" tabindex="-1" style="display: none;" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Scrollable modal</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas
+              eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+            <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue
+              laoreet rutrum faucibus dolor auctor.</p>
+            <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl
+              consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
+            <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas
+              eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+            <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue
+              laoreet rutrum faucibus dolor auctor.</p>
+            <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl
+              consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
+            <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas
+              eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+            <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue
+              laoreet rutrum faucibus dolor auctor.</p>
+            <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl
+              consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
+            <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas
+              eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+            <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue
+              laoreet rutrum faucibus dolor auctor.</p>
+            <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl
+              consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
+            <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas
+              eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+            <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue
+              laoreet rutrum faucibus dolor auctor.</p>
+            <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl
+              consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
+            <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas
+              eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+            <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue
+              laoreet rutrum faucibus dolor auctor.</p>
+            <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl
+              consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     <div class="modal modal-blur fade" id="${name}_modal-details" tabindex="-1" role="dialog" aria-hidden="true">

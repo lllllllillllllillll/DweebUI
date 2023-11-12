@@ -40,10 +40,7 @@ module.exports.containerList = async function () {
             let containerId = docker.getContainer(container.Id);
             let containerInfo = await containerId.inspect();
 
-            let external_port = 0;
-            let internal_port = 0;
-
-            // Get ports
+            // Get ports //////////////////////////
             let ports_list = [];
             for (const [key, value] of Object.entries(containerInfo.HostConfig.PortBindings)) {
                 let ports = {
@@ -64,10 +61,10 @@ module.exports.containerList = async function () {
                     }
                     ports_list[i] = ports;
                 }
-            }
+            } /////////////////////////////////////
 
 
-            // Get volumes.
+            // Get volumes ////////////////////////
             let volumes_list = [];
             for (const [key, value] of Object.entries(containerInfo.HostConfig.Binds)) {
                 let volumes = {
@@ -88,7 +85,7 @@ module.exports.containerList = async function () {
                     }
                     volumes_list[i] = volumes;
                 }
-            }
+            } /////////////////////////////////////
 
 
             // Get environment variables.
@@ -140,8 +137,8 @@ module.exports.containerList = async function () {
                 id: container.Id,
                 state: container.State,
                 image: container.Image,
-                external_port: external_port,
-                internal_port: internal_port, 
+                external_port: ports_list[0].external || 0,
+                internal_port: ports_list[0].internal || 0, 
                 ports: ports_list,
                 volumes: volumes_list,
                 environment_variables: environment_variables,
@@ -172,15 +169,17 @@ module.exports.containerStats = async function () {
 
     for (const container of data) {
 
-        const stats = await dockerContainerStats(container.Id);
-        let container_stat = {
-            name: container.Names[0].slice(1),
-            cpu: Math.round(stats[0].cpuPercent),
-            ram: Math.round(stats[0].memPercent)
-        }
+        if ((container.Names[0].slice(1) != 'DweebUI') && (container.Names[0].slice(1) != 'DweebCache')) {
+            const stats = await dockerContainerStats(container.Id);
+            let container_stat = {
+                name: container.Names[0].slice(1),
+                cpu: Math.round(stats[0].cpuPercent),
+                ram: Math.round(stats[0].memPercent)
+            }
 
-        //push stats to an array
-        container_stats.push(container_stat);
+            //push stats to an array
+            container_stats.push(container_stat);
+        }
     }
     return container_stats;
 }

@@ -166,7 +166,7 @@ function appCard(data) {
     // Get environment details
     try {
       let env = data.env[i];
-      let env_check = env ? "checked" : "";
+      let env_check = "";
       let env_default = env.default ? env.default : "";
       let env_description = env.description ? env.description : "";
       let env_label = env.label ? env.label : "";
@@ -193,7 +193,7 @@ function appCard(data) {
 
     try {
       let label = data.labels[i];
-      let label_check = label ? "checked" : "";
+      let label_check = "";
       let label_name = label.name ? label.name : "";
       let label_value = label.value ? label.value : "";
 

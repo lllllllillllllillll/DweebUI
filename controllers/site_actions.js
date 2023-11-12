@@ -21,7 +21,7 @@ exports.AddSite = async function (req, res) {
         caddyfile += `\n}`
 
         // save caddyfile
-        writeFileSync(`/home/docker/caddy/sites/${domain}.Caddyfile`, caddyfile, function (err) { console.log(err) });
+        writeFileSync(`./caddyfiles/sites/${domain}.Caddyfile`, caddyfile, function (err) { console.log(err) });
         
 
         // format caddyfile
