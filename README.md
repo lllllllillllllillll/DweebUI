@@ -19,7 +19,7 @@ Requirements: Docker
 * Partial Portainer Template Support (Network Mode, Ports, Volumes, Enviroment Variables, Labels, Commands, Restart Policy, Nvidia Hardware Acceleration).
 * Light/Dark Mode.
 * Support for multiple users is built in (but unused).
-* Caddy Proxy Manager (very simple. proof of concept)
+* ~~ Caddy Proxy Manager (very simple. proof of concept) ~~ Broken since moving to docker container.
 * Pure javascript. No frameworks or typescript.
 * User data is stored in a sqlite database and uses browser sessions and a redis store for authentication.
 * Templates.json maintains compatability with Portainer, so you can use the template without needing to use DweebUI.
