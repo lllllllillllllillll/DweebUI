@@ -1,4 +1,4 @@
-## v0.05 ( dev )
+## v0.05 ( Nov 17th 2023 )
 * Environment Variables and Labels are now unchecked by default.
 * Support for Docker volumes.
 * Fixed app uninstall.
