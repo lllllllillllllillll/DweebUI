@@ -1,17 +1,20 @@
 # DweebUI
-
-[![GitHub License](https://img.shields.io/github/license/lllllllillllllillll/DweebUI)](https://github.com/lllllllillllllillll/DweebUI/blob/main/LICENSE)
-[![GitHub activity](https://img.shields.io/github/commit-activity/m/lllllllillllllillll/DweebUI)]
-
 DweebUI is a simple Docker web interface created with javascript and node.js
 
 Pre-Pre-Pre-Pre-Pre Alpha v 0.05 ( :fire: Experimental. Don't install on any servers you care about :fire: )
+
+[![GitHub License](https://img.shields.io/github/license/lllllllillllllillll/DweebUI)](https://github.com/lllllllillllllillll/DweebUI/blob/main/LICENSE)
+[![GitHub activity](https://img.shields.io/github/commit-activity/y/lllllllillllllillll/DweebUI)](https://github.com/lllllllillllllillll)
+
 
 * I haven't used Github very much and I'm still new to javascript.
 * This is the first project I've ever released and I'm sure it's full of plenty of bugs and mistakes.
 * I probably should have waited a lot longer to share this :|
 
-<a href="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/DweebUI.png"><img src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/DweebUI.png" width="25%"/></a>
+<a href="https://raw.githubusercontent.com//lllllllillllllillll/DweebUI/main/screenshots/dashboard.png"><img src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/dashboard.png" width="40%"/></a>
+
+<a href="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/apps.png"><img src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/apps.png" width="40%"/></a>
+
 
 ## Features
 * [x] Dashboard provides server metrics (cpu, ram, network, disk) and container controls on a single page.
@@ -83,8 +86,7 @@ cd DweebUI
 chmod +x setup.sh
 sudo ./setup.sh
 ```
-Once setup is complete, I recommend installing Caddy first, then something like code-server. 
-The template is very rough. 
+
 
 ## Credit
 
