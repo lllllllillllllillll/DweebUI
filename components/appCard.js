@@ -139,11 +139,11 @@ function appCard(data) {
     try {
       let volumes = data.volumes[i];
       let volume_check = volumes ? "checked" : "";
-      let volume_bind = volumes.bind.split(":")[0] ? volumes.bind.split(":")[0] : "";
-      let volume_container = volumes.container.split(":")[0] ? volumes.container.split(":")[0] : "";
-      let volume_readwrite = "rw"
+      let volume_bind = volumes.bind ? volumes.bind : "";
+      let volume_container = volumes.container ? volumes.container.split(":")[0] : "";
+      let volume_readwrite = "rw";
 
-      if ((volumes.readonly == true) || (volumes.container.endsWith(":ro"))) {
+      if (volumes.readonly == true) {
         volume_readwrite = "ro";
       }
 
@@ -168,6 +168,7 @@ function appCard(data) {
       let env = data.env[i];
       let env_check = "";
       let env_default = env.default ? env.default : "";
+      if (env.set) { env_default = env.set;}
       let env_description = env.description ? env.description : "";
       let env_label = env.label ? env.label : "";
       let env_name = env.name ? env.name : "";

@@ -32,7 +32,7 @@ module.exports.containerList = async function () {
     for (const container of data) {
 
 
-        if ((container.Names[0].slice(1) != 'DweebUI') && (container.Names[0].slice(1) != 'DweebCache')) {
+        if ((container.Names[0].slice(1) != 'DweebUI') && (container.Names[0].slice(1) != 'DweebCache') && (container.Names[0].slice(1) != 'DweebProxy')) {
 
             let imageVersion = container.Image.split('/');
             let service = imageVersion[imageVersion.length - 1].split(':')[0];
@@ -42,15 +42,18 @@ module.exports.containerList = async function () {
 
             // Get ports //////////////////////////
             let ports_list = [];
-            for (const [key, value] of Object.entries(containerInfo.HostConfig.PortBindings)) {
-                let ports = {
-                    check : 'checked',
-                    external: value[0].HostPort,
-                    internal: key.split('/')[0],
-                    protocol: key.split('/')[1]
+            try {
+                for (const [key, value] of Object.entries(containerInfo.HostConfig.PortBindings)) {
+                    let ports = {
+                        check : 'checked',
+                        external: value[0].HostPort,
+                        internal: key.split('/')[0],
+                        protocol: key.split('/')[1]
+                    }
+                    ports_list.push(ports);
                 }
-                ports_list.push(ports);
-            }
+            } catch { console.log('no ports') }
+
             for (let i = 0; i < 12; i++) {
                 if (ports_list[i] == undefined) {
                     let ports = {
@@ -66,15 +69,15 @@ module.exports.containerList = async function () {
 
             // Get volumes ////////////////////////
             let volumes_list = [];
-            for (const [key, value] of Object.entries(containerInfo.HostConfig.Binds)) {
-                let volumes = {
-                    check : 'checked',
-                    bind: value.split(':')[0],
-                    container: value.split(':')[1],
-                    readwrite: value.split(':')[2]
-                }
-                volumes_list.push(volumes);
-            }
+            try { for (const [key, value] of Object.entries(containerInfo.HostConfig.Binds)) {
+                    let volumes = {
+                        check : 'checked',
+                        bind: value.split(':')[0],
+                        container: value.split(':')[1],
+                        readwrite: value.split(':')[2]
+                    }
+                    volumes_list.push(volumes);
+                }} catch { console.log('no volumes') }
             for (let i = 0; i < 12; i++) {
                 if (volumes_list[i] == undefined) {
                     let volumes = {
@@ -90,14 +93,14 @@ module.exports.containerList = async function () {
 
             // Get environment variables.
             let environment_variables = [];
-            for (const [key, value] of Object.entries(containerInfo.Config.Env)) {
+            try { for (const [key, value] of Object.entries(containerInfo.Config.Env)) {
                 let env = {
                     check : 'checked',
                     name: value.split('=')[0],
                     default: value.split('=')[1]
                 }
                 environment_variables.push(env);
-            }
+            }} catch { console.log('no env') }
             for (let i = 0; i < 12; i++) {
                 if (environment_variables[i] == undefined) {
                     let env = {
@@ -169,7 +172,7 @@ module.exports.containerStats = async function () {
 
     for (const container of data) {
 
-        if ((container.Names[0].slice(1) != 'DweebUI') && (container.Names[0].slice(1) != 'DweebCache')) {
+        if ((container.Names[0].slice(1) != 'DweebUI') && (container.Names[0].slice(1) != 'DweebCache') && (container.Names[0].slice(1) != 'DweebProxy')) {
             const stats = await dockerContainerStats(container.Id);
             let container_stat = {
                 name: container.Names[0].slice(1),
@@ -217,6 +220,37 @@ module.exports.containerAction = async function (data) {
 }
 
 
+
+module.exports.containerExec = async function (data) {
+
+    let { container, command } = data;
+
+    var containerName = docker.getContainer(container);
+
+    var options = {
+        Cmd: ['/bin/sh', '-c', command],
+        AttachStdout: true,
+        AttachStderr: true,
+        Tty: true
+    };
+
+    containerName.exec(options, function (err, exec) {
+        if (err) return;
+
+        exec.start(function (err, stream) {
+            if (err) return;
+
+            containerName.modem.demuxStream(stream, process.stdout, process.stderr);
+
+            exec.inspect(function (err, data) {
+                if (err) return;
+
+              
+            });
+        });
+    });
+    
+}
 
 
 

@@ -144,6 +144,8 @@ exports.Install = async function (req, res) {
     
     if (req.session.role == "admin") {
 
+        console.log(`Starting install for: ${req.body.name}`)
+
         install(req.body);
 
         let container_info = {
