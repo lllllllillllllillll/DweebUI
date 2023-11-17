@@ -1,7 +1,7 @@
 const { readFileSync, writeFileSync, appendFileSync, readdirSync } = require('fs');
 const { execSync } = require("child_process");
 const { siteCard } = require('../components/siteCard');
-
+const { containerExec } = require('../functions/system_information')
 
 exports.AddSite = async function (req, res) {
 
@@ -20,31 +20,54 @@ exports.AddSite = async function (req, res) {
         caddyfile += `\n\t}`
         caddyfile += `\n}`
 
-        // save caddyfile
-        writeFileSync(`/home/docker/caddy/sites/${domain}.Caddyfile`, caddyfile, function (err) { console.log(err) });
         
+        // save caddyfile
+        writeFileSync(`./caddyfiles/sites/${domain}.Caddyfile`, caddyfile, function (err) { console.log(err) });
+
 
         // format caddyfile
-        execSync(`docker exec caddy caddy fmt --overwrite /etc/caddy/sites/${domain}.Caddyfile`, (err, stdout, stderr) => {
-            if (err) { console.error(`error: ${err.message}`); return; }
-            if (stderr) { console.error(`stderr: ${stderr}`); return; }
-            if (stdout) { console.log(`stdout:\n${stdout}`); return; }
-            console.log(`Formatted ${domain}.Caddyfile`)
+        let format = {
+            container: 'DweebProxy',
+            command: `caddy fmt --overwrite /etc/caddy/sites/${domain}.Caddyfile`
+        }
+        await containerExec(format, function(err, data) {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            console.log(`Formatted ${domain}.Caddyfile`);
         });
         
+        ///////////////// convert caddyfile to json
+        let convert = {
+            container: 'DweebProxy',
+            command: `caddy adapt --config /etc/caddy/sites/${domain}.Caddyfile --pretty >> /etc/caddy/sites/${domain}.json`
+        }
+        await containerExec(convert, function(err, data) {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            console.log(`Converted ${domain}.Caddyfile to JSON`);
+        });
+
+        ////////////// reload caddy
+        let reload = {
+            container: 'DweebProxy',
+            command: `caddy reload --config /etc/caddy/Caddyfile`
+        }
+        await containerExec(reload, function(err, data) {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            console.log(`Reloaded Caddy Config`);
+        });
 
         let site = siteCard(type, domain, host, port, 0);
 
-        // reload caddy config to enable new site
-        execSync(`docker exec caddy caddy reload --config /etc/caddy/Caddyfile`, (err, stdout, stderr) => {
-            if (err) { console.error(`error: ${err.message}`); return; }
-            if (stderr) { console.error(`stderr: ${stderr}`); return; }
-            if (stdout) { console.log(`stdout:\n${stdout}`); return; }
-            console.log(`reloaded caddy config`)
-        });
+        req.app.locals.site_list += site;
 
-        // append the site to site_list.ejs
-        appendFileSync('./views/partials/site_list.ejs', site, function (err) { console.log(err) });
 
         res.redirect("/");
     } else {
@@ -61,22 +84,20 @@ exports.RemoveSite = async function (req, res) {
 
 
         for (const [key, value] of Object.entries(req.body)) {
-            console.log(`${key}: ${value}`);
-            execSync(`rm /home/docker/caddy/sites/${value}.Caddyfile`, (err, stdout, stderr) => {
+
+            execSync(`rm ./caddyfiles/sites/${value}.Caddyfile`, (err, stdout, stderr) => {
                 if (err) { console.error(`error: ${err.message}`); return; }
                 if (stderr) { console.error(`stderr: ${stderr}`); return; }
                 console.log(`removed ${value}.Caddyfile`);
             });
+
         }
 
-        
-        // reload caddy config to disable sites
-        try {
-            execSync(`docker exec caddy caddy reload --config /etc/caddy/Caddyfile`, (err, stdout, stderr) => {
-            if (err) { console.error(`error: ${err.message}`); return; }
-            if (stderr) { console.error(`stderr: ${stderr}`); return; }
-            console.log(`reloaded caddy config`)
-        }); } catch (error) { console.log("No sites to reload") }
+        let reload = {
+            container: 'DweebProxy',
+            command: `caddy reload --config /etc/caddy/Caddyfile`
+        }
+        await containerExec(reload);
 
         
         console.log('Removed Site(s)')
@@ -98,21 +119,15 @@ exports.RefreshSites = async function (req, res) {
 
 
         // Clear site_list.ejs
-        writeFileSync('./views/partials/site_list.ejs', '', function (err) {
-            if (err) {
-                console.log(err);
-            } else {
-                console.log('site_list.ejs has been cleared');
-            }
-        });
+        req.app.locals.site_list = "";
         
 
-        // check if /home/docker/caddy/sites/ contains any .json files, then delete them
+        // check if ./caddyfiles/sites contains any .json files, then delete them
         try {
-            let files = readdirSync('/home/docker/caddy/sites/');
+            let files = readdirSync('./caddyfiles/sites/');
             files.forEach(file => {
                 if (file.includes(".json")) {
-                    execSync(`rm /home/docker/caddy/sites/${file}`, (err, stdout, stderr) => {
+                    execSync(`rm ./caddyfiles/sites/${file}`, (err, stdout, stderr) => {
                         if (err) { console.error(`error: ${err.message}`); return; }
                         if (stderr) { console.error(`stderr: ${stderr}`); return; }
                         console.log(`removed ${file}`);
@@ -122,23 +137,25 @@ exports.RefreshSites = async function (req, res) {
         } catch (error) { console.log("No .json files to delete") }
    
         // get list of Caddyfiles
-        let sites = readdirSync('/home/docker/caddy/sites/');
+        let sites = readdirSync('./caddyfiles/sites/');
+
 
         sites.forEach(site_name => {
-
             // convert the caddyfile of each site to json
-            execSync(`docker exec caddy caddy adapt --config /etc/caddy/sites/${site_name} --pretty >> /home/docker/caddy/sites/${site_name}.json`, (err, stdout, stderr) => {
-                if (err) { console.error(`error: ${err.message}`); return; }
-                if (stderr) { console.error(`stderr: ${stderr}`); return; }
-                console.log(`stdout:\n${stdout}`);
-            });
-            
-            // read the json file
-            let site_file = readFileSync(`/home/docker/caddy/sites/${site_name}.json`, 'utf8');
+            let convert = {
+                container: 'DweebProxy',
+                command: `caddy adapt --config ./caddyfiles/sites/${site_name} --pretty >> ./caddyfiles/sites/${site_name}.json`
+            }
+            containerExec(convert);
 
+            try {
+            // read the json file
+            let site_file = readFileSync(`./caddyfiles/sites/${site_name}.json`, 'utf8');
             // fix whitespace and parse the json file
             site_file = site_file.replace(/        /g, "  ");
             site_file = JSON.parse(site_file);
+            } catch (error) { console.log("No .json file to read") }
+
 
             // get the domain, type, host, and port from the json file
             try { domain = site_file.apps.http.servers.srv0.routes[0].match[0].host[0] } catch (error) { console.log("No Domain") }
@@ -149,13 +166,13 @@ exports.RefreshSites = async function (req, res) {
             // build the site card
             let site = siteCard(type, domain, host, port, id);
 
-            // append the site card to site_list.ejs
-            appendFileSync('./views/partials/site_list.ejs', site, function (err) { console.log(err) });
+            // append the site card to site_list
+            req.app.locals.site_list += site;
             
             id++;
-
         });
         
+
         res.redirect("/");
     } else {
         // Redirect to the login page

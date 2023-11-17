@@ -911,17 +911,12 @@
           "set": "1000"
         },
         {
-          "label": "UMASK_SET",
-          "name": "UMASK_SET",
-          "set": "000"
-        },
-        {
           "label": "TZ",
           "name": "TZ",
           "set": "America/Chicago"
         }
       ],
-      "image": "linuxserver/deluge:latest",
+      "image": "lscr.io/linuxserver/deluge:latest",
       "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/deluge.png",
       "platform": "linux",
       "title": "Deluge",
@@ -934,6 +929,11 @@
         {
           "container": "/downloads"
         }
+      ],
+      "ports": [
+        "8112/tcp",
+        "6881/tcp",
+        "6881/udp"
       ]
     },
     {
@@ -3705,11 +3705,11 @@
           "container": "/data"
         },
         {
-          "bind": "/home/docker/caddy/Caddyfile",
+          "bind": "caddy/Caddyfile",
           "container": "/etc/caddy/Caddyfile"
         },
         {
-          "bind": "/home/docker/caddy/sites",
+          "bind": "caddy/sites",
           "container": "/etc/caddy/sites"
         }
       ]

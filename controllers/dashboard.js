@@ -13,7 +13,8 @@ exports.Dashboard = async function (req, res) {
             name: user.first_name + ' ' + user.last_name,
             role: user.role,
             avatar: user.avatar,
-            isLoggedIn: true
+            isLoggedIn: true,
+            site_list: req.app.locals.site_list,
         });
     } else {
         // Redirect to the login page

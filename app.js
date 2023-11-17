@@ -5,8 +5,10 @@ const app = express();
 const routes = require("./routes");
 
 const { serverStats, containerList, containerStats, containerAction } = require('./functions/system_information');
+const { RefreshSites } = require('./controllers/site_actions');
 
 let sent_list, clicked;
+app.locals.site_list = '';
 
 const redisClient = require('redis').createClient({
     url: 'redis://DweebCache:6379',

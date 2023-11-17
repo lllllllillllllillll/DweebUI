@@ -9,12 +9,15 @@ var DockerodeCompose = require('dockerode-compose');
 
 module.exports.install = async function (data) {
     
+        console.log(`[Start of install function]`);
 
         let { service_name, name, image, command_check, command, net_mode, restart_policy } = data;        
         let { port0, port1, port2, port3, port4, port5 } = data;
         let { volume0, volume1, volume2, volume3, volume4, volume5 } = data;
         let { env0, env1, env2, env3, env4, env5, env6, env7, env8, env9, env10, env11 } = data;
         let { label0, label1, label2, label3, label4, label5, label6, label7, label8, label9, label10, label11 } = data;
+
+        let docker_volumes = [];
 
         if (image.startsWith('https://')){
             mkdirSync(`./appdata/${name}`, { recursive: true });
@@ -71,9 +74,18 @@ module.exports.install = async function (data) {
                 compose_file += `\n    volumes:`
 
                 for (let i = 0; i < 6; i++) {
-                    if (data[`volume${i}`] == 'on') {
+
+                    // if volume is on and neither bind or container is empty, it's a bind mount (ex /mnt/user/appdata/config:/config  )
+                    if ((data[`volume${i}`] == 'on') && (data[`volume_${i}_bind`] != '') && (data[`volume_${i}_container`] != '')) {
                         compose_file += `\n      - ${data[`volume_${i}_bind`]}:${data[`volume_${i}_container`]}:${data[`volume_${i}_readwrite`]}`
                     }
+
+                    // if bind is empty create a docker volume (ex container_name_config:/config) convert any '/' in container name to '_'
+                    else if ((data[`volume${i}`] == 'on') && (data[`volume_${i}_bind`] == '') && (data[`volume_${i}_container`] != '')) {
+                        let volume_name = data[`volume_${i}_container`].replace(/\//g, '_');
+                        compose_file += `\n      - ${name}_${volume_name}:${data[`volume_${i}_container`]}:${data[`volume_${i}_readwrite`]}`
+                        docker_volumes.push(`${name}_${volume_name}`);
+                    } 
                 }
             }
 
@@ -122,6 +134,22 @@ module.exports.install = async function (data) {
                 }
             }
 
+    
+            // add any docker volumes to the docker-compose file
+            if ( docker_volumes.length > 0 ) {
+                compose_file += `\n`
+                compose_file += `\nvolumes:`
+
+                // check docker_volumes for duplicates and remove them completely
+                docker_volumes = docker_volumes.filter((item, index) => docker_volumes.indexOf(item) === index)
+
+                for (let i = 0; i < docker_volumes.length; i++) {
+                    if ( docker_volumes[i] != '') {
+                        compose_file += `\n  ${docker_volumes[i]}:`
+                    }
+                }
+            }
+
             try {   
                 mkdirSync(`./appdata/${name}`, { recursive: true });
                 writeFileSync(`./appdata/${name}/docker-compose.yml`, compose_file, function (err) { console.log(err) });
@@ -154,16 +182,16 @@ module.exports.uninstall = async function (data) {
             var containerName = docker.getContainer(`${data.service_name}`);
 
             try {
-                containerName.stop(function (err, data) {
-                });
-            } catch { console.log('unable to stop container') }
-
-
-            try {
-                containerName.remove(function (err, data) {
-                });
-            } catch { console.log('unable to remove container') }
-
+                    containerName.stop(function (err, data) {
+                        if (data) {
+                            containerName.remove(function (err, data) {
+                            });
+                        }
+                    });
+                } catch { 
+                    containerName.remove(function (err, data) {
+                    });
+                }
 
         }
 

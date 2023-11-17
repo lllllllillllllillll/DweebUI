@@ -115,6 +115,10 @@ function buttonAction(button) {
   socket.emit('clicked', {container: button.name, state: button.id, action: button.value});
 }
 
+function viewLogs(button) {
+  console.log(`trying to view logs for ${button.name}`);
+}
+
 socket.on('cards', (data) => {
 
   console.log('cards deleted');
@@ -143,31 +147,31 @@ socket.on('container_stats', (data) => {
 
   let {name, cpu, ram} = data;
 
-  // get cpu and ram array of the container from local storage
   var cpu_array = JSON.parse(localStorage.getItem(`${name}_cpu`));
   var ram_array = JSON.parse(localStorage.getItem(`${name}_ram`));
 
-  // if the cpu and ram arrays are null, create both arrays with 30 values of 0
   if (cpu_array == null) { cpu_array = Array(30).fill(0); }
   if (ram_array == null) { ram_array = Array(30).fill(0); }
 
-  // add the new cpu and ram values to the arrays, but limit the array to 30 values
   cpu_array.push(cpu);
   ram_array.push(ram);
-
+  
   cpu_array = cpu_array.slice(-30);
   ram_array = ram_array.slice(-30);
 
-  // save the arrays to local storage
   localStorage.setItem(`${name}_cpu`, JSON.stringify(cpu_array));
   localStorage.setItem(`${name}_ram`, JSON.stringify(ram_array));
 
   // replace the old chart with the new one
   let chart = document.getElementById(`${name}_chart`);
-  let newChart = document.createElement('div');
-  newChart.id = `${name}_chart`;
-  chart.parentNode.replaceChild(newChart, chart);
-  drawCharts(`#${name}_chart`, cpu_array, ram_array);  
+  if (chart) {
+    let newChart = document.createElement('div');
+    newChart.id = `${name}_chart`;
+    chart.parentNode.replaceChild(newChart, chart);
+    drawCharts(`#${name}_chart`, cpu_array, ram_array);
+  } else {
+    console.log(`Chart element with id ${name}_chart not found in the DOM`);
+  }
 });
 
 socket.on('install', (data) => {
