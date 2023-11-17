@@ -3,9 +3,9 @@ DweebUI is a simple Docker web interface created with javascript and node.js
 
 Pre-Pre-Pre-Pre-Pre Alpha v0.05 ( :fire: Experimental. Don't install on any servers you care about :fire: )
 
-[![GitHub License](https://img.shields.io/github/license/lllllllillllllillll/DweebUI)](https://github.com/lllllllillllllillll/DweebUI/blob/main/LICENSE)
-[![GitHub activity](https://img.shields.io/github/commit-activity/y/lllllllillllllillll/DweebUI)](https://github.com/lllllllillllllillll)
-
+![GitHub Repo stars](https://img.shields.io/github/stars/lllllllillllllillll/DweebUI)
+![GitHub License](https://img.shields.io/github/license/lllllllillllllillll/DweebUI)
+![GitHub activity](https://img.shields.io/github/commit-activity/y/lllllllillllllillll/DweebUI)
 
 * I haven't used Github very much and I'm still new to javascript.
 * This is the first project I've ever released and I'm sure it's full of plenty of bugs and mistakes.
