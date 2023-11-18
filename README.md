@@ -31,7 +31,8 @@ Pre-Pre-Pre-Pre-Pre Alpha v0.05 ( :fire: Experimental. Don't install on any serv
 * [x] Templates.json maintains compatability with Portainer, allowing you to use the template without needing to use DweebUI.
 * [ ] Manage your Docker networks, images, and volumes. (planned)
 * [ ] Preset variables. (planned)
-
+* [ ] VPN, VPS, and Firewall Toggles. (planned)
+* [ ] Offline Mode. (planned)
 
 ## Setup
 
