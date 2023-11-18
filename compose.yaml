@@ -11,8 +11,7 @@ services:
       - cache
     volumes:
       - dweebui:/app
-      - ./caddyfiles/Caddyfile:/app/caddyfiles/Caddyfile
-      - ./caddyfiles/sites:/app/caddyfiles/sites
+      - caddy:/app/caddyfiles
       - /var/run/docker.sock:/var/run/docker.sock
   cache:
     container_name: DweebCache
@@ -31,9 +30,7 @@ services:
     volumes:
       - caddy:/data
       - caddy:/config
-      - ./caddyfiles/Caddyfile:/etc/caddy/Caddyfile
-      - ./caddyfiles/sites:/etc/caddy/sites
-
+      - caddy:/etc/caddy:ro
 volumes:
   dweebui:
   cache:
