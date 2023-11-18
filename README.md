@@ -38,45 +38,42 @@ Pre-Pre-Pre-Pre-Pre Alpha v0.05 ( :fire: Experimental. Don't install on any serv
 * Docker compose.yaml: 
 ```
 services:
-  dweebui:
-    container_name: DweebUI
-    image: lllllllillllllillll/dweebui:v0.05
-    restart: unless-stopped
-    ports:
-      - 8000:8000
-    depends_on:
-      - cache
-    links:
-      - cache
-    volumes:
-      - dweebui:/app
-      - ./caddyfiles/Caddyfile:/app/caddyfiles/Caddyfile
-      - ./caddyfiles/sites:/app/caddyfiles/sites
-      - /var/run/docker.sock:/var/run/docker.sock
-  cache:
-    container_name: DweebCache
-    image: redis:6.2-alpine
-    restart: always
-    command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
-    volumes: 
-      - cache:/data
-  proxy:
-    container_name: DweebProxy
-    image: caddy:2.4.5-alpine
-    depends_on:
-      - dweebui
-    restart: unless-stopped
-    network_mode: host
-    volumes:
-      - caddy:/data
-      - caddy:/config
-      - ./caddyfiles/Caddyfile:/etc/caddy/Caddyfile
-      - ./caddyfiles/sites:/etc/caddy/sites
-
+  dweebui:
+    container_name: DweebUI
+    image: lllllllillllllillll/dweebui:v0.05
+    restart: unless-stopped
+    ports:
+      - 8000:8000
+    depends_on:
+      - cache
+    links:
+      - cache
+    volumes:
+      - dweebui:/app
+      - caddy:/app/caddyfiles
+      - /var/run/docker.sock:/var/run/docker.sock
+  cache:
+    container_name: DweebCache
+    image: redis:6.2-alpine
+    restart: always
+    command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+    volumes: 
+      - cache:/data
+  proxy:
+    container_name: DweebProxy
+    image: caddy:2.4.5-alpine
+    depends_on:
+      - dweebui
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - caddy:/data
+      - caddy:/config
+      - caddy:/etc/caddy:ro
 volumes:
-  dweebui:
-  cache:
-  caddy:
+  dweebui:
+  cache:
+  caddy:
 ```
 
 * Using setup.sh: 
