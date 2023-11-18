@@ -69,7 +69,7 @@ services:
     volumes:
       - caddy:/data
       - caddy:/config
-      - caddy:/etc/caddy:ro
+      - caddy:/etc/caddy
 volumes:
   dweebui:
   cache:
