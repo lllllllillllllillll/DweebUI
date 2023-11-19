@@ -16,7 +16,7 @@
     "express-session": "^1.17.3",
     "js-yaml": "^4.1.0",
     "redis": "^4.6.5",
-    "sequelize": "^6.32.1",
+    "sequelize": "^6.35.1",
     "socket.io": "^4.6.1",
     "sqlite3": "^5.1.6",
     "systeminformation": "^5.17.12"
