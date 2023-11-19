@@ -1,16 +1,19 @@
 version: 2
 updates:
   - package-ecosystem: "github-actions"
+    directory: "/"
     schedule:
       interval: "weekly"
     labels:
       - "🤖 Dependencies"
   - package-ecosystem: "docker"
+    directory: "/"
     schedule:
       interval: "weekly"
     labels:
       - "🤖 Dependencies"
   - package-ecosystem: "npm"
+    directory: "/"
     schedule:
       interval: "daily"
     labels:
