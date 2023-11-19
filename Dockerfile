@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM node:20-alpine
+FROM node:20-slim
 
 # Use production node environment by default.
 ENV NODE_ENV production
