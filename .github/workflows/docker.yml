@@ -1,4 +1,4 @@
-name: CI/CD Docker Build/Publish
+name: Docker
 
 on:
   push:
@@ -19,6 +19,7 @@ on:
 jobs:
   build-and-publish-image:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -55,12 +56,12 @@ jobs:
       # Build image and only publish if not a Pull Request
       - name: Build and Publish Docker Image
         uses: docker/build-push-action@v5
+        timeout-minutes: 30
         with:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
-          target: release
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6
+          platforms: linux/amd64,linux/arm64
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
