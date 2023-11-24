@@ -12,7 +12,7 @@ app.locals.site_list = '';
 
 const redisClient = require('redis').createClient({
     url: 'redis://DweebCache:6379',
-    password:'eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81',
+    password: process.env.REDIS_PASS,
     legacyMode:true
 });
 redisClient.connect().catch(console.log);
