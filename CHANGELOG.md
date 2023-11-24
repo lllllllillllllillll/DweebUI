@@ -1,3 +1,11 @@
+## v0.06 ( Nov 24th 2023 )
+* Multi-platform image (amd64/arm64).
+* Removed Caddy from compose file.
+* Proxy Manager UI can be enabled from environment variable.
+* Removed hardcoded redis passwords.
+* Repo change: Implemented image build-and-publish and dependabot (Thank you, gaby).
+* Updated dependencies.
+
 ## v0.05 ( Nov 17th 2023 )
 * Environment Variables and Labels are now unchecked by default.
 * Support for Docker volumes.
