@@ -1,7 +1,11 @@
 services:
   dweebui:
     container_name: DweebUI
-    image: lllllllillllllillll/dweebui:v0.05
+    image: lllllllillllllillll/dweebui:v0.06
+    environment:
+      NODE_ENV: production
+      REDIS_PASS: replace_with_password_for_redis
+      # Proxy_Manager: enabled
     restart: unless-stopped
     ports:
       - 8000:8000
@@ -11,27 +15,17 @@ services:
       - cache
     volumes:
       - dweebui:/app
-      - caddy:/app/caddyfiles
+      - caddyfiles:/app/caddyfiles
       - /var/run/docker.sock:/var/run/docker.sock
   cache:
     container_name: DweebCache
     image: redis:6.2-alpine
     restart: always
-    command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+    command: redis-server --save 20 1 --loglevel warning --requirepass replace_with_password_for_redis
     volumes: 
       - cache:/data
-  proxy:
-    container_name: DweebProxy
-    image: caddy:2.4.5-alpine
-    depends_on:
-      - dweebui
-    restart: unless-stopped
-    network_mode: host
-    volumes:
-      - caddy:/data
-      - caddy:/config
-      - caddy:/etc/caddy
+
 volumes:
   dweebui:
   cache:
-  caddy:
+  caddyfiles:

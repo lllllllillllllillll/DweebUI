@@ -1,7 +1,7 @@
 # DweebUI
 DweebUI is a simple Docker web interface created with javascript and node.js
 
-Pre-Pre-Pre-Pre-Pre Alpha v0.05 ( :fire: Experimental. Don't install on any servers you care about :fire: )
+Pre-Pre-Pre-Pre-Pre Alpha v0.06 ( :fire: Experimental. Don't install on any servers you care about :fire: )
 
 [![GitHub Stars](https://img.shields.io/github/stars/lllllllillllllillll/DweebUI)](https://github.com/lllllllillllllillll)
 [![GitHub License](https://img.shields.io/github/license/lllllllillllllillll/DweebUI)](https://github.com/lllllllillllllillll/DweebUI/blob/main/LICENSE)
@@ -21,7 +21,7 @@ Pre-Pre-Pre-Pre-Pre Alpha v0.05 ( :fire: Experimental. Don't install on any serv
 * [x] Light/Dark Mode.
 * [x] Easy to install app templates.
 * [x] Automatically persists data in docker volumes if bind mount isn't used. 
-* [x] Proxy manager for Caddy.
+* [x] Proxy manager for Caddy. (Optional)
 * [x] Partial Portainer Template Support (Network Mode, Ports, Volumes, Enviroment Variables, Labels, Commands, Restart Policy, Nvidia Hardware Acceleration).
 * [x] Multi-User built-in.
 * [ ] User pages: Shortcuts, Requests, Support. (planned)
@@ -39,42 +39,36 @@ Pre-Pre-Pre-Pre-Pre Alpha v0.05 ( :fire: Experimental. Don't install on any serv
 * Docker compose.yaml: 
 ```
 services:
-  dweebui:
-    container_name: DweebUI
-    image: lllllllillllllillll/dweebui:v0.05
-    restart: unless-stopped
-    ports:
-      - 8000:8000
-    depends_on:
-      - cache
-    links:
-      - cache
-    volumes:
-      - dweebui:/app
-      - caddy:/app/caddyfiles
-      - /var/run/docker.sock:/var/run/docker.sock
-  cache:
-    container_name: DweebCache
-    image: redis:6.2-alpine
-    restart: always
-    command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
-    volumes: 
-      - cache:/data
-  proxy:
-    container_name: DweebProxy
-    image: caddy:2.4.5-alpine
-    depends_on:
-      - dweebui
-    restart: unless-stopped
-    network_mode: host
-    volumes:
-      - caddy:/data
-      - caddy:/config
-      - caddy:/etc/caddy
+  dweebui:
+    container_name: DweebUI
+    image: lllllllillllllillll/dweebui:v0.06
+    environment:
+      NODE_ENV: production
+      REDIS_PASS: replace_with_password_for_redis
+      # Proxy_Manager: enabled
+    restart: unless-stopped
+    ports:
+      - 8000:8000
+    depends_on:
+      - cache
+    links:
+      - cache
+    volumes:
+      - dweebui:/app
+      - caddyfiles:/app/caddyfiles
+      - /var/run/docker.sock:/var/run/docker.sock
+  cache:
+    container_name: DweebCache
+    image: redis:6.2-alpine
+    restart: always
+    command: redis-server --save 20 1 --loglevel warning --requirepass replace_with_password_for_redis
+    volumes: 
+      - cache:/data
+
 volumes:
-  dweebui:
-  cache:
-  caddy:
+  dweebui:
+  cache:
+  caddyfiles:
 ```
 
 * Using setup.sh: 

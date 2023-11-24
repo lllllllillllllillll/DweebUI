@@ -3701,16 +3701,16 @@
       "type": 1,
       "volumes": [
         {
-          "bind": "/home/docker/caddy/",
+          "bind": "caddy",
           "container": "/data"
         },
         {
-          "bind": "caddy/Caddyfile",
-          "container": "/etc/caddy/Caddyfile"
+          "bind": "caddy",
+          "container": "/config"
         },
         {
-          "bind": "caddy/sites",
-          "container": "/etc/caddy/sites"
+          "bind": "caddyfiles",
+          "container": "/etc/caddy"
         }
       ]
     },
