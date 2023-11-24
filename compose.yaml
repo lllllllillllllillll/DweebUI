@@ -1,7 +1,7 @@
 services:
   dweebui:
     container_name: DweebUI
-    image: lllllllillllllillll/dweebui:v0.06-dev
+    image: lllllllillllllillll/dweebui:v0.06
     environment:
       NODE_ENV: production
       REDIS_PASS: replace_with_password_for_redis
