@@ -27,7 +27,7 @@ Pre-Pre-Pre-Pre-Pre Alpha v0.06 ( :fire: Experimental. Don't install on any serv
 * [ ] User pages: Shortcuts, Requests, Support. (planned)
 * [x] Support for Windows, Linux, and MacOS.
 * [ ] Import compose files. (planned)
-* [x] Pure javascript. No frameworks or typescript.
+* [x] Javascript, Node.js, and Express.
 * [x] Templates.json maintains compatability with Portainer, allowing you to use the template without needing to use DweebUI.
 * [ ] Manage your Docker networks, images, and volumes. (planned)
 * [ ] Preset variables. (planned)
