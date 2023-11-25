@@ -1,7 +1,17 @@
 const express = require("express");
-const session = require("express-session");
-const redis = require('connect-redis');
 const app = express();
+const session = require("express-session");
+const redis = require('redis');
+const RedisStore = require("connect-redis").default;
+const redisClient = redis.createClient({
+    url: "redis://DweebCache:6379",
+    password: process.env.REDIS_PASS,
+});
+redisClient.connect().catch(console.log);
+let redisStore = new RedisStore({
+    client: redisClient,
+});
+
 const routes = require("./routes");
 
 const { serverStats, containerList, containerStats, containerAction } = require('./functions/system_information');
@@ -10,16 +20,8 @@ const { RefreshSites } = require('./controllers/site_actions');
 let sent_list, clicked;
 app.locals.site_list = '';
 
-const redisClient = require('redis').createClient({
-    url: 'redis://DweebCache:6379',
-    password: process.env.REDIS_PASS,
-    legacyMode:true
-});
-redisClient.connect().catch(console.log);
-const RedisStore = redis(session);
-
 const sessionMiddleware = session({
-    store:new RedisStore({client:redisClient}),
+    store: redisStore,
     secret: "keyboard cat", 
     resave: false, 
     saveUninitialized: false, 
