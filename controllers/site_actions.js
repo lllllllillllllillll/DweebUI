@@ -1,7 +1,7 @@
 const { readFileSync, writeFileSync, appendFileSync, readdirSync } = require('fs');
 const { execSync } = require("child_process");
 const { siteCard } = require('../components/siteCard');
-const { containerExec } = require('../functions/system_information')
+const { containerExec } = require('../functions/system')
 
 exports.AddSite = async function (req, res) {
 

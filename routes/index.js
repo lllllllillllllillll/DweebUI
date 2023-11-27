@@ -16,15 +16,16 @@ const { Register, processRegister } = require("../controllers/register");
 
 
 router.get("/", Dashboard);
-
-router.post("/install", Install)
-router.post("/uninstall", Uninstall)
-
 router.post("/addsite", AddSite)
 router.post("/removesite", RemoveSite)
 router.get("/refreshsites", RefreshSites)
 router.post("/disablesite", DisableSite)
 router.post("/enablesite", EnableSite)
+
+
+router.post("/install", Install)
+router.post("/uninstall", Uninstall)
+
 
 
 router.get("/users", Users);
