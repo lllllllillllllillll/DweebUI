@@ -1,7 +1,7 @@
 # DweebUI
 DweebUI is a simple Docker web interface created with javascript and node.js
 
-Pre-Pre-Pre-Pre-Pre Alpha v0.06 ( :fire: Experimental. Don't install on any servers you care about :fire: )
+Pre-Pre-Pre-Pre-Pre Alpha v0.07 ( :fire: Experimental. Don't install on any servers you care about :fire: )
 
 [![GitHub Stars](https://img.shields.io/github/stars/lllllllillllllillll/DweebUI)](https://github.com/lllllllillllllillll)
 [![GitHub License](https://img.shields.io/github/license/lllllllillllllillll/DweebUI)](https://github.com/lllllllillllllillll/DweebUI/blob/main/LICENSE)
@@ -39,36 +39,36 @@ Pre-Pre-Pre-Pre-Pre Alpha v0.06 ( :fire: Experimental. Don't install on any serv
 * Docker compose.yaml: 
 ```
 services:
-  dweebui:
-    container_name: DweebUI
-    image: lllllllillllllillll/dweebui:v0.06
-    environment:
-      NODE_ENV: production
-      REDIS_PASS: replace_with_password_for_redis
-      # Proxy_Manager: enabled
-    restart: unless-stopped
-    ports:
-      - 8000:8000
-    depends_on:
-      - cache
-    links:
-      - cache
-    volumes:
-      - dweebui:/app
-      - caddyfiles:/app/caddyfiles
-      - /var/run/docker.sock:/var/run/docker.sock
-  cache:
-    container_name: DweebCache
-    image: redis:6.2-alpine
-    restart: always
-    command: redis-server --save 20 1 --loglevel warning --requirepass replace_with_password_for_redis
-    volumes: 
-      - cache:/data
+  dweebui:
+    container_name: DweebUI
+    image: lllllllillllllillll/dweebui:v0.07-dev
+    environment:
+      PORT: 8000
+      REDIS_PASS: replace_with_password_for_redis
+      # Proxy_Manager: enabled
+    restart: unless-stopped
+    ports:
+      - 8000:8000
+    depends_on:
+      - cache
+    links:
+      - cache
+    volumes:
+      - dweebui:/app
+      - caddyfiles:/app/caddyfiles
+      - /var/run/docker.sock:/var/run/docker.sock
+  cache:
+    container_name: DweebCache
+    image: redis:6.2-alpine
+    restart: always
+    command: redis-server --save 20 1 --loglevel warning --requirepass replace_with_password_for_redis
+    volumes: 
+      - cache:/data
 
 volumes:
-  dweebui:
-  cache:
-  caddyfiles:
+  dweebui:
+  cache:
+  caddyfiles:
 ```
 
 * Using setup.sh: 
@@ -83,5 +83,5 @@ sudo ./setup.sh
 ## Credit
 
 * UI was built using HTML and CSS elements from https://tabler.io/
-* Apps template based on Portainer template provided by Lissy93 here: https://github.com/Lissy93/portainer-templates
-* Most of the app icons were sourced from Walkxcode's dashboard icons here: https://github.com/walkxcode/dashboard-icons
+* Apps template based on Portainer template provided by Lissy93: https://github.com/Lissy93/portainer-templates
+* Icons from Walkxcode with some renames and additions: https://github.com/walkxcode/dashboard-icons
