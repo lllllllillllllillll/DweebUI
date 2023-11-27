@@ -1,9 +1,9 @@
 services:
   dweebui:
     container_name: DweebUI
-    image: lllllllillllllillll/dweebui:v0.06
+    image: lllllllillllllillll/dweebui:v0.07-dev
     environment:
-      NODE_ENV: production
+      PORT: 8000
       REDIS_PASS: replace_with_password_for_redis
       # Proxy_Manager: enabled
     restart: unless-stopped
