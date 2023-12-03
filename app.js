@@ -11,11 +11,11 @@ const redisClient = redis.createClient({ url: "redis://DweebCache:6379", passwor
 redisClient.connect().catch(console.log);
 let redisStore = new RedisStore({ client: redisClient });
 
-// Routes
+// Router
 const routes = require("./routes");
 
 // Functions and variables
-const { serverStats, containerList, containerStats, containerAction } = require('./functions/system');
+const { serverStats, containerList, containerStats, containerAction, containerLogs } = require('./functions/system');
 let sentList, clicked;
 app.locals.site_list = '';
 
@@ -98,6 +98,19 @@ io.on('connection', (socket) => {
         clicked = false;
     });
 
+
+    // Container logs
+    socket.on('logs', (data) => {
+        containerLogs(data.container)
+        .then(logs => {
+            socket.emit('logString', logs);
+        })
+        .catch(err => {
+            console.error(err);
+        });
+    });
+
+    // On disconnect
     socket.on('disconnect', () => {                
         clearInterval(ServerStats);
         clearInterval(ContainerList);

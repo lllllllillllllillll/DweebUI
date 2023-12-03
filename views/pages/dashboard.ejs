@@ -126,6 +126,38 @@
                 </div>
               </div>
 
+
+              <div class="modal modal-blur fade" id="log_view" tabindex="-1" style="display: none;" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">Logs</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      
+                    <div class="card-body">
+                          <h4>
+                            Log File:
+                          </h4>
+                          <h4>Logs:</h4>
+                          <div id="logView">
+                            <pre>No logs available</pre>
+                          </div>
+                    </div>
+          
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-info" onclick="viewLogs(this)" name="refresh"> 
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-refresh" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4"></path> <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"></path> </svg>
+                          Refresh
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <div class="col-12 mt-12 <%- caddy %>">
                 <div class="card">
                   <div class="card-header">

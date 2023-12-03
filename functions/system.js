@@ -2,6 +2,7 @@ const { currentLoad, mem, networkStats, fsSize, dockerContainerStats } = require
 var Docker = require('dockerode');
 var docker = new Docker({ socketPath: '/var/run/docker.sock' });
 const { dashCard } = require('../components/dashCard');
+const { Readable } = require('stream');
 
 // export docker
 module.exports.docker = docker;
@@ -254,3 +255,41 @@ module.exports.containerExec = async function (data) {
 
 
 
+
+
+
+
+
+
+
+module.exports.containerLogs = function (data) {
+    return new Promise((resolve, reject) => {
+        let logString = '';
+
+        var options = {
+            follow: false,
+            stdout: true,
+            stderr: false,
+            timestamps: false
+        };
+
+        var containerName = docker.getContainer(data);
+
+        containerName.logs(options, function (err, stream) {
+            if (err) {
+                reject(err);
+                return;
+            }
+
+            const readableStream = Readable.from(stream);
+
+            readableStream.on('data', function (chunk) {
+                logString += chunk.toString('utf8');
+            });
+
+            readableStream.on('end', function () {
+                resolve(logString);
+            });
+        });
+    });
+};
