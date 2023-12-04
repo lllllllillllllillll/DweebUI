@@ -19,7 +19,7 @@
     "sequelize": "^6.35.1",
     "socket.io": "^4.6.1",
     "sqlite3": "^5.1.6",
-    "systeminformation": "^5.21.17"
+    "systeminformation": "^5.21.20"
   },
   "description": ""
 }
