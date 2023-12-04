@@ -158,9 +158,11 @@ socket.on('cards', (data) => {
 });
 
 
-socket.on('container_stats', (data) => {
+socket.on('containerStats', (data) => {
 
   let {name, cpu, ram} = data;
+
+  console.log(`drawing chart for ${name}`)
 
   var cpu_array = JSON.parse(localStorage.getItem(`${name}_cpu`));
   var ram_array = JSON.parse(localStorage.getItem(`${name}_ram`));

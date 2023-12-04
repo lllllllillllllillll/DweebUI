@@ -168,19 +168,19 @@ module.exports.containerList = async function () {
 module.exports.containerStats = async function () {
 
     let container_stats = [];
-
     const data = await docker.listContainers({ all: true });
 
     for (const container of data) {
 
         if ((container.Names[0].slice(1) != 'DweebUI') && (container.Names[0].slice(1) != 'DweebCache')) {
             const stats = await dockerContainerStats(container.Id);
+            
             let container_stat = {
                 name: container.Names[0].slice(1),
                 cpu: Math.round(stats[0].cpuPercent),
                 ram: Math.round(stats[0].memPercent)
             }
-
+            
             //push stats to an array
             container_stats.push(container_stat);
         }
