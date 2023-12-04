@@ -184,8 +184,8 @@ module.exports.dashCard = function dashCard(data) {
             <!-- Download SVG icon from http://tabler-icons.io/i/alert-triangle -->
             <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 9v2m0 4v.01"></path><path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75"></path></svg>
             <h3>Remove ${name}?</h3>
-            <form action="/uninstall" id="uninstall" method="POST">
-            <input type="text" class="form-control" name="service_name" value="${app_name}" hidden/>
+            <form action="/uninstall" id="${name}_uninstall" method="POST">
+            <input type="text" class="form-control" name="service_name" value="${name}" hidden/>
             <div class="mb-3"> </div>
             
             <div class="mb-2">
@@ -246,7 +246,7 @@ module.exports.dashCard = function dashCard(data) {
                   </a>
                 </div>
                 <div class="col">
-                  <input type="submit" form="uninstall" class="btn btn-danger w-100" value="Uninstall"/>
+                  <input type="submit" form="${name}_uninstall" class="btn btn-danger w-100" value="Uninstall"/>
                 </div>
               </div>
             </div>
