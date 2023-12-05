@@ -1,9 +1,10 @@
 ## v0.07 ( dev )
 * View container logs.
+* Removed Redis.
 * Improved uninstall function and form id fix.
 * WebUI Port can be changed in compose.yml
 * Code clean-up.
-* Updated dependencies (redis-connect and systeminformation).
+* Updated dependencies (systeminformation).
   
 ## v0.06 ( Nov 24th 2023 )
 * Multi-platform image (amd64/arm64).
