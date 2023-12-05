@@ -4,13 +4,6 @@ const app = express();
 const session = require("express-session");
 const PORT = process.env.PORT || 8000;
 
-// Redis
-const redis = require('redis');
-const RedisStore = require("connect-redis").default;
-const redisClient = redis.createClient({ url: "redis://DweebCache:6379", password: process.env.REDIS_PASS, });
-redisClient.connect().catch(console.log);
-let redisStore = new RedisStore({ client: redisClient });
-
 // Router
 const routes = require("./routes");
 
@@ -21,7 +14,6 @@ app.locals.site_list = '';
 
 // Configure Session
 const sessionMiddleware = session({
-    store: redisStore,
     secret: "keyboard cat", 
     resave: false, 
     saveUninitialized: false, 
