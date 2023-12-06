@@ -36,7 +36,7 @@ Pre-Pre-Pre-Pre-Pre Alpha v0.06 ( :fire: Experimental. Don't install on any serv
 
 ## Setup
 
-* Docker compose.yaml: 
+* Docker Compose: 
 ```
 version: "3.9"
 services:
