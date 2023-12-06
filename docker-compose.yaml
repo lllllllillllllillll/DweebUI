@@ -1,4 +1,6 @@
+version: "3.9"
 services:
+
   dweebui:
     container_name: dweebui
     image: lllllllillllllillll/dweebui:v0.06
@@ -17,6 +19,8 @@ services:
       - ./data/app:/app
       - ./data/caddyfiles:/app/caddyfiles
       - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - dweeb_main_network
       
   dweeb-redis:
     container_name: dweeb-redis
@@ -25,3 +29,9 @@ services:
     command: redis-server --save 20 1 --loglevel warning --requirepass replace_with_password_for_redis
     volumes: 
       - ./data/redis:/data
+    networks:
+      - dweeb_main_network
+
+networks:
+  dweeb_main_network:
+    driver: bridge
