@@ -38,9 +38,11 @@ Pre-Pre-Pre-Pre-Pre Alpha v0.06 ( :fire: Experimental. Don't install on any serv
 
 * Docker compose.yaml: 
 ```
+version: "3.9"
 services:
+
   dweebui:
-    container_name: DweebUI
+    container_name: dweebui
     image: lllllllillllllillll/dweebui:v0.06
     environment:
       NODE_ENV: production
@@ -54,22 +56,28 @@ services:
     links:
       - cache
     volumes:
-      - dweebui:/app
-      - caddyfiles:/app/caddyfiles
+      - ./data/app:/app
+      - ./data/caddyfiles:/app/caddyfiles
       - /var/run/docker.sock:/var/run/docker.sock
-  cache:
-    container_name: DweebCache
+    networks:
+      - dweeb_main_network
+      
+  dweeb-redis:
+    container_name: dweeb-redis
     image: redis:6.2-alpine
-    restart: always
+    restart: unless-stopped
     command: redis-server --save 20 1 --loglevel warning --requirepass replace_with_password_for_redis
     volumes: 
-      - cache:/data
+      - ./data/redis:/data
+    networks:
+      - dweeb_main_network
 
-volumes:
-  dweebui:
-  cache:
-  caddyfiles:
+networks:
+  dweeb_main_network:
+    driver: bridge
 ```
+
+In order to use the compose file create a folder named somethign like ```dweebui``` and add the contents of above to a file named ```docker-compose.yml```. Also make sure to create a ```data``` folder for the dweeb files to be storred in.
 
 * Using setup.sh: 
 ```
