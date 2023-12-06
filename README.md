@@ -43,31 +43,20 @@ services:
     container_name: DweebUI
     image: lllllllillllllillll/dweebui:v0.07-dev
     environment:
-      PORT: 8000
+      NODE_ENV: production
       REDIS_PASS: replace_with_password_for_redis
+      PORT: 8000
       # Proxy_Manager: enabled
     restart: unless-stopped
     ports:
       - 8000:8000
-    depends_on:
-      - cache
-    links:
-      - cache
     volumes:
       - dweebui:/app
       - caddyfiles:/app/caddyfiles
       - /var/run/docker.sock:/var/run/docker.sock
-  cache:
-    container_name: DweebCache
-    image: redis:6.2-alpine
-    restart: always
-    command: redis-server --save 20 1 --loglevel warning --requirepass replace_with_password_for_redis
-    volumes: 
-      - cache:/data
 
 volumes:
   dweebui:
-  cache:
   caddyfiles:
 ```
 
