@@ -1,3 +1,6 @@
+## v0.08 (dev)
+* ???
+
 ## v0.07 (Dec 8th 2023)
 * View container logs.
 * Removed Redis.
