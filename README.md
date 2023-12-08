@@ -44,7 +44,6 @@ services:
     image: lllllllillllllillll/dweebui:v0.07
     environment:
       NODE_ENV: production
-      REDIS_PASS: replace_with_password_for_redis
       PORT: 8000
       # Proxy_Manager: enabled
     restart: unless-stopped
