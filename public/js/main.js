@@ -22,7 +22,7 @@ const diskBar = document.getElementById('disk-bar');
 
 const dockerCards = document.getElementById('cards');
 
-// create
+const logViewer = document.getElementById('logView');
 
 //Update usage bars
 socket.on('metrics', (data) => {
@@ -115,9 +115,24 @@ function buttonAction(button) {
   socket.emit('clicked', {container: button.name, state: button.id, action: button.value});
 }
 
+
+let containerLogs;
+
 function viewLogs(button) {
-  console.log(`trying to view logs for ${button.name}`);
+
+  if (button.name != 'refresh') {
+    containerLogs = button.name;
+  }
+
+
+  socket.emit('logs', {container: containerLogs});
 }
+
+socket.on('logString', (data) => {
+  logViewer.innerHTML = `<pre>${data}</pre>`;
+});
+
+
 
 socket.on('cards', (data) => {
 
@@ -143,9 +158,11 @@ socket.on('cards', (data) => {
 });
 
 
-socket.on('container_stats', (data) => {
+socket.on('containerStats', (data) => {
 
   let {name, cpu, ram} = data;
+
+  console.log(`drawing chart for ${name}`)
 
   var cpu_array = JSON.parse(localStorage.getItem(`${name}_cpu`));
   var ram_array = JSON.parse(localStorage.getItem(`${name}_ram`));

@@ -2,6 +2,7 @@ const { currentLoad, mem, networkStats, fsSize, dockerContainerStats } = require
 var Docker = require('dockerode');
 var docker = new Docker({ socketPath: '/var/run/docker.sock' });
 const { dashCard } = require('../components/dashCard');
+const { Readable } = require('stream');
 
 // export docker
 module.exports.docker = docker;
@@ -32,7 +33,7 @@ module.exports.containerList = async function () {
     for (const container of data) {
 
 
-        if ((container.Names[0].slice(1) != 'DweebUI') && (container.Names[0].slice(1) != 'DweebCache') && (container.Names[0].slice(1) != 'DweebProxy')) {
+        if ((container.Names[0].slice(1) != 'DweebUI') && (container.Names[0].slice(1) != 'DweebCache')) {
 
             let imageVersion = container.Image.split('/');
             let service = imageVersion[imageVersion.length - 1].split(':')[0];
@@ -167,19 +168,19 @@ module.exports.containerList = async function () {
 module.exports.containerStats = async function () {
 
     let container_stats = [];
-
     const data = await docker.listContainers({ all: true });
 
     for (const container of data) {
 
-        if ((container.Names[0].slice(1) != 'DweebUI') && (container.Names[0].slice(1) != 'DweebCache') && (container.Names[0].slice(1) != 'DweebProxy')) {
+        if ((container.Names[0].slice(1) != 'DweebUI') && (container.Names[0].slice(1) != 'DweebCache')) {
             const stats = await dockerContainerStats(container.Id);
+            
             let container_stat = {
                 name: container.Names[0].slice(1),
                 cpu: Math.round(stats[0].cpuPercent),
                 ram: Math.round(stats[0].memPercent)
             }
-
+            
             //push stats to an array
             container_stats.push(container_stat);
         }
@@ -254,3 +255,41 @@ module.exports.containerExec = async function (data) {
 
 
 
+
+
+
+
+
+
+
+module.exports.containerLogs = function (data) {
+    return new Promise((resolve, reject) => {
+        let logString = '';
+
+        var options = {
+            follow: false,
+            stdout: true,
+            stderr: false,
+            timestamps: false
+        };
+
+        var containerName = docker.getContainer(data);
+
+        containerName.logs(options, function (err, stream) {
+            if (err) {
+                reject(err);
+                return;
+            }
+
+            const readableStream = Readable.from(stream);
+
+            readableStream.on('data', function (chunk) {
+                logString += chunk.toString('utf8');
+            });
+
+            readableStream.on('end', function () {
+                resolve(logString);
+            });
+        });
+    });
+};

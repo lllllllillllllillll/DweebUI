@@ -1,4 +1,12 @@
-## v0.06 ( Nov 24th 2023 )
+## v0.07 (Dec 8th 2023)
+* View container logs.
+* Removed Redis.
+* Improved uninstall function and form id fix.
+* WebUI Port can be changed in compose.yml
+* Code clean-up.
+* Updated dependencies (systeminformation).
+  
+## v0.06 (Nov 24th 2023)
 * Multi-platform image (amd64/arm64).
 * Removed Caddy from compose file.
 * Proxy Manager UI can be enabled from environment variable.
@@ -6,7 +14,7 @@
 * Repo change: Implemented image build-and-publish and dependabot (Thank you, gaby).
 * Updated dependencies.
 
-## v0.05 ( Nov 17th 2023 )
+## v0.05 (Nov 17th 2023)
 * Environment Variables and Labels are now unchecked by default.
 * Support for Docker volumes.
 * Fixed app uninstall.

@@ -1,35 +1,30 @@
+// Express
 const express = require("express");
-const session = require("express-session");
-const redis = require('connect-redis');
 const app = express();
+const session = require("express-session");
+const PORT = process.env.PORT || 8000;
+
+// Router
 const routes = require("./routes");
 
-const { serverStats, containerList, containerStats, containerAction } = require('./functions/system_information');
-const { RefreshSites } = require('./controllers/site_actions');
-
-let sent_list, clicked;
+// Functions and variables
+const { serverStats, containerList, containerStats, containerAction, containerLogs } = require('./functions/system');
+let sentList, clicked;
 app.locals.site_list = '';
 
-const redisClient = require('redis').createClient({
-    url: 'redis://DweebCache:6379',
-    password: process.env.REDIS_PASS,
-    legacyMode:true
-});
-redisClient.connect().catch(console.log);
-const RedisStore = redis(session);
-
+// Configure Session
 const sessionMiddleware = session({
-    store:new RedisStore({client:redisClient}),
     secret: "keyboard cat", 
     resave: false, 
     saveUninitialized: false, 
     cookie:{
         secure:false, // Only set to true if you are using HTTPS.
         httpOnly:false, // Only set to true if you are using HTTPS.
-        maxAge:3600000 * 8// Session max age in milliseconds. 3600000 = 1 hour.
+        maxAge:3600000 * 8 // Session max age in milliseconds. 3600000 = 1 hour.
     } 
 })
 
+// Middleware
 app.set('view engine', 'ejs');
 app.use([
     express.static("public"),
@@ -39,49 +34,49 @@ app.use([
     routes
 ]);
 
-const server = app.listen(8000, async () => {
-    console.log(`App listening on port 8000`);   
+// Start Express server
+const server = app.listen(PORT, async () => {
+    console.log(`App listening on port ${PORT}`);   
 });
 
+// Start Socket.io
 const io = require('socket.io')(server);
 io.engine.use(sessionMiddleware);
 
-
 io.on('connection', (socket) => {
-    // set user session
+
+    // Set user session
     const user_session = socket.request.session;
     console.log(`${user_session.user} connected from ${socket.handshake.headers.host} ${socket.handshake.address}`);
 
-    // check if a list of containers needs to be sent
-    if (sent_list != null) { socket.emit('cards', sent_list); }
-
-    // check if an install card has to be sent
+    // Check if a list of containers or an install card needs to be sent
+    if (sentList != null) { socket.emit('cards', sentList); }
     if((app.locals.install != '') && (app.locals.install != null)){ socket.emit('install', app.locals.install); }
 
-    // send server metrics
+    // Send server metrics
     let ServerStats = setInterval(async () => {
         socket.emit('metrics', await serverStats());
     }, 1000);
 
-    // send container list
+    // Send list of containers
     let ContainerList = setInterval(async () => {
-        let card_list = await containerList();
-        if (sent_list !== card_list) {
-            sent_list = card_list;
+        let cardList = await containerList();
+        if (sentList !== cardList) {
+            sentList = cardList;
             app.locals.install = '';
-            socket.emit('cards', card_list);
+            socket.emit('cards', cardList);
         }
     }, 1000);
 
-    // send container metrics
+    // Send container metrics
     let ContainerStats = setInterval(async () => {
-        let container_stats = await containerStats();
-        for (let i = 0; i < container_stats.length; i++) {
-            socket.emit('container_stats', container_stats[i]);
+        let stats = await containerStats();
+        for (let i = 0; i < stats.length; i++) {
+            socket.emit('containerStats', stats[i]);
         }
     }, 1000);
 
-    // play/pause/stop/restart container
+    // Container controls
     socket.on('clicked', (data) => {
         if (clicked == true) { return; } clicked = true;
         let buttonPress = {
@@ -94,7 +89,20 @@ io.on('connection', (socket) => {
         containerAction(buttonPress);
         clicked = false;
     });
-    
+
+
+    // Container logs
+    socket.on('logs', (data) => {
+        containerLogs(data.container)
+        .then(logs => {
+            socket.emit('logString', logs);
+        })
+        .catch(err => {
+            console.error(err);
+        });
+    });
+
+    // On disconnect
     socket.on('disconnect', () => {                
         clearInterval(ServerStats);
         clearInterval(ContainerList);
