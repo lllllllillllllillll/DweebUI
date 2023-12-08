@@ -41,7 +41,7 @@ Pre-Pre-Pre-Pre-Pre Alpha v0.07 ( :fire: Experimental. Don't install on any serv
 services:
   dweebui:
     container_name: DweebUI
-    image: lllllllillllllillll/dweebui:v0.07-dev
+    image: lllllllillllllillll/dweebui:v0.07
     environment:
       NODE_ENV: production
       REDIS_PASS: replace_with_password_for_redis
