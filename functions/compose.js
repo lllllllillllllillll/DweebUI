@@ -180,20 +180,26 @@ module.exports.install = async function (data) {
 
 
 module.exports.uninstall = async function (data) {
-    if (data.confirm == 'Yes') {
-        console.log(`Uninstalling ${data.service_name}: ${data}`);
-        var containerName = docker.getContainer(`${data.service_name}`);
-        try {
-            await containerName.stop();
-            console.log(`Stopped ${data.service_name} container`);
-        } catch {
-            console.log(`Error stopping ${data.service_name} container`);
+    
+
+        if (data.confirm == 'Yes') {
+
+
+            var containerName = docker.getContainer(`${data.service_name}`);
+
+            try {
+                    containerName.stop(function (err, data) {
+                        if (data) {
+                            containerName.remove(function (err, data) {
+                            });
+                        }
+                    });
+                } catch { 
+                    containerName.remove(function (err, data) {
+                    });
+                }
+
         }
-        try {
-            await containerName.remove();
-            console.log(`Removed ${data.service_name} container`);
-        } catch {
-            console.log(`Error removing ${data.service_name} container`);
-        }
-    }
+
+   
 }
