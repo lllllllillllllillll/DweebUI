@@ -69,7 +69,8 @@ networks:
     driver: bridge
 ```
 
-* Compose setup: 
+* Compose setup:
+
 Paste the above content into a file named ```docker-compose.yml``` then place it in a folder named ```dweebui```.
 Open a terminal in the ```dweebui``` folder, then enter ```docker compose up -d```.
 You may need to use ```docker-compose up -d``` or execute the command as root with  either ```sudo docker compose up -d``` or ```sudo docker-compose up -d```.
