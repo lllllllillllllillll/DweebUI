@@ -1,7 +1,7 @@
 # DweebUI
 DweebUI is a simple Docker web interface created with javascript and node.js
 
-Pre-Pre-Pre-Pre-Pre Alpha v0.06 ( :fire: Experimental. Don't install on any servers you care about :fire: )
+Pre-Pre-Pre-Pre-Pre Alpha v0.08 ( :fire: Experimental. Don't install on any servers you care about :fire: )
 
 [![GitHub Stars](https://img.shields.io/github/stars/lllllllillllllillll/DweebUI)](https://github.com/lllllllillllllillll)
 [![GitHub License](https://img.shields.io/github/license/lllllllillllllillll/DweebUI)](https://github.com/lllllllillllllillll/DweebUI/blob/main/LICENSE)
@@ -43,32 +43,18 @@ services:
 
   dweebui:
     container_name: dweebui
-    image: lllllllillllllillll/dweebui:v0.06
+    image: lllllllillllllillll/dweebui:v0.08-dev
     environment:
       NODE_ENV: production
-      REDIS_PASS: replace_with_password_for_redis
+      PORT: 8000
       # Proxy_Manager: enabled
     restart: unless-stopped
     ports:
       - 8000:8000
-    depends_on:
-      - cache
-    links:
-      - cache
     volumes:
       - ./data/app:/app
       - ./data/caddyfiles:/app/caddyfiles
       - /var/run/docker.sock:/var/run/docker.sock
-    networks:
-      - dweeb_main_network
-      
-  dweeb-redis:
-    container_name: dweeb-redis
-    image: redis:6.2-alpine
-    restart: unless-stopped
-    command: redis-server --save 20 1 --loglevel warning --requirepass replace_with_password_for_redis
-    volumes: 
-      - ./data/redis:/data
     networks:
       - dweeb_main_network
 
@@ -77,7 +63,7 @@ networks:
     driver: bridge
 ```
 
-In order to use the compose file create a folder named somethign like ```dweebui``` and add the contents of above to a file named ```docker-compose.yml```. Also make sure to create a ```data``` folder for the dweeb files to be storred in.
+Compose setup: Paste the above content into a file named ```docker-compose.yml``` then place it in a folder named ```dweebui```. You'll also need to create a ```data``` folder for the dweeb files to be stored in.
 
 * Using setup.sh: 
 ```
@@ -91,5 +77,5 @@ sudo ./setup.sh
 ## Credit
 
 * UI was built using HTML and CSS elements from https://tabler.io/
-* Apps template based on Portainer template provided by Lissy93 here: https://github.com/Lissy93/portainer-templates
-* Most of the app icons were sourced from Walkxcode's dashboard icons here: https://github.com/walkxcode/dashboard-icons
+* Apps template based on Portainer template provided by Lissy93: https://github.com/Lissy93/portainer-templates
+* Icons from Walkxcode with some renames and additions: https://github.com/walkxcode/dashboard-icons

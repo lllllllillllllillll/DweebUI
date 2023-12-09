@@ -33,7 +33,7 @@ module.exports.containerList = async function () {
     for (const container of data) {
 
 
-        if ((container.Names[0].slice(1) != 'DweebUI') && (container.Names[0].slice(1) != 'DweebCache')) {
+        if (container.Names[0].slice(1) != 'dweebui') {
 
             let imageVersion = container.Image.split('/');
             let service = imageVersion[imageVersion.length - 1].split(':')[0];
@@ -172,7 +172,7 @@ module.exports.containerStats = async function () {
 
     for (const container of data) {
 
-        if ((container.Names[0].slice(1) != 'DweebUI') && (container.Names[0].slice(1) != 'DweebCache')) {
+        if (container.Names[0].slice(1) != 'dweebui') {
             const stats = await dockerContainerStats(container.Id);
             
             let container_stat = {
