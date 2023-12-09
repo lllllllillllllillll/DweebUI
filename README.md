@@ -52,18 +52,28 @@ services:
     ports:
       - 8000:8000
     volumes:
-      - ./data/app:/app
-      - ./data/caddyfiles:/app/caddyfiles
+      - dweebui:/app
+      - caddyfiles:/app/caddyfiles
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
-      - dweeb_main_network
+      - dweeb_network
+
+
+volumes:
+  dweebui:
+  caddyfiles:
+
 
 networks:
-  dweeb_main_network:
+  dweeb_network:
     driver: bridge
 ```
 
-Compose setup: Paste the above content into a file named ```docker-compose.yml``` then place it in a folder named ```dweebui```. You'll also need to create a ```data``` folder for the dweeb files to be stored in.
+* Compose setup: 
+Paste the above content into a file named ```docker-compose.yml``` then place it in a folder named ```dweebui```.
+Open a terminal in the ```dweebui``` folder, then enter ```docker compose up -d```.
+You may need to use ```docker-compose up -d``` or execute the command as root with  either ```sudo docker compose up -d``` or ```sudo docker-compose up -d```.
+
 
 * Using setup.sh: 
 ```
