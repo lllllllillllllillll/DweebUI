@@ -1,5 +1,5 @@
 {
-  "name": "dweeb-ui",
+  "name": "dweebui",
   "version": "1.0.0",
   "main": "app.js",
   "keywords": [],
@@ -8,11 +8,11 @@
   "dependencies": {
     "bcrypt": "^5.1.0",
     "child_process": "^1.0.2",
+    "cookie-session": "^2.0.0",
     "dockerode": "^4.0.0",
     "dockerode-compose": "^1.4.0",
     "ejs": "^3.1.9",
     "express": "^4.18.2",
-    "express-session": "^1.17.3",
     "js-yaml": "^4.1.0",
     "sequelize": "^6.35.1",
     "socket.io": "^4.6.1",

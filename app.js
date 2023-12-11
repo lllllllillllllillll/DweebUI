@@ -1,7 +1,7 @@
 // Express
 const express = require("express");
 const app = express();
-const session = require("express-session");
+const session = require("cookie-session");
 const PORT = process.env.PORT || 8000;
 
 
@@ -19,8 +19,6 @@ const sessionMiddleware = session({
     resave: false, 
     saveUninitialized: false, 
     cookie:{
-        secure:false, // Only set to true if you are using HTTPS.
-        httpOnly:false, // Only set to true if you are using HTTPS.
         maxAge:3600000 * 8 // Session max age in milliseconds. 3600000 = 1 hour.
     } 
 })
