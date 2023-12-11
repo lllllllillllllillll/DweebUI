@@ -4,10 +4,13 @@ services:
   dweebui:
     container_name: dweebui
     image: lllllllillllllillll/dweebui:v0.08-dev
+    # build:
+    #   context: .
     environment:
       NODE_ENV: production
       PORT: 8000
-      # Proxy_Manager: enabled
+      SECRET: MrWiskers
+      #Proxy_Manager: enabled
     restart: unless-stopped
     ports:
       - 8000:8000
@@ -15,6 +18,8 @@ services:
       - dweebui:/app
       - caddyfiles:/app/caddyfiles
       - /var/run/docker.sock:/var/run/docker.sock
+      #- ./custom-templates.json:/app/custom-templates.json
+      #- ./composefiles:/app/composefiles
     networks:
       - dweeb_network
 

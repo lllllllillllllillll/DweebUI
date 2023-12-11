@@ -1,5 +1,5 @@
 ## v0.08 (dev)
-* ???
+* Added SECRET to register page as a simple security measure.
 
 ## v0.07 (Dec 8th 2023)
 * View container logs.

@@ -36,7 +36,7 @@ Pre-Pre-Pre-Pre-Pre Alpha v0.08 ( :fire: Experimental. Don't install on any serv
 
 ## Setup
 
-* Docker Compose: 
+Docker Compose: 
 ```
 version: "3.9"
 services:
@@ -44,10 +44,13 @@ services:
   dweebui:
     container_name: dweebui
     image: lllllllillllllillll/dweebui:v0.08-dev
+    # build:
+    #   context: .
     environment:
       NODE_ENV: production
       PORT: 8000
-      # Proxy_Manager: enabled
+      SECRET: MrWiskers
+      #Proxy_Manager: enabled
     restart: unless-stopped
     ports:
       - 8000:8000
@@ -55,6 +58,8 @@ services:
       - dweebui:/app
       - caddyfiles:/app/caddyfiles
       - /var/run/docker.sock:/var/run/docker.sock
+      #- ./custom-templates.json:/app/custom-templates.json
+      #- ./composefiles:/app/composefiles
     networks:
       - dweeb_network
 
@@ -69,14 +74,14 @@ networks:
     driver: bridge
 ```
 
-* Compose setup:
+Compose setup:
 
-Paste the above content into a file named ```docker-compose.yml``` then place it in a folder named ```dweebui```.
-Open a terminal in the ```dweebui``` folder, then enter ```docker compose up -d```.
-You may need to use ```docker-compose up -d``` or execute the command as root with  either ```sudo docker compose up -d``` or ```sudo docker-compose up -d```.
+* Paste the above content into a file named ```docker-compose.yml``` then place it in a folder named ```dweebui```.
+* Open a terminal in the ```dweebui``` folder, then enter ```docker compose up -d```.
+* You may need to use ```docker-compose up -d``` or execute the command as root with either ```sudo docker compose up -d``` or ```sudo docker-compose up -d```.
 
 
-* Using setup.sh: 
+Using setup.sh: 
 ```
 Extract DweebUI.zip and navigate to /DweebUI
 cd DweebUI
