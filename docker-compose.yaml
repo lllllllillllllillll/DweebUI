@@ -7,7 +7,6 @@ services:
     # build:
     #   context: .
     environment:
-      NODE_ENV: production
       PORT: 8000
       SECRET: MrWiskers
       #Proxy_Manager: enabled
