@@ -22,6 +22,10 @@ const Containers = sequelize.define('Containers', {
     type: DataTypes.STRING
     // allowNull defaults to true
   },
+  size: {
+    type: DataTypes.STRING
+    // allowNull defaults to true
+  },
   group: {
     type: DataTypes.STRING
     // allowNull defaults to true

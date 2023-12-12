@@ -18,6 +18,10 @@ templates = templates.sort((a, b) => {
   
 
 exports.Apps = async function(req, res) {
+
+    console.log(req.params.page);
+
+
     if (req.session.role == "admin") {
 
         // Get the user.

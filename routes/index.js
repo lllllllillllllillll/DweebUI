@@ -27,6 +27,7 @@ router.post("/uninstall", Uninstall)
 router.get("/users", Users);
 
 router.get("/apps", Apps);
+router.get("/apps/:page", Apps);
 router.post("/apps", searchApps);
 
 router.get("/settings", Settings);
