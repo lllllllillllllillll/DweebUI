@@ -113,6 +113,13 @@ io.on('connection', (socket) => {
         }
     });
 
+    socket.on('reset', (data) => {
+        // set visibility to true for all containers
+        Containers.update({ visibility: true }, { where: {} });
+        console.log('All containers visible');
+        hiddenContainers();
+    });
+
 
     // Container logs
     socket.on('logs', (data) => {
