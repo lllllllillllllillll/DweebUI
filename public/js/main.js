@@ -115,6 +115,12 @@ function buttonAction(button) {
   socket.emit('clicked', {container: button.name, state: button.id, action: button.value});
 }
 
+// container button actions
+function hideContainer(button) {
+  socket.emit('hide', {container: button.name});
+}
+
+
 
 let containerLogs;
 

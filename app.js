@@ -8,9 +8,12 @@ const PORT = process.env.PORT || 8000;
 const routes = require("./routes");
 
 // Functions and variables
-const { serverStats, containerList, containerStats, containerAction, containerLogs } = require('./functions/system');
+const { serverStats, containerList, containerStats, containerAction, containerLogs, hiddenContainers } = require('./functions/system');
 let sentList, clicked;
 app.locals.site_list = '';
+
+const Containers = require('./database/ContainerSettings');
+
 
 // Configure Session
 const sessionMiddleware = session({
@@ -88,6 +91,26 @@ io.on('connection', (socket) => {
         }
         containerAction(buttonPress);
         clicked = false;
+    });
+
+    
+    socket.on('hide', async (data) => {
+        console.log(`Hide ${data.container}`);
+
+        let containerExists = await Containers.findOne({ where: {name:data.container}});
+        
+        if(!containerExists){
+            const container = await Containers.create({ 
+                name: data.container,
+                visibility: false
+             });
+             hiddenContainers();
+            console.log(`[Created] Container ${data.container} hidden`)
+        } else {
+            containerExists.update({ visibility: false });
+            console.log(`[Updated] Container ${data.container} hidden`)
+            hiddenContainers();
+        }
     });
 
 

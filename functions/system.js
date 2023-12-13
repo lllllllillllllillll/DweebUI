@@ -1,8 +1,21 @@
-const { currentLoad, mem, networkStats, fsSize, dockerContainerStats } = require('systeminformation');
+const { currentLoad, mem, networkStats, fsSize, dockerContainerStats, networkInterfaces } = require('systeminformation');
 var Docker = require('dockerode');
 var docker = new Docker({ socketPath: '/var/run/docker.sock' });
 const { dashCard } = require('../components/dashCard');
 const { Readable } = require('stream');
+
+const Containers = require('../database/ContainerSettings');
+
+let hidden = '';
+module.exports.hiddenContainers = async function () {
+    hidden = await Containers.findAll({ where: {visibility:false}});
+    hidden = hidden.map(a => a.name);
+}
+
+async () => {
+let netif = await networkInterfaces();
+console.log(netif);
+}
 
 // export docker
 module.exports.docker = docker;
@@ -33,7 +46,7 @@ module.exports.containerList = async function () {
     for (const container of data) {
 
 
-        if (container.Names[0].slice(1) != 'dweebui') {
+        if (!hidden.includes(container.Names[0].slice(1))) {
 
             let imageVersion = container.Image.split('/');
             let service = imageVersion[imageVersion.length - 1].split(':')[0];
@@ -53,7 +66,9 @@ module.exports.containerList = async function () {
                     }
                     ports_list.push(ports);
                 }
-            } catch { console.log('no ports') }
+            } catch { 
+                // console.log('no ports') 
+                }
 
             for (let i = 0; i < 12; i++) {
                 if (ports_list[i] == undefined) {
@@ -78,7 +93,9 @@ module.exports.containerList = async function () {
                         readwrite: value.split(':')[2]
                     }
                     volumes_list.push(volumes);
-                }} catch { console.log('no volumes') }
+                }} catch { 
+                    // console.log('no volumes') 
+                    }
             for (let i = 0; i < 12; i++) {
                 if (volumes_list[i] == undefined) {
                     let volumes = {
@@ -172,7 +189,7 @@ module.exports.containerStats = async function () {
 
     for (const container of data) {
 
-        if (container.Names[0].slice(1) != 'dweebui') {
+        if (!hidden.includes(container.Names[0].slice(1))) {
             const stats = await dockerContainerStats(container.Id);
             
             let container_stat = {
