@@ -1,5 +1,9 @@
 ## v0.08 (dev)
-* Added SECRET to register page as a simple security measure.
+* Added SECRET field to register page as a simple security measure.
+* dashCard links now use server IP.
+* Added option to hide containers.
+* Added 'Reset View' option.
+* Removed the VPN, Firewall, and VNC placeholders.
 
 ## v0.07 (Dec 8th 2023)
 * View container logs.
