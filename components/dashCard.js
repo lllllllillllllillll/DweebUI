@@ -1,6 +1,6 @@
 module.exports.dashCard = function dashCard(data) {
   
-  let { name, service, id, state, image, external_port, internal_port, ports, volumes, environment_variables, labels } = data;
+  let { name, service, id, state, image, external_port, internal_port, ports, volumes, environment_variables, labels, IPv4 } = data;
   
   //disable controls for a docker container depending on its name
   let enabled = "";
@@ -160,7 +160,7 @@ module.exports.dashCard = function dashCard(data) {
           </div>
           <div class="d-flex align-items-baseline">
             <div class="h1 me-2" title="${name}">
-              <a href="http://localhost:${external_port}" target="_blank">
+              <a href="http://${IPv4}:${external_port}" target="_blank">
                 ${shortened_name}
               </a>
             </div>

@@ -6,19 +6,20 @@ const { Readable } = require('stream');
 
 const Containers = require('../database/ContainerSettings');
 
+// export docker
+module.exports.docker = docker;
+
+
+let IPv4 = '';
+networkInterfaces().then(data => {
+    IPv4 = data[0].ip4;
+});
+
 let hidden = '';
 module.exports.hiddenContainers = async function () {
     hidden = await Containers.findAll({ where: {visibility:false}});
     hidden = hidden.map(a => a.name);
 }
-
-async () => {
-let netif = await networkInterfaces();
-console.log(netif);
-}
-
-// export docker
-module.exports.docker = docker;
 
 module.exports.serverStats = async function () {
     const cpuUsage = await currentLoad();
@@ -164,6 +165,7 @@ module.exports.containerList = async function () {
                 volumes: volumes_list,
                 environment_variables: environment_variables,
                 labels: labels,
+                IPv4: IPv4
             }
 
             let dockerCard = dashCard(container_info);

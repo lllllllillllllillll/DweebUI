@@ -39,7 +39,7 @@ app.use([
 
 // Start Express server
 const server = app.listen(PORT, async () => {
-    console.log(`App listening on port ${PORT}`);   
+    console.log(`App listening on port ${PORT}`);
 });
 
 // Start Socket.io
