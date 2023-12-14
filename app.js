@@ -125,6 +125,7 @@ io.on('connection', (socket) => {
     socket.on('logs', (data) => {
         containerLogs(data.container)
         .then(logs => {
+            console.log(`Refreshed logs for ${data.container}`)
             socket.emit('logString', logs);
         })
         .catch(err => {
