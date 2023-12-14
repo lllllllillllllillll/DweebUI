@@ -2,14 +2,16 @@ module.exports.dashCard = function dashCard(data) {
   
   let { name, service, id, state, image, external_port, internal_port, ports, volumes, environment_variables, labels, IPv4, style } = data;
 
-  let margin, icon, font = '';
+  let margin, iconSize, fontSize = '';
 
-  if (style = "Large") {
-    //Large cards
-  } else if (style = "Compact") {
+  if (style == "Large") {
+    iconSize = 'height="150px" width="150px"'
+  } else if (style == "Compact") {
+    iconSize = 'height="110px" width="110px"'
     margin = 'style="margin-bottom: 0;"'
-  } else if (style = "Row") {
-    //Row cards
+  } else if (style == "Row") {
+    iconSize = 'height="50px" width="50px"'
+    margin = 'style="margin-bottom: 0;"'
   }
 
 
@@ -126,7 +128,7 @@ module.exports.dashCard = function dashCard(data) {
       <div class="card">
         <div class="card-body">
           <div class="card-stamp card-stamp-sm">
-            <img heigh="150px" width="150px" src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/${service}.png" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/dweebui.png';"></img>
+            <img ${iconSize} src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/${service}.png" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/dweebui.png';"></img>
           </div>
           <div class="d-flex align-items-center">
             <div class="subheader text-yellow">${external_port}:${internal_port}</div>

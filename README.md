@@ -1,5 +1,5 @@
 # DweebUI
-DweebUI is a simple Docker web interface created with javascript and node.js
+DweebUI is a simple Docker web interface created using Javascript, Node.JS, and Express.
 
 Pre-Pre-Pre-Pre-Pre Alpha v0.08 ( :fire: Experimental. Don't install on any servers you care about :fire: )
 
@@ -9,8 +9,9 @@ Pre-Pre-Pre-Pre-Pre Alpha v0.08 ( :fire: Experimental. Don't install on any serv
 [![Docker Pulls](https://img.shields.io/docker/pulls/lllllllillllllillll/dweebui)](https://hub.docker.com/repository/docker/lllllllillllllillll/dweebui)
 
 
-* I haven't used Github very much and I'm still new to javascript.
+* This is a personal project that I decided to share.
 * This is the first project I've ever released and I'm sure it's full of plenty of bugs and mistakes.
+* I haven't used Github very much and I'm still new to Javascript.
 * I probably should have waited a lot longer to share this :|
 
 <a href="https://raw.githubusercontent.com//lllllllillllllillll/DweebUI/main/screenshots/dashboard.png"><img src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/dashboard.png" width="50%"/></a>
@@ -19,22 +20,22 @@ Pre-Pre-Pre-Pre-Pre Alpha v0.08 ( :fire: Experimental. Don't install on any serv
 
 
 ## Features
-* [x] Dashboard provides server metrics (cpu, ram, network, disk) and container controls on a single page.
+* [x] Dashboard provides server metrics, container metrics, and container controls, on a single page.
+* [x] View container logs.
+* [ ] Update containers (planned).
+* [ ] Manage your Docker networks, images, and volumes (planned).
 * [x] Light/Dark Mode.
 * [x] Easy to install app templates.
-* [x] Automatically persists data in docker volumes if bind mount isn't used. 
-* [x] Proxy manager for Caddy. (Optional)
-* [x] Partial Portainer Template Support (Network Mode, Ports, Volumes, Enviroment Variables, Labels, Commands, Restart Policy, Nvidia Hardware Acceleration).
+* [x] Proxy manager for Caddy (Optional).
 * [x] Multi-User built-in.
-* [ ] User pages: Shortcuts, Requests, Support. (planned)
+* [ ] User pages (planned).
 * [x] Support for Windows, Linux, and MacOS.
-* [ ] Import compose files. (planned)
-* [x] Pure javascript. No frameworks or typescript.
+* [ ] Docker compose support (planned).
 * [x] Templates.json maintains compatability with Portainer, allowing you to use the template without needing to use DweebUI.
-* [ ] Manage your Docker networks, images, and volumes. (planned)
-* [ ] Preset variables. (planned)
-* [ ] VPN, VPS, and Firewall Toggles. (planned)
-* [ ] Offline Mode. (planned)
+* [x] Automatically persists data in docker volumes if bind mount isn't used.
+* [ ] Preset variables (planned).
+* [ ] Offline/Local Only (planned).
+
 
 ## Setup
 
@@ -92,8 +93,9 @@ sudo ./setup.sh
 ```
 
 
-## Credit
+## Credits
 
+* Dockerode and dockerode-compose by Apocas: https://github.com/apocas/dockerode
 * UI was built using HTML and CSS elements from https://tabler.io/
 * Apps template based on Portainer template provided by Lissy93: https://github.com/Lissy93/portainer-templates
 * Icons from Walkxcode with some renames and additions: https://github.com/walkxcode/dashboard-icons
