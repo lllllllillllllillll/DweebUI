@@ -5,12 +5,12 @@ module.exports.dashCard = function dashCard(data) {
   let margin, iconSize, fontSize = '';
 
   if (style == "Large") {
-    iconSize = 'height="150px" width="150px"'
+    iconSize = 'width="150px"'
   } else if (style == "Compact") {
-    iconSize = 'height="110px" width="110px"'
+    iconSize = 'width="110px"'
     margin = 'style="margin-bottom: 0;"'
   } else if (style == "Row") {
-    iconSize = 'height="50px" width="50px"'
+    iconSize = 'width="50px"'
     margin = 'style="margin-bottom: 0;"'
   }
 
