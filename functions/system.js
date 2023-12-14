@@ -165,7 +165,8 @@ module.exports.containerList = async function () {
                 volumes: volumes_list,
                 environment_variables: environment_variables,
                 labels: labels,
-                IPv4: IPv4
+                IPv4: IPv4,
+                style: "Large"
             }
 
             let dockerCard = dashCard(container_info);
