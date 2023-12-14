@@ -2,11 +2,12 @@ module.exports.dashCard = function dashCard(data) {
   
   let { name, service, id, state, image, external_port, internal_port, ports, volumes, environment_variables, labels, IPv4, style } = data;
 
-  
+  let margin, icon, font = '';
+
   if (style = "Large") {
     //Large cards
   } else if (style = "Compact") {
-    //Compact cards
+    margin = 'style="margin-bottom: 0;"'
   } else if (style = "Row") {
     //Row cards
   }
@@ -170,7 +171,7 @@ module.exports.dashCard = function dashCard(data) {
             </div>
           </div>
           <div class="d-flex align-items-baseline">
-            <div class="h1 me-2" title="${name}" style="margin-bottom: 0;">
+            <div class="h1 me-2" title="${name}" ${margin}>
               <a href="http://${IPv4}:${external_port}" target="_blank">
                 ${shortened_name}
               </a>
