@@ -1,10 +1,7 @@
 const User = require('../database/UserModel');
 const { appCard } = require('../components/appCard')
 const { dashCard } = require('../components/dashCard');
-
 const { install, uninstall } = require('../functions/package_manager');
-
-// import { install, uninstall } from '../functions/package_manager';
 
 const templates_json = require('../templates.json');
 let templates = templates_json.templates;
@@ -18,23 +15,24 @@ templates = templates.sort((a, b) => {
   
 
 exports.Apps = async function(req, res) {
+
     if (req.session.role == "admin") {
 
         // Get the user.
         let user = await User.findOne({ where: { UUID: req.session.UUID }});
 
-        let page = Number(req.query.page) || 1;
+        let page = Number(req.params.page) || 1;
         let list_start = (page - 1) * 28;
         let list_end = (page * 28);
         let last_page = Math.ceil(templates.length / 28);
 
-        let prev = '/apps?page=' + (page - 1);
-        let next = '/apps?page=' + (page + 1);
+        let prev = '/apps/' + (page - 1);
+        let next = '/apps/' + (page + 1);
         if (page == 1) {
-            prev = '/apps?page=' + (page);
+            prev = '/apps/' + (page);
         }
         if (page == last_page) {
-            next = '/apps?page=' + (page);
+            next = '/apps/' + (page);
         }
 
         let apps_list = '';

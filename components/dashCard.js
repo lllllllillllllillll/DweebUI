@@ -1,11 +1,24 @@
 module.exports.dashCard = function dashCard(data) {
   
-  let { name, service, id, state, image, external_port, internal_port, ports, volumes, environment_variables, labels } = data;
-  
+  let { name, service, id, state, image, external_port, internal_port, ports, volumes, environment_variables, labels, IPv4, style } = data;
+
+  let margin, iconSize, fontSize = '';
+
+  if (style == "Large") {
+    iconSize = 'width="150px"'
+  } else if ((style == "Compact") || (style == undefined)) {
+    iconSize = 'width="100px"'
+    margin = 'style="margin-bottom: 0;"'
+  } else if (style == "Row") {
+    iconSize = 'width="50px"'
+    margin = 'style="margin-bottom: 0;"'
+  }
+
+
   //disable controls for a docker container depending on its name
-  let enabled = "";
-  if (name.startsWith('Dweeb')) {
-    enabled = 'disabled=""';
+  let actions = "";
+  if (name.startsWith('dweebui')) {
+    actions = 'disabled=""';
   }
 
   if ( external_port == undefined ) { external_port = 0; }
@@ -115,23 +128,23 @@ module.exports.dashCard = function dashCard(data) {
       <div class="card">
         <div class="card-body">
           <div class="card-stamp card-stamp-sm">
-            <img heigh="150px" width="150px" src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/${service}.png" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/dweebui.png';"></img>
+            <img ${iconSize} src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/${service}.png" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/docker.png';"></img>
           </div>
           <div class="d-flex align-items-center">
             <div class="subheader text-yellow">${external_port}:${internal_port}</div>
             <div class="ms-auto lh-1">
               <div class="card-actions btn-actions">
                 <div class="card-actions btn-actions">
-                  <button onclick="buttonAction(this)" name="${name}" value="start" id="${state}" class="btn-action" title="Start" ${enabled}><!-- player-play -->
+                  <button onclick="buttonAction(this)" name="${name}" value="start" id="${state}" class="btn-action" title="Start" ${actions}><!-- player-play -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-player-play" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M7 4v16l13 -8z"></path></svg>
                   </button>
-                  <button onclick="buttonAction(this)" name="${name}" value="stop" id="${state}" class="btn-action" title="Stop" ${enabled}><!-- player-stop -->
+                  <button onclick="buttonAction(this)" name="${name}" value="stop" id="${state}" class="btn-action" title="Stop" ${actions}><!-- player-stop -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-player-stop" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M5 5m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z"></path></svg>
                   </button>
-                  <button onclick="buttonAction(this)" name="${name}" value="pause" id="${state}" class="btn-action" title="Pause" ${enabled}><!-- player-pause -->
+                  <button onclick="buttonAction(this)" name="${name}" value="pause" id="${state}" class="btn-action" title="Pause" ${actions}><!-- player-pause -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-player-pause" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M6 5m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v12a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z"></path><path d="M14 5m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v12a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z"></path></svg>
                   </button>
-                  <button onclick="buttonAction(this)" name="${name}" value="restart" id="${state}" class="btn-action" title="Restart" ${enabled}><!-- reload -->
+                  <button onclick="buttonAction(this)" name="${name}" value="restart" id="${state}" class="btn-action" title="Restart" ${actions}><!-- reload -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-reload" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M19.933 13.041a8 8 0 1 1 -9.925 -8.788c3.899 -1 7.935 1.007 9.425 4.747"></path><path d="M20 4v5h-5"></path></svg>                          
                   </button>
                   <div class="dropdown">
@@ -146,13 +159,22 @@ module.exports.dashCard = function dashCard(data) {
                       <a class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#${name}_modal-danger" href="#">Remove</a>
                     </div>
                   </div>
+                  <div class="dropdown">
+                    <a href="#" class="btn-action dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><!-- Download SVG icon from http://tabler-icons.io/i/dots-vertical -->
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-eye" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"/> <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /> <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" /> </svg>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end">
+                      <a class="dropdown-item" onclick="hideContainer(this)" name="${name}" href="#">Hide</a>
+                      <a class="dropdown-item" onclick="resetView()" name="${name}" href="#">Reset View</a>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
           <div class="d-flex align-items-baseline">
-            <div class="h1 me-2" title="${name}">
-              <a href="http://localhost:${external_port}" target="_blank">
+            <div class="h1 me-2" title="${name}" ${margin}>
+              <a href="http://${IPv4}:${external_port}" target="_blank">
                 ${shortened_name}
               </a>
             </div>

@@ -1,7 +1,7 @@
 const { writeFileSync, mkdirSync, readFileSync } = require("fs");
 const yaml = require('js-yaml');
 
-const { exec, execSync } = require("child_process");
+const { execSync } = require("child_process");
 
 const { docker } = require('./system');
 
@@ -17,11 +17,6 @@ module.exports.install = async function (data) {
         let { volume0, volume1, volume2, volume3, volume4, volume5 } = data;
         let { env0, env1, env2, env3, env4, env5, env6, env7, env8, env9, env10, env11 } = data;
         let { label0, label1, label2, label3, label4, label5, label6, label7, label8, label9, label10, label11 } = data;
-
-
-        if ((service_name.includes('caddy')) || (name.includes('caddy'))) {
-            req.app.locals.caddy = 'enabled';
-        }
 
         let docker_volumes = [];
 

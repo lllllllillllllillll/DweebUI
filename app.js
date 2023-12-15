@@ -8,9 +8,12 @@ const PORT = process.env.PORT || 8000;
 const routes = require("./routes");
 
 // Functions and variables
-const { serverStats, containerList, containerStats, containerAction, containerLogs } = require('./functions/system');
+const { serverStats, containerList, containerStats, containerAction, containerLogs, hiddenContainers } = require('./functions/system');
 let sentList, clicked;
 app.locals.site_list = '';
+
+const Containers = require('./database/ContainerSettings');
+
 
 // Configure Session
 const sessionMiddleware = session({
@@ -36,7 +39,7 @@ app.use([
 
 // Start Express server
 const server = app.listen(PORT, async () => {
-    console.log(`App listening on port ${PORT}`);   
+    console.log(`App listening on port ${PORT}`);
 });
 
 // Start Socket.io
@@ -90,11 +93,39 @@ io.on('connection', (socket) => {
         clicked = false;
     });
 
+    
+    socket.on('hide', async (data) => {
+        console.log(`Hide ${data.container}`);
+
+        let containerExists = await Containers.findOne({ where: {name:data.container}});
+        
+        if(!containerExists){
+            const container = await Containers.create({ 
+                name: data.container,
+                visibility: false
+             });
+             hiddenContainers();
+            console.log(`[Created] Container ${data.container} hidden`)
+        } else {
+            containerExists.update({ visibility: false });
+            console.log(`[Updated] Container ${data.container} hidden`)
+            hiddenContainers();
+        }
+    });
+
+    socket.on('reset', (data) => {
+        // set visibility to true for all containers
+        Containers.update({ visibility: true }, { where: {} });
+        console.log('All containers visible');
+        hiddenContainers();
+    });
+
 
     // Container logs
     socket.on('logs', (data) => {
         containerLogs(data.container)
         .then(logs => {
+            console.log(`Refreshed logs for ${data.container}`)
             socket.emit('logString', logs);
         })
         .catch(err => {

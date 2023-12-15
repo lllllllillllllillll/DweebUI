@@ -116,6 +116,14 @@ function buttonAction(button) {
 }
 
 
+function hideContainer(button) {
+  socket.emit('hide', {container: button.name});
+}
+
+function resetView() {
+  socket.emit('reset');
+}
+
 let containerLogs;
 
 function viewLogs(button) {

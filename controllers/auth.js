@@ -86,11 +86,11 @@ exports.Register = function(req,res){
 exports.processRegister = async function(req,res){
 
     // Get the data.
-    let { first_name, last_name, username, email, password, avatar, tos } = req.body;
+    let { first_name, last_name, username, email, password, avatar, tos, secret } = req.body;
     let role = "user";
 
     // Check the data.
-    if(first_name && last_name && email && password && username && tos){
+    if((first_name && last_name && email && password && username && tos) && (secret == process.env.SECRET)){
 
         // Check if there is an existing user with that username.
         let existingUser = await User.findOne({ where: {username:username}});
