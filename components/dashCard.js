@@ -6,8 +6,8 @@ module.exports.dashCard = function dashCard(data) {
 
   if (style == "Large") {
     iconSize = 'width="150px"'
-  } else if (style == "Compact") {
-    iconSize = 'width="110px"'
+  } else if ((style == "Compact") || (style == undefined)) {
+    iconSize = 'width="100px"'
     margin = 'style="margin-bottom: 0;"'
   } else if (style == "Row") {
     iconSize = 'width="50px"'
@@ -128,7 +128,7 @@ module.exports.dashCard = function dashCard(data) {
       <div class="card">
         <div class="card-body">
           <div class="card-stamp card-stamp-sm">
-            <img ${iconSize} src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/${service}.png" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/dweebui.png';"></img>
+            <img ${iconSize} src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/${service}.png" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/docker.png';"></img>
           </div>
           <div class="d-flex align-items-center">
             <div class="subheader text-yellow">${external_port}:${internal_port}</div>

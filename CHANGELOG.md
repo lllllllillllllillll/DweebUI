@@ -1,9 +1,15 @@
-## v0.08 (dev)
-* Added SECRET field to register page as a simple security measure.
-* dashCard links now use server IP.
-* Added option to hide containers.
-* Added 'Reset View' option.
-* Removed the VPN, Firewall, and VNC placeholders.
+## v0.08 (Dec 15th 2023)
+* Updates to compose file and instructions from [steveiliop56](https://github.com/steveiliop56)
+* Added SECRET field to compose file as a basic security measure.
+* Visibility button to hide containers or reset view.
+* Container link now uses server IP address.
+* More compact container card, with style options planned.
+* Improved log view.
+* Removed VPN, Firewall, and VNC buttons.
+* Updated dependencies (Sequelize 6.35.2)
+* Fixed web pages not using the "public" static folder.
+* Small tweaks to router.
+* Replaced the default icon shown for missing icons (docker.png).
 
 ## v0.07 (Dec 8th 2023)
 * View container logs.

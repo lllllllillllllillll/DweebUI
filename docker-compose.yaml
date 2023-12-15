@@ -1,9 +1,8 @@
 version: "3.9"
 services:
-
   dweebui:
     container_name: dweebui
-    image: lllllllillllllillll/dweebui:v0.08-dev
+    image: lllllllillllllillll/dweebui:v0.08
     # build:
     #   context: .
     environment:
@@ -22,11 +21,9 @@ services:
     networks:
       - dweeb_network
 
-
 volumes:
   dweebui:
   caddyfiles:
-
 
 networks:
   dweeb_network:
