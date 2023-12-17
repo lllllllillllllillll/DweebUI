@@ -1,3 +1,8 @@
+## v0.09 (dev)
+* Added authentication middleware to router.
+* Added gzip compression.
+* Added PM2 to dockerfile.
+
 ## v0.08 (Dec 15th 2023)
 * Updates to compose file and instructions from [steveiliop56](https://github.com/steveiliop56)
 * Added SECRET field to compose file as a basic security measure.

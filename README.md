@@ -1,7 +1,7 @@
 # DweebUI
 DweebUI is a simple Docker web interface created using Javascript, Node.JS, and Express.
 
-Pre-Pre-Pre-Pre-Pre Alpha v0.08 ( :fire: Experimental. Don't install on any servers you care about :fire: )
+Pre-Pre-Pre-Pre-Pre Alpha v0.09 ( :fire: Experimental. Don't install on any servers you care about :fire: )
 
 [![GitHub Stars](https://img.shields.io/github/stars/lllllllillllllillll/DweebUI)](https://github.com/lllllllillllllillll)
 [![GitHub Activity](https://img.shields.io/github/commit-activity/y/lllllllillllllillll/DweebUI)](https://github.com/lllllllillllllillll)
@@ -45,7 +45,7 @@ services:
 
   dweebui:
     container_name: dweebui
-    image: lllllllillllllillll/dweebui:v0.08
+    image: lllllllillllllillll/dweebui:v0.09-dev
     # build:
     #   context: .
     environment:
@@ -98,3 +98,6 @@ sudo ./setup.sh
 * UI was built using HTML and CSS elements from https://tabler.io/
 * Apps template based on Portainer template provided by Lissy93: https://github.com/Lissy93/portainer-templates
 * Icons from Walkxcode with some renames and additions: https://github.com/walkxcode/dashboard-icons
+
+
+## Supporters

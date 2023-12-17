@@ -2,6 +2,7 @@
 const express = require("express");
 const app = express();
 const session = require("express-session");
+const compression = require('compression');
 const PORT = process.env.PORT || 8000;
 
 // Router
@@ -30,6 +31,7 @@ const sessionMiddleware = session({
 // Middleware
 app.set('view engine', 'ejs');
 app.use([
+    compression(),
     express.static("public"),
     express.json(),
     express.urlencoded({ extended: true }),

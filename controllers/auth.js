@@ -29,10 +29,12 @@ exports.processLogin = async function(req,res){
             // compare the password.
             let match = await bcrypt.compare(password,existingUser.password);
             if(match){
+
                 // set the session.
                 req.session.user = existingUser.username;
                 req.session.UUID = existingUser.UUID;
                 req.session.role = existingUser.role;
+
 
                 // Redirect to the home page.
                 res.redirect("/");
@@ -118,10 +120,16 @@ exports.processRegister = async function(req,res){
                     avatar: `<img src="./static/avatars/${avatar}">`
                  });
 
-                // set the session.
-                req.session.user = user.username;
-                req.session.UUID = user.UUID;
-                req.session.role = user.role;
+                let newUser = await User.findOne({ where: {email:email}});
+
+                let match = await bcrypt.compare(password,newUser.password);
+                if(match){  
+                    console.log(`User session created for ${newUser.username}`) 
+                    req.session.user = newUser.username;
+                    req.session.UUID = newUser.UUID;
+                    req.session.role = newUser.role;
+                }
+
                 // Redirect to the home page.
                 res.redirect("/");
             }
