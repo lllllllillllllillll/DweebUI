@@ -1,6 +1,6 @@
 const User = require('../database/UserModel');
 
-exports.Users = async function(req, res) {
+exports.Images = async function(req, res) {
     if (req.session.role == "admin") {
 
         // Get the user.
@@ -40,7 +40,7 @@ exports.Users = async function(req, res) {
         });
 
         // Render the home page
-        res.render("pages/users", {
+        res.render("pages/images", {
             name: user.first_name + ' ' + user.last_name,
             role: user.role,
             avatar: user.avatar,
