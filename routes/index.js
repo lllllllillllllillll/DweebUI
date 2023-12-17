@@ -5,6 +5,10 @@ const { Dashboard, AddSite, RemoveSite, RefreshSites, DisableSite, EnableSite } 
 const { Login, processLogin, Logout, Register, processRegister } = require("../controllers/auth");
 const { Apps, searchApps, Install, Uninstall } = require("../controllers/apps");
 
+const { Images } = require("../controllers/images");
+const { Volumes } = require("../controllers/volumes");
+const { Networks } = require("../controllers/networks");
+
 const { Users } = require("../controllers/users");
 const { Account } = require("../controllers/account");
 const { Settings } = require("../controllers/settings");
@@ -12,10 +16,7 @@ const { Settings } = require("../controllers/settings");
 // Authentication middleware
 const authenticate = (req, res, next) => {
     if (req.session && req.session.user) {
-        console.log("User:", req.session.user);
-        console.log("UUID:", req.session.UUID);
-        console.log("Role:", req.session.role);
-        console.log("Page:", req.originalUrl);
+        console.log(`User ${req.session.user} [${req.session.role} : ${req.session.UUID}] accessed ${req.originalUrl}`)
         next();
     } else {
         res.redirect("/login");
@@ -29,6 +30,8 @@ router.post("/removesite", authenticate, RemoveSite);
 router.get("/refreshsites", authenticate, RefreshSites);
 router.post("/disablesite", authenticate, DisableSite);
 router.post("/enablesite", authenticate, EnableSite);
+
+router.get("/images", authenticate, Images);
 
 // Auth
 router.get("/login", Login);

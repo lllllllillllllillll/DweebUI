@@ -1,17 +1,13 @@
 # DweebUI
 DweebUI is a simple Docker web interface created using Javascript, Node.JS, and Express.
 
-Pre-Pre-Pre-Pre-Pre Alpha v0.09 ( :fire: Experimental. Don't install on any servers you care about :fire: )
+v0.09
 
 [![GitHub Stars](https://img.shields.io/github/stars/lllllllillllllillll/DweebUI)](https://github.com/lllllllillllllillll)
 [![GitHub Activity](https://img.shields.io/github/commit-activity/y/lllllllillllllillll/DweebUI)](https://github.com/lllllllillllllillll)
 [![Docker Pulls](https://img.shields.io/docker/pulls/lllllllillllllillll/dweebui)](https://hub.docker.com/repository/docker/lllllllillllllillll/dweebui)
 [![GitHub License](https://img.shields.io/github/license/lllllllillllllillll/DweebUI)](https://github.com/lllllllillllllillll/DweebUI/blob/main/LICENSE)
 
-
-* This is a personal project that I decided to share. I'm sure it has plenty of bugs and mistakes.
-* I haven't used Github very much and I'm still new to Javascript.
-* I probably should have waited a lot longer to share this :|
 
 <a href="https://raw.githubusercontent.com//lllllllillllllillll/DweebUI/main/screenshots/dashboard.png"><img src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/dashboard.png" width="50%"/></a>
 
@@ -101,3 +97,5 @@ sudo ./setup.sh
 
 
 ## Supporters
+
+* MM (Patreon)

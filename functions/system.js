@@ -313,3 +313,79 @@ module.exports.containerLogs = function (data) {
         });
     });
 };
+
+
+
+module.exports.dockerImages = async function () {
+    let image_list = '';
+
+    const data = await docker.listImages();
+
+    return data;
+
+    // for (const image of data) {
+
+    //     let imageVersion = image.RepoTags[0].split('/');
+    //     let service = imageVersion[imageVersion.length - 1].split(':')[0];
+
+    //     let image_info = {
+    //         name: image.RepoTags[0],
+    //         service: service,
+    //         id: image.Id,
+    //         size: image.Size,
+    //         style: "Compact"
+    //     }
+
+    //     let dockerCard = dashCard(image_info);
+
+    //     image_list += dockerCard;
+    // }
+
+    // return image_list;
+}
+
+
+module.exports.dockerVolumes = async function () {
+    let volume_list = '';
+
+    const data = await docker.listVolumes();
+
+    return data;
+
+    // for (const volume of data.Volumes) {
+
+    //     let volume_info = {
+    //         name: volume.Name,
+    //         style: "Compact"
+    //     }
+
+    //     let dockerCard = dashCard(volume_info);
+
+    //     volume_list += dockerCard;
+    // }
+
+    // return volume_list;
+}
+
+
+module.exports.dockerNetworks = async function () {
+    let network_list = '';
+
+    const data = await docker.listNetworks();
+
+    return data;
+
+    // for (const network of data) {
+
+    //     let network_info = {
+    //         name: network.Name,
+    //         style: "Compact"
+    //     }
+
+    //     let dockerCard = dashCard(network_info);
+
+    //     network_list += dockerCard;
+    // }
+
+    // return network_list;
+}

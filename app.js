@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 8000;
 const routes = require("./routes");
 
 // Functions and variables
-const { serverStats, containerList, containerStats, containerAction, containerLogs, hiddenContainers } = require('./functions/system');
+const { serverStats, containerList, containerStats, containerAction, containerLogs, hiddenContainers, dockerImages, dockerVolumes, dockerNetworks } = require('./functions/system');
 let sentList, clicked;
 app.locals.site_list = '';
 
@@ -57,6 +57,11 @@ io.on('connection', (socket) => {
     // Check if a list of containers or an install card needs to be sent
     if (sentList != null) { socket.emit('cards', sentList); }
     if((app.locals.install != '') && (app.locals.install != null)){ socket.emit('install', app.locals.install); }
+
+
+    console.log(`Imags: ${dockerImages()}`);
+    console.log(`Volumes: ${dockerVolumes()}`);
+    console.log(`Networks: ${dockerNetworks()}`);
 
     // Send server metrics
     let ServerStats = setInterval(async () => {
