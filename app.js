@@ -59,9 +59,15 @@ io.on('connection', (socket) => {
     if((app.locals.install != '') && (app.locals.install != null)){ socket.emit('install', app.locals.install); }
 
 
-    console.log(`Imags: ${dockerImages()}`);
-    console.log(`Volumes: ${dockerVolumes()}`);
-    console.log(`Networks: ${dockerNetworks()}`);
+    async function dockerStuff(){
+        let i = await dockerImages();
+        let v = await dockerVolumes();
+        let n = await dockerNetworks();
+        
+        // console.log(i, v, n);
+    }
+
+    dockerStuff();
 
     // Send server metrics
     let ServerStats = setInterval(async () => {

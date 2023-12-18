@@ -21,7 +21,6 @@ v0.09
 * [ ] Manage your Docker networks, images, and volumes (planned).
 * [x] Light/Dark Mode.
 * [x] Easy to install app templates.
-* [x] Proxy manager for Caddy (Optional).
 * [x] Multi-User built-in.
 * [ ] User pages (planned).
 * [x] Support for Windows, Linux, and MacOS.
@@ -29,7 +28,7 @@ v0.09
 * [x] Templates.json maintains compatability with Portainer, allowing you to use the template without needing to use DweebUI.
 * [x] Automatically persists data in docker volumes if bind mount isn't used.
 * [ ] Preset variables (planned).
-* [ ] Offline/Local Icons (planned).
+* [ ] Proxy manager for Caddy (Disabled).
 
 
 ## Setup
@@ -48,7 +47,6 @@ services:
       NODE_ENV: production
       PORT: 8000
       SECRET: MrWiskers
-      #Proxy_Manager: enabled
     restart: unless-stopped
     ports:
       - 8000:8000

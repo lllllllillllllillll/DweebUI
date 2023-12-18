@@ -34,6 +34,7 @@ exports.processLogin = async function(req,res){
                 req.session.user = existingUser.username;
                 req.session.UUID = existingUser.UUID;
                 req.session.role = existingUser.role;
+                req.session.avatar = existingUser.avatar;
 
 
                 // Redirect to the home page.
@@ -128,6 +129,7 @@ exports.processRegister = async function(req,res){
                     req.session.user = newUser.username;
                     req.session.UUID = newUser.UUID;
                     req.session.role = newUser.role;
+                    req.session.avatar = newUser.avatar;
                 }
 
                 // Redirect to the home page.

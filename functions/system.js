@@ -1,4 +1,4 @@
-const { currentLoad, mem, networkStats, fsSize, dockerContainerStats, networkInterfaces } = require('systeminformation');
+const { currentLoad, mem, networkStats, fsSize, dockerContainerStats, dockerImages, networkInterfaces } = require('systeminformation');
 var Docker = require('dockerode');
 var docker = new Docker({ socketPath: '/var/run/docker.sock' });
 const { dashCard } = require('../components/dashCard');
@@ -317,31 +317,16 @@ module.exports.containerLogs = function (data) {
 
 
 module.exports.dockerImages = async function () {
-    let image_list = '';
+ 
+    const data = await dockerImages({ all: true });
 
-    const data = await docker.listImages();
+    for ( i = 0; i < data.length; i++) {
+        console.log(`Image ${i}:`)
+        console.log(`repoTags: ${data[i].repoTags}`)
+        // console.log(`repoDigest: ${data[i].repoDigests}`)
+    }
+    
 
-    return data;
-
-    // for (const image of data) {
-
-    //     let imageVersion = image.RepoTags[0].split('/');
-    //     let service = imageVersion[imageVersion.length - 1].split(':')[0];
-
-    //     let image_info = {
-    //         name: image.RepoTags[0],
-    //         service: service,
-    //         id: image.Id,
-    //         size: image.Size,
-    //         style: "Compact"
-    //     }
-
-    //     let dockerCard = dashCard(image_info);
-
-    //     image_list += dockerCard;
-    // }
-
-    // return image_list;
 }
 
 

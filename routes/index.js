@@ -15,10 +15,11 @@ const { Settings } = require("../controllers/settings");
 
 // Authentication middleware
 const authenticate = (req, res, next) => {
-    if (req.session && req.session.user) {
-        console.log(`User ${req.session.user} [${req.session.role} : ${req.session.UUID}] accessed ${req.originalUrl}`)
+    if (req.session && req.session.role == "admin") {
+        console.log(`User ${req.session.user} [${req.session.role}] accessed ${req.originalUrl}`)
         next();
     } else {
+        console.log('Not admin')
         res.redirect("/login");
     }
 };

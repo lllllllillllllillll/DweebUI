@@ -9,7 +9,6 @@ services:
       NODE_ENV: production
       PORT: 8000
       SECRET: MrWiskers
-      #Proxy_Manager: enabled
     restart: unless-stopped
     ports:
       - 8000:8000

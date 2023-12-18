@@ -4,7 +4,7 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <title>Users</title>
+    <title>Volumes</title>
     <link href="/css/tabler.min.css?1685973381" rel="stylesheet"/>
     <link href="/css/demo.min.css?1685973381" rel="stylesheet"/>
     <style>
@@ -31,7 +31,7 @@
             <div class="row g-2 align-items-center">
               <div class="col">
                 <h2 class="page-title">
-                  Users
+                  Volumes
                 </h2>
               </div>
             </div>
@@ -64,8 +64,24 @@
       </div>
     </div>
     <!-- Libs JS -->
+    <script src="/libs/list.js/dist/list.min.js?1692870487" defer></script>
     <!-- Tabler Core -->
     <script src="/js/tabler.min.js?1685973381" defer></script>
     <script src="/js/demo.min.js?1685973381" defer></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+      const list = new List('table-default', {
+      	sortClass: 'table-sort',
+      	listClass: 'table-tbody',
+      	valueNames: [ 'sort-name', 'sort-type', 'sort-city', 'sort-score',
+      		{ attr: 'data-date', name: 'sort-date' },
+      		{ attr: 'data-progress', name: 'sort-progress' },
+      		'sort-quantity'
+      	]
+      });
+      })
+    </script>
+    
   </body>
 </html>
