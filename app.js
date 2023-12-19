@@ -33,7 +33,7 @@ const sessionMiddleware = session({
 app.set('view engine', 'ejs');
 app.use([
     compression(),
-    helmet(),
+    helmet({contentSecurityPolicy: false}),
     express.static("public"),
     express.json(),
     express.urlencoded({ extended: true }),
