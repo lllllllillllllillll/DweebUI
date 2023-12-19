@@ -1,10 +1,10 @@
-const { currentLoad, mem, networkStats, fsSize, dockerContainerStats, dockerImages, networkInterfaces } = require('systeminformation');
+const { currentLoad, mem, networkStats, fsSize, dockerContainerStats, dockerImages, networkInterfaces, dockerInfo } = require('systeminformation');
 var Docker = require('dockerode');
 var docker = new Docker({ socketPath: '/var/run/docker.sock' });
 const { dashCard } = require('../components/dashCard');
 const { Readable } = require('stream');
 
-const Containers = require('../database/ContainerSettings');
+const Containers = require('../database/ContainerModel');
 
 // export docker
 module.exports.docker = docker;
@@ -317,15 +317,21 @@ module.exports.containerLogs = function (data) {
 
 
 module.exports.dockerImages = async function () {
- 
-    const data = await dockerImages({ all: true });
 
-    for ( i = 0; i < data.length; i++) {
-        console.log(`Image ${i}:`)
-        console.log(`repoTags: ${data[i].repoTags}`)
-        // console.log(`repoDigest: ${data[i].repoDigests}`)
-    }
+    // get the names, tags, status, created date, and size of all images
+ 
+    const data1 = await dockerImages({ all: true });
+
+    const data2 = await docker.listImages({ all: true });
+
+    // for ( i = 0; i < data.length; i++) {
+    //     console.log(`Image ${i}:`)
+    //     console.log(`repoTags: ${data[i].repoTags}`)
+    // }
     
+    // console.log(data1);
+
+    console.log(data2);
 
 }
 

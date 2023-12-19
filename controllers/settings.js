@@ -1,5 +1,5 @@
 const User = require('../database/UserModel.js');
-const Server = require('../database/ServerSettings.js');
+const Server = require('../database/ServerModel.js');
 
 exports.Settings = async function(req, res) {
 

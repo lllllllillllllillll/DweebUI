@@ -3,6 +3,7 @@ const express = require("express");
 const app = express();
 const session = require("express-session");
 const compression = require('compression');
+const helmet = require('helmet');
 const PORT = process.env.PORT || 8000;
 
 // Router
@@ -13,7 +14,7 @@ const { serverStats, containerList, containerStats, containerAction, containerLo
 let sentList, clicked;
 app.locals.site_list = '';
 
-const Containers = require('./database/ContainerSettings');
+const Containers = require('./database/ContainerModel');
 
 
 // Configure Session
@@ -32,6 +33,7 @@ const sessionMiddleware = session({
 app.set('view engine', 'ejs');
 app.use([
     compression(),
+    helmet(),
     express.static("public"),
     express.json(),
     express.urlencoded({ extended: true }),
@@ -111,14 +113,18 @@ io.on('connection', (socket) => {
         console.log(`Hide ${data.container}`);
 
         let containerExists = await Containers.findOne({ where: {name:data.container}});
-        
+
         if(!containerExists){
             const container = await Containers.create({ 
                 name: data.container,
-                visibility: false
-             });
-             hiddenContainers();
+                visibility: false,
+            });
+            hiddenContainers();
             console.log(`[Created] Container ${data.container} hidden`)
+
+            let containerData = await Containers.findOne({ where: {name:data.container}});
+            console.log(containerData);
+
         } else {
             containerExists.update({ visibility: false });
             console.log(`[Updated] Container ${data.container} hidden`)

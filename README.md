@@ -1,7 +1,7 @@
 # DweebUI
 DweebUI is a simple Docker web interface created using Javascript, Node.JS, and Express.
 
-v0.09
+Alpha v0.09 ( :fire: Experimental :fire: )
 
 [![GitHub Stars](https://img.shields.io/github/stars/lllllllillllllillll/DweebUI)](https://github.com/lllllllillllllillll)
 [![GitHub Activity](https://img.shields.io/github/commit-activity/y/lllllllillllllillll/DweebUI)](https://github.com/lllllllillllllillll)
@@ -18,13 +18,13 @@ v0.09
 * [x] Dashboard provides server metrics, container metrics, and container controls, on a single page.
 * [x] View container logs.
 * [ ] Update containers (planned).
-* [ ] Manage your Docker networks, images, and volumes (planned).
+* [ ] Manage your Docker networks, images, and volumes (in development).
 * [x] Light/Dark Mode.
 * [x] Easy to install app templates.
 * [x] Multi-User built-in.
-* [ ] User pages (planned).
+* [ ] Permissions system (in development).
 * [x] Support for Windows, Linux, and MacOS.
-* [ ] Docker compose support (planned).
+* [ ] Docker compose import (in development).
 * [x] Templates.json maintains compatability with Portainer, allowing you to use the template without needing to use DweebUI.
 * [x] Automatically persists data in docker volumes if bind mount isn't used.
 * [ ] Preset variables (planned).

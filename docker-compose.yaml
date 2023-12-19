@@ -2,9 +2,9 @@ version: "3.9"
 services:
   dweebui:
     container_name: dweebui
-    image: lllllllillllllillll/dweebui:v0.09-dev
-    # build:
-    #   context: .
+    # image: lllllllillllllillll/dweebui:v0.09-dev
+    build:
+      context: .
     environment:
       NODE_ENV: production
       PORT: 8000

@@ -30,10 +30,35 @@ const Containers = sequelize.define('Containers', {
     type: DataTypes.STRING
     // allowNull defaults to true
   },
-  permissions: {
-    type: DataTypes.STRING
+  start: {
+    type: DataTypes.JSON
     // allowNull defaults to true
-  }
+  },
+  stop: {
+    type: DataTypes.JSON
+    // allowNull defaults to true
+  },
+  pause: {
+    type: DataTypes.JSON
+    // allowNull defaults to true
+  },
+  restart: {
+    type: DataTypes.JSON
+    // allowNull defaults to true
+  },
+  remove: {
+    type: DataTypes.JSON
+    // allowNull defaults to true
+  },
+  logs: {
+    type: DataTypes.JSON
+    // allowNull defaults to true
+  },
+  update: {
+    type: DataTypes.JSON
+    // allowNull defaults to true
+  },
+
 });
 
 async function syncModel() {

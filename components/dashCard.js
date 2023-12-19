@@ -166,6 +166,7 @@ module.exports.dashCard = function dashCard(data) {
                     <div class="dropdown-menu dropdown-menu-end">
                       <a class="dropdown-item" onclick="hideContainer(this)" name="${name}" href="#">Hide</a>
                       <a class="dropdown-item" onclick="resetView()" name="${name}" href="#">Reset View</a>
+                      <a class="dropdown-item" href="#">Permissions</a>
                     </div>
                   </div>
                 </div>
