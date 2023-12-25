@@ -8,7 +8,7 @@
   "dependencies": {
     "bcrypt": "^5.1.0",
     "child_process": "^1.0.2",
-    "dockerode": "^4.0.0",
+    "dockerode": "^4.0.1",
     "dockerode-compose": "^1.4.0",
     "ejs": "^3.1.9",
     "express": "^4.18.2",
