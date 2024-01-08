@@ -2,3 +2,4 @@ node_modules
 database/database.sqlite
 test
 .dockerignore
+.gitignore

@@ -11,8 +11,11 @@
 * Massive reduction in the amount of HTML, CSS, and JS on client side.
 * Container graphs are significantly more efficent and no longer use localStorage.
 * Made dark mode the default theme.
-* Created intervals to allow application to idle or scale bettery with more users.
+* Created intervals to allow application to idle or scale with more users.
 * Pages for images, volumes, and networks (non-functional at the moment). :new: 
+* Localized fonts.
+* CORS Support
+* Testing with Mocha and Supertest
 
 ## <del>v0.09 (dev)</del> dead. (It had so many problems that I essentially rewrote everything)
 * Added authentication middleware to router.
