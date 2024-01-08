@@ -1,14 +1,13 @@
-const User = require('../database/UserModel');
+import { docker } from '../app.js';
 
-exports.Networks = async function(req, res) {
 
-    
-    // Render the home page
-    res.render("pages/users", {
+export const Networks = async function(req, res) {
+
+
+    res.render("networks", {
         name: req.session.user,
         role: req.session.role,
         avatar: req.session.avatar,
-        isLoggedIn: true,
     });
 
 }

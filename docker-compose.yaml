@@ -2,9 +2,9 @@ version: "3.9"
 services:
   dweebui:
     container_name: dweebui
-    image: lllllllillllllillll/dweebui:v0.09-dev
-    # build:
-    #   context: .
+    # image: lllllllillllllillll/dweebui:v0.20
+    build:
+      context: .
     environment:
       NODE_ENV: production
       PORT: 8000
@@ -14,17 +14,13 @@ services:
       - 8000:8000
     volumes:
       - dweebui:/app
-      - caddyfiles:/app/caddyfiles
       - /var/run/docker.sock:/var/run/docker.sock
-      #- ./custom-templates.json:/app/custom-templates.json
-      #- ./composefiles:/app/composefiles
     networks:
-      - dweeb_network
+      - dweebui_net
 
 volumes:
   dweebui:
-  caddyfiles:
 
 networks:
-  dweeb_network:
+  dweebui_net:
     driver: bridge

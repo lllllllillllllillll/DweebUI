@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>DweebUI - Syslogs</title>
+    <link href="/css/tabler.min.css" rel="stylesheet"/>
+    <link href="/css/demo.min.css" rel="stylesheet"/>
+    <style>
+      @import url('https://rsms.me/inter/inter.css');
+      :root {
+      	--tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+      }
+      body {
+      	font-feature-settings: "cv03", "cv04", "cv11";
+      }
+    </style>
+  </head>
+  <body >
+    <script src="/js/demo-theme.min.js"></script>
+    <div class="page">
+
+
+      <%- include('navbar.ejs') %>
+
+      <div class="page-wrapper">
+
+        <div class="page-header d-print-none">
+          <div class="container-xl">
+            <div class="row g-2 align-items-center">
+              <div class="col">
+                <h2 class="page-title">
+                  Syslogs
+                </h2>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="page-body">
+          <div class="container-xl">
+            
+            <div class="card">
+              <div class="card-body">
+                <div id="table-default" class="table-responsive">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th><button class="table-sort" data-sort="sort-id">id</button></th>
+                        <th><button class="table-sort" data-sort="sort-user">user</button></th>
+                        <th><button class="table-sort" data-sort="sort-email">email</button></th>
+                        <th><button class="table-sort" data-sort="sort-event">event</button></th>
+                        <th><button class="table-sort" data-sort="sort-message">message</button></th>
+                        <th><button class="table-sort" data-sort="sort-ip">ip</button></th>
+                        <th><button class="table-sort" data-sort="sort-datetime">date/time</button></th>
+                      </tr>
+                    </thead>
+                    <tbody class="table-tbody">
+                      
+                      <%- logs %>
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <%- include('footer.ejs') %>
+      </div>
+    </div>
+    <!-- Libs JS -->
+    <script src="/libs/list.js/dist/list.min.js" defer></script>
+    <!-- Tabler Core -->
+    <script src="/js/tabler.min.js" defer></script>
+    <script src="/js/demo.min.js" defer></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+      const list = new List('table-default', {
+      	sortClass: 'table-sort',
+      	listClass: 'table-tbody',
+      	valueNames: [ 'sort-id', 'sort-email', 'sort-user', 'sort-event',
+      		{ attr: 'data-date', name: 'sort-message' },
+      		{ attr: 'data-progress', name: 'sort-datetime' },
+      		'sort-ip'
+      	]
+      });
+      })
+    </script>
+    
+  </body>
+</html>

@@ -1,14 +1,18 @@
+import { docker } from '../app.js';
 
+export const Images = async function(req, res) {
 
-exports.Images = async function(req, res) {
+    const allImages = await docker.listImages({ all: true });
+
+    for (let i = 0; i < allImages.length; i++) {
+        console.log(`Image ${i}:`)
+        console.log(`repoTags: ${allImages[i].repoTags}`)
+    }
     
-    
-    // Render the home page
-    res.render("pages/images", {
+    res.render("images", {
         name: req.session.user,
         role: req.session.role,
         avatar: req.session.avatar,
-        isLoggedIn: true,
     });
 
 }

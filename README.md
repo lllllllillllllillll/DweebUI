@@ -1,13 +1,18 @@
 # DweebUI
-DweebUI is a simple Docker web interface created using Javascript, Node.JS, and Express.
+DweebUI is a web interface for managing Docker, with a zero-config dashboard for your containers.
 
-Alpha v0.09 ( :fire: Experimental :fire: )
+Alpha v0.20 ( :fire: Experimental :fire: )
+
+:warning: DweebUI is a management interface and should not be directly exposed to the internet:warning:   
+:warning: External access should be done through a VPN or secure SSH connection :warning:
 
 [![GitHub Stars](https://img.shields.io/github/stars/lllllllillllllillll/DweebUI)](https://github.com/lllllllillllllillll)
 [![GitHub Activity](https://img.shields.io/github/commit-activity/y/lllllllillllllillll/DweebUI)](https://github.com/lllllllillllllillll)
 [![Docker Pulls](https://img.shields.io/docker/pulls/lllllllillllllillll/dweebui)](https://hub.docker.com/repository/docker/lllllllillllllillll/dweebui)
 [![GitHub License](https://img.shields.io/github/license/lllllllillllllillll/DweebUI)](https://github.com/lllllllillllllillll/DweebUI/blob/main/LICENSE)
 
+* This is a personal project that I started to get more familiar with Javascript and Node.js.
+* I probably should have waited a lot longer to share this :|
 
 <a href="https://raw.githubusercontent.com//lllllllillllllillll/DweebUI/main/screenshots/dashboard.png"><img src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/dashboard.png" width="50%"/></a>
 
@@ -37,12 +42,11 @@ Docker Compose:
 ```
 version: "3.9"
 services:
-
   dweebui:
     container_name: dweebui
-    image: lllllllillllllillll/dweebui:v0.09-dev
-    # build:
-    #   context: .
+    # image: lllllllillllllillll/dweebui:v0.20
+    build:
+      context: .
     environment:
       NODE_ENV: production
       PORT: 8000
@@ -52,21 +56,15 @@ services:
       - 8000:8000
     volumes:
       - dweebui:/app
-      - caddyfiles:/app/caddyfiles
       - /var/run/docker.sock:/var/run/docker.sock
-      #- ./custom-templates.json:/app/custom-templates.json
-      #- ./composefiles:/app/composefiles
     networks:
-      - dweeb_network
-
+      - dweebui_net
 
 volumes:
   dweebui:
-  caddyfiles:
-
 
 networks:
-  dweeb_network:
+  dweebui_net:
     driver: bridge
 ```
 
@@ -76,14 +74,6 @@ Compose setup:
 * Open a terminal in the ```dweebui``` folder, then enter ```docker compose up -d```.
 * You may need to use ```docker-compose up -d``` or execute the command as root with either ```sudo docker compose up -d``` or ```sudo docker-compose up -d```.
 
-
-Using setup.sh: 
-```
-Extract DweebUI.zip and navigate to /DweebUI
-cd DweebUI
-chmod +x setup.sh
-sudo ./setup.sh
-```
 
 
 ## Credits

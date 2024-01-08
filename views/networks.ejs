@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>DweebUI - Networks</title>
+    <link href="/css/tabler.min.css" rel="stylesheet"/>
+    <link href="/css/demo.min.css" rel="stylesheet"/>
+    <style>
+      @import url('https://rsms.me/inter/inter.css');
+      :root {
+      	--tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+      }
+      body {
+      	font-feature-settings: "cv03", "cv04", "cv11";
+      }
+    </style>
+  </head>
+  <body >
+    <script src="/js/demo-theme.min.js"></script>
+    <div class="page">
+
+
+      <%- include('navbar.ejs') %>
+
+      <div class="page-wrapper">
+
+        <div class="page-header d-print-none">
+          <div class="container-xl">
+            <div class="row g-2 align-items-center">
+              <div class="col">
+                <h2 class="page-title">
+                  Networks
+                </h2>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="page-body">
+          <div class="container-xl">
+            
+
+
+
+            <div class="card">
+              <div class="card-body">
+                <div id="table-default" class="table-responsive">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th><button class="table-sort" data-sort="sort-name">Name</button></th>
+                        <th><button class="table-sort" data-sort="sort-city">ID</button></th>
+                        <th><button class="table-sort" data-sort="sort-type">Tag</button></th>
+                        <th><button class="table-sort" data-sort="sort-score">Status</button></th>
+                        <th><button class="table-sort" data-sort="sort-date">Created</button></th>
+                        <th><button class="table-sort" data-sort="sort-quantity">Size</button></th>
+                        <th><button class="table-sort" data-sort="sort-progress">Action</button></th>
+                      </tr>
+                    </thead>
+                    <tbody class="table-tbody"><tr>
+                        <td class="sort-name">Caddy</td>
+                        <td class="sort-city">2f148ddb6662b4245ef4ced637e928eaf67a8a1941572d69627652253e779366</td>
+                        <td class="sort-type">Latest</td>
+                        <td class="sort-score">In use</td>
+                        <td class="sort-date" data-date="1628122643">August 05, 2021</td>
+                        <td class="sort-quantity">69.27 MB</td>
+                        <td class="sort-progress">BUTTON</td>
+                      </tr><tr>
+                        <td class="sort-name">clamav/clamav</td>
+                        <td class="sort-city">c447f9c713058cdb915c5becbef004a678cd7b8d6f5d70ec53479ba7687c3375</td>
+                        <td class="sort-type">Latest</td>
+                        <td class="sort-score">In use</td>
+                        <td class="sort-date" data-date="1546344668">January 01, 2019</td>
+                        <td class="sort-quantity">546.22 MB</td>
+                        <td class="sort-progress">BUTTON</td>
+                      </tr><tr>
+                        <td class="sort-name">linuxserver/code-server</td>
+                        <td class="sort-city">af09184f86e955b33bef7634862430f54899cc9ca5e492d1530451caa1d99dc0</td>
+                        <td class="sort-type">Latest</td>
+                        <td class="sort-score">Unused</td>
+                        <td class="sort-date" data-date="1545977105">December 28, 2018</td>
+                        <td class="sort-quantity">63.91 MB</td>
+                        <td class="sort-progress">BUTTON</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+
+
+
+          </div>
+        </div>
+        <%- include('footer.ejs') %>
+      </div>
+    </div>
+    <!-- Libs JS -->
+    <script src="/libs/list.js/dist/list.min.js" defer></script>
+    <!-- Tabler Core -->
+    <script src="/js/tabler.min.js" defer></script>
+    <script src="/js/demo.min.js" defer></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+      const list = new List('table-default', {
+      	sortClass: 'table-sort',
+      	listClass: 'table-tbody',
+      	valueNames: [ 'sort-name', 'sort-type', 'sort-city', 'sort-score',
+      		{ attr: 'data-date', name: 'sort-date' },
+      		{ attr: 'data-progress', name: 'sort-progress' },
+      		'sort-quantity'
+      	]
+      });
+      })
+    </script>
+    
+  </body>
+</html>

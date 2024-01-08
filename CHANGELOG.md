@@ -1,4 +1,20 @@
-## v0.09 (dev)
+## v0.20 (dev) - The rewrite. Jumping all the way to v0.20.
+* Changed to ES6 imports.
+* Cleaned up file structure and code layout.
+* Updated DweebUI logo.
+* Visual tweaks to login and registration pages.
+* Added .gitignore and .dockerignore files.
+* Syslogs - View logs for sign-in and registration attempts. :new: 
+* Docker socket now uses default connection.
+* Updated Users page displays 'inactive' if no sign-ins within 30 days.
+* Dashboard updates now triggered by Docker events.
+* Massive reduction in the amount of HTML, CSS, and JS on client side.
+* Container graphs are significantly more efficent and no longer use localStorage.
+* Made dark mode the default theme.
+* Created intervals to allow application to idle or scale bettery with more users.
+* Pages for images, volumes, and networks (non-functional at the moment). :new: 
+
+## <del>v0.09 (dev)</del> dead. (It had so many problems that I essentially rewrote everything)
 * Added authentication middleware to router.
 * Added gzip compression.
 * Added PM2.

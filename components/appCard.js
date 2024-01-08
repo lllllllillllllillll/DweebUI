@@ -1,4 +1,4 @@
-function appCard(data) {
+export const appCard = (data) => {
 
   // make data.title lowercase
   let app_name = data.name || data.title.toLowerCase();
@@ -227,11 +227,11 @@ function appCard(data) {
         </div>
       </div>
       <div class="d-flex">
-        <a href="#" class="card-btn" data-bs-toggle="modal" data-bs-target="#${modal}-info"><!-- Download SVG icon from http://tabler-icons.io/i/mail -->
+        <a href="#" class="card-btn" data-bs-toggle="modal" data-bs-target="#${modal}-info">
           <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-article" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M3 4m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z"></path> <path d="M7 8h10"></path> <path d="M7 12h10"></path> <path d="M7 16h10"></path></svg>
             Learn More
         </a>
-        <a href="#" class="card-btn" data-bs-toggle="modal" data-bs-target="#${modal}-install"><!-- Download SVG icon from http://tabler-icons.io/i/phone -->
+        <a href="#" class="card-btn" data-bs-toggle="modal" data-bs-target="#${modal}-install">
         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-bar-to-down" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M4 20l16 0"></path> <path d="M12 14l0 -10"></path> <path d="M12 14l4 -4"></path> <path d="M12 14l-4 -4"></path></svg>
           Install
         </a>
@@ -990,5 +990,3 @@ function appCard(data) {
 
 
 }
-
-module.exports = { appCard };

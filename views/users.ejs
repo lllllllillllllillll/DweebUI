@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>DweebUI - Users</title>
+    <link href="/css/tabler.min.css" rel="stylesheet"/>
+    <link href="/css/demo.min.css" rel="stylesheet"/>
+    <style>
+      @import url('https://rsms.me/inter/inter.css');
+      :root {
+      	--tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+      }
+      body {
+      	font-feature-settings: "cv03", "cv04", "cv11";
+      }
+    </style>
+  </head>
+  <body >
+    <script src="/js/demo-theme.min.js"></script>
+    <div class="page">
+
+
+      <%- include('navbar.ejs') %>
+
+      <div class="page-wrapper">
+
+        <div class="page-header d-print-none">
+          <div class="container-xl">
+            <div class="row g-2 align-items-center">
+              <div class="col">
+                <h2 class="page-title">
+                  Users
+                </h2>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="page-body">
+          <div class="container-xl">
+            <div class="row row-cards">
+              
+              <div class="col-12">
+                <div class="card">
+                  <div class="table-responsive">
+                    <table class="table table-vcenter table-mobile-md card-table">
+                      <tbody>
+
+                        <%- user_list %>
+                      
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+            
+            </div>
+          </div>
+        </div>
+        <%- include('footer.ejs') %>
+      </div>
+    </div>
+    <!-- Libs JS -->
+    <!-- Tabler Core -->
+    <script src="/js/tabler.min.js" defer></script>
+    <script src="/js/demo.min.js" defer></script>
+  </body>
+</html>

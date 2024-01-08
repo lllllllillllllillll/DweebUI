@@ -1,25 +1,35 @@
 {
   "name": "dweebui",
   "version": "1.0.0",
+  "description": "A web UI for Docker",
   "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "test": "mocha --require @babel/register --exit"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^5.1.0",
-    "child_process": "^1.0.2",
+    "@babel/register": "^7.23.7",
+    "@journeyapps/sqlcipher": "^5.3.1",
+    "@socket.io/admin-ui": "^0.5.1",
+    "bcrypt": "^5.1.1",
+    "chai": "^5.0.0",
     "compression": "^1.7.4",
-    "dockerode": "^4.0.0",
-    "dockerode-compose": "^1.4.0",
+    "cors": "^2.8.5",
+    "dockerode": "^4.0.1",
     "ejs": "^3.1.9",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
     "helmet": "^7.1.0",
-    "js-yaml": "^4.1.0",
+    "mocha": "^10.2.0",
     "sequelize": "^6.35.2",
-    "socket.io": "^4.6.1",
+    "sinon": "^17.0.1",
+    "socket.io": "^4.7.2",
     "sqlite3": "^5.1.6",
-    "systeminformation": "^5.21.20"
-  },
-  "description": ""
+    "stream": "^0.0.2",
+    "supertest": "^6.3.3",
+    "systeminformation": "^5.21.22"
+  }
 }
