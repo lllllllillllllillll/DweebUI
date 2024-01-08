@@ -2,7 +2,6 @@
 export const Dashboard = (req, res) => {
 
 
-
     res.render("dashboard", {
         name: req.session.user,
         role: req.session.role,

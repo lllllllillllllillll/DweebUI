@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import Docker from 'dockerode';
 import cors from 'cors';
 import { Readable } from 'stream';
+import { rateLimit } from 'express-rate-limit';
 import { instrument } from '@socket.io/admin-ui'
 import { router } from './router/index.js';
 import { createServer } from 'node:http';
@@ -23,7 +24,7 @@ let metricsInterval, cardsInterval, graphsInterval;
 let cardList = '';
 const statsArray = {};
 
-// socket.io admin ui
+// Socket.io admin ui
 export const io = new Server(server, { 
     connectionStateRecovery: {},
     cors: {
@@ -48,7 +49,17 @@ const sessionMiddleware = session({
         maxAge:3600000 * 8 // Session max age in milliseconds. 3600000 = 1 hour.
     }
 });
+
+// Make session data available to socket.io
 io.engine.use(sessionMiddleware); 
+
+// Rate limiter
+const limiter = rateLimit({
+	windowMs: 5 * 60 * 1000, // 5 minutes
+	limit: 30, // Limit each IP to 30 requests per `window`.
+	standardHeaders: 'draft-7',
+	legacyHeaders: false,
+})
 
 // Express middleware
 app.set('view engine', 'ejs');
@@ -67,19 +78,17 @@ app.use([
 server.listen(port, () => {
     async function init() {
         try {
-        await sequelize.authenticate();
-        console.log('[Connected to DB]');
-        } catch (error) {
-            console.log('[Could not connect to DB]', error);
+            await sequelize.authenticate().then(() => { console.log('[Connected to DB]') });
+        } catch {
+            console.log('[Could not connect to DB]');
         }
         try {
-        await sequelize.sync();
-        console.log('[Models Synced]');
-        hidden = await Container.findAll({ where: {visibility:false}});
-        containerCards();
-        } catch (error) {
-        console.log('[Could not Sync Models]', error);
+            await sequelize.sync().then(() => { console.log('[Models Synced]') });
+        } catch {
+            console.log('[Could not Sync Models]', error);
         }
+        getHidden();
+        containerCards();
         console.log(`\nServer listening on http://localhost:${port}`);
     }
     init();
