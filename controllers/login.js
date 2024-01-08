@@ -1,5 +1,4 @@
-import { User } from '../database/models.js';
-import { Syslog } from '../database/models.js';
+import { User, Syslog } from '../database/models.js';
 import bcrypt from 'bcrypt';
 
 export const Login = function(req,res){

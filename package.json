@@ -5,7 +5,7 @@
   "main": "app.js",
   "type": "module",
   "scripts": {
-    "test": "mocha --require @babel/register --exit"
+    "test": "mocha --require @babel/register"
   },
   "keywords": [],
   "author": "",

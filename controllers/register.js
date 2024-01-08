@@ -45,6 +45,9 @@ export const submitRegister = async function(req,res){
         if(!existingUser){
 
             try {
+                let currentDate = new Date();
+                let newLogin = currentDate.toLocaleString();
+
                 const user = await User.create({ 
                     name: name,
                     username: username,
@@ -52,7 +55,8 @@ export const submitRegister = async function(req,res){
                     password: bcrypt.hashSync(password,10),
                     role: await userRole(),
                     group: 'all',
-                    avatar: `<img src="img/avatars/${avatar}">`
+                    avatar: `<img src="img/avatars/${avatar}">`,
+                    lastLogin: newLogin,
                 });
 
                 // make sure the user was created and get the UUID.
