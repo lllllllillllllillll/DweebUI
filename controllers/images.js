@@ -1,5 +1,4 @@
 import { docker } from '../app.js';
-import { dockerImages } from 'systeminformation';
 
 export const Images = async function(req, res) {
 

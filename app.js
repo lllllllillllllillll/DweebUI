@@ -76,7 +76,7 @@ app.use([
 ]);
 
 // Initialize server
-server.listen(port, () => {
+server.listen(port, async () => {
     async function init() {
         try {
             await sequelize.authenticate().then(() => { console.log('[Connected to DB]') });
@@ -88,11 +88,12 @@ server.listen(port, () => {
         } catch {
             console.log('[Could not Sync Models]', error);
         }
-        getHidden();
+        await getHidden();
         containerCards();
-        console.log(`\nServer listening on http://localhost:${port}`);
     }
-    init();
+    await init();
+    app.emit("appStarted");
+    console.log(`\nServer listening on http://localhost:${port}`);
 });
 
 // Server metrics

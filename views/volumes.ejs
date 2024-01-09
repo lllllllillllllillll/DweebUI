@@ -36,11 +36,11 @@
                       <div class="card-options btn-list">                  
                           <a href="/refreshsites" class="btn">
                           <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-refresh" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4"></path> <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"></path> </svg>
-                          Scan
+                          Refresh
                           </a>
                           <a href="#" class="btn" data-bs-toggle="modal" data-bs-target="#add-site">
                           <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M12 5l0 14"></path> <path d="M5 12l14 0"></path> </svg>
-                          Create Volume
+                          New Volume
                           </a>
                       </div>
                   </div>
@@ -109,47 +109,9 @@
 
                   <div id="table-default" class="table-responsive">
                     <table class="table">
-                      <thead>
-                        <tr>
-                          <th class="w-1"><input class="form-check-input m-0 align-middle" name="select" type="checkbox" aria-label="Select all" onclick="selectAll()"></th>
-                          <th><button class="table-sort" data-sort="sort-name">Name</button></th>
-                          <th><button class="table-sort" data-sort="sort-city">ID</button></th>
-                          <th><button class="table-sort" data-sort="sort-type">Tag</button></th>
-                          <th><button class="table-sort" data-sort="sort-score">Status</button></th>
-                          <th><button class="table-sort" data-sort="sort-date">Created</button></th>
-                          <th><button class="table-sort" data-sort="sort-quantity">Size</button></th>
-                          <th><button class="table-sort" data-sort="sort-progress">Action</button></th>
-                        </tr>
-                      </thead>
-                      <tbody class="table-tbody"><tr>
-                          <td><input class="form-check-input m-0 align-middle" name="select" value="" type="checkbox" aria-label="Select"></td>
-                          <td class="sort-name">Caddy</td>
-                          <td class="sort-city">2f148ddb6662b4245ef4ced637e928eaf67a8a1941572d69627652253e779366</td>
-                          <td class="sort-type">Latest</td>
-                          <td class="sort-score text-green">In use</td>
-                          <td class="sort-date" data-date="1628122643">August 05, 2021</td>
-                          <td class="sort-quantity">69.27 MB</td>
-                          <td class="text-end"><a class="btn" href="#">Details</a></td>
-                        </tr><tr>
-                          <td><input class="form-check-input m-0 align-middle" name="select" value="" type="checkbox" aria-label="Select"></td>
-                          <td class="sort-name">clamav/clamav</td>
-                          <td class="sort-city">c447f9c713058cdb915c5becbef004a678cd7b8d6f5d70ec53479ba7687c3375</td>
-                          <td class="sort-type">Latest</td>
-                          <td class="sort-score text-green">In use</td>
-                          <td class="sort-date" data-date="1546344668">January 01, 2019</td>
-                          <td class="sort-quantity">546.22 MB</td>
-                          <td class="text-end"><a class="btn" href="#">Details</a></td>
-                        </tr><tr>
-                          <td><input class="form-check-input m-0 align-middle" name="select" value="" type="checkbox" aria-label="Select"></td>
-                          <td class="sort-name">linuxserver/code-server</td>
-                          <td class="sort-city">af09184f86e955b33bef7634862430f54899cc9ca5e492d1530451caa1d99dc0</td>
-                          <td class="sort-type">Latest</td>
-                          <td class="sort-score text-yellow">Unused</td>
-                          <td class="sort-date" data-date="1545977105">December 28, 2018</td>
-                          <td class="sort-quantity">63.91 MB</td>
-                          <td class="text-end"><a class="btn" href="#">Details</a></td>
-                        </tr>
-                      </tbody>
+                      
+                      <%- volume_list %>
+
                     </table>
                   </div>
 
@@ -172,7 +134,7 @@
 
                   </form>
                                         
-                    <p class="m-0 text-muted ms-auto">3 Images</p>
+                    <p class="m-0 text-muted ms-auto"><%- volume_count %> Volumes</p>
 
                   </div>
                 </div>
