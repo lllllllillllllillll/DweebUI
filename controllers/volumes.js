@@ -3,16 +3,15 @@ import { docker } from '../app.js';
 
 export const Volumes = async function(req, res) {
 
-    let volumes = await docker.listVolumes();
-    console.log(volumes);
+    let list = await docker.listVolumes({ all: true });
+    let volumes = list.Volumes;
 
     let volume_list = `
     <thead>
         <tr>
             <th class="w-1"><input class="form-check-input m-0 align-middle" name="select" type="checkbox" aria-label="Select all" onclick="selectAll()"></th>
             <th><button class="table-sort" data-sort="sort-name">Name</button></th>
-            <th><button class="table-sort" data-sort="sort-city">ID</button></th>
-            <th><button class="table-sort" data-sort="sort-type">Tag</button></th>
+            <th><button class="table-sort" data-sort="sort-city">Mount point</button></th>
             <th><button class="table-sort" data-sort="sort-score">Status</button></th>
             <th><button class="table-sort" data-sort="sort-date">Created</button></th>
             <th><button class="table-sort" data-sort="sort-quantity">Size</button></th>
@@ -22,36 +21,49 @@ export const Volumes = async function(req, res) {
     <tbody class="table-tbody">`
 
 
-    // for (let i = 0; i < images.length; i++) {
 
-    //     let date = new Date(images[i].Created * 1000);
-    //     let created = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    for (let i = 0; i < volumes.length; i++) {
+        let volume = volumes[i];
+        let name = volume.Name;
+        let mount = volume.Mountpoint;
 
-    //     let size = images[i].Size / 1000 / 1000; // to match docker desktop
-    //     size = size.toFixed(2);
+        if (name.length > 40) {
+            name = name.slice(0, 37) + '...';
+        }
 
-    //     let details = `
-    //         <tr>
-    //             <td><input class="form-check-input m-0 align-middle" name="select" value="" type="checkbox" aria-label="Select"></td>
-    //             <td class="sort-name">${images[i].RepoTags}</td>
-    //             <td class="sort-city">${images[i].Id}</td>
-    //             <td class="sort-type">Latest</td>
-    //             <td class="sort-score text-green">In use</td>
-    //             <td class="sort-date" data-date="1628122643">${created}</td>
-    //             <td class="sort-quantity">${size} MB</td>
-    //             <td class="text-end"><a class="btn" href="#">Details</a></td>
-    //         </tr>`
-    //     image_list += details;
-    // }
+        if (mount.length > 70) {
+            mount = mount.slice(0, 67) + '...';
+        }
+        
+        // docker.df(volume.Mountpoint).then((data) => {
+        //     for (let key in data) {
+        //         console.log(data[key]);
+        //     }
+        // });
+
     
-    // image_list += `</tbody>`
+        let details = `
+        <tr>
+            <td><input class="form-check-input m-0 align-middle" name="select" value="" type="checkbox" aria-label="Select"></td>
+            <td class="sort-name">${name}</td>
+            <td class="sort-city">${mount}</td>
+            <td class="sort-score text-green">In use</td>
+            <td class="sort-date" data-date="1628122643">${volume.CreatedAt}</td>
+            <td class="sort-quantity">MB</td>
+            <td class="text-end"><a class="btn" href="#">Details</a></td>
+        </tr>`
+    
+        volume_list += details;    
+    }
+
+    volume_list += `</tbody>`
 
     
     res.render("volumes", {
         name: req.session.user,
         role: req.session.role,
         avatar: req.session.avatar,
-        volume_list: volumes_list,
+        volume_list: volume_list,
         volume_count: volumes.length
     });
 
