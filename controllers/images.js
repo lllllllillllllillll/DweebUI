@@ -37,7 +37,7 @@ export const Images = async function(req, res) {
                 <td class="sort-type">Latest</td>
                 <td class="sort-score text-green">In use</td>
                 <td class="sort-date" data-date="1628122643">${created}</td>
-                <td class="sort-quantity">${size}</td>
+                <td class="sort-quantity">${size} MB</td>
                 <td class="text-end"><a class="btn" href="#">Details</a></td>
             </tr>`
         image_list += details;

@@ -56,7 +56,7 @@ io.engine.use(sessionMiddleware);
 // Rate limiter
 const limiter = rateLimit({
 	windowMs: 5 * 60 * 1000, // 5 minutes
-	limit: 30, // Limit each IP to 30 requests per `window`.
+	limit: 50, // Limit each IP to 50 requests per `window`.
 	standardHeaders: 'draft-7',
 	legacyHeaders: false,
 })
@@ -71,7 +71,8 @@ app.use([
     express.json(),
     express.urlencoded({ extended: true }),
     sessionMiddleware,
-    router
+    router,
+    limiter
 ]);
 
 // Initialize server
