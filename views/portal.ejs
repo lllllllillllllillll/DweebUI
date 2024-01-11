@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>DweebUI - Dashboard</title>
+    <!-- CSS files -->
+    <link href="css/tabler.min.css" rel="stylesheet"/>
+    <link href="css/meters.css" rel="stylesheet"/>
+    <style>
+      @import url('fonts/inter.css');
+      :root {
+        --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+      }
+      body {
+        font-feature-settings: "cv03", "cv04", "cv11";
+      }
+    </style>
+  </head>
+  <body >
+  <div class="page">
+
+    <%- include('navbar.ejs') %>
+    <div class="page-wrapper">
+
+      <div class="page-body">
+        <div class="container-xl">
+          <div class="row row-deck row-cards">
+            
+            
+            
+            
+          </div>
+        </div>
+      </div>
+      
+      <%- include('footer.ejs') %>
+      
+    </div>
+  </div>
+    
+
+  <!-- Libs JS -->
+  <script src="libs/apexcharts/dist/apexcharts.min.js" defer></script>
+  <!-- Tabler Core -->
+  <script src="js/tabler.min.js"></script>
+  </body>
+</html>
+

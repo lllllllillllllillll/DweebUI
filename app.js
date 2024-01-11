@@ -212,14 +212,17 @@ io.on('connection', (socket) => {
         
         // Start intervals if not already started
         if (!metricsInterval) {
+            serverMetrics();
             metricsInterval = setInterval(serverMetrics, 1000);
             console.log('Metrics interval started');
         }
         if (!cardsInterval) {
+            containerCards();
             cardsInterval = setInterval(containerCards, 1000);
             console.log('Cards interval started');
         }
         if (!graphsInterval) {
+            containerStats();
             graphsInterval = setInterval(containerStats, 1000);
             console.log('Graphs interval started');
         }

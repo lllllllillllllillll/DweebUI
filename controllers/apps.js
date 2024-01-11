@@ -11,6 +11,8 @@ templates = templates.sort((a, b) => {
 });
 
 export const Apps = (req, res) => {
+    // console.log(req.body);
+    
     let page = Number(req.params.page) || 1;
     let list_start = (page-1)*28;
     let list_end = (page*28);
@@ -50,6 +52,7 @@ export const Apps = (req, res) => {
 
 export const searchApps = async (req, res) => {
 
+    // console.log(req.body);
     let page = Number(req.query.page) || 1;
     let list_start = (page - 1) * 28;
     let list_end = (page * 28);
@@ -67,13 +70,14 @@ export const searchApps = async (req, res) => {
     let apps_list = '';
     let search_results = [];
 
+    console.log(req.body);
     let search = req.body.search;
 
     // split value of search into an array of words
     search = search.split(' ');
-    try {console.log(search[0]);} catch (error) {}
-    try {console.log(search[1]);} catch (error) {}
-    try {console.log(search[2]);} catch (error) {}
+    // try {console.log(search[0]);} catch (error) {}
+    // try {console.log(search[1]);} catch (error) {}
+    // try {console.log(search[2]);} catch (error) {}
 
     function searchTemplates(word) {
 

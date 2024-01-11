@@ -160,3 +160,30 @@ export const Syslog = sequelize.define('Syslog', {
     type: DataTypes.STRING
   },
 });
+
+
+export const Notification = sequelize.define('Notification', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
+  },
+  title: {
+    type: DataTypes.STRING
+  },
+  message: {
+    type: DataTypes.STRING
+  },
+  icon: {
+    type: DataTypes.STRING,
+  },
+  color: {
+    type: DataTypes.STRING,
+  },
+  createdAt : {
+    type: DataTypes.STRING
+  },
+  createdBy : {
+    type: DataTypes.STRING
+  },
+});

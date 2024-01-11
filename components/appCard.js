@@ -219,7 +219,7 @@ export const appCard = (data) => {
   <div class="col-md-6 col-lg-3">
     <div class="card">
       <div class="card-body p-4 text-center">
-        <span class="avatar avatar-xlplus mb-3 rounded"><img src='${data.logo}' width="144px" height="144px" loading="lazy"></img></span>
+        <span class="avatar avatar-xlplus mb-3 rounded"><img src='${data.logo}' width="144px" height="144px" loading="lazy"/></span>
         <h3 class="m-0 mb-1"><a href="#">${shortened_name}</a></h3>
         <div class="text-secondary">${shortened_desc}</div>
         <div class="mt-3">
