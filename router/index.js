@@ -26,7 +26,7 @@ const auth = (req, res, next) => {
     if (req.session.role == "admin") {
         next();
     } else {
-        res.redirect("/portal");
+        res.redirect("/login");
     }
 };
 
@@ -39,7 +39,7 @@ router.post("/register", submitRegister);
 router.get("/", auth, Dashboard);
 router.post("/", auth, searchDashboard);
 
-router.get("/portal", auth, Portal)
+router.get("/portal", Portal)
 
 router.get("/apps", auth, Apps);
 router.get("/apps/:page", auth, Apps);

@@ -45,6 +45,12 @@
                   </form>
                   <input type="submit" form="search" class="btn btn-outline-success h-50" value="search">
 
+
+                  <form action="/apps" id="search2" name="search2" method="POST">
+                    <input type="search" class="form-control" name="search2" placeholder="Search apps…">
+                  </form>
+                  <input type="submit" form="search2" class="btn btn-outline-success h-50" value="search2">
+
                   <div class="card-actions btn-actions">
                     <div class="card-actions btn-actions">
                       <div class="dropdown">
@@ -107,5 +113,29 @@
     <!-- Tabler Core -->
     <script src="js/tabler.min.js" defer></script>
     <script src="js/demo.min.js" defer></script>
+    <script>
+
+      const form = document.querySelector("#userinfo");
+
+      async function sendData() {
+        const formData = new FormData(form);
+
+        try {
+          const response = await fetch("/install", {
+            method: "POST",
+            body: formData,
+          });
+          console.log(await response.json());
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        sendData();
+      });
+
+    </script>
   </body>
 </html>
