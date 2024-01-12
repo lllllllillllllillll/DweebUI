@@ -1,11 +1,10 @@
 import express from "express";
-import { io } from "../app.js";
 
 // Controllers
-import { Login, submitLogin } from "../controllers/login.js";
+import { Login, submitLogin, Logout } from "../controllers/login.js";
 import { Register, submitRegister } from "../controllers/register.js";
 import { Dashboard, searchDashboard } from "../controllers/dashboard.js";
-import { Apps } from "../controllers/apps.js";
+import { Apps, appSearch } from "../controllers/apps.js";
 import { Users } from "../controllers/users.js";
 import { Images } from "../controllers/images.js";
 import { Account } from "../controllers/account.js";
@@ -30,42 +29,34 @@ const auth = (req, res, next) => {
     }
 };
 
+// Routes
 router.get("/login", Login);
 router.post("/login", submitLogin);
+router.get("/logout", Logout);
 
 router.get("/register", Register);
 router.post("/register", submitRegister);  
 
+
 router.get("/", auth, Dashboard);
 router.post("/", auth, searchDashboard);
 
+router.get("/images", auth, Images);
+router.get("/volumes", auth, Volumes);
+router.get("/networks", auth, Networks);
 router.get("/portal", Portal)
 
 router.get("/apps", auth, Apps);
 router.get("/apps/:page", auth, Apps);
+router.post("/apps", auth, appSearch);
 
 router.get("/users", auth, Users);
-
-router.get("/images", auth, Images);
-
-router.get("/networks", auth, Networks);
-
-router.get("/volumes", auth, Volumes);
-
 router.get("/syslogs", auth, Syslogs);
 
+
 router.get("/account", Account);
-
 router.get("/settings", auth, Settings);
-  
-router.get("/logout", (req, res) => {
-    const sessionId = req.session.id;
-    req.session.destroy(() => {
-        io.to(sessionId).disconnectSockets();
-        res.redirect("/login");
-    });
-});
 
-
+// Functions
 router.post("/install", auth, Install);
 router.post("/uninstall", auth, Uninstall);

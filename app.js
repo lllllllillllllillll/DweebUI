@@ -78,16 +78,10 @@ app.use([
 // Initialize server
 server.listen(port, async () => {
     async function init() {
-        try {
-            await sequelize.authenticate().then(() => { console.log('[Connected to DB]') });
-        } catch {
-            console.log('[Could not connect to DB]');
-        }
-        try {
-            await sequelize.sync().then(() => { console.log('[Models Synced]') });
-        } catch {
-            console.log('[Could not Sync Models]', error);
-        }
+        try { await sequelize.authenticate().then(() => { console.log('[Connected to DB]') }); } 
+            catch { console.log('[Could not connect to DB]'); }
+        try { await sequelize.sync().then(() => { console.log('[Models Synced]') }); } 
+            catch { console.log('[Could not Sync Models]', error); }
         await getHidden();
         containerCards();
     }

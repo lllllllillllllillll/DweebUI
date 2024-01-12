@@ -73,3 +73,12 @@ export const submitLogin = async function(req,res){
         });
     }
 }
+
+
+export const Logout = function(req,res){
+    const sessionId = req.session.id;
+    req.session.destroy(() => {
+        io.to(sessionId).disconnectSockets();
+        res.redirect("/login");
+    });
+}

@@ -11,7 +11,6 @@ templates = templates.sort((a, b) => {
 });
 
 export const Apps = (req, res) => {
-    // console.log(req.body);
     
     let page = Number(req.params.page) || 1;
     let list_start = (page-1)*28;
@@ -50,9 +49,12 @@ export const Apps = (req, res) => {
 
 
 
-export const searchApps = async (req, res) => {
+export const appSearch = async (req, res) => {
 
-    // console.log(req.body);
+    let apps_list = '';
+    let results = [];
+    let search = req.body.search.split(' ');
+
     let page = Number(req.query.page) || 1;
     let list_start = (page - 1) * 28;
     let list_end = (page * 28);
@@ -67,32 +69,17 @@ export const searchApps = async (req, res) => {
         next = '/apps?page=' + (page);
     }
 
-    let apps_list = '';
-    let search_results = [];
-
-    console.log(req.body);
-    let search = req.body.search;
-
-    // split value of search into an array of words
-    search = search.split(' ');
-    // try {console.log(search[0]);} catch (error) {}
-    // try {console.log(search[1]);} catch (error) {}
-    // try {console.log(search[2]);} catch (error) {}
-
     function searchTemplates(word) {
-
         for (let i = 0; i < templates.length; i++) {
             if ((templates[i].description.includes(word)) || (templates[i].name.includes(word)) || (templates[i].title.includes(word))) {
-                search_results.push(templates[i]);
+                results.push(templates[i]);
             }
         }
-        // console.log(search_results);
     }
-    
     searchTemplates(search);
 
-    for (let i = 0; i < search_results.length; i++) {
-        let app_card = appCard(search_results[i]);
+    for (let i = 0; i < results.length; i++) {
+        let app_card = appCard(results[i]);
         apps_list += app_card;
     }
     
