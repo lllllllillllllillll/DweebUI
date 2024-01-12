@@ -1,6 +1,5 @@
 export const appCard = (data) => {
 
-  // make data.title lowercase
   let app_name = data.name || data.title.toLowerCase();
   let shortened_name = "";
   let shortened_desc = data.description.slice(0, 60) + "...";
@@ -15,11 +14,10 @@ export const appCard = (data) => {
   let repository = data.repository || "";
   let source = data.image || "";
 
-
-  // if data.network is set to host, bridge, or docker set the radio button to checked
   let net_host, net_bridge, net_docker = '';
   let net_name = 'AppBridge';
   
+  // if data.network is set to host, bridge, or docker set the radio button to checked
   if (data.network == 'host') {
     net_host = 'checked';
   } else if (data.network) {

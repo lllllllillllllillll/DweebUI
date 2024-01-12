@@ -1,4 +1,5 @@
 import express from "express";
+export const router = express.Router();
 
 // Controllers
 import { Login, submitLogin, Logout } from "../controllers/login.js";
@@ -13,8 +14,6 @@ import { Networks } from "../controllers/networks.js";
 import { Volumes } from "../controllers/volumes.js";
 import { Syslogs } from "../controllers/syslogs.js";
 import { Portal } from "../controllers/portal.js"
-
-export const router = express.Router();
 
 /// Functions
 import { Install } from "../functions/install.js"

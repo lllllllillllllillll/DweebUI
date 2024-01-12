@@ -51,9 +51,9 @@ export const Apps = (req, res) => {
 
 export const appSearch = async (req, res) => {
 
+    let search = req.body.search.split(' ');
     let apps_list = '';
     let results = [];
-    let search = req.body.search.split(' ');
 
     let page = Number(req.query.page) || 1;
     let list_start = (page - 1) * 28;

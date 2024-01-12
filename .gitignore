@@ -3,3 +3,4 @@ database/database.sqlite
 test
 .dockerignore
 .gitignore
+appdata
