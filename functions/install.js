@@ -1,11 +1,12 @@
 import { writeFileSync, mkdirSync, readFileSync } from "fs";
 import yaml from 'js-yaml';
 import { execSync } from "child_process";
-import { docker } from "../app.js";
+import { docker } from "../server.js";
 import DockerodeCompose from "dockerode-compose";
+import { Syslog } from "../database/models.js";
 
 
-
+// This entire page hurts to look at. 
 export const Install = async (req, res) => {
 
         let data = req.body;
@@ -32,7 +33,6 @@ export const Install = async (req, res) => {
                     console.log(stackfile.services[Object.keys(stackfile.services)[i]].environment);
                 } catch { console.log('no env') }
             }
-            
         } else {
 
             let compose_file = `version: '3'`;
@@ -72,68 +72,80 @@ export const Install = async (req, res) => {
                 }
             }
 
+
             // Volumes
-            if (volume0 == 'on' || volume1 == 'on' || volume2 == 'on' || volume3 == 'on' || volume4 == 'on' || volume5 == 'on') {
-                compose_file += `\n    volumes:`
+            let volumes = [volume0, volume1, volume2, volume3, volume4, volume5]
 
-                for (let i = 0; i < 6; i++) {
-
-                    // if volume is on and neither bind or container is empty, it's a bind mount (ex /mnt/user/appdata/config:/config  )
-                    if ((data[`volume${i}`] == 'on') && (data[`volume_${i}_bind`] != '') && (data[`volume_${i}_container`] != '')) {
-                        compose_file += `\n      - ${data[`volume_${i}_bind`]}:${data[`volume_${i}_container`]}:${data[`volume_${i}_readwrite`]}`
-                    }
-
-                    // if bind is empty create a docker volume (ex container_name_config:/config) convert any '/' in container name to '_'
-                    else if ((data[`volume${i}`] == 'on') && (data[`volume_${i}_bind`] == '') && (data[`volume_${i}_container`] != '')) {
-                        let volume_name = data[`volume_${i}_container`].replace(/\//g, '_');
-                        compose_file += `\n      - ${name}_${volume_name}:${data[`volume_${i}_container`]}:${data[`volume_${i}_readwrite`]}`
-                        docker_volumes.push(`${name}_${volume_name}`);
-                    } 
+            for (let i = 0; i < volumes.length; i++) {
+                if (volumes[i] == 'on') {
+                    compose_file += `\n    volumes:`
+                    break;
                 }
+            }
+
+            for (let i = 0; i < volumes.length; i++) {
+
+                // if volume is on and neither bind or container is empty, it's a bind mount (ex /mnt/user/appdata/config:/config  )
+                if ((data[`volume${i}`] == 'on') && (data[`volume_${i}_bind`] != '') && (data[`volume_${i}_container`] != '')) {
+                    compose_file += `\n      - ${data[`volume_${i}_bind`]}:${data[`volume_${i}_container`]}:${data[`volume_${i}_readwrite`]}`
+                }
+
+                // if bind is empty create a docker volume (ex container_name_config:/config) convert any '/' in container name to '_'
+                else if ((data[`volume${i}`] == 'on') && (data[`volume_${i}_bind`] == '') && (data[`volume_${i}_container`] != '')) {
+                    let volume_name = data[`volume_${i}_container`].replace(/\//g, '_');
+                    compose_file += `\n      - ${name}_${volume_name}:${data[`volume_${i}_container`]}:${data[`volume_${i}_readwrite`]}`
+                    docker_volumes.push(`${name}_${volume_name}`);
+                } 
+                
             }
 
             // Environment variables
-            if (env0 == 'on' || env1 == 'on' || env2 == 'on' || env3 == 'on' || env4 == 'on' || env5 == 'on' || env6 == 'on' || env7 == 'on' || env8 == 'on' || env9 == 'on' || env10 == 'on' || env11 == 'on') {
-                compose_file += `\n    environment:`
-            }
-            for (let i = 0; i < 12; i++) {
-                if (data[`env${i}`] == 'on') {
-                    compose_file += `\n      - ${data[`env_${i}_name`]}=${data[`env_${i}_default`]}`
+            let env_vars = [env0, env1, env2, env3, env4, env5, env6, env7, env8, env9, env10, env11]
 
+            for (let i = 0; i < env_vars.length; i++) {
+                if (env_vars[i] == 'on') {
+                    compose_file += `\n    environment:`
+                    break;
+                }
+            }
+            for (let i = 0; i < env_vars.length; i++) {
+                if (env_vars[i] == 'on') {
+                    compose_file += `\n      - ${data[`env_${i}_name`]}=${data[`env_${i}_default`]}`
                 }
             }
 
-            // Add labels
-            if (label0 == 'on' || label1 == 'on' || label2 == 'on' || label3 == 'on' || label4 == 'on' || label5 == 'on' || label6 == 'on' || label7 == 'on' || label8 == 'on' || label9 == 'on' || label10 == 'on' || label11 == 'on') {
-                compose_file += `\n    labels:`
-            }   
+            // Labels
+            let labels = [label0, label1, label2, label3, label4, label5, label6, label7, label8, label9, label10, label11]
+
+            for (let i = 0; i < labels.length; i++) {
+                if (labels[i] == 'on') {
+                    compose_file += `\n    labels:`
+                    break;
+                }
+            }
+
             for (let i = 0; i < 12; i++) {
                 if (data[`label${i}`] == 'on') {
                     compose_file += `\n      - ${data[`label_${i}_name`]}=${data[`label_${i}_value`]}`
                 }
             }
 
-            // Add privileged mode 
-
+            // Privileged mode 
             if (data.privileged == 'on') {
                 compose_file += `\n    privileged: true`
             }
 
-
-            // Add hardware acceleration to the docker-compose file if one of the environment variables has the label DRINODE
-            if (env0 == 'on' || env1 == 'on' || env2 == 'on' || env3 == 'on' || env4 == 'on' || env5 == 'on' || env6 == 'on' || env7 == 'on' || env8 == 'on' || env9 == 'on' || env10 == 'on' || env11 == 'on') {
-                for (let i = 0; i < 12; i++) {
-                    if (data[`env${i}`] == 'on') {
-                        if (data[`env_${i}_name`] == 'DRINODE') {
-                            compose_file += `\n    deploy:`
-                            compose_file += `\n      resources:`
-                            compose_file += `\n        reservations:`
-                            compose_file += `\n          devices:`
-                            compose_file += `\n          - driver: nvidia`
-                            compose_file += `\n            count: 1`
-                            compose_file += `\n            capabilities: [gpu]`
-                        }
-                    }
+            // Hardware acceleration
+            for (let i = 0; i < env_vars.length; i++) {
+                if ((env_vars[i] == 'on') && (data[`env_${i}_name`] == 'DRINODE')) {
+                    compose_file += `\n    deploy:`
+                    compose_file += `\n      resources:`
+                    compose_file += `\n        reservations:`
+                    compose_file += `\n          devices:`
+                    compose_file += `\n          - driver: nvidia`
+                    compose_file += `\n            count: 1`
+                    compose_file += `\n            capabilities: [gpu]`
+                    break;
                 }
             }
 
@@ -165,6 +177,15 @@ export const Install = async (req, res) => {
                 (async () => {
                 await compose.pull();
                 await compose.up();
+
+                const syslog = await Syslog.create({
+                    user: req.session.user,
+                    email: null,
+                    event: "App Installation",
+                    message: `${name} installed successfully}`,
+                    ip: req.socket.remoteAddress
+                });
+
                 })();
 
             } catch { console.log('error running compose file')}

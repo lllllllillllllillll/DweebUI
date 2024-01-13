@@ -1,4 +1,5 @@
-import { docker } from "../app.js";
+import { docker } from "../server.js";
+import { Syslog } from "../database/models.js";
 
 
 export const Uninstall = async (req, res) => {
@@ -16,7 +17,17 @@ export const Uninstall = async (req, res) => {
         }
         try {
             await containerName.remove();
-            console.log(`Removed ${service_name} container`);
+            
+
+            const syslog = await Syslog.create({
+                user: req.session.user,
+                email: null,
+                event: "App Removal",
+                message: `${name} uninstalled successfully}`,
+                ip: req.socket.remoteAddress
+            });
+
+
         } catch {
             console.log(`Error removing ${service_name} container`);
         }

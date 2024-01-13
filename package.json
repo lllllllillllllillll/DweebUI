@@ -2,7 +2,7 @@
   "name": "dweebui",
   "version": "1.0.0",
   "description": "A web UI for Docker",
-  "main": "app.js",
+  "main": "server.js",
   "type": "module",
   "scripts": {
     "test": "mocha --require @babel/register"
