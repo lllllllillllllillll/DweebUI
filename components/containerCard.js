@@ -81,7 +81,7 @@ export const containerCard = (data) => {
                       <button class="dropdown-item text-secondary" onclick="clicked(this)" name="${name}" id="logs" data-bs-toggle="modal" data-bs-target="#log_view" href="#">Logs</button>
                       <button class="dropdown-item text-secondary" onclick="clicked(this)" name="${name}" id="edit" href="#">Edit</button>
                       <button class="dropdown-item text-primary" onclick="clicked(this)" name="${name}" id="update" href="#">Update</button>
-                      <button class="dropdown-item text-danger" onclick="clicked(this)" name="${name}" id="remove" data-bs-toggle="modal" data-bs-target="#remove_modal" href="#">Remove</button>
+                      <button class="dropdown-item text-danger" onclick="clicked(this)" name="${name}" id="remove" data-bs-toggle="modal" data-bs-target="#${name}_uninstall_modal" href="#">Remove</button>
                     </div>
                   </div>
                   <div class="dropdown">
@@ -115,7 +115,7 @@ export const containerCard = (data) => {
         </div>
       </div>
     </div>
-    <div class="modal modal-blur fade" id="remove_modal" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal modal-blur fade" id="${name}_uninstall_modal" tabindex="-1" style="display: none;" aria-hidden="true">
       <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
         <div class="modal-content">
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
