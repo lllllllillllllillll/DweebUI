@@ -12,10 +12,12 @@
 * Container graphs are significantly more efficent and no longer use localStorage.
 * Made dark mode the default theme.
 * Created intervals to allow application to idle or scale with more users.
-* Pages for images, volumes, and networks (non-functional at the moment). :new: 
+* Pages for images, volumes, and networks. :new: 
 * Localized fonts.
-* CORS Support
-* Testing with Mocha and Supertest
+* CORS.
+* Testing with Mocha and Supertest.
+* Created Portal page. :new:
+
 
 ## <del>v0.09 (dev)</del> dead. (It had so many problems that I essentially rewrote everything)
 * Added authentication middleware to router.

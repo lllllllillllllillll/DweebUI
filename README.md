@@ -33,7 +33,6 @@ Alpha v0.20 ( :fire: Experimental :fire: )
 * [x] Templates.json maintains compatability with Portainer, allowing you to use the template without needing to use DweebUI.
 * [x] Automatically persists data in docker volumes if bind mount isn't used.
 * [ ] Preset variables (planned).
-* [ ] Proxy manager for Caddy (Disabled).
 
 
 ## Setup
@@ -44,9 +43,7 @@ version: "3.9"
 services:
   dweebui:
     container_name: dweebui
-    # image: lllllllillllllillll/dweebui:v0.20
-    build:
-      context: .
+    image: lllllllillllllillll/dweebui:v0.20-dev
     environment:
       NODE_ENV: production
       PORT: 8000

@@ -23,7 +23,7 @@ export const Uninstall = async (req, res) => {
                 user: req.session.user,
                 email: null,
                 event: "App Removal",
-                message: `${service_name} uninstalled successfully}`,
+                message: `${service_name} uninstalled successfully`,
                 ip: req.socket.remoteAddress
             });
 
