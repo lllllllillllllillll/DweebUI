@@ -182,7 +182,7 @@ export const Install = async (req, res) => {
                     user: req.session.user,
                     email: null,
                     event: "App Installation",
-                    message: `${name} installed successfully}`,
+                    message: `${name} installed successfully`,
                     ip: req.socket.remoteAddress
                 });
 

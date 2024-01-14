@@ -11,12 +11,20 @@ Alpha v0.20 ( :fire: Experimental :fire: )
 [![Docker Pulls](https://img.shields.io/docker/pulls/lllllllillllllillll/dweebui)](https://hub.docker.com/repository/docker/lllllllillllllillll/dweebui)
 [![GitHub License](https://img.shields.io/github/license/lllllllillllllillll/DweebUI)](https://github.com/lllllllillllllillll/DweebUI/blob/main/LICENSE)
 
-* This is a personal project that I started to get more familiar with Javascript and Node.js.
+* This is a personal project I started to get more familiar with Javascript and Node.js.
+* Some UI elements are placeholders.
+* Please submit issues and post discussions so I know what features to focus on.
 * I probably should have waited a lot longer to share this :|
 
-<a href="https://raw.githubusercontent.com//lllllllillllllillll/DweebUI/main/screenshots/dashboard.png"><img src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/dashboard.png" width="50%"/></a>
+<a href="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/dashboard1.png"><img src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/dashboard1.png" width="25%"/></a>
+<a href="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/dashboard2.png"><img src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/dashboard2.png" width="25%"/></a>
+<a href="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/apps.png"><img src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/apps.png" width="25%"/></a>
+<a href="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/images.png"><img src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/images.png" width="25%"/></a>
+<a href="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/register.png"><img src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/register.png" width="25%"/></a>
+<a href="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/login.png"><img src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/login.png" width="25%"/></a>
+<a href="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/syslogs.png"><img src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/syslogs.png" width="25%"/></a>
+<a href="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/volumes.png"><img src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/volumes.png" width="25%"/></a>
 
-<a href="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/apps.png"><img src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/apps.png" width="50%"/></a>
 
 
 ## Features

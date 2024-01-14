@@ -1,6 +1,9 @@
-node_modules
-database/database.sqlite
+**/node_modules/
+**/database.sqlite
+**/appdata/
+.github
 test
 .dockerignore
 .gitignore
 appdata
+docker-compose.yaml
