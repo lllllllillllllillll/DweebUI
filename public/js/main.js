@@ -132,20 +132,6 @@ socket.on('containerStats', (data) => {
 });
 
 
-
-// socket.on('install', (data) => {
-//   dockerCards.insertAdjacentHTML("afterend", data);
-// });
-
-// let containerLogs;
-
-// function viewLogs(button) {
-//   if (button.name != 'refresh') {
-//     containerLogs = button.name;
-//   }
-//   socket.emit('logs', {container: containerLogs});
-// }
-
 socket.on('logs', (data) => {
   logViewer.innerHTML = `<pre>${data}</pre>`;
 });

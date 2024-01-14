@@ -4,7 +4,7 @@ import { execSync } from "child_process";
 import { docker } from "../server.js";
 import DockerodeCompose from "dockerode-compose";
 import { Syslog } from "../database/models.js";
-
+import { containerCard } from "../components/containerCard.js";
 
 // This entire page hurts to look at. 
 export const Install = async (req, res) => {
@@ -177,7 +177,7 @@ export const Install = async (req, res) => {
                 (async () => {
                 await compose.pull();
                 await compose.up();
-
+                
                 const syslog = await Syslog.create({
                     user: req.session.user,
                     email: null,
@@ -185,10 +185,17 @@ export const Install = async (req, res) => {
                     message: `${name} installed successfully`,
                     ip: req.socket.remoteAddress
                 });
-
                 })();
 
-            } catch { console.log('error running compose file')}
+            } catch { 
+                const syslog = await Syslog.create({
+                    user: req.session.user,
+                    email: null,
+                    event: "App Installation",
+                    message: `${name} installation failed`,
+                    ip: req.socket.remoteAddress
+                });
+            }
 
         }
 

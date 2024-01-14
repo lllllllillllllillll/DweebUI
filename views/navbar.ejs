@@ -1,49 +1,47 @@
-<header class="navbar navbar-expand-md d-print-none">
+<script>
+  var themeStorageKey = "tablerTheme";
+  var defaultTheme = "dark";
+  var selectedTheme;
 
-  <script>
-    var themeStorageKey = "tablerTheme";
-    var defaultTheme = "light";
-    var selectedTheme;
+  (function (factory) {
+    typeof define === 'function' && define.amd ? define(factory) :
+    factory();
+  })((function () {
+    'use strict';
 
-    (function (factory) {
-      typeof define === 'function' && define.amd ? define(factory) :
-      factory();
-    })((function () {
-      'use strict';
-
-      var params = new Proxy(new URLSearchParams(window.location.search), {
-        get: function get(searchParams, prop) {
-          return searchParams.get(prop);
-        }
-      });
-
-      if (!!params.theme) {
-        localStorage.setItem(themeStorageKey, params.theme);
-        selectedTheme = params.theme;
-      } else {
-        var storedTheme = localStorage.getItem(themeStorageKey);
-        selectedTheme = storedTheme ? storedTheme : defaultTheme;
+    var params = new Proxy(new URLSearchParams(window.location.search), {
+      get: function get(searchParams, prop) {
+        return searchParams.get(prop);
       }
+    });
 
-      if (selectedTheme === 'dark') {
-        document.body.setAttribute("data-bs-theme", selectedTheme);
-      } else {
-        document.body.removeAttribute("data-bs-theme");
-      }
-    }));
-
-    function toggleTheme(button) {
-      if (button.value == 'dark-theme') {
-        document.body.setAttribute("data-bs-theme", 'dark');
-        localStorage.setItem(themeStorageKey, 'dark');
-      }
-      else if (button.value == 'light-theme') {
-        document.body.removeAttribute("data-bs-theme");
-        localStorage.setItem(themeStorageKey, 'light');
-      }
+    if (!!params.theme) {
+      localStorage.setItem(themeStorageKey, params.theme);
+      selectedTheme = params.theme;
+    } else {
+      var storedTheme = localStorage.getItem(themeStorageKey);
+      selectedTheme = storedTheme ? storedTheme : defaultTheme;
     }
-  </script>
 
+    if (selectedTheme === 'dark') {
+      document.body.setAttribute("data-bs-theme", selectedTheme);
+    } else {
+      document.body.removeAttribute("data-bs-theme");
+    }
+  }));
+
+  function toggleTheme(button) {
+    if (button.value == 'dark-theme') {
+      document.body.setAttribute("data-bs-theme", 'dark');
+      localStorage.setItem(themeStorageKey, 'dark');
+    }
+    else if (button.value == 'light-theme') {
+      document.body.removeAttribute("data-bs-theme");
+      localStorage.setItem(themeStorageKey, 'light');
+    }
+  }
+</script>
+<header class="navbar navbar-expand-md d-print-none">
   <div class="container-xl">
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu"
       aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">

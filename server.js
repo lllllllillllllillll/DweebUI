@@ -22,6 +22,7 @@ let [cpu, ram, tx, rx, disk] = [0, 0, 0, 0, 0];
 let [hidden, clicked, dockerEvents] = ['', false, ''];
 let metricsInterval, cardsInterval, graphsInterval;
 let cardList = '';
+app.locals.installCard = '';
 const statsArray = {};
 
 // Socket.io admin ui

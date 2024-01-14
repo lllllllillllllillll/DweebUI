@@ -5,5 +5,4 @@
 test
 .dockerignore
 .gitignore
-appdata
 docker-compose.yaml

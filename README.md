@@ -13,7 +13,7 @@ Alpha v0.20 ( :fire: Experimental :fire: )
 
 * This is a personal project I started to get more familiar with Javascript and Node.js.
 * Some UI elements are placeholders.
-* Please submit issues and post discussions so I know what features to focus on.
+* Please post issues and discussions so I know what bugs and features to focus on.
 * I probably should have waited a lot longer to share this :|
 
 <a href="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/dashboard1.png"><img src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/dashboard1.png" width="25%"/></a>
