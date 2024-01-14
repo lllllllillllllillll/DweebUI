@@ -1,4 +1,8 @@
-socket.on('connect', () => { console.log('connected'); });
+socket.on('connect', () => { 
+  console.log('connected'); 
+  //clear localStorage (because of code in old versions)
+  localStorage.clear();
+});
 
 // Server metrics
 const cpuText = document.getElementById('cpu-text');

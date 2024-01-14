@@ -3,32 +3,18 @@
   var defaultTheme = "dark";
   var selectedTheme;
 
-  (function (factory) {
-    typeof define === 'function' && define.amd ? define(factory) :
-    factory();
-  })((function () {
+  (function () {
     'use strict';
 
-    var params = new Proxy(new URLSearchParams(window.location.search), {
-      get: function get(searchParams, prop) {
-        return searchParams.get(prop);
-      }
-    });
-
-    if (!!params.theme) {
-      localStorage.setItem(themeStorageKey, params.theme);
-      selectedTheme = params.theme;
-    } else {
-      var storedTheme = localStorage.getItem(themeStorageKey);
-      selectedTheme = storedTheme ? storedTheme : defaultTheme;
-    }
+    var storedTheme = localStorage.getItem(themeStorageKey);
+    selectedTheme = storedTheme ? storedTheme : defaultTheme;
 
     if (selectedTheme === 'dark') {
       document.body.setAttribute("data-bs-theme", selectedTheme);
     } else {
       document.body.removeAttribute("data-bs-theme");
     }
-  }));
+  })();
 
   function toggleTheme(button) {
     if (button.value == 'dark-theme') {
@@ -49,7 +35,7 @@
     </button>
     <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
       <a href="#">
-        <img src="static/logo.svg" alt="DweebUI" title="DweebUI" class="navbar-brand-image">
+        <img src="/static/logo.svg" alt="DweebUI" title="DweebUI" class="navbar-brand-image">
       </a>
     </h1>
     <div class="navbar-nav flex-row order-md-last">
@@ -152,10 +138,10 @@
           </div>
         </a>
         <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-          <a href="#" class="dropdown-item">Status</a>
+          <!-- <a href="#" class="dropdown-item">Status</a> -->
           <a href="/account" class="dropdown-item">Account</a>
-          <a href="#" class="dropdown-item">Feedback</a>
-          <div class="dropdown-divider"></div>
+          <!-- <a href="#" class="dropdown-item">Feedback</a> -->
+          <!-- <div class="dropdown-divider"></div> -->
           <a href="/settings" class="dropdown-item">Settings</a>
           <a href="/logout" class="dropdown-item">Logout</a>
         </div>
@@ -216,6 +202,7 @@
             </a>
           </li>
 
+
           <li class="nav-item">
             <a class="nav-link" href="/apps">
               <span
@@ -263,18 +250,13 @@
             </a>
           </li>
 
-          
         </ul>
 
         <div class="my-2 my-md-0 flex-grow-1 flex-md-grow-0 order-first order-md-last">
-          <form action="/" method="get" autocomplete="off" novalidate>
-            <div class="input-icon">
-              <span class="input-icon-addon">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none" /> <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /> <path d="M21 21l-6 -6" /> </svg>
-              </span>
-              <input type="text" value="" class="form-control" placeholder="Search…" aria-label="Search in website">
-            </div>
-          </form>
+
+          <ul class="navbar-nav">
+            
+          </ul>
         </div>
 
       </div>

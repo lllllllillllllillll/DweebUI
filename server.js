@@ -22,12 +22,11 @@ let [cpu, ram, tx, rx, disk] = [0, 0, 0, 0, 0];
 let [hidden, clicked, dockerEvents] = ['', false, ''];
 let metricsInterval, cardsInterval, graphsInterval;
 let cardList = '';
-app.locals.installCard = '';
+app.locals.installCard = 'test';
 const statsArray = {};
 
 // Socket.io admin ui
 export const io = new Server(server, { 
-    connectionStateRecovery: {},
     cors: {
         origin: ['http://localhost:8000', 'https://admin.socket.io'],
         methods: ['GET', 'POST'],
@@ -233,40 +232,30 @@ io.on('connection', (socket) => {
         }, 1000);
 
 
-
         // Client input        
         socket.on('clicked', (data) => {
-            if (clicked == true) { return; } clicked = true;
             let { name, id, value } = data;
             console.log(`${sessionData.user} clicked: ${id} ${value} ${name}`);
+            if (clicked == true) { return; } clicked = true;
 
             // View container logs
             if (id == 'logs'){
                 function containerLogs (data) {
                     return new Promise((resolve, reject) => {
                         let logString = '';
-                
                         var options = {
                             follow: false,
                             stdout: true,
                             stderr: false,
                             timestamps: false
                         };
-                
                         var containerName = docker.getContainer(data);
-                
                         containerName.logs(options, function (err, stream) {
-                            if (err) {
-                                reject(err);
-                                return;
-                            }
-                
+                            if (err) { reject(err); return; }
                             const readableStream = Readable.from(stream);
-                
                             readableStream.on('data', function (chunk) {
                                 logString += chunk.toString('utf8');
                             });
-                
                             readableStream.on('end', function () {
                                 resolve(logString);
                             });
@@ -275,10 +264,7 @@ io.on('connection', (socket) => {
                 };
                 containerLogs(name).then((data) => {
                     socket.emit('logs', data);
-                }).catch((err) => {
-                    console.log(err);
                 });
-
             }
 
             // start, stop, pause, restart container

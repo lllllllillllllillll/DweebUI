@@ -9,6 +9,8 @@ import { containerCard } from "../components/containerCard.js";
 // This entire page hurts to look at. 
 export const Install = async (req, res) => {
 
+        console.log(req.app.locals.installCard);
+
         let data = req.body;
 
         let { service_name, name, image, command_check, command, net_mode, restart_policy } = data;        
@@ -176,8 +178,10 @@ export const Install = async (req, res) => {
 
                 (async () => {
                 await compose.pull();
-                await compose.up();
-                
+                await compose.up().then(() => {
+                    req.app.locals.installCard = 'empty';
+                    console.log(req.app.locals.installCard)
+                });
                 const syslog = await Syslog.create({
                     user: req.session.user,
                     email: null,
