@@ -1,5 +1,7 @@
 export const appCard = (data) => {
 
+
+  // dont look at anything in here.
   let app_name = data.name || data.title.toLowerCase();
   let shortened_name = "";
   let shortened_desc = data.description.slice(0, 60) + "...";

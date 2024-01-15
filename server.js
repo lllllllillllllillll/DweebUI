@@ -22,7 +22,6 @@ let [cpu, ram, tx, rx, disk] = [0, 0, 0, 0, 0];
 let [hidden, clicked, dockerEvents] = ['', false, ''];
 let metricsInterval, cardsInterval, graphsInterval;
 let cardList = '';
-app.locals.installCard = 'test';
 const statsArray = {};
 
 // Socket.io admin ui
@@ -184,10 +183,10 @@ docker.getEvents((err, stream) => {
 });
 
 // Check for docker events
-setInterval( () => {
+setInterval(async () => {
     if (dockerEvents != '') {
-        getHidden();
-        containerCards();
+        await getHidden();
+        await containerCards();
         dockerEvents = '';
     }
 }, 1000);

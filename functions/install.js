@@ -173,34 +173,31 @@ export const Install = async (req, res) => {
 
             } catch { console.log('error creating directory or compose file') }
 
-            try {
-                var compose = new DockerodeCompose(docker, `./appdata/${name}/docker-compose.yml`, `${name}`);
+            var compose = new DockerodeCompose(docker, `./appdata/${name}/docker-compose.yml`, `${name}`);
 
-                (async () => {
-                await compose.pull();
-                await compose.up().then(() => {
-                    req.app.locals.installCard = 'empty';
-                    console.log(req.app.locals.installCard)
-                });
-                const syslog = await Syslog.create({
-                    user: req.session.user,
-                    email: null,
-                    event: "App Installation",
-                    message: `${name} installed successfully`,
-                    ip: req.socket.remoteAddress
-                });
-                })();
-
-            } catch { 
-                const syslog = await Syslog.create({
-                    user: req.session.user,
-                    email: null,
-                    event: "App Installation",
-                    message: `${name} installation failed`,
-                    ip: req.socket.remoteAddress
-                });
-            }
-
+            (async () => {
+                try {
+                    await compose.pull();
+                    await compose.up().then(() => {
+                        const syslog = Syslog.create({
+                            user: req.session.user,
+                            email: null,
+                            event: "App Installation",
+                            message: `${name} installed successfully`,
+                            ip: req.socket.remoteAddress
+                        });
+                    });
+                } catch (err) {
+                    console.error(err);
+                    const syslog = await Syslog.create({
+                        user: req.session.user,
+                        email: null,
+                        event: "App Installation",
+                        message: `${name} installation failed: ${err}`,
+                        ip: req.socket.remoteAddress
+                    });
+                }
+            })();
         }
 
 

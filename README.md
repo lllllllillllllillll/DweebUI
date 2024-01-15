@@ -3,8 +3,8 @@ DweebUI is a web interface for managing Docker, with a zero-config dashboard for
 
 Alpha v0.20 ( :fire: Experimental :fire: )
 
-:warning: DweebUI is a management interface and should not be directly exposed to the internet:warning:   
-:warning: External access should be done through a VPN or secure SSH connection :warning:
+   
+[:warning: DweebUI is a management interface and should not be directly exposed to the internet :warning:](https://github.com/lllllllillllllillll/DweebUI/wiki/Exposing-DweebUI-to-the-Internet)
 
 [![GitHub Stars](https://img.shields.io/github/stars/lllllllillllllillll/DweebUI)](https://github.com/lllllllillllllillll)
 [![GitHub Activity](https://img.shields.io/github/commit-activity/y/lllllllillllllillll/DweebUI)](https://github.com/lllllllillllllillll)

@@ -17,7 +17,7 @@ export const Register = function(req,res){
 
 export const submitRegister = async function(req,res){
 
-    let { name, username, email, password, confirmPassword, avatar, tos, secret } = req.body;
+    let { name, username, email, password, confirmPassword, avatar, warning, secret } = req.body;
 
 
     if (secret != SECRET) {
@@ -30,7 +30,7 @@ export const submitRegister = async function(req,res){
         });
     }
 
-    if((name && email && password && confirmPassword && username && tos) && (secret == SECRET) && (password == confirmPassword)){
+    if((name && email && password && confirmPassword && username && warning) && (secret == SECRET) && (password == confirmPassword)){
 
         async function userRole () {
             let userCount = await User.count();
@@ -94,7 +94,7 @@ export const submitRegister = async function(req,res){
     } else {
         // Redirect to the signup page.
         res.render("register",{
-            "error":"Please fill in all the fields and accept TOS.",
+            "error":"Please fill in all the fields and acknowledge security warning.",
         });
     }
 }

@@ -1,7 +1,6 @@
 FROM node:21-alpine
 
 ENV NODE_ENV=production
-ENV DOCKER_BUILDKIT=1
 
 WORKDIR /app
 
