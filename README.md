@@ -1,5 +1,5 @@
 # DweebUI
-DweebUI is a web interface for managing Docker, with a zero-config dashboard for your containers.
+DweebUI is a web interface for managing Docker, with a zero-config dashboard for controlling and monitoring your containers.
 
 Alpha v0.20 ( :fire: Experimental :fire: )
 
@@ -12,7 +12,7 @@ Alpha v0.20 ( :fire: Experimental :fire: )
 [![GitHub License](https://img.shields.io/github/license/lllllllillllllillll/DweebUI)](https://github.com/lllllllillllllillll/DweebUI/blob/main/LICENSE)
 
 * This is a personal project I started to get more familiar with Javascript and Node.js.
-* Some UI elements are placeholders.
+* Some UI elements are placeholders and every version may have breaking changes.
 * Please post issues and discussions so I know what bugs and features to focus on.
 * I probably should have waited a lot longer to share this :|
 
