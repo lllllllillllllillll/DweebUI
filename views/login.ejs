@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>DweebUI - Login</title>
+    <!-- CSS files -->
+    <link href="/css/tabler.min.css" rel="stylesheet"/>
+    <link href="/css/demo.min.css" rel="stylesheet"/>
+    <style>
+      @import url('fonts/inter.css');
+      :root {
+        --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+      }
+      body {
+        font-feature-settings: "cv03", "cv04", "cv11";
+      }
+    </style>
+  </head>
+  <body  class=" d-flex flex-column">
+    <script src="/js/demo-theme.js"></script>
+    <div class="page page-center">
+      <div class="container container-tight py-4">
+        <div class="text-center mb-4">
+          <a href="." class="navbar-brand navbar-brand-autodark"><img src="/static/logo.svg" height="50" alt=""></a>
+        </div>
+        <div class="card card-md">
+          <div class="card-body">
+            <h2 class="h2 text-center mb-4">Login to your account</h2>
+            <form action="/login" method="POST" novalidate>
+
+                <% if(error) { %>
+                    <div class="alert alert-danger" role="alert">
+                        <%= error %>
+                    </div>
+                <% } %>
+
+              <div class="mb-2">
+                <label class="form-label">Email address</label>
+                <input type="email" class="form-control" id="email" name="email">
+              </div>
+              <div class="mb-2">
+                <label class="form-label">
+                  Password
+                </label>
+                <div class="input-group input-group-flat">
+                  <input type="password" class="form-control"  id="password" name="password" autocomplete="off">
+                </div>
+              </div>
+              <div class="mb-2 d-flex justify-content-between">
+                <label class="form-check">
+                  <input type="checkbox" class="form-check-input" checked=""/>
+                  <span class="form-check-label">
+                    Remember me
+                  </span>
+                </label>
+                <span>
+                  <a href="#">Forgot password</a>
+                </span>
+              </div>
+              <div class="form-footer">
+                <button type="submit" class="btn btn-primary w-100">Sign in</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="text-center text-muted mt-2">
+          Don't have account? <a href="/register" tabindex="-1">Register</a>
+        </div>
+      </div>
+    </div>
+    <!-- Libs JS -->
+    <!-- Tabler Core -->
+    <script src="/js/tabler.min.js" defer></script>
+    <script src="/js/demo.min.js" defer></script>
+  </body>
+</html>

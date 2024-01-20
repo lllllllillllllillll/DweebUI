@@ -2,7 +2,7 @@
 
 .meter {
     box-sizing: content-box;
-    height: 15px; /* Can be anything */
+    height: 15px;
     margin-left: auto;
     margin-right: auto;
     position: relative;

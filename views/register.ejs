@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>DweebUI - Register</title>
+    <!-- CSS files -->
+    <link href="/css/tabler.min.css" rel="stylesheet"/>
+    <link href="/css/demo.min.css" rel="stylesheet"/>
+    <style>
+      @import url('fonts/inter.css');
+      :root {
+        --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+      }
+      body {
+        font-feature-settings: "cv03", "cv04", "cv11";
+      }
+    </style>
+  </head>
+  <body  class=" d-flex flex-column">
+    <script src="/js/demo-theme.js"></script>
+    <div class="page page-center">
+
+      
+      <form class="container container-tight py-4" action="/register" method="POST" novalidate>
+        
+        <div class="text-center mb-4">
+          <a href="#" class="navbar-brand navbar-brand-autodark d-none"><img src="/static/logo.svg" height="36" alt=""></a>
+        </div>
+
+        <div class="card">
+          
+          <div class="card-body text-center py-4">
+            <h1 class="mt-1">Welcome to DweebUI</h1>
+            <p class="text-muted">Account information is stored in a local sqlite database.</p>
+
+            <% if(error) { %>
+              <div class="alert alert-danger" role="alert">
+                  <%= error %>
+              </div>
+            <% } %>
+
+          </div>
+          <div class="card-body">
+            
+
+            <div class="row row-cards">
+              <div class="col-sm-6 col-md-6">
+                <div class="mb-2">
+                  <label class="form-label">Name</label>
+                  <input type="text" class="form-control" id="name" name="name">
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-6">
+                <div class="mb-2">
+                  <label class="form-label">Username</label>
+                  <input type="text" class="form-control" id="username" name="username">
+                </div>
+              </div>
+            </div>
+            <div class="mb-2">
+              <label class="form-label">Email address</label>
+              <input type="email" class="form-control" id="email" name="email">
+            </div>
+            <div class="mb-2">
+              <label class="form-label">Password</label>
+              <div class="input-group input-group-flat">
+                <input type="password" class="form-control" id="password" name="password"  autocomplete="off">
+              </div>
+            </div>
+            <div class="mb-2">
+              <label class="form-label">Confirm Password</label>
+              <div class="input-group input-group-flat">
+                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword"  autocomplete="off">
+              </div>
+            </div>
+
+            <div class="mb-2">
+              <label class="form-label" title="Enter the value of 'SECRET' from the DweebUI docker-compose.yaml">SECRET</label>
+              <input type="text" class="form-control" id="secret" name="secret">
+            </div>
+
+            <div class="mb-2">
+              <label class="form-label">Avatar</label>
+              <div class="row g-2">
+                <div class="col-6 col-sm-3">
+                  <label class="form-imagecheck mb-2">
+                    <input name="avatar" type="radio" value="rus.jpg" class="form-imagecheck-input" checked/>
+                    <span class="form-imagecheck-figure">
+                      <img src="img/avatars/rus.jpg" alt="Rich Uncle Skeleton" title="Rich Uncle Skeleton" class="form-imagecheck-image" width="100px">
+                    </span>
+                  </label>
+                </div>
+                <div class="col-6 col-sm-3">
+                  <label class="form-imagecheck mb-2">
+                    <input name="avatar" type="radio" value="burns.jpg" class="form-imagecheck-input"/>
+                    <span class="form-imagecheck-figure">
+                      <img src="img/avatars/burns.jpg" alt="Montgomery Burns" title="Montgomery Burns" class="form-imagecheck-image" width="100px">
+                    </span>
+                  </label>
+                </div>
+                <div class="col-6 col-sm-3">
+                  <label class="form-imagecheck mb-2">
+                    <input name="avatar" type="radio" value="frank.jpg" class="form-imagecheck-input" />
+                    <span class="form-imagecheck-figure">
+                      <img src="img/avatars/frank.jpg" alt="Frank Grimes" title= "Frank Grimes" class="form-imagecheck-image" width="100px">
+                    </span>
+                  </label>
+                </div>
+                <div class="col-6 col-sm-3">
+                  <label class="form-imagecheck mb-2">
+                    <input name="avatar" type="radio" value="moe.jpg" class="form-imagecheck-input"/>
+                    <span class="form-imagecheck-figure">
+                      <img src="img/avatars/moe.jpg" alt="Moe Szyslak" title="Moe Szyslak" class="form-imagecheck-image" width="100px">
+                    </span>
+                  </label>
+                </div>
+                <div class="col-6 col-sm-3">
+                  <label class="form-imagecheck mb-2">
+                    <input name="avatar" type="radio" value="poochie.jpg" class="form-imagecheck-input" />
+                    <span class="form-imagecheck-figure">
+                      <img src="img/avatars/poochie.jpg" alt="Poochie" title="Poochie" class="form-imagecheck-image" width="100px">
+                    </span>
+                  </label>
+                </div>
+                <div class="col-6 col-sm-3">
+                  <label class="form-imagecheck mb-2">
+                    <input name="avatar" type="radio" value="skinner.jpg" class="form-imagecheck-input" />
+                    <span class="form-imagecheck-figure">
+                      <img src="img/avatars/skinner.jpg" alt="Seymour Skinner" title="Seymour Skinner" class="form-imagecheck-image" width="100px">
+                    </span>
+                  </label>
+                </div>
+                <div class="col-6 col-sm-3">
+                  <label class="form-imagecheck mb-2">
+                    <input name="avatar" type="radio" value="moleman.png" class="form-imagecheck-input" />
+                    <span class="form-imagecheck-figure">
+                      <img src="img/avatars/moleman.png" alt="Hans Moleman" title="Hans Moleman" class="form-imagecheck-image" width="100px">
+                    </span>
+                  </label>
+                </div>
+                <div class="col-6 col-sm-3">
+                  <label class="form-imagecheck mb-2">
+                    <input name="avatar" type="radio" value="duffman.png" class="form-imagecheck-input" />
+                    <span class="form-imagecheck-figure">
+                      <img src="img/avatars/duffman.png" alt="Duffman" title="Duffman" class="form-imagecheck-image" width="100px">
+                    </span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-2">
+              <label class="form-check">
+                <input type="checkbox" class="form-check-input" name="warning"/>
+                <span class="form-check-label">
+                  I understand that<a href="https://github.com/lllllllillllllillll/DweebUI/wiki/Exposing-DweebUI-to-the-Internet"> exposing DweebUI directly to the internet</a> is a bad idea.
+                </span>
+              </label>
+            </div>
+
+          </div>
+        </div>
+        
+        
+        <div class="row align-items-center mt-2">
+          
+          <div class="col">
+            <a href="/login">Login</a>
+          </div>
+
+          <div class="col">
+            <div class="btn-list justify-content-end">
+
+              <div class="d-none d-md-flex">
+                
+                <a href="?theme=dark" class="nav-link px-0 hide-theme-dark" title="Enable dark mode" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                  <!-- Download SVG icon from http://tabler-icons.io/i/moon -->
+                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" /></svg>
+                </a>
+                <a href="?theme=light" class="nav-link px-0 hide-theme-light" title="Enable light mode" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                  <!-- Download SVG icon from http://tabler-icons.io/i/sun -->
+                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" /></svg>
+                </a>
+              </div>
+
+              <button type="submit" class="btn btn-primary">Install</button>
+              
+            </div>
+          </div>
+        </div>
+
+
+      </form>
+    </div>
+    <!-- Libs JS -->
+    <!-- Tabler Core -->
+    <script src="/js/tabler.min.js" defer></script>
+    <script src="/js/demo.min.js" defer></script>
+  </body>
+</html>

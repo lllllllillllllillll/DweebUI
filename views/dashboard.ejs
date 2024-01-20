@@ -1,0 +1,1011 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>DweebUI - Dashboard</title>
+    <!-- CSS files -->
+    <link href="/css/tabler.min.css" rel="stylesheet"/>
+    <link href="/css/meters.css" rel="stylesheet"/>
+    <style>
+      @import url('/fonts/inter.css');
+      :root {
+        --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+      }
+      body {
+        font-feature-settings: "cv03", "cv04", "cv11";
+      }
+    </style>
+  </head>
+  <body >
+  <div class="page">
+
+    <%- include('navbar.ejs') %>
+    <div class="page-wrapper">
+
+      <div class="page-body">
+        <div class="container-xl">
+          <div class="row row-deck row-cards">
+            
+            <div class="col-12" id="cards">
+              <div class="row row-cards">
+                
+                <div class="col-sm-6 col-lg-3">
+                  <div class="card card-sm">
+                    <div class="card-body">
+                      <div class="row align-items-center">
+                        <div class="col-auto">
+                          <span class="bg-primary text-white avatar">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-cpu" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M5 5m0 1a1 1 0 0 1 1 -1h12a1 1 0 0 1 1 1v12a1 1 0 0 1 -1 1h-12a1 1 0 0 1 -1 -1z"></path><path d="M9 9h6v6h-6z"></path><path d="M3 10h2"></path><path d="M3 14h2"></path><path d="M10 3v2"></path><path d="M14 3v2"></path><path d="M21 10h-2"></path><path d="M21 14h-2"></path><path d="M14 21v-2"></path><path d="M10 21v-2"></path></svg>
+                          </span>
+                        </div>
+                        <div class="col">
+                          <div class="font-weight-medium">
+                            <label id="cpu-text" class="cpu-text mb-1" for="cpu">CPU 0%</label>
+                          </div>
+                          <div id="cpu-bar" class="cpu-bar meter animate">
+                            <span style="width: 25%"><span></span></span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-3">
+                  <div class="card card-sm">
+                    <div class="card-body">
+                      <div class="row align-items-center">
+                        <div class="col-auto">
+                          <span class="bg-green text-white avatar">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-container" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M20 4v.01"></path> <path d="M20 20v.01"></path> <path d="M20 16v.01"></path> <path d="M20 12v.01"></path> <path d="M20 8v.01"></path> <path d="M8 4m0 1a1 1 0 0 1 1 -1h6a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1h-6a1 1 0 0 1 -1 -1z"></path> <path d="M4 4v.01"></path> <path d="M4 20v.01"></path> <path d="M4 16v.01"></path> <path d="M4 12v.01"></path> <path d="M4 8v.01"></path> </svg>                            
+                          </span>
+                        </div>
+                        <div class="col">
+                          <div class="font-weight-medium">
+                            <label id="ram-text" class="ram-text mb-1" for="ram">RAM 0%</label>
+                          </div>
+                          <div id="ram-bar" class="ram-bar meter animate orange">
+                            <span style="width: 25%"><span></span></span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="col-sm-6 col-lg-3">
+                  <div class="card card-sm">
+                    <div class="card-body">
+                      <div class="row align-items-center">
+                        <div class="col-auto">
+                          <span class="bg-twitter text-white avatar">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrows-left-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M21 17l-18 0"></path> <path d="M6 10l-3 -3l3 -3"></path> <path d="M3 7l18 0"></path> <path d="M18 20l3 -3l-3 -3"></path> </svg>                            
+                          </span>
+                        </div>
+                        <div class="col">
+                          <div class="font-weight-medium">
+                            <label id="net-text" class="net-text mb-1" for="network">Down: 0MB  Up: 0MB</label>
+                          </div>
+                          <div id="net-bar" class="meter animate blue">
+                            <span style="width: 25%"><span></span></span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-3">
+                  <div class="card card-sm">
+                    <div class="card-body">
+                      <div class="row align-items-center">
+                        <div class="col-auto">
+                          <span class="bg-facebook text-white avatar">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-database" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M12 6m-8 0a8 3 0 1 0 16 0a8 3 0 1 0 -16 0"></path> <path d="M4 6v6a8 3 0 0 0 16 0v-6"></path> <path d="M4 12v6a8 3 0 0 0 16 0v-6"></path></svg>
+                          </span>
+                        </div>
+                        <div class="col">
+                          <div class="font-weight-medium">
+                            <label id="disk-text" class="disk-text mb-1" for="disk">DISK 0%</label>
+                          </div>
+                          <div id="disk-bar" class="meter animate red">
+                            <span style="width: 25%"><span></span></span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+              </div>
+            </div>
+
+
+            <!-- containerCards get inserted here from public/js/main.js -->
+            
+            <div class="modal modal-blur fade" id="details_modal" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title">${name}</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                    
+                            
+                            <div class="modal-body">
+                              
+                            <pre class="text-secondary">note</pre>
+                            
+                              <form action="" id="details_modal" method="POST">
+                              
+                              <div class="row mb-3 align-items-end">
+                                
+                                <div class="col-lg-6">
+                                  <label class="form-label">Container Name: </label>
+                                  <input type="text" class="form-control" name="service_name" value="${app_name}" hidden/>
+                                  <input type="text" class="form-control" name="name" value="${app_name}"/>
+                                </div>
+                                <div class="col-lg-3">
+                                  <label class="form-label">Image: </label>
+                                  <input type="text" class="form-control" name="image" value="${image}"/>
+                                </div>
+                                <div class="col-lg-3">
+                                  <label class="form-label">Restart Policy: </label>
+                                  <select class="form-select" name="restart_policy" value="${restart_policy}">
+                                    <option value="1">unless-stopped</option>
+                                    <option value="2">on-failure</option>
+                                    <option value="3">never</option>
+                                    <option value="4">always</option>
+                                  </select>
+                                </div>
+                              </div>
+                    
+                              <label class="form-label">Network Mode</label>
+                                <div class="form-selectgroup-boxes row mb-3">
+                                  <div class="col">
+                                    <label class="form-selectgroup-item">
+                                      <input type="radio" name="report-type" value="1" class="form-selectgroup-input">
+                                      <span class="form-selectgroup-label d-flex align-items-center p-3">
+                                        <span class="me-3">
+                                          <span class="form-selectgroup-check"></span>
+                                        </span>
+                                        <span class="form-selectgroup-label-content">
+                                          <span class="form-selectgroup-title strong mb-1">Host Network</span>
+                                          <span class="d-block text-secondary">Same as host. No isolation. ex.127.0.0.1</span>
+                                        </span>
+                                      </span>
+                                    </label>
+                                  </div>
+                                  <div class="col">
+                                    <label class="form-selectgroup-item">
+                                      <input type="radio" name="report-type" class="form-selectgroup-input">
+                                      <span class="form-selectgroup-label d-flex align-items-center p-3">
+                                        <span class="me-3">
+                                          <span class="form-selectgroup-check"></span>
+                                        </span>
+                                        <span class="form-selectgroup-label-content">
+                                          <span class="form-selectgroup-title strong mb-1">Bridge Network</span>
+                                          <span class="d-block text-secondary">Containers can communicate using names.</span>
+                                        </span>
+                                      </span>
+                                    </label>
+                                  </div>
+                                  <div class="col">
+                                  <label class="form-selectgroup-item">
+                                    <input type="radio" name="report-type" class="form-selectgroup-input">
+                                    <span class="form-selectgroup-label d-flex align-items-center p-3">
+                                      <span class="me-3">
+                                        <span class="form-selectgroup-check"></span>
+                                      </span>
+                                      <span class="form-selectgroup-label-content">
+                                        <span class="form-selectgroup-title strong mb-1">Docker Network</span>
+                                        <span class="d-block text-secondary">Isolated on the docker network. ex.172.0.34.2</span>
+                                      </span>
+                                    </span>
+                                  </label>
+                                </div>
+                              </div>
+        
+        
+        
+        
+                    
+                              <div class="accordion" id="details_accordion">
+                                <div class="accordion-item">
+                                  <h2 class="accordion-header" id="heading-1">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-1" aria-expanded="false">
+                                      Ports
+                                    </button>
+                                  </h2>
+                                  <div id="collapse-1" class="accordion-collapse collapse" data-bs-parent="#details_accordion">
+                                    <div class="accordion-body pt-0">
+                    
+        
+                                      <div class="row mb-1 align-items-end">
+                                        <div class="col-auto">
+                                          <input class="form-check-input" name="port_0_check" type="checkbox" ${ports_data[0].check}>
+                                        </div>
+                                        <div class="col">
+                                          <label class="form-label">External Port</label>
+                                          <input type="text" class="form-control" name="port_0_external" value="${ports_data[0].external}"/>
+                                        </div>
+                                        <div class="col">
+                                          <label class="form-label">Internal Port</label>
+                                          <input type="text" class="form-control" name="port_0_internal" value="${ports_data[0].internal}"/>
+                                        </div>
+                                        <div class="col-lg-2">
+                                          <label class="form-label">Protocol</label>
+                                          <select class="form-select" name="port_0_protocol">
+                                            <option value="${ports_data[0].protocol}" selected hidden>${ports_data[0].protocol}</option>
+                                            <option value="tcp">tcp</option>
+                                            <option value="udp">udp</option>
+                                          </select>
+                                        </div>
+                                      </div>
+                    
+                                      <div class="row mb-1 align-items-end">
+                                        <div class="col-auto">
+                                          <input class="form-check-input" name="port_1_check" type="checkbox" ${ports_data[1].check}>
+                                        </div>
+                                        <div class="col">
+                                          <input type="text" class="form-control" name="port_1_external" value="${ports_data[1].external}"/>
+                                        </div>
+                                        <div class="col">
+                                          <input type="text" class="form-control" name="port_1_internal" value="${ports_data[1].internal}"/>
+                                        </div>
+                                        <div class="col-lg-2">
+                                          <select class="form-select" name="port_1_protocol">
+                                            <option value="${ports_data[1].protocol}" selected hidden>${ports_data[1].protocol}</option>
+                                            <option value="tcp">tcp</option>
+                                            <option value="udp">udp</option>
+                                          </select>
+                                        </div>
+                                      </div>
+                    
+                                      <div class="row mb-1 align-items-end">
+                                        <div class="col-auto">
+                                          <input class="form-check-input" name="port_2_check" type="checkbox" ${ports_data[2].check}>
+                                        </div>
+                                        <div class="col">
+                                          <input type="text" class="form-control" name="port_2_external" value="${ports_data[2].external}"/>
+                                        </div>
+                                        <div class="col">
+                                          <input type="text" class="form-control" name="port_2_internal" value="${ports_data[2].internal}"/>
+                                        </div>
+                                        <div class="col-lg-2">
+                                          <select class="form-select" name="port_2_protocol">
+                                            <option value="${ports_data[2].protocol}" selected hidden>${ports_data[2].protocol}</option>
+                                            <option value="tcp">tcp</option>
+                                            <option value="udp">udp</option>
+                                          </select>
+                                        </div>
+                                      </div>
+                    
+                                      <div class="row mb-1 align-items-end">
+                                        <div class="col-auto">
+                                          <input class="form-check-input" name="port_3_check" type="checkbox" ${ports_data[3].check}>
+                                        </div>
+                                        <div class="col">
+                                          <input type="text" class="form-control" name="port_3_external" value="${ports_data[3].external}"/>
+                                        </div>
+                                        <div class="col">
+                                          <input type="text" class="form-control" name="port_3_internal" value="${ports_data[3].internal}"/>
+                                        </div>
+                                        <div class="col-lg-2">
+                                          <select class="form-select" name="port_3_protocol">
+                                            <option value="${ports_data[3].protocol}" selected hidden>${ports_data[3].protocol}</option>
+                                            <option value="tcp">tcp</option>
+                                            <option value="udp">udp</option>
+                                          </select>
+                                        </div>
+                                      </div>
+                    
+                                      <div class="row mb-1 align-items-end">
+                                        <div class="col-auto">
+                                          <input class="form-check-input" name="port_4_check" type="checkbox" ${ports_data[4].check}>
+                                        </div>
+                                        <div class="col">
+                                          <input type="text" class="form-control" name="port_4_external" value="${ports_data[4].external}"/>
+                                        </div>
+                                        <div class="col">
+                                          <input type="text" class="form-control" name="port_4_internal" value="${ports_data[4].internal}"/>
+                                        </div>
+                                        <div class="col-lg-2">
+                                          <select class="form-select" name="port_4_protocol">
+                                            <option value="${ports_data[4].protocol}" selected hidden>${ports_data[4].protocol}</option>
+                                            <option value="tcp">tcp</option>
+                                            <option value="udp">udp</option>
+                                          </select>
+                                        </div>
+                                      </div>
+                    
+                                      <div class="row mb-1 align-items-end">
+                                        <div class="col-auto">
+                                          <input class="form-check-input" name="port_5_check" type="checkbox" ${ports_data[5].check}>
+                                        </div>
+                                        <div class="col">
+                                          <input type="text" class="form-control" name="port_5_external" value="${ports_data[5].external}"/>
+                                        </div>
+                                        <div class="col">
+                                          <input type="text" class="form-control" name="port_5_internal" value="${ports_data[5].internal}"/>
+                                        </div>
+                                        <div class="col-lg-2">
+                                          <select class="form-select" name="port_5_protocol">
+                                            <option value="${ports_data[5].protocol}" selected hidden>${ports_data[5].protocol}</option>
+                                            <option value="tcp">tcp</option>
+                                            <option value="udp">udp</option>
+                                          </select>
+                                        </div>
+                                      </div>
+                    
+                    
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="accordion-item">
+                                  <h2 class="accordion-header" id="heading-2">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-2" aria-expanded="false">
+                                      Volumes
+                                    </button>
+                                  </h2>
+                                  <div id="collapse-2" class="accordion-collapse collapse" data-bs-parent="#details_accordion">
+                                    <div class="accordion-body pt-0">
+                    
+                    
+                                    <div class="row mb-1 align-items-end">
+                                    <div class="col-auto">
+                                      <input class="form-check-input" name="volume_0_check" type="checkbox" ${volumes_data[0].check}>
+                                    </div>
+                                    <div class="col">
+                                      <input type="text" class="form-control" name="volume_0_bind" value="${volumes_data[0].bind}"/>
+                                    </div>
+                                    <div class="col">
+                                      <input type="text" class="form-control" name="volume_0_container" value="${volumes_data[0].container}"/>
+                                    </div>
+                                    <div class="col-lg-2">
+                                      <select class="form-select" name="volume_0_readwrite">
+                                        <option value="${volumes_data[0].readwrite}" selected hidden>${volumes_data[0].readwrite}</option>
+                                        <option value="rw">rw</option>
+                                        <option value="ro">ro</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                    
+                                  <div class="row mb-1 align-items-end">
+                                    <div class="col-auto">
+                                      <input class="form-check-input" name="volume_1_check" type="checkbox" ${volumes_data[1].check}>
+                                    </div>
+                                    <div class="col">
+                                      <input type="text" class="form-control" name="volume_1_bind" value="${volumes_data[1].bind}"/>
+                                    </div>
+                                    <div class="col">
+                                      <input type="text" class="form-control" name="volume_1_container" value="${volumes_data[1].container}"/>
+                                    </div>
+                                    <div class="col-lg-2">
+                                      <select class="form-select" name="volume_1_readwrite">
+                                        <option value="${volumes_data[1].readwrite}" selected hidden>${volumes_data[1].readwrite}</option>
+                                        <option value="rw">rw</option>
+                                        <option value="ro">ro</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                    
+                                  <div class="row mb-1 align-items-end">
+                                    <div class="col-auto">
+                                      <input class="form-check-input" name="volume_2_check" type="checkbox" ${volumes_data[2].check}>
+                                    </div>
+                                    <div class="col">
+                                      <input type="text" class="form-control" name="volume_2_bind" value="${volumes_data[2].bind}"/>
+                                    </div>
+                                    <div class="col">
+                                      <input type="text" class="form-control" name="volume_2_container" value="${volumes_data[2].container}"/>
+                                    </div>
+                                    <div class="col-lg-2">
+                                      <select class="form-select" name="volume_2_readwrite">
+                                        <option value="${volumes_data[2].readwrite}" selected hidden>${volumes_data[2].readwrite}</option>
+                                        <option value="rw">rw</option>
+                                        <option value="ro">ro</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                    
+                                  <div class="row mb-1 align-items-end">
+                                    <div class="col-auto">
+                                      <input class="form-check-input" name="volume_3_check" type="checkbox" ${volumes_data[3].check}>
+                                    </div>
+                                    <div class="col">
+                                      <input type="text" class="form-control" name="volume_3_bind" value="${volumes_data[3].bind}"/>
+                                    </div>
+                                    <div class="col">
+                                      <input type="text" class="form-control" name="volume_3_container" value="${volumes_data[3].container}"/>
+                                    </div>
+                                    <div class="col-lg-2">
+                                      <select class="form-select" name="volume_3_readwrite">
+                                        <option value="${volumes_data[3].readwrite}" selected hidden>${volumes_data[3].readwrite}</option>
+                                        <option value="rw">rw</option>
+                                        <option value="ro">ro</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                    
+                                  <div class="row mb-1 align-items-end">
+                                    <div class="col-auto">
+                                      <input class="form-check-input" name="volume_4_check" type="checkbox" ${volumes_data[4].check}>
+                                    </div>
+                                    <div class="col">
+                                      <input type="text" class="form-control" name="volume_4_bind" value="${volumes_data[4].bind}"/>
+                                    </div>
+                                    <div class="col">
+                                      <input type="text" class="form-control" name="volume_4_container" value="${volumes_data[4].container}"/>
+                                    </div>
+                                    <div class="col-lg-2">
+                                      <select class="form-select" name="volume_4_readwrite">
+                                        <option value="${volumes_data[4].readwrite}" selected hidden>${volumes_data[4].readwrite}</option>
+                                        <option value="rw">rw</option>
+                                        <option value="ro">ro</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                    
+                                  <div class="row mb-1 align-items-end">
+                                  <div class="col-auto">
+                                    <input class="form-check-input" name="volume_5_check" type="checkbox" ${volumes_data[5].check}>
+                                  </div>
+                                  <div class="col">
+                                    <input type="text" class="form-control" name="volume_5_bind" value="${volumes_data[5].bind}"/>
+                                  </div>
+                                  <div class="col">
+                                    <input type="text" class="form-control" name="volume_5_container" value="${volumes_data[5].container}"/>
+                                  </div>
+                                  <div class="col-lg-2">
+                                    <select class="form-select" name="volume_5_readwrite">
+                                      <option value="${volumes_data[5].readwrite}" selected hidden>${volumes_data[5].readwrite}</option>
+                                      <option value="rw">rw</option>
+                                      <option value="ro">ro</option>
+                                    </select>
+                                  </div>
+                                </div>
+                    
+                    
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="accordion-item">
+                                  <h2 class="accordion-header" id="heading-3">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-3" aria-expanded="false">
+                                      Environment Variables
+                                    </button>
+                                  </h2>
+                                  <div id="collapse-3" class="accordion-collapse collapse" data-bs-parent="#details_accordion">
+                                    <div class="accordion-body pt-0">
+                    
+                    
+                                      <div class="row mb-1 align-items-end">
+                                        <div class="col-auto">
+                                          <input class="form-check-input" type="checkbox" name="env_0_check" ${env_data[0].check}>
+                                        </div>
+                                        <div class="col">
+                                          <label class="form-label">Variable</label>
+                                          <input type="text" class="form-control" name="env_0_name" value="${env_data[0].name}"/>
+                                        </div>
+                                        <div class="col">
+                                          <label class="form-label">Value</label>
+                                          <input type="text" class="form-control" name="env_0_default" value="${env_data[0].default}"/>
+                                        </div>
+                                      </div>
+                    
+                                      <div class="row mb-1 align-items-end">
+                                        <div class="col-auto">
+                                          <input class="form-check-input" type="checkbox" name="env_1_check" ${env_data[1].check}>
+                                        </div>
+                                        <div class="col">
+                                          <input type="text" class="form-control" name="env_1_name" value="${env_data[1].name}"/>
+                                        </div>
+                                        <div class="col">
+                                          <input type="text" class="form-control" name="env_1_default" value="${env_data[1].default}"/>
+                                        </div>
+                                      </div>
+                    
+                                      <div class="row mb-1 align-items-end">
+                                        <div class="col-auto">
+                                          <input class="form-check-input" type="checkbox" name="env_2_check" ${env_data[2].check}>
+                                        </div>
+                                        <div class="col">
+                                          <input type="text" class="form-control" name="env_2_name" value="${env_data[2].name}"/>
+                                        </div>
+                                        <div class="col">
+                                          <input type="text" class="form-control" name="env_2_default" value="${env_data[2].default}"/>
+                                        </div>
+                                      </div>
+                    
+                                      <div class="row mb-1 align-items-end">
+                                        <div class="col-auto">
+                                          <input class="form-check-input" type="checkbox" name="env_3_check" ${env_data[3].check}>
+                                        </div>
+                                        <div class="col">
+                                          <input type="text" class="form-control" name="env_3_name" value="${env_data[3].name}"/>
+                                        </div>
+                                        <div class="col">
+                                          <input type="text" class="form-control" name="env_3_default" value="${env_data[3].default}"/>
+                                        </div>
+                                      </div>
+                    
+                                      <div class="row mb-1 align-items-end">
+                                        <div class="col-auto">
+                                          <input class="form-check-input" type="checkbox" name="env_4_check" ${env_data[4].check}>
+                                        </div>
+                                        <div class="col">
+                                          <input type="text" class="form-control" name="env_4_name" value="${env_data[4].name}"/>
+                                        </div>
+                                        <div class="col">
+                                          <input type="text" class="form-control" name="env_4_default" value="${env_data[4].default}"/>
+                                        </div>
+                                      </div>
+                    
+                                      <div class="row mb-1 align-items-end">
+                                        <div class="col-auto">
+                                          <input class="form-check-input" type="checkbox" name="env_5_check" ${env_data[5].check}>
+                                        </div>
+                                        <div class="col">
+                                          <input type="text" class="form-control" name="env_5_name" value="${env_data[5].name}"/>
+                                        </div>
+                                        <div class="col">
+                                          <input type="text" class="form-control" name="env_5_default" value="${env_data[5].default}"/>
+                                        </div>
+                                      </div>
+                    
+                                      <div class="row mb-1 align-items-end">
+                                        <div class="col-auto">
+                                          <input class="form-check-input" type="checkbox" name="env_6_check" ${env_data[6].check}>
+                                        </div>
+                                        <div class="col">
+                                          <input type="text" class="form-control" name="env_6_name" value="${env_data[6].name}"/>
+                                        </div>
+                                        <div class="col">
+                                          <input type="text" class="form-control" name="env_6_default" value="${env_data[6].default}"/>
+                                        </div>
+                                      </div>
+                    
+                    
+                                      <div class="row mb-1 align-items-end">
+                                        <div class="col-auto">
+                                          <input class="form-check-input" type="checkbox" name="env_7_check" ${env_data[7].check}>
+                                        </div>
+                                        <div class="col">
+                                          <input type="text" class="form-control" name="env_7_name" value="${env_data[7].name}"/>
+                                        </div>
+                                        <div class="col">
+                                          <input type="text" class="form-control" name="env_7_default" value="${env_data[7].default}"/>
+                                        </div>
+                                      </div>
+                    
+                    
+                                      <div class="row mb-1 align-items-end">
+                                        <div class="col-auto">
+                                          <input class="form-check-input" type="checkbox" name="env_8_check" ${env_data[8].check}>
+                                        </div>
+                                        <div class="col">
+                                          <input type="text" class="form-control" name="env_8_name" value="${env_data[8].name}"/>
+                                        </div>
+                                        <div class="col">
+                                          <input type="text" class="form-control" name="env_8_default" value="${env_data[8].default}"/>
+                                        </div>
+                                      </div>
+                    
+                    
+                                      <div class="row mb-1 align-items-end">
+                                        <div class="col-auto">
+                                          <input class="form-check-input" type="checkbox" name="env_9_check" ${env_data[9].check}>
+                                        </div>
+                                        <div class="col">
+                                          <input type="text" class="form-control" name="env_9_name" value="${env_data[9].name}"/>
+                                        </div>
+                                        <div class="col">
+                                          <input type="text" class="form-control" name="env_9_default" value="${env_data[9].default}"/>
+                                        </div>
+                                      </div>
+                    
+                    
+                                      <div class="row mb-1 align-items-end">
+                                        <div class="col-auto">
+                                          <input class="form-check-input" type="checkbox" name="env_10_check" ${env_data[10].check}>
+                                        </div>
+                                        <div class="col">
+                                          <input type="text" class="form-control" name="env_10_name" value="${env_data[10].name}"/>
+                                        </div>
+                                        <div class="col">
+                                          <input type="text" class="form-control" name="env_10_default" value="${env_data[10].default}"/>
+                                        </div>
+                                      </div>
+                    
+                    
+                                      <div class="row mb-1 align-items-end">
+                                        <div class="col-auto">
+                                          <input class="form-check-input" type="checkbox" name="env_11_check" ${env_data[11].check}>
+                                        </div>
+                                        <div class="col">
+                                          <input type="text" class="form-control" name="env_11_name" value="${env_data[11].name}"/>
+                                        </div>
+                                        <div class="col">
+                                          <input type="text" class="form-control" name="env_11_default" value="${env_data[11].default}"/>
+                                        </div>
+                                      </div>
+                    
+                    
+                    
+                    
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="accordion-item">
+                                  <h2 class="accordion-header" id="heading-4">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-4" aria-expanded="false">
+                                      Labels
+                                    </button>
+                                  </h2>
+                                  <div id="collapse-4" class="accordion-collapse collapse" data-bs-parent="#details_accordion">
+                                    <div class="accordion-body pt-0">
+                    
+                    
+                                    <div class="row mb-1 align-items-end">
+                                      <div class="col-auto">
+                                        <input class="form-check-input" type="checkbox" name="label_0_check" ${label_data[0].check}>
+                                      </div>
+                                      <div class="col">
+                                        <label class="form-label">Variable</label>
+                                        <input type="text" class="form-control" name="label_0_name" value="${label_data[0].name}"/>
+                                      </div>
+                                      <div class="col">
+                                        <label class="form-label">Value</label>
+                                        <input type="text" class="form-control" name="label_0_value" value="${label_data[0].value}"/>
+                                      </div>
+                                    </div>
+                    
+                                    <div class="row mb-1 align-items-end">
+                                      <div class="col-auto">
+                                        <input class="form-check-input" type="checkbox" name="label_1_check" ${label_data[1].check}>
+                                      </div>
+                                      <div class="col">
+                                        <input type="text" class="form-control" name="label_1_name" value="${label_data[1].name}"/>
+                                      </div>
+                                      <div class="col">
+                                        <input type="text" class="form-control" name="label_1_value" value="${label_data[1].value}"/>
+                                      </div>
+                                    </div>
+                    
+                                      
+                                    <div class="row mb-1 align-items-end">
+                                      <div class="col-auto">
+                                        <input class="form-check-input" type="checkbox" name="label_2_check" ${label_data[2].check}>
+                                      </div>
+                                      <div class="col">
+                                        <input type="text" class="form-control" name="label_2_name" value="${label_data[2].name}"/>
+                                      </div>
+                                      <div class="col">
+                                        <input type="text" class="form-control" name="label_2_value" value="${label_data[2].value}"/>
+                                      </div>
+                                    </div>
+                    
+                                    <div class="row mb-1 align-items-end">
+                                      <div class="col-auto">
+                                        <input class="form-check-input" type="checkbox" name="label_3_check" ${label_data[3].check}>
+                                      </div>
+                                      <div class="col">
+                                        <input type="text" class="form-control" name="label_3_name" value="${label_data[3].name}"/>
+                                      </div>
+                                      <div class="col">
+                                        <input type="text" class="form-control" name="label_3_value" value="${label_data[3].value}"/>
+                                      </div>
+                                    </div>
+                    
+                                    <div class="row mb-1 align-items-end">
+                                      <div class="col-auto">
+                                        <input class="form-check-input" type="checkbox" name="label_4_check" ${label_data[4].check}>
+                                      </div>
+                                      <div class="col">
+                                        <input type="text" class="form-control" name="label_4_name" value="${label_data[4].name}"/>
+                                      </div>
+                                      <div class="col">
+                                        <input type="text" class="form-control" name="label_4_value" value="${label_data[4].value}"/>
+                                      </div>
+                                    </div>
+        
+                                    <div class="row mb-1 align-items-end">
+                                      <div class="col-auto">
+                                        <input class="form-check-input" type="checkbox" name="label_5_check" ${label_data[5].check}>
+                                      </div>
+                                      <div class="col">
+                                        <input type="text" class="form-control" name="label_5_name" value="${label_data[5].name}"/>
+                                      </div>
+                                      <div class="col">
+                                        <input type="text" class="form-control" name="label_5_value" value="${label_data[5].value}"/>
+                                      </div>
+                                    </div>
+        
+                                    <div class="row mb-1 align-items-end">
+                                      <div class="col-auto">
+                                        <input class="form-check-input" type="checkbox" name="label_6_check" ${label_data[6].check}>
+                                      </div>
+                                      <div class="col">
+                                        <input type="text" class="form-control" name="label_6_name" value="${label_data[6].name}"/>
+                                      </div>
+                                      <div class="col">
+                                        <input type="text" class="form-control" name="label_6_value" value="${label_data[6].value}"/>
+                                      </div>
+                                    </div>
+        
+                                    <div class="row mb-1 align-items-end">
+                                      <div class="col-auto">
+                                        <input class="form-check-input" type="checkbox" name="label_7_check" ${label_data[7].check}>
+                                      </div>
+                                      <div class="col">
+                                        <input type="text" class="form-control" name="label_7_name" value="${label_data[7].name}"/>
+                                      </div>
+                                      <div class="col">
+                                        <input type="text" class="form-control" name="label_7_value" value="${label_data[7].value}"/>
+                                      </div>
+                                    </div>
+        
+                                    <div class="row mb-1 align-items-end">
+                                      <div class="col-auto">
+                                        <input class="form-check-input" type="checkbox" name="label_8_check" ${label_data[8].check}>
+                                      </div>
+                                      <div class="col">
+                                        <input type="text" class="form-control" name="label_8_name" value="${label_data[8].name}"/>
+                                      </div>
+                                      <div class="col">
+                                        <input type="text" class="form-control" name="label_8_value" value="${label_data[8].value}"/>
+                                      </div>
+                                    </div>
+        
+                                    <div class="row mb-1 align-items-end">
+                                      <div class="col-auto">
+                                        <input class="form-check-input" type="checkbox" name="label_9_check" ${label_data[9].check}>
+                                      </div>
+                                      <div class="col">
+                                        <input type="text" class="form-control" name="label_9_name" value="${label_data[9].name}"/>
+                                      </div>
+                                      <div class="col">
+                                        <input type="text" class="form-control" name="label_9_value" value="${label_data[9].value}"/>
+                                      </div>
+                                    </div>
+        
+                                    <div class="row mb-1 align-items-end">
+                                      <div class="col-auto">
+                                        <input class="form-check-input" type="checkbox" name="label_10_check" ${label_data[10].check}>
+                                      </div>
+                                      <div class="col">
+                                        <input type="text" class="form-control" name="label_10_name" value="${label_data[10].name}"/>
+                                      </div>
+                                      <div class="col">
+                                        <input type="text" class="form-control" name="label_10_value" value="${label_data[10].value}"/>
+                                      </div>
+                                    </div>
+        
+                                    <div class="row mb-1 align-items-end">
+                                      <div class="col-auto">
+                                        <input class="form-check-input" type="checkbox" name="label_11_check" ${label_data[11].check}>
+                                      </div>
+                                      <div class="col">
+                                        <input type="text" class="form-control" name="label_11_name" value="${label_data[11].name}"/>
+                                      </div>
+                                      <div class="col">
+                                        <input type="text" class="form-control" name="label_11_value" value="${label_data[11].value}"/>
+                                      </div>
+                                    </div>
+                    
+                    
+                                    </div>
+                                  </div>
+                                </div>
+        
+        
+                                <div class="accordion-item">
+                                  <h2 class="accordion-header" id="heading-5">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-5" aria-expanded="false">
+                                      Extras
+                                    </button>
+                                  </h2>
+                                  <div id="collapse-5" class="accordion-collapse collapse" data-bs-parent="#details_accordion">
+                                    <div class="accordion-body pt-0">
+                    
+        
+                                      <div class="row mb-1 align-items-end">
+                                        <div class="col-auto">
+                                          <input class="form-check-input" name="port_0_check" type="checkbox" ${ports_data[0].check}>
+                                        </div>
+                                        <div class="col">
+                                          <label class="form-label">External Port</label>
+                                          <input type="text" class="form-control" name="port_0_external" value="${ports_data[0].external}"/>
+                                        </div>
+                                        <div class="col">
+                                          <label class="form-label">Internal Port</label>
+                                          <input type="text" class="form-control" name="port_0_internal" value="${ports_data[0].internal}"/>
+                                        </div>
+                                        <div class="col-lg-2">
+                                          <label class="form-label">Protocol</label>
+                                          <select class="form-select" name="port_0_protocol">
+                                            <option value="${ports_data[0].protocol}" selected hidden>${ports_data[0].protocol}</option>
+                                            <option value="tcp">tcp</option>
+                                            <option value="udp">udp</option>
+                                          </select>
+                                        </div>
+                                      </div>
+                    
+                                      <div class="row mb-1 align-items-end">
+                                        <div class="col-auto">
+                                          <input class="form-check-input" name="port_1_check" type="checkbox" ${ports_data[1].check}>
+                                        </div>
+                                        <div class="col">
+                                          <input type="text" class="form-control" name="port_1_external" value="${ports_data[1].external}"/>
+                                        </div>
+                                        <div class="col">
+                                          <input type="text" class="form-control" name="port_1_internal" value="${ports_data[1].internal}"/>
+                                        </div>
+                                        <div class="col-lg-2">
+                                          <select class="form-select" name="port_1_protocol">
+                                            <option value="${ports_data[1].protocol}" selected hidden>${ports_data[1].protocol}</option>
+                                            <option value="tcp">tcp</option>
+                                            <option value="udp">udp</option>
+                                          </select>
+                                        </div>
+                                      </div>
+                    
+                                      <div class="row mb-1 align-items-end">
+                                        <div class="col-auto">
+                                          <input class="form-check-input" name="port_2_check" type="checkbox" ${ports_data[2].check}>
+                                        </div>
+                                        <div class="col">
+                                          <input type="text" class="form-control" name="port_2_external" value="${ports_data[2].external}"/>
+                                        </div>
+                                        <div class="col">
+                                          <input type="text" class="form-control" name="port_2_internal" value="${ports_data[2].internal}"/>
+                                        </div>
+                                        <div class="col-lg-2">
+                                          <select class="form-select" name="port_2_protocol">
+                                            <option value="${ports_data[2].protocol}" selected hidden>${ports_data[2].protocol}</option>
+                                            <option value="tcp">tcp</option>
+                                            <option value="udp">udp</option>
+                                          </select>
+                                        </div>
+                                      </div>
+                    
+                                      <div class="row mb-1 align-items-end">
+                                        <div class="col-auto">
+                                          <input class="form-check-input" name="port_3_check" type="checkbox" ${ports_data[3].check}>
+                                        </div>
+                                        <div class="col">
+                                          <input type="text" class="form-control" name="port_3_external" value="${ports_data[3].external}"/>
+                                        </div>
+                                        <div class="col">
+                                          <input type="text" class="form-control" name="port_3_internal" value="${ports_data[3].internal}"/>
+                                        </div>
+                                        <div class="col-lg-2">
+                                          <select class="form-select" name="port_3_protocol">
+                                            <option value="${ports_data[3].protocol}" selected hidden>${ports_data[3].protocol}</option>
+                                            <option value="tcp">tcp</option>
+                                            <option value="udp">udp</option>
+                                          </select>
+                                        </div>
+                                      </div>
+                    
+                                      <div class="row mb-1 align-items-end">
+                                        <div class="col-auto">
+                                          <input class="form-check-input" name="port_4_check" type="checkbox" ${ports_data[4].check}>
+                                        </div>
+                                        <div class="col">
+                                          <input type="text" class="form-control" name="port_4_external" value="${ports_data[4].external}"/>
+                                        </div>
+                                        <div class="col">
+                                          <input type="text" class="form-control" name="port_4_internal" value="${ports_data[4].internal}"/>
+                                        </div>
+                                        <div class="col-lg-2">
+                                          <select class="form-select" name="port_4_protocol">
+                                            <option value="${ports_data[4].protocol}" selected hidden>${ports_data[4].protocol}</option>
+                                            <option value="tcp">tcp</option>
+                                            <option value="udp">udp</option>
+                                          </select>
+                                        </div>
+                                      </div>
+                    
+                                      <div class="row mb-1 align-items-end">
+                                        <div class="col-auto">
+                                          <input class="form-check-input" name="" type="checkbox" >
+                                        </div>
+                                        <div class="col">
+                                          <label class="form-label">External Port</label>
+                                          <input type="text" class="form-control" name="" value=""/>
+                                        </div>
+                                        <div class="col">
+                                          <label class="form-label">Internal Port</label>
+                                          <input type="text" class="form-control" name="" value=""/>
+                                        </div>
+                                        <div class="col-lg-2">
+                                          <label class="form-label">Protocol</label>
+                                          <select class="form-select" name="">
+                                            <option value="" selected hidden></option>
+                                            <option value="tcp">tcp</option>
+                                            <option value="udp">udp</option>
+                                          </select>
+                                        </div>
+                                      </div>
+                    
+                    
+                                    </div>
+                                  </div>
+                                </div>
+        
+        
+        
+                              </div>
+                    
+                    
+                              
+                              </form>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
+                              <input type="submit" form="${form_id}_install" class="btn btn-success" value="Install"/>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+
+            <div class="modal modal-blur fade" id="log_view" tabindex="-1" style="display: none;" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Logs</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    
+                  <div class="card-body">
+                        <h4>Logs:</h4>
+                        <div id="logView">
+                          <pre>No logs available</pre>
+                        </div>
+                  </div>
+        
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-info" onclick="viewLogs(this)" name="refresh"> 
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-refresh" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4"></path> <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"></path> </svg>
+                        Refresh
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            
+
+          </div>
+        </div>
+      </div>
+      
+      <%- include('footer.ejs') %>
+      
+    </div>
+  </div>
+    
+
+  <!-- Libs JS -->
+  <script src="/libs/apexcharts/dist/apexcharts.min.js" defer></script>
+  <!-- Tabler Core -->
+  <script src="/js/tabler.min.js"></script>
+  <!-- Socket.io -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+  </script>
+  <script src="/js/main.js"></script>
+    
+  </body>
+</html>
+

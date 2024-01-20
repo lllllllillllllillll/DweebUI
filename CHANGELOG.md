@@ -1,3 +1,32 @@
+## v0.20 (Jan 20th 2024) - The rewrite. Jumping all the way to v0.20.
+* Changed to ES6 imports.
+* Cleaned up file structure and code layout.
+* Updated DweebUI logo.
+* Visual tweaks to login and registration pages.
+* Added .gitignore and .dockerignore files.
+* Syslogs - View logs for sign-in and registration attempts. :new: 
+* Docker socket now uses default connection.
+* Updated Users page displays 'inactive' if no sign-ins within 30 days.
+* Dashboard updates now triggered by Docker events.
+* Massive reduction in the amount of HTML, CSS, and JS on client side.
+* Container graphs are significantly more efficent and no longer use localStorage.
+* Made dark mode the default theme.
+* Created intervals to allow application to idle or scale with more users.
+* Pages for images, volumes, and networks. :new: 
+* Localized fonts.
+* CORS.
+* Testing with Mocha and Supertest.
+* Created Portal page. :new:
+
+
+## <del>v0.09 (dev)</del> dead. (It had so many problems that I essentially rewrote everything)
+* Added authentication middleware to router.
+* Added gzip compression.
+* Added PM2.
+* Added Helmet.
+* Fixed missing session data.
+* Reduced sqlite queries.
+
 ## v0.08 (Dec 15th 2023)
 * Updates to compose file and instructions from [steveiliop56](https://github.com/steveiliop56)
 * Added SECRET field to compose file as a basic security measure.
