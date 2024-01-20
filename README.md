@@ -10,11 +10,11 @@ Alpha v0.20 ( :fire: Experimental :fire: )
 [![GitHub Activity](https://img.shields.io/github/commit-activity/y/lllllllillllllillll/DweebUI)](https://github.com/lllllllillllllillll)
 [![Docker Pulls](https://img.shields.io/docker/pulls/lllllllillllllillll/dweebui)](https://hub.docker.com/repository/docker/lllllllillllllillll/dweebui)
 [![GitHub License](https://img.shields.io/github/license/lllllllillllllillll/DweebUI)](https://github.com/lllllllillllllillll/DweebUI/blob/main/LICENSE)
+[![GitHub License](https://img.shields.io/badge/-buy_me_a%C2%A0coffee-gray?logo=buy-me-a-coffee)](https://www.buymeacoffee.com/lllllllillllllillll)
 
 * This is a personal project I started to get more familiar with Javascript and Node.js.
 * Some UI elements are placeholders and every version may have breaking changes.
 * Please post issues and discussions so I know what bugs and features to focus on.
-* I probably should have waited a lot longer to share this :|
 
 <a href="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/dashboard1.png"><img src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/dashboard1.png" width="25%"/></a>
 <a href="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/dashboard2.png"><img src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/dashboard2.png" width="25%"/></a>
@@ -51,7 +51,7 @@ version: "3.9"
 services:
   dweebui:
     container_name: dweebui
-    image: lllllllillllllillll/dweebui:v0.20-dev
+    image: lllllllillllllillll/dweebui:v0.20
     environment:
       NODE_ENV: production
       PORT: 8000
