@@ -1,4 +1,4 @@
-## v0.20 (dev) - The rewrite. Jumping all the way to v0.20.
+## v0.20 (Jan 20th 2024) - The rewrite. Jumping all the way to v0.20.
 * Changed to ES6 imports.
 * Cleaned up file structure and code layout.
 * Updated DweebUI logo.

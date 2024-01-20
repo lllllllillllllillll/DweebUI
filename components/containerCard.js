@@ -91,7 +91,7 @@ export const containerCard = (data) => {
                     <div class="dropdown-menu dropdown-menu-end">
                       <button class="dropdown-item text-secondary" onclick="clicked(this)" name="${name}" id="hide" value="hide">Hide</button>
                       <button class="dropdown-item text-secondary" onclick="clicked(this)" name="${name}" id="resetView" value="resetView">Reset View</button>
-                      <button class="dropdown-item text-secondary" onclick="clicked(this)" name="${name}" id="permissions" value="permissions">Permissions</button>
+                      <button class="dropdown-item text-secondary" onclick="clicked(this)" name="${name}" id="permissions" value="permissions" data-bs-toggle="modal" data-bs-target="#${name}_permissions">Permissions</button>
                     </div>
                   </div>
                 </div>
@@ -186,6 +186,95 @@ export const containerCard = (data) => {
                 </div>
                 <div class="col">
                   <input type="submit" form="${name}_uninstall" class="btn btn-danger w-100" value="Uninstall"/>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal modal-blur fade" id="${name}_permissions" tabindex="-1" style="display: none;" aria-hidden="true">
+      <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <div class="modal-status bg-cyan"></div>
+          <div class="modal-body text-center py-3">
+            <h3>${name} permissions</h3>
+            <form action="#" id="${name}_permissions" method="POST">
+            <input type="text" class="form-control" name="service_name" value="${name}" hidden/>
+
+
+            <div class="mb-2">
+              <div class="divide-y">
+                <div class="row">
+                  <div class="col-9">
+                    <label class="row text-start">
+                      <span class="col">Install</span>
+                    </label>
+                  </div>
+                  <div class="col-3">
+                    <label class="form-check form-check-single form-switch text-end">
+                      <input class="form-check-input" type="checkbox" name="remove_volumes">
+                    </label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-9">
+                    <label class="row text-start">
+                      <span class="col">
+                        Uninstall
+                      </span>
+                    </label>
+                  </div>
+                  <div class="col-3">
+                    <label class="form-check form-check-single form-switch text-end">
+                      <input class="form-check-input" type="checkbox" name="remove_image">
+                    </label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-9">
+                    <label class="row text-start">
+                      <span class="col">
+                        Edit
+                      </span>
+                    </label>
+                  </div>
+                  <div class="col-3">
+                    <label class="form-check form-check-single form-switch text-end">
+                      <input class="form-check-input" type="checkbox" name="remove_backups">
+                    </label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-9">
+                    <label class="row text-start">
+                      <span class="col">
+                        Upgrade
+                      </span>
+                    </label>
+                  </div>
+                  <div class="col-3">
+                    <label class="form-check form-check-single form-switch text-end">
+                      <input class="form-check-input" type="checkbox" name="remove_backups">
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="mt-1"> </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <div class="w-100">
+              <div class="row">
+                <div class="col">
+                  <a href="#" class="btn w-100" data-bs-dismiss="modal">
+                    Cancel
+                  </a>
+                </div>
+                <div class="col">
+                  <input type="submit" form="${name}_permissions" class="btn btn-primary w-100" value="Update"/>
                 </div>
               </div>
             </div>
