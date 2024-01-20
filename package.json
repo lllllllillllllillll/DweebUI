@@ -32,6 +32,6 @@
     "sqlite3": "^5.1.7",
     "stream": "^0.0.2",
     "supertest": "^6.3.3",
-    "systeminformation": "^5.21.22"
+    "systeminformation": "^5.21.23"
   }
 }
