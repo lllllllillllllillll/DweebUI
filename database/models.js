@@ -1,17 +1,9 @@
 import { Sequelize, DataTypes } from 'sequelize';
 
-// let SQLITE_PASS = process.env.SQLITE_PASS || 'some_long_elaborate_password';
-
-// export const sequelize = new Sequelize('dweebui', 'dweebui', SQLITE_PASS, { 
-//   dialect: 'sqlite',
-//   dialectModulePath: '@journeyapps/sqlcipher',
-//   storage: './database/database.sqlite',
-//   logging: false,
-// });
 
 export const sequelize = new Sequelize({ 
   dialect: 'sqlite',
-  storage: './database/database.sqlite',
+  storage: './database/db.sqlite',
   logging: false,
 });
 

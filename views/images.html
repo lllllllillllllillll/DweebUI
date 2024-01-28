@@ -4,7 +4,7 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <title>DweebUI - Volumes</title>
+    <title>DweebUI - Images</title>
     <link href="/css/tabler.min.css" rel="stylesheet"/>
     <link href="/css/demo.min.css" rel="stylesheet"/>
     <style>
@@ -20,7 +20,7 @@
   <body >
     <div class="page">
       <!-- Navbar -->
-      <%- include('navbar.ejs') %>
+      <%- include('navbar.html') %>
       <div class="page-wrapper">
         <!-- Page header -->
         
@@ -32,7 +32,7 @@
               <div class="col-12 mt-12">
                 <div class="card">
                   <div class="card-header">
-                    <h3 class="card-title">Docker Volumes</h3>
+                    <h3 class="card-title">Docker Images</h3>
                       <div class="card-options btn-list">                  
                           <a href="#" class="btn">
                           <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-refresh" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4"></path> <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"></path> </svg>
@@ -40,7 +40,7 @@
                           </a>
                           <a href="#" class="btn" data-bs-toggle="modal" data-bs-target="#not_add-site">
                           <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M12 5l0 14"></path> <path d="M5 12l14 0"></path> </svg>
-                          New Volume
+                          New Image
                           </a>
                       </div>
                   </div>
@@ -110,7 +110,7 @@
                   <div id="table-default" class="table-responsive">
                     <table class="table">
                       
-                      <%- volume_list %>
+                      <%- image_list %>
 
                     </table>
                   </div>
@@ -134,7 +134,7 @@
 
                   </form>
                                         
-                    <p class="m-0 text-muted ms-auto"><%- volume_count %> Volumes</p>
+                    <p class="m-0 text-muted ms-auto"><%- image_count %> Images</p>
 
                   </div>
                 </div>
@@ -144,7 +144,7 @@
           </div>
         </div>
         
-        <%- include('footer.ejs') %>
+        <%- include('footer.html') %>
         
       </div>
     </div>

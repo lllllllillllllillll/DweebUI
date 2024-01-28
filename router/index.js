@@ -15,9 +15,10 @@ import { Volumes } from "../controllers/volumes.js";
 import { Syslogs } from "../controllers/syslogs.js";
 import { Portal } from "../controllers/portal.js"
 
-/// Functions
+// Functions
 import { Install } from "../functions/install.js"
 import { Uninstall } from "../functions/uninstall.js"
+
 
 // Auth middleware
 const auth = (req, res, next) => {

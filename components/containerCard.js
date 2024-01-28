@@ -49,7 +49,7 @@ export const containerCard = (data) => {
 
 
   return `
-    <div class="col-sm-6 col-lg-3 deleteme">
+    <div class="col-sm-6 col-lg-3 pt-1">
       <div class="card">
         <div class="card-body">
           <div class="card-stamp card-stamp-sm">
@@ -60,16 +60,16 @@ export const containerCard = (data) => {
             <div class="ms-auto lh-1">
               <div class="card-actions btn-actions">
                 <div class="card-actions btn-actions">
-                  <button onclick="clicked(this)" name="${name}" value="${state}" id="start" class="btn-action" title="Start" ${actions}><!-- player-play -->
+                  <button class="btn-action" title="Start" data-hx-get="/click" data-hx-trigger="click" data-hx-swap="none" name="${name}" id="start" value="${state}" ${actions}><!-- player-play -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-player-play" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M7 4v16l13 -8z"></path></svg>
                   </button>
-                  <button onclick="clicked(this)" name="${name}" value="${state}" id="stop" class="btn-action" title="Stop" ${actions}><!-- player-stop -->
+                  <button class="btn-action" title="Stop" data-hx-get="/click" data-hx-trigger="click" data-hx-swap="none" name="${name}" id="stop" value="${state}" ${actions}><!-- player-stop -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-player-stop" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M5 5m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z"></path></svg>
                   </button>
-                  <button onclick="clicked(this)" name="${name}" value="${state}" id="pause" class="btn-action" title="Pause" ${actions}><!-- player-pause -->
+                  <button class="btn-action" title="Pause" data-hx-get="/click" data-hx-trigger="click" data-hx-swap="none" name="${name}" id="pause" value="${state}" ${actions}><!-- player-pause -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-player-pause" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M6 5m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v12a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z"></path><path d="M14 5m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v12a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z"></path></svg>
                   </button>
-                  <button onclick="clicked(this)" name="${name}" value="${state}" id="restart" class="btn-action" title="Restart" ${actions}><!-- reload -->
+                  <button class="btn-action" title="Restart" data-hx-get="/click" data-hx-trigger="click" data-hx-swap="none" name="${name}" id="restart" value="${state}" ${actions}><!-- reload -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-reload" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M19.933 13.041a8 8 0 1 1 -9.925 -8.788c3.899 -1 7.935 1.007 9.425 4.747"></path><path d="M20 4v5h-5"></path></svg>                          
                   </button>
                   <div class="dropdown">
@@ -89,8 +89,8 @@ export const containerCard = (data) => {
                       <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-eye" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"/> <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /> <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" /> </svg>
                     </a>
                     <div class="dropdown-menu dropdown-menu-end">
-                      <button class="dropdown-item text-secondary" onclick="clicked(this)" name="${name}" id="hide" value="hide">Hide</button>
-                      <button class="dropdown-item text-secondary" onclick="clicked(this)" name="${name}" id="resetView" value="resetView">Reset View</button>
+                      <button class="dropdown-item text-secondary" data-hx-get="/click" data-hx-trigger="click" data-hx-swap="none" name="${name}" id="hide" value="hide">Hide</button>
+                      <button class="dropdown-item text-secondary" data-hx-get="/click" data-hx-trigger="click" data-hx-swap="none" name="${name}" id="reset" value="reset">Reset View</button>
                       <button class="dropdown-item text-secondary" onclick="clicked(this)" name="${name}" id="permissions" value="permissions" data-bs-toggle="modal" data-bs-target="#${name}_permissions">Permissions</button>
                     </div>
                   </div>
@@ -111,7 +111,9 @@ export const containerCard = (data) => {
               </span>
             </div>
           </div>
-          <div id="${chart}_chart" class="chart-sm"></div>
+          <div class="chart-sm" data-hx-get="/chart" data-hx-trigger="every 2s" name="${name}" data-hx-target="#${name}_chart" hx-swap="innerHTML">
+            <div id="${name}_chart"></div>
+          </div>
         </div>
       </div>
     </div>

@@ -1,3 +1,11 @@
+## v0.21 (dev) - Another rewrite
+* Rewrote the dashboard to use HTMX.
+* Removed Socket.io.
+* Views are now HTML instead of EJS.
+* Improved Dockerfile.
+* Express sessions configured to use memorystore.
+* 
+
 ## v0.20 (Jan 20th 2024) - The rewrite. Jumping all the way to v0.20.
 * Changed to ES6 imports.
 * Cleaned up file structure and code layout.

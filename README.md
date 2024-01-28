@@ -1,7 +1,7 @@
 # DweebUI
 DweebUI is a web interface for managing Docker, with a zero-config dashboard for controlling and monitoring your containers.
 
-Alpha v0.20 ( :fire: Experimental :fire: )
+Alpha v0.21 ( :fire: Experimental :fire: )
 
    
 [:warning: DweebUI is a management interface and should not be directly exposed to the internet :warning:](https://github.com/lllllllillllllillll/DweebUI/wiki/Exposing-DweebUI-to-the-Internet)
@@ -10,7 +10,7 @@ Alpha v0.20 ( :fire: Experimental :fire: )
 [![GitHub Activity](https://img.shields.io/github/commit-activity/y/lllllllillllllillll/DweebUI)](https://github.com/lllllllillllllillll)
 [![Docker Pulls](https://img.shields.io/docker/pulls/lllllllillllllillll/dweebui)](https://hub.docker.com/repository/docker/lllllllillllllillll/dweebui)
 [![GitHub License](https://img.shields.io/github/license/lllllllillllllillll/DweebUI)](https://github.com/lllllllillllllillll/DweebUI/blob/main/LICENSE)
-[![GitHub License](https://img.shields.io/badge/-buy_me_a%C2%A0coffee-gray?logo=buy-me-a-coffee)](https://www.buymeacoffee.com/lllllllillllllillll)
+[![Coffee](https://img.shields.io/badge/-buy_me_a%C2%A0coffee-gray?logo=buy-me-a-coffee)](https://www.buymeacoffee.com/lllllllillllllillll)
 
 * This is a personal project I started to get more familiar with Javascript and Node.js.
 * Some UI elements are placeholders and every version may have breaking changes.

@@ -2,16 +2,15 @@ version: "3.9"
 services:
   dweebui:
     container_name: dweebui
-    image: lllllllillllllillll/dweebui:v0.20
+    image: lllllllillllllillll/dweebui:v0.21-dev
     environment:
-      NODE_ENV: production
       PORT: 8000
       SECRET: MrWiskers
     restart: unless-stopped
     ports:
       - 8000:8000
     volumes:
-      - dweebui:/app
+      - dweebui:/app/database/db.sqlite
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - dweebui_net

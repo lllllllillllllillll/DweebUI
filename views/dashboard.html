@@ -8,6 +8,8 @@
     <!-- CSS files -->
     <link href="/css/tabler.min.css" rel="stylesheet"/>
     <link href="/css/meters.css" rel="stylesheet"/>
+    <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/sse.js"></script>
     <style>
       @import url('/fonts/inter.css');
       :root {
@@ -19,16 +21,18 @@
     </style>
   </head>
   <body >
+  
   <div class="page">
 
-    <%- include('navbar.ejs') %>
+    <%- include('navbar.html') %>
+    
     <div class="page-wrapper">
 
       <div class="page-body">
         <div class="container-xl">
           <div class="row row-deck row-cards">
             
-            <div class="col-12" id="cards">
+            <div class="col-12">
               <div class="row row-cards">
                 
                 <div class="col-sm-6 col-lg-3">
@@ -40,14 +44,17 @@
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-cpu" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M5 5m0 1a1 1 0 0 1 1 -1h12a1 1 0 0 1 1 1v12a1 1 0 0 1 -1 1h-12a1 1 0 0 1 -1 -1z"></path><path d="M9 9h6v6h-6z"></path><path d="M3 10h2"></path><path d="M3 14h2"></path><path d="M10 3v2"></path><path d="M14 3v2"></path><path d="M21 10h-2"></path><path d="M21 14h-2"></path><path d="M14 21v-2"></path><path d="M10 21v-2"></path></svg>
                           </span>
                         </div>
-                        <div class="col">
+
+                        <!-- HTMX -->
+                        <div class="col" id="cpu" data-hx-get="/stats" data-hx-trigger="load, every 1s" data-hx-target="#cpu">
                           <div class="font-weight-medium">
-                            <label id="cpu-text" class="cpu-text mb-1" for="cpu">CPU 0%</label>
+                            <label class="cpu-text mb-1" for="cpu">CPU 0%</label>
                           </div>
-                          <div id="cpu-bar" class="cpu-bar meter animate">
-                            <span style="width: 25%"><span></span></span>
+                          <div class="cpu-bar meter animate">
+                            <span style="width:20%"><span></span></span>
                           </div>
                         </div>
+
                       </div>
                     </div>
                   </div>
@@ -62,14 +69,17 @@
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-container" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M20 4v.01"></path> <path d="M20 20v.01"></path> <path d="M20 16v.01"></path> <path d="M20 12v.01"></path> <path d="M20 8v.01"></path> <path d="M8 4m0 1a1 1 0 0 1 1 -1h6a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1h-6a1 1 0 0 1 -1 -1z"></path> <path d="M4 4v.01"></path> <path d="M4 20v.01"></path> <path d="M4 16v.01"></path> <path d="M4 12v.01"></path> <path d="M4 8v.01"></path> </svg>                            
                           </span>
                         </div>
-                        <div class="col">
+
+                        <!-- HTMX -->
+                        <div class="col" id="ram" data-hx-get="/stats" data-hx-trigger="load, every 2s">
                           <div class="font-weight-medium">
-                            <label id="ram-text" class="ram-text mb-1" for="ram">RAM 0%</label>
+                            <label class="ram-text mb-1" for="ram">RAM 0%</label>
                           </div>
-                          <div id="ram-bar" class="ram-bar meter animate orange">
-                            <span style="width: 25%"><span></span></span>
+                          <div class="ram-bar meter animate orange">
+                            <span style="width:20%"><span></span></span>
                           </div>
                         </div>
+
                       </div>
                     </div>
                   </div>
@@ -89,7 +99,7 @@
                             <label id="net-text" class="net-text mb-1" for="network">Down: 0MB  Up: 0MB</label>
                           </div>
                           <div id="net-bar" class="meter animate blue">
-                            <span style="width: 25%"><span></span></span>
+                            <span style="width: 20%"><span></span></span>
                           </div>
                         </div>
                       </div>
@@ -106,14 +116,17 @@
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-database" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M12 6m-8 0a8 3 0 1 0 16 0a8 3 0 1 0 -16 0"></path> <path d="M4 6v6a8 3 0 0 0 16 0v-6"></path> <path d="M4 12v6a8 3 0 0 0 16 0v-6"></path></svg>
                           </span>
                         </div>
-                        <div class="col">
+
+                        <!-- HTMX -->
+                        <div class="col" id="disk" data-hx-get="/stats" data-hx-trigger="load, every 2s">
                           <div class="font-weight-medium">
-                            <label id="disk-text" class="disk-text mb-1" for="disk">DISK 0%</label>
+                            <label class="disk-text mb-1" for="disk">DISK 0%</label>
                           </div>
-                          <div id="disk-bar" class="meter animate red">
-                            <span style="width: 25%"><span></span></span>
+                          <div class="meter animate red">
+                            <span style="width:20%"><span></span></span>
                           </div>
                         </div>
+
                       </div>
                     </div>
                   </div>
@@ -123,9 +136,13 @@
               </div>
             </div>
 
+            <!-- HTMX -->
+            <div class="col-12" hx-ext="sse" sse-connect="/sse_event">
+              <div class="row row-cards" data-hx-get="/containers" data-hx-trigger="load, sse:docker" data-hx-swap="innerHTML">
 
-            <!-- containerCards get inserted here from public/js/main.js -->
-            
+              </div>
+            </div>
+
             <div class="modal modal-blur fade" id="details_modal" tabindex="-1" role="dialog" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
                           <div class="modal-content">
@@ -989,23 +1006,15 @@
         </div>
       </div>
       
-      <%- include('footer.ejs') %>
+    <%- include('footer.html') %>
       
     </div>
   </div>
     
 
-  <!-- Libs JS -->
-  <script src="/libs/apexcharts/dist/apexcharts.min.js" defer></script>
-  <!-- Tabler Core -->
+  <script src="/libs/apexcharts/dist/apexcharts.min.js"></script>
   <script src="/js/tabler.min.js"></script>
-  <!-- Socket.io -->
-  <script src="/socket.io/socket.io.js"></script>
-  <script>
-    const socket = io();
-  </script>
-  <script src="/js/main.js"></script>
-    
+
   </body>
 </html>
 

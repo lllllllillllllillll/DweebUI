@@ -1,44 +1,26 @@
 import express from 'express';
 import session from 'express-session';
-import compression from 'compression';
-import helmet from 'helmet';
+import memorystore from 'memorystore';
+import ejs from 'ejs';
 import Docker from 'dockerode';
-import cors from 'cors';
 import { Readable } from 'stream';
-import { rateLimit } from 'express-rate-limit';
-import { instrument } from '@socket.io/admin-ui'
 import { router } from './router/index.js';
-import { createServer } from 'node:http';
-import { Server } from 'socket.io';
 import { sequelize, Container } from './database/models.js';
 import { currentLoad, mem, networkStats, fsSize, dockerContainerStats, dockerImages, networkInterfaces } from 'systeminformation';
 import { containerCard } from './components/containerCard.js';
-
-export const app = express();
-const server = createServer(app);
-const port = process.env.PORT || 8000;
 export var docker = new Docker();
-let [cpu, ram, tx, rx, disk] = [0, 0, 0, 0, 0];
-let [hidden, clicked, dockerEvents] = ['', false, ''];
-let metricsInterval, cardsInterval, graphsInterval;
-let cardList = '';
-const statsArray = {};
 
-// Socket.io admin ui
-export const io = new Server(server, { 
-    cors: {
-        origin: ['http://localhost:8000', 'https://admin.socket.io'],
-        methods: ['GET', 'POST'],
-        credentials: true
-    } 
-});
-instrument(io, {
-    auth: false,
-    readonly: true
-});
+const app = express();
+const MemoryStore = memorystore(session);
+const port = process.env.PORT || 8000;
+let [ hidden, activeEvent, cardList, clicked ] = ['', '', '', false];
+let sentList = '';
+let SSE = false;
+let clicks = 0;
 
 // Session middleware
 const sessionMiddleware = session({
+    store: new MemoryStore({ checkPeriod: 86400000 }), // Prune expired entries every 24h
     secret: "keyboard cat", 
     resave: false, 
     saveUninitialized: false, 
@@ -49,47 +31,40 @@ const sessionMiddleware = session({
     }
 });
 
-// Make session data available to socket.io
-io.engine.use(sessionMiddleware); 
-
-// Rate limiter
-const limiter = rateLimit({
-	windowMs: 5 * 60 * 1000, // 5 minutes
-	limit: 50, // Limit each IP to 50 requests per `window`.
-	standardHeaders: 'draft-7',
-	legacyHeaders: false,
-})
-
 // Express middleware
-app.set('view engine', 'ejs');
+app.set('view engine', 'html');
+app.engine('html', ejs.renderFile);
 app.use([
-    compression(),
-    cors(),
-    helmet({contentSecurityPolicy: false}),
-    express.static("public"),
+    express.static('public'),
     express.json(),
     express.urlencoded({ extended: true }),
     sessionMiddleware,
-    router,
-    limiter
+    router
 ]);
 
 // Initialize server
-server.listen(port, async () => {
+app.listen(port, async () => {
     async function init() {
-        try { await sequelize.authenticate().then(() => { console.log('[Connected to DB]') }); } 
-            catch { console.log('[Could not connect to DB]'); }
-        try { await sequelize.sync().then(() => { console.log('[Models Synced]') }); } 
-            catch { console.log('[Could not Sync Models]', error); }
-        await getHidden();
-        containerCards();
+        try { await sequelize.authenticate().then(
+            () => { console.log('DB Connection: ✔️') }); } 
+            catch { console.log('DB Connection: ❌'); }
+        try { await sequelize.sync().then( // check out that formatting
+            () => { console.log('Synced Models: ✔️') }); } 
+            catch { console.log('Synced Models: ❌'); }
     }
-    await init();
-    app.emit("appStarted");
-    console.log(`\nServer listening on http://localhost:${port}`);
+    await init().then(() => { 
+        console.log(`Listening on http://localhost:${port} ✔️`);
+    });
 });
 
+// Get hidden containers
+async function getHidden() {
+    hidden = await Container.findAll({ where: {visibility:false}});
+    hidden = hidden.map((container) => container.name);
+}
+
 // Server metrics
+let [ cpu, ram, tx, rx, disk ] = [0, 0, 0, 0, 0];
 let serverMetrics = async () => {
     currentLoad().then(data => { 
         cpu = Math.round(data.currentLoad); 
@@ -105,8 +80,9 @@ let serverMetrics = async () => {
         disk = data[0].use; 
     });
 }
+setInterval(serverMetrics, 1000);
 
-// List docker containers
+// Docker containers
 let containerCards = async () => {
     let list = '';
     const allContainers = await docker.listContainers({ all: true });
@@ -151,193 +127,198 @@ let containerCards = async () => {
     cardList = list;
 }
 
-// Container metrics
-let containerStats = async () => {
-    const data = await docker.listContainers({ all: true });
-    for (const container of data) {
-        if (!hidden.includes(container.Names[0].slice(1))) {
-            const stats = await dockerContainerStats(container.Id);
-            const name = container.Names[0].slice(1);
-
-            if (!statsArray[name]) {
-                statsArray[name] = {
-                    cpuArray: Array(15).fill(0),
-                    ramArray: Array(15).fill(0)
-                };
-            }
-            statsArray[name].cpuArray.push(Math.round(stats[0].cpuPercent));
-            statsArray[name].ramArray.push(Math.round(stats[0].memPercent));
-
-            statsArray[name].cpuArray = statsArray[name].cpuArray.slice(-15);
-            statsArray[name].ramArray = statsArray[name].ramArray.slice(-15);
-        }
-    }
-}
 
 // Store docker events 
 docker.getEvents((err, stream) => {
     if (err) throw err;
     stream.on('data', (chunk) => {
-        dockerEvents += chunk.toString('utf8');
+        activeEvent += chunk.toString('utf8');
     });
 });
 
-// Check for docker events
+// Check if the container cards need to be updated
 setInterval(async () => {
-    if (dockerEvents != '') {
-        await getHidden();
-        await containerCards();
-        dockerEvents = '';
+    if (activeEvent == '') { return; }
+    activeEvent = '';
+    await getHidden();
+    await containerCards();
+    if (cardList != sentList) {
+        cardList = sentList;
+        SSE = true;
     }
 }, 1000);
 
-// Get hidden containers
-async function getHidden() {
-    hidden = await Container.findAll({ where: {visibility:false}});
-    hidden = hidden.map((container) => container.name);
-}
-
-// Socket.io
-io.on('connection', (socket) => {
-    let sessionData = socket.request.session;
-    let sent = '';
-    if (sessionData.user != undefined) {
-        console.log(`${sessionData.user} connected from ${socket.handshake.headers.host}`);
-        
-        // Start intervals if not already started
-        if (!metricsInterval) {
-            serverMetrics();
-            metricsInterval = setInterval(serverMetrics, 1000);
-            console.log('Metrics interval started');
-        }
-        if (!cardsInterval) {
-            containerCards();
-            cardsInterval = setInterval(containerCards, 1000);
-            console.log('Cards interval started');
-        }
-        if (!graphsInterval) {
-            containerStats();
-            graphsInterval = setInterval(containerStats, 1000);
-            console.log('Graphs interval started');
-        }
-
-        setInterval(() => {
-            socket.emit('metrics', [cpu, ram, tx, rx, disk]);
-            if (sent != cardList) {
-                sent = cardList;
-                socket.emit('containers', cardList);
-            }
-            socket.emit('containerStats', statsArray);
-        }, 1000);
-
-
-        // Client input        
-        socket.on('clicked', (data) => {
-            let { name, id, value } = data;
-            console.log(`${sessionData.user} clicked: ${id} ${value} ${name}`);
-            if (clicked == true) { return; } clicked = true;
-
-            // View container logs
-            if (id == 'logs'){
-                function containerLogs (data) {
-                    return new Promise((resolve, reject) => {
-                        let logString = '';
-                        var options = {
-                            follow: false,
-                            stdout: true,
-                            stderr: false,
-                            timestamps: false
-                        };
-                        var containerName = docker.getContainer(data);
-                        containerName.logs(options, function (err, stream) {
-                            if (err) { reject(err); return; }
-                            const readableStream = Readable.from(stream);
-                            readableStream.on('data', function (chunk) {
-                                logString += chunk.toString('utf8');
-                            });
-                            readableStream.on('end', function () {
-                                resolve(logString);
-                            });
-                        });
-                    });
-                };
-                containerLogs(name).then((data) => {
-                    socket.emit('logs', data);
-                });
-            }
-
-            // start, stop, pause, restart container
-            if (id == 'start' || id == 'stop' || id == 'pause' || id == 'restart'){
-                var containerName = docker.getContainer(name);
-        
-                if ((id == 'start') && (value == 'stopped')) {
-                    containerName.start();
-                } else if ((id == 'start') && (value == 'paused')) {
-                    containerName.unpause();
-                } else if ((id == 'stop') && (value != 'stopped')) {
-                    containerName.stop();
-                } else if ((id == 'pause') && (value == 'running')) {
-                    containerName.pause();
-                } else if ((id == 'pause') && (value == 'paused')) {
-                    containerName.unpause();
-                } else if (id == 'restart') {
-                    containerName.restart();
-                }
-            }
-
-            // hide container
-            if (id == 'hide') {
-                async function hideContainer() {
-                    let containerExists = await Container.findOne({ where: {name: name}});
-                    if(!containerExists) {
-                        const newContainer = await Container.create({ name: name, visibility: false, });
-                        getHidden();
-                    } else {
-                        containerExists.update({ visibility: false });
-                        getHidden();
-                    }
-                    
-                }
-                hideContainer();
-            }
-
-            // unhide containers
-            if (id == 'resetView') {
-                Container.update({ visibility: true }, { where: {} });
-                getHidden();
-            }
-                
-            clicked = false;
-        });
-
-        socket.on('disconnect', () => {
-            console.log(`${sessionData.user} disconnected`);
-            socket.disconnect();
-            // clear intervals if no users are connected
-            if (io.engine.clientsCount == 0) {
-                clearInterval(metricsInterval);
-                clearInterval(cardsInterval);
-                clearInterval(graphsInterval);
-                metricsInterval = null;
-                cardsInterval = null;
-                graphsInterval = null;
-                console.log('All intervals cleared');
-            }
-        });
-    } else {
-        console.log('Missing session data');
+// HTMX triggers
+router.get('/stats', async (req, res) => {
+    switch (req.header('HX-Trigger')) {
+        case 'cpu': 
+        let info = '<div class="font-weight-medium">';
+            info += '<label class="cpu-text mb-1" for="cpu">CPU ' + cpu + '%</label>';
+            info += '</div>';
+            info += '<div class="cpu-bar meter animate">';
+            info += '<span style="width:' + cpu + '%"><span></span></span>';
+            info += '</div>';
+            res.send(info);
+            break;
+        case 'ram':
+        let info2 = '<div class="font-weight-medium">';
+            info2 += '<label class="ram-text mb-1" for="ram">RAM ' + ram + '%</label>';
+            info2 += '</div>';
+            info2 += '<div class="ram-bar meter animate orange">';
+            info2 += '<span style="width:' + ram + '%"><span></span></span>';
+            info2 += '</div>';
+            res.send(info2);
+            break;
+        case 'tx':
+            res.send('TX ' + tx.toFixed(2) + ' MB');
+            break;
+        case 'rx':
+            res.send('RX ' + rx.toFixed(2) + ' MB');
+            break;
+        case 'disk':
+        let info5 = '<div class="font-weight-medium">';
+            info5 += '<label class="disk-text mb-1" for="disk">Disk ' + disk + '%</label>';
+            info5 += '</div>';
+            info5 += '<div class="disk-bar meter animate red">';
+            info5 += '<span style="width:' + disk + '%"><span></span></span>';
+            info5 += '</div>';
+            res.send(info5);
+            break;
+        default:
+            console.log('Unknown trigger');
+            break;
     }
 });
 
+router.get('/containers', async (req, res) => {
+    await getHidden();
+    await containerCards();
+    sentList = cardList;
+    res.send(cardList);
+});
 
+// Server-side event trigger
+router.get('/sse_event', (req, res) => {
+    res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive', });
 
+    let eventCheck = setInterval(async () => {
+        if (SSE == true) {
+            SSE = false;
+            res.write(`event: docker\n`);
+            res.write(`data: there was a docker event!\n\n`);
+            console.log(`server-side event sent`)
+        }
+    }, 1000);
 
+    req.on('close', () => {
+        clearInterval(eventCheck);
+    });
+});
 
+// HTMX buttons
+router.get('/click', async (req, res) => {
+    
+    let name = req.header('hx-trigger-name');
+    let id = req.header('hx-trigger');
+    let value = req.query[name];
 
+    // start, stop, pause, restart container
+    if (id == 'start' || id == 'stop' || id == 'pause' || id == 'restart'){
+        var containerName = docker.getContainer(name);
 
+        if ((id == 'start') && (value == 'stopped')) {
+            containerName.start();
+        } else if ((id == 'start') && (value == 'paused')) {
+            containerName.unpause();
+        } else if ((id == 'stop') && (value != 'stopped')) {
+            containerName.stop();
+        } else if ((id == 'pause') && (value == 'running')) {
+            containerName.pause();
+        } else if ((id == 'pause') && (value == 'paused')) {
+            containerName.unpause();
+        } else if (id == 'restart') {
+            containerName.restart();
+        }
+    }
 
-// let link = '';
-// networkInterfaces().then(data => {
-//     link = data[0].ip4;
-// });
+    // hide container
+    if (id == 'hide') {
+        let exists = await Container.findOne({ where: {name: name}});
+        if (!exists) {
+            const newContainer = await Container.create({ name: name, visibility: false, });
+            SSE = true;
+        } else {
+            exists.update({ visibility: false });
+            SSE = true;
+        }
+    }
 
+    // reset hidden
+    if (id == 'reset') {
+        Container.update({ visibility: true }, { where: {} });
+        SSE = true;
+    }
+});
+
+// container charts
+router.get('/chart', async (req, res) => {
+    let name = req.header('hx-trigger-name');
+    let chart = `
+    <script>
+    var options = {
+        chart: {
+          type: "line",
+          height: 40.0,
+          sparkline: {
+            enabled: true
+          },
+          animations: {
+            enabled: false
+          }
+        },
+        fill: {
+          opacity: 1
+        },
+        stroke: {
+          width: [2, 1],
+          dashArray: [0, 3],
+          lineCap: "round",
+          curve: "smooth"
+        },
+        series: [{
+          name: "CPU",
+          data: [0,10,0,10,0,10,0,10,0,10]
+        }, {
+          name: "RAM",
+          data: [0,5,0,5,0,5,0,5,0,5]
+        }],
+        tooltip: {
+          enabled: false
+        },
+        grid: {
+          strokeDashArray: 4
+        },
+        xaxis: {
+          labels: {
+            padding: 0
+          },
+          tooltip: {
+            enabled: false
+          }
+        },
+        yaxis: {
+          labels: {
+            padding: 4
+          }
+        },
+        colors: [tabler.getColor("primary"), tabler.getColor("gray-600")],
+        legend: {
+          show: false
+        }
+    }
+
+    var chart = new ApexCharts(document.querySelector("#${name}_chart"), options);
+    chart.render();
+    </script>`
+    res.send(chart);
+});

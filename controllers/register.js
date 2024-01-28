@@ -55,7 +55,7 @@ export const submitRegister = async function(req,res){
                     password: bcrypt.hashSync(password,10),
                     role: await userRole(),
                     group: 'all',
-                    avatar: `<img src="img/avatars/${avatar}">`,
+                    avatar: `<img src="/images/avatars/${avatar}">`,
                     lastLogin: newLogin,
                 });
 
