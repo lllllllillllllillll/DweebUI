@@ -78,11 +78,11 @@ export const containerCard = (data) => {
                       <svg xmlns="http://www.w3.org/2000/svg" class="" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle><circle cx="12" cy="5" r="1"></circle></svg>
                     </a>
                     <div class="dropdown-menu dropdown-menu-end">
-                      <button class="dropdown-item text-secondary" onclick="clicked(this)" id="details" data-bs-toggle="modal" data-bs-target="#details_modal" href="#">Details</button>
-                      <button class="dropdown-item text-secondary" onclick="clicked(this)" name="${name}" id="logs" data-bs-toggle="modal" data-bs-target="#log_view" href="#">Logs</button>
-                      <button class="dropdown-item text-secondary" onclick="clicked(this)" name="${name}" id="edit" href="#">Edit</button>
-                      <button class="dropdown-item text-primary" onclick="clicked(this)" name="${name}" id="update" href="#">Update</button>
-                      <button class="dropdown-item text-danger" onclick="clicked(this)" name="${name}" id="remove" data-bs-toggle="modal" data-bs-target="#${name}_uninstall_modal" href="#">Remove</button>
+                      <button class="dropdown-item text-secondary" id="details" data-bs-toggle="modal" data-bs-target="#details_modal">Details</button>
+                      <button class="dropdown-item text-secondary" name="${name}" id="logs" data-hx-get="/logs" data-hx-target="#logView" data-bs-toggle="modal" data-bs-target="#log_view">Logs</button>
+                      <button class="dropdown-item text-secondary" name="${name}" id="edit" href="#">Edit</button>
+                      <button class="dropdown-item text-primary" name="${name}" id="update" href="#">Update</button>
+                      <button class="dropdown-item text-danger" name="${name}" id="remove" data-bs-toggle="modal" data-bs-target="#${name}_uninstall_modal" href="#">Remove</button>
                     </div>
                   </div>
                   <div class="dropdown">
@@ -92,7 +92,7 @@ export const containerCard = (data) => {
                     <div class="dropdown-menu dropdown-menu-end">
                       <button class="dropdown-item text-secondary" data-hx-get="/click" data-hx-trigger="click" data-hx-swap="none" name="${name}" id="hide" value="hide">Hide</button>
                       <button class="dropdown-item text-secondary" data-hx-get="/click" data-hx-trigger="click" data-hx-swap="none" name="${name}" id="reset" value="reset">Reset View</button>
-                      <button class="dropdown-item text-secondary" onclick="clicked(this)" name="${name}" id="permissions" value="permissions" data-bs-toggle="modal" data-bs-target="#${name}_permissions">Permissions</button>
+                      <button class="dropdown-item text-secondary" name="${name}" id="permissions" value="permissions" data-bs-toggle="modal" data-bs-target="#${name}_permissions">Permissions</button>
                     </div>
                   </div>
                 </div>

@@ -267,12 +267,45 @@ router.get('/chart', async (req, res) => {
     let chart = `
     <script>
         ${name}chart.updateSeries([{
-            data: [0,10,0,20,0,30,0,40,0,50]
+            data: [50,100,50,100,50,100,50,100,50,100]
         }, {
-            data: [10,0,30,0,0,50,0,0,70,0]
+            data: [0,25,0,25,0,25,0,25,0,25]
         }])
     </script>`
 
     res.send(chart);
       
 });
+
+// container logs
+router.get('/logs', async (req, res) => {
+
+    let name = req.header('hx-trigger-name');
+    
+    function containerLogs (data) {
+        return new Promise((resolve, reject) => {
+            let logString = '';
+            var options = {
+                follow: false,
+                stdout: true,
+                stderr: false,
+                timestamps: false
+            };
+            var containerName = docker.getContainer(data);
+            containerName.logs(options, function (err, stream) {
+                if (err) { reject(err); return; }
+                const readableStream = Readable.from(stream);
+                readableStream.on('data', function (chunk) {
+                    logString += chunk.toString('utf8');
+                });
+                readableStream.on('end', function () {
+                    resolve(logString);
+                });
+            });
+        });
+    };
+    containerLogs(name).then((data) => {
+        res.send(`<pre>${data}</pre> `)
+    });
+});
+
