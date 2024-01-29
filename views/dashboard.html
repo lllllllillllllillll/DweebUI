@@ -1014,6 +1014,61 @@
 
   <script src="/libs/apexcharts/dist/apexcharts.min.js"></script>
   <script src="/js/tabler.min.js"></script>
+  <script>
+    var options = {
+        chart: {
+          type: "line",
+          height: 40.0,
+          sparkline: {
+            enabled: true
+          },
+          animations: {
+            enabled: false
+          }
+        },
+        fill: {
+          opacity: 1
+        },
+        stroke: {
+          width: [2, 1],
+          dashArray: [0, 3],
+          lineCap: "round",
+          curve: "smooth"
+        },
+        series: [{
+          name: "CPU",
+          data: [0,0,0,0,0,0,0,0,0,0]
+        }, {
+          name: "RAM",
+          data: [0,0,0,0,0,0,0,0,0,0]
+        }],
+        tooltip: {
+          enabled: false
+        },
+        grid: {
+          strokeDashArray: 4
+        },
+        xaxis: {
+          labels: {
+            padding: 0
+          },
+          tooltip: {
+            enabled: false
+          }
+        },
+        yaxis: {
+          min: 0,
+          max: 100,
+          labels: {
+            padding: 4
+          }
+        },
+        colors: [tabler.getColor("primary"), tabler.getColor("gray-600")],
+        legend: {
+          show: false
+        }
+    }
+  </script>
 
   </body>
 </html>

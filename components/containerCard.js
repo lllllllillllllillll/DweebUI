@@ -3,7 +3,8 @@ export const containerCard = (data) => {
   
   let { name, service, state, external_port, internal_port, ports, link } = data;
   let wrapped = name;
-  let chart = name;
+  
+  let chartName = name.replace(/-/g, '');
 
   if (name.length > 13) {
     wrapped = name.slice(0, 10) + '...';
@@ -111,8 +112,18 @@ export const containerCard = (data) => {
               </span>
             </div>
           </div>
-          <div class="chart-sm" data-hx-get="/chart" data-hx-trigger="every 2s" name="${name}" data-hx-target="#${name}_chart" hx-swap="innerHTML">
-            <div id="${name}_chart"></div>
+          
+          <script>
+              var ${chartName}chart = new ApexCharts(document.querySelector("#${chartName}_chart"), options);
+          </script>
+
+          <div class="chart-sm">
+            <div id="${chartName}_chart" data-hx-trigger="every 4s" data-hx-get="/chart" name="${chartName}">
+              <script>
+                ${chartName}chart.render();
+              </script>
+            </div>
+            
           </div>
         </div>
       </div>

@@ -46,10 +46,10 @@ app.use([
 app.listen(port, async () => {
     async function init() {
         try { await sequelize.authenticate().then(
-            () => { console.log('DB Connection: ✔️') }); } 
+            () => { console.log('DB Connection: ✔️') }); }
             catch { console.log('DB Connection: ❌'); }
         try { await sequelize.sync().then( // check out that formatting
-            () => { console.log('Synced Models: ✔️') }); } 
+            () => { console.log('Synced Models: ✔️') }); }
             catch { console.log('Synced Models: ❌'); }
     }
     await init().then(() => { 
@@ -263,62 +263,16 @@ router.get('/click', async (req, res) => {
 // container charts
 router.get('/chart', async (req, res) => {
     let name = req.header('hx-trigger-name');
+
     let chart = `
     <script>
-    var options = {
-        chart: {
-          type: "line",
-          height: 40.0,
-          sparkline: {
-            enabled: true
-          },
-          animations: {
-            enabled: false
-          }
-        },
-        fill: {
-          opacity: 1
-        },
-        stroke: {
-          width: [2, 1],
-          dashArray: [0, 3],
-          lineCap: "round",
-          curve: "smooth"
-        },
-        series: [{
-          name: "CPU",
-          data: [0,10,0,10,0,10,0,10,0,10]
+        ${name}chart.updateSeries([{
+            data: [0,10,0,20,0,30,0,40,0,50]
         }, {
-          name: "RAM",
-          data: [0,5,0,5,0,5,0,5,0,5]
-        }],
-        tooltip: {
-          enabled: false
-        },
-        grid: {
-          strokeDashArray: 4
-        },
-        xaxis: {
-          labels: {
-            padding: 0
-          },
-          tooltip: {
-            enabled: false
-          }
-        },
-        yaxis: {
-          labels: {
-            padding: 4
-          }
-        },
-        colors: [tabler.getColor("primary"), tabler.getColor("gray-600")],
-        legend: {
-          show: false
-        }
-    }
-
-    var chart = new ApexCharts(document.querySelector("#${name}_chart"), options);
-    chart.render();
+            data: [10,0,30,0,0,50,0,0,70,0]
+        }])
     </script>`
+
     res.send(chart);
+      
 });
