@@ -8,6 +8,7 @@ import { router } from './router/index.js';
 import { sequelize, Container } from './database/models.js';
 import { currentLoad, mem, networkStats, fsSize, dockerContainerStats, dockerImages, networkInterfaces } from 'systeminformation';
 import { containerCard } from './components/containerCard.js';
+import { modal } from './components/modal.js';
 export var docker = new Docker();
 
 const app = express();
@@ -50,10 +51,9 @@ app.listen(port, async () => {
             catch { console.log('DB Connection: ❌'); }
         try { await sequelize.sync().then( // check out that formatting
             () => { console.log('Synced Models: ✔️') }); }
-            catch { console.log('Synced Models: ❌'); }
-    }
-    await init().then(() => { 
-        console.log(`Listening on http://localhost:${port} ✔️`);
+            catch { console.log('Synced Models: ❌'); } }
+        await init().then(() => { 
+            console.log(`Listening on http://localhost:${port} ✔️`);
     });
 });
 
@@ -148,7 +148,11 @@ setInterval(async () => {
     }
 }, 1000);
 
-// HTMX triggers
+
+
+/////////////////// HTMX routes //////////////////////////
+
+
 router.get('/stats', async (req, res) => {
     switch (req.header('HX-Trigger')) {
         case 'cpu': 
@@ -197,89 +201,54 @@ router.get('/containers', async (req, res) => {
     res.send(cardList);
 });
 
-// Server-side event trigger
-router.get('/sse_event', (req, res) => {
-    res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive', });
-
-    let eventCheck = setInterval(async () => {
-        if (SSE == true) {
-            SSE = false;
-            res.write(`event: docker\n`);
-            res.write(`data: there was a docker event!\n\n`);
-            console.log(`server-side event sent`)
-        }
-    }, 1000);
-
-    req.on('close', () => {
-        clearInterval(eventCheck);
-    });
-});
-
-// HTMX buttons
-router.get('/click', async (req, res) => {
-    
+router.get('/action', async (req, res) => {
     let name = req.header('hx-trigger-name');
     let id = req.header('hx-trigger');
     let value = req.query[name];
 
-    // start, stop, pause, restart container
-    if (id == 'start' || id == 'stop' || id == 'pause' || id == 'restart'){
-        var containerName = docker.getContainer(name);
+    var containerName = docker.getContainer(name);
 
-        if ((id == 'start') && (value == 'stopped')) {
-            containerName.start();
-        } else if ((id == 'start') && (value == 'paused')) {
-            containerName.unpause();
-        } else if ((id == 'stop') && (value != 'stopped')) {
-            containerName.stop();
-        } else if ((id == 'pause') && (value == 'running')) {
-            containerName.pause();
-        } else if ((id == 'pause') && (value == 'paused')) {
-            containerName.unpause();
-        } else if (id == 'restart') {
-            containerName.restart();
-        }
+    if ((id == 'start') && (value == 'stopped')) {
+        containerName.start();
+    } else if ((id == 'start') && (value == 'paused')) {
+        containerName.unpause();
+    } else if ((id == 'stop') && (value != 'stopped')) {
+        containerName.stop();
+    } else if ((id == 'pause') && (value == 'running')) {
+        containerName.pause();
+    } else if ((id == 'pause') && (value == 'paused')) {
+        containerName.unpause();
+    } else if (id == 'restart') {
+        containerName.restart();
     }
+});
 
-    // hide container
+router.get('/hide', async (req, res) => {
+    let name = req.header('hx-trigger-name');
+    let id = req.header('hx-trigger');
+
     if (id == 'hide') {
         let exists = await Container.findOne({ where: {name: name}});
         if (!exists) {
             const newContainer = await Container.create({ name: name, visibility: false, });
             SSE = true;
+            return;
         } else {
             exists.update({ visibility: false });
             SSE = true;
+            return;
         }
     }
 
-    // reset hidden
     if (id == 'reset') {
         Container.update({ visibility: true }, { where: {} });
         SSE = true;
     }
 });
 
-// container charts
-router.get('/chart', async (req, res) => {
-    let name = req.header('hx-trigger-name');
 
-    let chart = `
-    <script>
-        ${name}chart.updateSeries([{
-            data: [50,100,50,100,50,100,50,100,50,100]
-        }, {
-            data: [0,25,0,25,0,25,0,25,0,25]
-        }])
-    </script>`
 
-    res.send(chart);
-      
-});
-
-// container logs
 router.get('/logs', async (req, res) => {
-
     let name = req.header('hx-trigger-name');
     
     function containerLogs (data) {
@@ -309,3 +278,102 @@ router.get('/logs', async (req, res) => {
     });
 });
 
+
+router.get('/sse_event', (req, res) => {
+    res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive', });
+    let eventCheck = setInterval(async () => {
+        if (SSE == true) {
+            SSE = false;
+            res.write(`event: docker\n`);
+            res.write(`data: there was a docker event!\n\n`);
+        }
+    }, 1000);
+    req.on('close', () => {
+        clearInterval(eventCheck);
+    });
+});
+
+
+
+router.get('/modal', async (req, res) => {
+
+    let name = req.header('hx-trigger-name');
+
+    let containerId = docker.getContainer(name);
+    let containerInfo = await containerId.inspect();
+    let ports_list = [];
+    try {
+    for (const [key, value] of Object.entries(containerInfo.HostConfig.PortBindings)) {
+        let ports = {
+            check: 'checked',
+            external: value[0].HostPort,
+            internal: key.split('/')[0],
+            protocol: key.split('/')[1]
+        }
+        ports_list.push(ports);
+    }
+    } catch {}
+
+    let external_port = ports_list[0]?.external || 0;
+    let internal_port = ports_list[0]?.internal || 0;
+
+    let container_info = {
+        name: containerInfo.Name.slice(1),
+        state: containerInfo.State.Status,
+        image: containerInfo.Config.Image,
+        external_port: external_port,
+        internal_port: internal_port,
+        ports: ports_list,
+        link: 'localhost',
+    }
+
+    console.log(container_info);
+    
+    let form = modal(container_info);
+    res.send(form);
+});
+
+
+
+let dockerStats = {};
+setInterval(async () => {
+
+    const data = await docker.listContainers({ all: true });
+    for (const container of data) {
+        let name = container.Names[0].slice(1);
+        if (!hidden.includes(name)) {
+            const stats = await dockerContainerStats(container.Id);
+            let cpu = Math.round(stats[0].cpuPercent);
+            let ram = Math.round(stats[0].memPercent);
+
+            if (!dockerStats[name]) {
+                dockerStats[name] = Array(15).fill({ cpu: 0, ram: 0 });
+            }
+
+            dockerStats[name].push({ cpu: cpu, ram: ram });
+
+            if (dockerStats[name].length > 15) {
+                dockerStats[name].shift();
+            }
+        }
+    }
+    // console.log(dockerStats);
+
+}, 1000);
+
+
+router.get('/chart', async (req, res) => {
+    let name = req.header('hx-trigger-name');
+
+    // console.log(dockerStats[name]);
+
+    let chart = `
+    <script>
+        ${name}chart.appendData([{
+            data: [100]
+        }, {
+            data: [25]
+        }])
+    </script>`
+    res.send(chart);
+});

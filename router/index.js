@@ -10,6 +10,7 @@ import { Users } from "../controllers/users.js";
 import { Images } from "../controllers/images.js";
 import { Account } from "../controllers/account.js";
 import { Settings } from "../controllers/settings.js";
+import { Supporters } from "../controllers/supporters.js";
 import { Networks } from "../controllers/networks.js";
 import { Volumes } from "../controllers/volumes.js";
 import { Syslogs } from "../controllers/syslogs.js";
@@ -56,6 +57,7 @@ router.get("/syslogs", auth, Syslogs);
 
 router.get("/account", Account);
 router.get("/settings", auth, Settings);
+router.get("/supporters", Supporters);
 
 // Functions
 router.post("/install", auth, Install);

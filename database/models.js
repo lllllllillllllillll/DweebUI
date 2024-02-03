@@ -47,25 +47,60 @@ export const User = sequelize.define('User', {
 });
 
 export const Container = sequelize.define('Container', {
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true
-  },
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  visibility: {
-    type: DataTypes.STRING
-  },
-  size: {
-    type: DataTypes.STRING
-  },
-  group: {
-    type: DataTypes.STRING
-  }
-});
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+    },
+    name: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    visibility: {
+        type: DataTypes.STRING
+    },
+    service: {
+        type: DataTypes.STRING
+    },
+    state: {
+        type: DataTypes.STRING
+    },
+    image: {
+        type: DataTypes.STRING
+    },
+    external_port: {
+        type: DataTypes.STRING
+    },
+    internal_port: {
+        type: DataTypes.STRING
+    },
+    ports: {
+        type: DataTypes.STRING
+    },
+    volumes: {
+        type: DataTypes.STRING
+    },
+    environment_variables: {
+        type: DataTypes.STRING
+    },
+    labels: {
+        type: DataTypes.STRING
+    },
+    IPv4: {
+        type: DataTypes.STRING
+    },
+    style: {
+        type: DataTypes.STRING
+    },
+    cpu: {
+        // store the last 15 values from dockerContainerStats
+        type: DataTypes.STRING
+    },
+    ram: {
+        // store the last 15 values from dockerContainerStats
+        type: DataTypes.STRING
+    },
+  });
 
 export const Permission = sequelize.define('Permission', {
   id: {
