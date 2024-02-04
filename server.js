@@ -334,46 +334,31 @@ router.get('/modal', async (req, res) => {
 });
 
 
-
-let dockerStats = {};
-setInterval(async () => {
-
-    const data = await docker.listContainers({ all: true });
-    for (const container of data) {
-        let name = container.Names[0].slice(1);
-        if (!hidden.includes(name)) {
-            const stats = await dockerContainerStats(container.Id);
-            let cpu = Math.round(stats[0].cpuPercent);
-            let ram = Math.round(stats[0].memPercent);
-
-            if (!dockerStats[name]) {
-                dockerStats[name] = Array(15).fill({ cpu: 0, ram: 0 });
-            }
-
-            dockerStats[name].push({ cpu: cpu, ram: ram });
-
-            if (dockerStats[name].length > 15) {
-                dockerStats[name].shift();
-            }
-        }
-    }
-    // console.log(dockerStats);
-
-}, 1000);
-
-
+let stats = {};
 router.get('/chart', async (req, res) => {
     let name = req.header('hx-trigger-name');
-
-    // console.log(dockerStats[name]);
+    // create an empty array if it doesn't exist
+    if (!stats[name]) {
+        stats[name] = { cpuArray: Array(15).fill(0), ramArray: Array(15).fill(0) };
+    }
+    // get the stats
+    const info = await dockerContainerStats(name);
+    // update the arrays
+    stats[name].cpuArray.push(Math.round(info[0].cpuPercent));
+    stats[name].ramArray.push(Math.round(info[0].memPercent));
+    // slice them down to the last 15 values
+    stats[name].cpuArray = stats[name].cpuArray.slice(-15);
+    stats[name].ramArray = stats[name].ramArray.slice(-15);
 
     let chart = `
-    <script>
-        ${name}chart.appendData([{
-            data: [100]
-        }, {
-            data: [25]
-        }])
-    </script>`
+        <script>
+            ${name}chart.updateSeries([{
+                data: ${JSON.stringify(stats[name].cpuArray)}
+            }, {
+                data: ${JSON.stringify(stats[name].ramArray)}
+            }])
+        </script>`
     res.send(chart);
 });
+
+
