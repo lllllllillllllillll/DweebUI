@@ -362,3 +362,9 @@ router.get('/chart', async (req, res) => {
 });
 
 
+
+router.get('/clicker', async (req, res) => {
+    let name = req.header('hx-trigger-name');
+    clicks++;
+    res.send(clicks.toString());
+});
