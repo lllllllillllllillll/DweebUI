@@ -31,112 +31,52 @@
 
               <div class="col-12 mt-12">
                 <div class="card">
-                  <div class="card-header">
-                    <h3 class="card-title">Docker Networks</h3>
-                      <div class="card-options btn-list">                  
-                          <a href="#" class="btn">
-                          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-refresh" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4"></path> <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"></path> </svg>
-                          Refresh
-                          </a>
-                          <a href="#" class="btn" data-bs-toggle="modal" data-bs-target="#not_add-site">
-                          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M12 5l0 14"></path> <path d="M5 12l14 0"></path> </svg>
-                          New Network
-                          </a>
-                      </div>
-                  </div>
-                  
-                  <div class="modal modal-blur fade" id="add-site" tabindex="-1" style="display: none;" aria-hidden="true">
-                    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-                      <div class="modal-content">
-                        <div class="modal-body">
-
-                          <form action="/addsite" id="addsite" method="POST">
-                            <div class="mb-3">
-                              <div class="form-label">Type</div>
-                              <select class="form-select" name="type">
-                                <option value="reverse_proxy">Reverse Proxy</option>
-                                <option value="proxy">Proxy</option>
-                                <option value="file_server">File Server</option>
-                              </select>
-                            </div>
-                            <div class="mb-3">
-                              <label class="form-label">Domain / Subdomain</label>
-                              <input type="text" class="form-control" name="domain" placeholder="media.mydomainname.com">
-                            </div>
-                            <div class="mb-4">
-                              <div class="row g-2">
-                                <div class="col-8">
-                                  <label class="form-label">Hostname / Host IP</label>
-                                  <input type="text" class="form-control" name="host" placeholder="localhost">
-                                </div>
-                                <div class="col-4">
-                                  <label class="form-label">Port</label>
-                                  <input type="text" class="form-control" name="port" placeholder="8000">
-                                </div>
-                              </div>
-                            </div>
-                            <div class="mb-3">
-                              <div class="divide-y">
-                                <div>
-                                  <label class="row">
-                                    <span class="col" title="HTTP Strict Transport Security (HSTS) is a simple and widely supported standard to protect visitors by ensuring that their browsers always connect to a website over HTTPS.">HSTS</span>
-                                    <span class="col-auto">
-                                      <label class="form-check form-check-single form-switch">
-                                        <input class="form-check-input" type="checkbox" name="hsts" checked="" disabled="">
-                                      </label>
-                                    </span>
-                                  </label>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="mb-3">
-                              <div class="form-label">Container</div>
-                              <select class="form-select" name="container" disabled="">
-                                <option value="0" selected></option>
-                                <option value="1">Jellyfin</option>
-                              </select>
-                            </div>
-                          </form>
+                  <form method="post">
+                    <div class="card-header">
+                      <h3 class="card-title">Docker Networks</h3>
+                        <div class="card-options btn-list">                  
+                            <a href="#" class="btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-refresh" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4"></path> <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"></path> </svg>
+                            Refresh
+                            </a>
+                            <a href="#" class="btn" data-bs-toggle="modal" data-bs-target="#not_add-site">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M12 5l0 14"></path> <path d="M5 12l14 0"></path> </svg>
+                            New Network
+                            </a>
                         </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-link link-secondary me-auto" data-bs-dismiss="modal">Cancel</button>
-                          <input type="submit" form="addsite" class="btn btn-success" value="Add"/>
-                        </div>
-                      </div>
                     </div>
-                  </div>
+                  
+                    <div id="table-default" class="table-responsive">
+                      <table class="table">
+                        
+                        <%- network_list %>
 
+                      </table>
+                    </div>
 
-                  <div id="table-default" class="table-responsive">
-                    <table class="table">
+                    <div class="card-footer d-flex align-items-center">
+
+                      <span class="dropdown">
+                        <button class="btn dropdown-toggle align-text-top" data-bs-toggle="dropdown">Actions</button>
+                        <div class="dropdown-menu dropdown-menu-end">
+                          <button class="dropdown-item" type="submit" formaction="/submitNetworks">
+                            Enable
+                          </button>
+                          <button class="dropdown-item" type="submit" formaction="/submitNetworks">
+                            Disable
+                          </button>
+                          <button class="dropdown-item" type="submit" formaction="/submitNetworks">
+                            Delete
+                          </button>
+                        </div>
+                      </span>
+
                       
-                      <%- network_list %>
-
-                    </table>
-                  </div>
-
-                  <div class="card-footer d-flex align-items-center">
-
-                    <span class="dropdown">
-                      <button class="btn dropdown-toggle align-text-top" data-bs-toggle="dropdown">Actions</button>
-                      <div class="dropdown-menu dropdown-menu-end">
-                        <button class="dropdown-item" type="submit" formaction="/enablesite">
-                          Enable
-                        </button>
-                        <button class="dropdown-item" type="submit" formaction="/disablesite">
-                          Disable
-                        </button>
-                        <button class="dropdown-item" type="submit" formaction="/removesite">
-                          Delete
-                        </button>
-                      </div>
-                    </span>
-
-                  </form>
                                         
-                    <p class="m-0 text-muted ms-auto"><%- network_count %> Networks</p>
+                      <p class="m-0 text-muted ms-auto"><%- network_count %> Networks</p>
 
-                  </div>
+                    </div>
+                  </form>
                 </div>
               </div>
 

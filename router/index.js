@@ -43,8 +43,24 @@ router.get("/", auth, Dashboard);
 router.post("/", auth, searchDashboard);
 
 router.get("/images", auth, Images);
+
+router.post("/submitImages", (req, res, next) => {
+    console.log(req.body);
+    next();
+}, Images);
+
 router.get("/volumes", auth, Volumes);
+router.post("/submitVolumes", (req, res, next) => {
+    console.log(req.body);
+    next();
+}, Volumes);
+
 router.get("/networks", auth, Networks);
+router.post("/submitNetworks", (req, res, next) => {
+    console.log(req.body);
+    next();
+}, Networks);
+
 router.get("/portal", Portal)
 
 router.get("/apps", auth, Apps);

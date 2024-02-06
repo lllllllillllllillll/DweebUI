@@ -28,7 +28,7 @@ export const Networks = async function(req, res) {
 
         let details = `
             <tr>
-                <td><input class="form-check-input m-0 align-middle" name="select" value="" type="checkbox" aria-label="Select"></td>
+                <td><input class="form-check-input m-0 align-middle" name="select" value="${networks[i].Name}" type="checkbox" aria-label="Select"></td>
                 <td class="sort-name">${networks[i].Name}</td>
                 <td class="sort-city">${networks[i].Id}</td>
                 <td class="sort-score text-green">In use</td>
