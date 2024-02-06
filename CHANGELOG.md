@@ -5,7 +5,8 @@
 * Improved Dockerfile.
 * Express sessions configured to use memorystore.
 * Improved chart rendering.
-* Fixed chart scaling.
+* Improvements to container charts.
+* Created Supporters page.
 
 ## v0.20 (Jan 20th 2024) - The rewrite. Jumping all the way to v0.20.
 * Changed to ES6 imports.

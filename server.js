@@ -9,6 +9,7 @@ import { sequelize, Container } from './database/models.js';
 import { currentLoad, mem, networkStats, fsSize, dockerContainerStats, dockerImages, networkInterfaces } from 'systeminformation';
 import { containerCard } from './components/containerCard.js';
 import { modal } from './components/modal.js';
+import { permissionsModal } from './components/permissions_modal.js';
 export var docker = new Docker();
 
 const app = express();
@@ -17,7 +18,7 @@ const port = process.env.PORT || 8000;
 let [ hidden, activeEvent, cardList, clicked ] = ['', '', '', false];
 let sentList = '';
 let SSE = false;
-let clicks = 0;
+let thanks = 0;
 
 // Session middleware
 const sessionMiddleware = session({
@@ -298,6 +299,14 @@ router.get('/sse_event', (req, res) => {
 router.get('/modal', async (req, res) => {
 
     let name = req.header('hx-trigger-name');
+    let id = req.header('hx-trigger');
+
+    if (id == 'permissions') {
+        let form = permissionsModal();
+        res.send(form);
+        return;
+    }
+
 
     let containerId = docker.getContainer(name);
     let containerInfo = await containerId.inspect();
@@ -326,8 +335,6 @@ router.get('/modal', async (req, res) => {
         ports: ports_list,
         link: 'localhost',
     }
-
-    console.log(container_info);
     
     let form = modal(container_info);
     res.send(form);
@@ -349,13 +356,13 @@ router.get('/chart', async (req, res) => {
     // slice them down to the last 15 values
     stats[name].cpuArray = stats[name].cpuArray.slice(-15);
     stats[name].ramArray = stats[name].ramArray.slice(-15);
-
+    // replace the chart with the new data
     let chart = `
         <script>
             ${name}chart.updateSeries([{
-                data: ${JSON.stringify(stats[name].cpuArray)}
+                data: [${stats[name].cpuArray}]
             }, {
-                data: ${JSON.stringify(stats[name].ramArray)}
+                data: [${stats[name].ramArray}]
             }])
         </script>`
     res.send(chart);
@@ -363,8 +370,12 @@ router.get('/chart', async (req, res) => {
 
 
 
-router.get('/clicker', async (req, res) => {
+router.get('/thank', async (req, res) => {
     let name = req.header('hx-trigger-name');
-    clicks++;
-    res.send(clicks.toString());
+    thanks++;
+    let data = thanks.toString();
+    if (thanks > 999) {
+        data = 'Did you really click 1000 times?!';
+    }
+    res.send(data);
 });

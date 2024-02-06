@@ -146,11 +146,10 @@
             <div id="modals-here" class="modal modal-blur fade" style="display: none" aria-hidden="false" tabindex="-1">
               <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
                 <div class="modal-content">
-
                 </div>
               </div>
             </div>
-
+            
 
             <div class="modal modal-blur fade" id="log_view" tabindex="-1" style="display: none;" aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
@@ -203,7 +202,7 @@
             enabled: true
           },
           animations: {
-            enabled: false
+            enabled: true
           }
         },
         fill: {
@@ -229,19 +228,13 @@
           strokeDashArray: 4
         },
         xaxis: {
-          labels: {
-            padding: 0
-          },
           tooltip: {
             enabled: false
           }
         },
         yaxis: {
           min: 0,
-          max: 102,
-          labels: {
-            padding: 4
-          }
+          max: 100,
         },
         colors: [tabler.getColor("primary"), tabler.getColor("gray-600")],
         legend: {

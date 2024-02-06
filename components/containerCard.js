@@ -85,7 +85,7 @@ export const containerCard = (data) => {
                     <div class="dropdown-menu dropdown-menu-end">
                       <button class="dropdown-item text-secondary" data-hx-get="/hide" data-hx-trigger="click" data-hx-swap="none" name="${name}" id="hide" value="hide">Hide</button>
                       <button class="dropdown-item text-secondary" data-hx-get="/hide" data-hx-trigger="click" data-hx-swap="none" name="${name}" id="reset" value="reset">Reset View</button>
-                      <button class="dropdown-item text-secondary" name="${name}" id="permissions" value="permissions" data-bs-toggle="modal" data-bs-target="#${name}_permissions">Permissions</button>
+                      <button class="dropdown-item text-secondary" name="${name}" id="permissions" data-hx-get="/modal" data-hx-target="#modals-here" data-hx-trigger="click" data-bs-toggle="modal" data-bs-target="#modals-here">Permissions</button>
                     </div>
                   </div>
                 </div>
@@ -212,18 +212,35 @@ export const containerCard = (data) => {
 
             <div class="mb-2">
               <div class="divide-y">
+                
+                <div class="row">
+                  <div class="col-9">
+                    <div class="d-flex align-items-center">
+                      User:
+                      <select class="form-select ms-2">
+                        <option value="john_doe" selected hidden>John Doe</option>
+                        <option value="john_doe">John Doe</option>
+                        <option value="jane_doe">Jane Doe</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
                 <div class="row">
                   <div class="col-9">
                     <label class="row text-start">
-                      <span class="col">Install</span>
+                      <span class="col">
+                        View
+                      </span>
                     </label>
                   </div>
                   <div class="col-3">
                     <label class="form-check form-check-single form-switch text-end">
-                      <input class="form-check-input" type="checkbox" name="remove_volumes">
+                      <input class="form-check-input" type="checkbox" name="remove_image">
                     </label>
                   </div>
                 </div>
+
                 <div class="row">
                   <div class="col-9">
                     <label class="row text-start">
@@ -238,6 +255,7 @@ export const containerCard = (data) => {
                     </label>
                   </div>
                 </div>
+
                 <div class="row">
                   <div class="col-9">
                     <label class="row text-start">
