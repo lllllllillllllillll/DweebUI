@@ -74,7 +74,7 @@ export const containerCard = (data) => {
                       <button class="dropdown-item text-secondary" name="${name}" data-hx-get="/modal" data-hx-target="#modals-here" data-hx-trigger="click" data-bs-toggle="modal" data-bs-target="#modals-here">Details</button>
                       <button class="dropdown-item text-secondary" name="${name}" id="logs" data-hx-get="/logs" data-hx-target="#logView" data-bs-toggle="modal" data-bs-target="#log_view">Logs</button>
                       <button class="dropdown-item text-secondary" name="${name}" id="edit">Edit</button>
-                      <button class="dropdown-item text-primary" name="${name}" id="update">Update</button>
+                      <button class="dropdown-item text-primary" name="${name}" id="update" disabled="">Update</button>
                       <button class="dropdown-item text-danger" name="${name}" id="remove" data-bs-toggle="modal" data-bs-target="#${name}_uninstall_modal" href="#">Remove</button>
                     </div>
                   </div>

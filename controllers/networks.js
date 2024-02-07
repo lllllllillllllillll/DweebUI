@@ -23,15 +23,13 @@ export const Networks = async function(req, res) {
 
         // let date = new Date(images[i].Created * 1000);
         // let created = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-
-    
-
+        
         let details = `
             <tr>
-                <td><input class="form-check-input m-0 align-middle" name="select" value="${networks[i].Name}" type="checkbox" aria-label="Select"></td>
+                <td><input class="form-check-input m-0 align-middle" name="select" value="${networks[i].Id}" type="checkbox" aria-label="Select"></td>
                 <td class="sort-name">${networks[i].Name}</td>
                 <td class="sort-city">${networks[i].Id}</td>
-                <td class="sort-score text-green">In use</td>
+                <td class="sort-score text-green"> - </td>
                 <td class="sort-date" data-date="1628122643">${networks[i].Created}</td>
                 <td class="text-end"><a class="btn" href="#">Details</a></td>
             </tr>`
@@ -49,4 +47,27 @@ export const Networks = async function(req, res) {
         network_count: networks.length
     });
 
+}
+
+
+
+
+export const removeNetwork = async function(req, res) {
+    
+    let networks = req.body.select;
+
+    for (let i = 0; i < networks.length; i++) {
+        
+        if (networks[i] != 'on') {
+            try {
+                console.log(`Removing network: ${networks[i]}`);
+                let network = docker.getNetwork(networks[i]);
+                await network.remove();
+            } catch (error) {
+                console.log(`Unable to remove network: ${networks[i]}`);
+            }
+        }
+    }
+
+    res.redirect("/networks");
 }

@@ -155,6 +155,8 @@ setInterval(async () => {
 
 
 router.get('/stats', async (req, res) => {
+    if (req.session.UUID == undefined) { return; }
+
     switch (req.header('HX-Trigger')) {
         case 'cpu': 
         let info = '<div class="font-weight-medium">';
@@ -196,6 +198,8 @@ router.get('/stats', async (req, res) => {
 });
 
 router.get('/containers', async (req, res) => {
+    if (req.session.UUID == undefined) { return; }
+
     await getHidden();
     await containerCards();
     sentList = cardList;
@@ -203,6 +207,8 @@ router.get('/containers', async (req, res) => {
 });
 
 router.get('/action', async (req, res) => {
+    if (req.session.UUID == undefined) { return; }
+
     let name = req.header('hx-trigger-name');
     let id = req.header('hx-trigger');
     let value = req.query[name];
@@ -225,6 +231,8 @@ router.get('/action', async (req, res) => {
 });
 
 router.get('/hide', async (req, res) => {
+    if (req.session.UUID == undefined) { return; }
+
     let name = req.header('hx-trigger-name');
     let id = req.header('hx-trigger');
 
@@ -250,6 +258,8 @@ router.get('/hide', async (req, res) => {
 
 
 router.get('/logs', async (req, res) => {
+    if (req.session.UUID == undefined) { return; }
+    
     let name = req.header('hx-trigger-name');
     
     function containerLogs (data) {
@@ -297,6 +307,7 @@ router.get('/sse_event', (req, res) => {
 
 
 router.get('/modal', async (req, res) => {
+    if (req.session.UUID == undefined) { return; }
 
     let name = req.header('hx-trigger-name');
     let id = req.header('hx-trigger');
@@ -343,6 +354,8 @@ router.get('/modal', async (req, res) => {
 
 let stats = {};
 router.get('/chart', async (req, res) => {
+    if (req.session.UUID == undefined) { return; }
+
     let name = req.header('hx-trigger-name');
     // create an empty array if it doesn't exist
     if (!stats[name]) {

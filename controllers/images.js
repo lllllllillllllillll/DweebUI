@@ -30,11 +30,11 @@ export const Images = async function(req, res) {
 
         let details = `
             <tr>
-                <td><input class="form-check-input m-0 align-middle" name="select" value="${images[i].RepoTags}" type="checkbox" aria-label="Select"></td>
+                <td><input class="form-check-input m-0 align-middle" name="select" value="${images[i].Id}" type="checkbox" aria-label="Select"></td>
                 <td class="sort-name">${images[i].RepoTags}</td>
                 <td class="sort-city">${images[i].Id}</td>
                 <td class="sort-type">Latest</td>
-                <td class="sort-score text-green">In use</td>
+                <td class="sort-score text-green"> - </td>
                 <td class="sort-date" data-date="1628122643">${created}</td>
                 <td class="sort-quantity">${size} MB</td>
                 <td class="text-end"><a class="btn" href="#">Details</a></td>
@@ -53,4 +53,28 @@ export const Images = async function(req, res) {
         image_count: images.length
     });
 
+}
+
+
+
+export const removeImage = async function(req, res) {
+    
+    let images = req.body.select;
+
+    console.log(images);
+
+    for (let i = 0; i < images.length; i++) {
+        
+        if (images[i] != 'on') {
+            try {
+                console.log(`Removing image: ${images[i]}`);
+                let image = docker.getImage(images[i]);
+                await image.remove();
+            } catch (error) {
+                console.log(`Unable to remove image: ${images[i]}`);
+            }
+        }
+    }
+
+    res.redirect("/images");
 }

@@ -37,11 +37,11 @@
                         <div class="card-options btn-list">                  
                             <a href="#" class="btn">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-refresh" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4"></path> <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"></path> </svg>
-                            Refresh
+                              Refresh
                             </a>
                             <a href="#" class="btn" data-bs-toggle="modal" data-bs-target="#not_add-site">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M12 5l0 14"></path> <path d="M5 12l14 0"></path> </svg>
-                            New Volume
+                              New Volume
                             </a>
                         </div>
                     </div>
@@ -57,7 +57,9 @@
 
                     <div class="card-footer d-flex align-items-center">
 
-                      <span class="dropdown">
+                        <button class="btn" type="submit" formaction="/removeVolume">Remove</button>
+
+                      <!-- <span class="dropdown">
                         <button class="btn dropdown-toggle align-text-top" data-bs-toggle="dropdown">Actions</button>
                         <div class="dropdown-menu dropdown-menu-end">
                           <button class="dropdown-item" type="submit" formaction="/submitVolumes">
@@ -70,10 +72,9 @@
                             Delete
                           </button>
                         </div>
-                      </span>
+                      </span> -->
 
-                    
-                                          
+                                                        
                       <p class="m-0 text-muted ms-auto"><%- volume_count %> Volumes</p>
 
                     </div>

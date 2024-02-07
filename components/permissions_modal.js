@@ -249,10 +249,12 @@ export const permissionsModal = (data) => {
             <div class="modal-footer">
               <div class="row">
 
+                <div class="col">
                   <label class="form-check form-switch col">
-                    <input class="form-check-input" type="checkbox">
                     <span class="form-check-label">Reset</span>
+                    <input class="form-check-input" type="checkbox">
                   </label>
+                </div>
               
                 <div class="col">
                   <button type="button" class="btn btn-danger" data-bs-dismiss="modal" disabled="">Reset</button>
