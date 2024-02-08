@@ -15,6 +15,10 @@ export const Networks = async function(req, res) {
                 <th><button class="table-sort" data-sort="sort-date">Created</button></th>
                 <th><button class="table-sort" data-sort="sort-progress">Action</button></th>
             </tr>
+            <!-- Hidden checkbox so that the form returns an array each time -->
+            <tr class="d-none">
+                <td><input class="form-check-input m-0 align-middle" name="select" value="on" type="checkbox" checked="" aria-label="Select"></td>
+            </tr>
         </thead>
     <tbody class="table-tbody">`
 
@@ -38,7 +42,6 @@ export const Networks = async function(req, res) {
     
     network_list += `</tbody>`
 
-    
     res.render("networks", {
         name: req.session.user,
         role: req.session.role,
@@ -46,16 +49,13 @@ export const Networks = async function(req, res) {
         network_list: network_list,
         network_count: networks.length
     });
-
 }
 
 
 
 
 export const removeNetwork = async function(req, res) {
-    
     let networks = req.body.select;
-
     for (let i = 0; i < networks.length; i++) {
         
         if (networks[i] != 'on') {
@@ -68,6 +68,5 @@ export const removeNetwork = async function(req, res) {
             }
         }
     }
-
     res.redirect("/networks");
 }

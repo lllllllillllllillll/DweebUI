@@ -17,6 +17,10 @@ export const Volumes = async function(req, res) {
             <th><button class="table-sort" data-sort="sort-quantity">Size</button></th>
             <th><button class="table-sort" data-sort="sort-progress">Action</button></th>
         </tr>
+        <!-- Hidden checkbox so that the form returns an array each time -->
+        <tr class="d-none">
+            <td><input class="form-check-input m-0 align-middle" name="select" value="on" type="checkbox" checked="" aria-label="Select"></td>
+        </tr>
     </thead>
     <tbody class="table-tbody">`
 
@@ -50,7 +54,7 @@ export const Volumes = async function(req, res) {
             <td class="sort-score text-green"> - </td>
             <td class="sort-date" data-date="1628122643">${volume.CreatedAt}</td>
             <td class="sort-quantity">MB</td>
-            <td class="text-end"><a class="btn" href="#" disabled="">Details</a></td>
+            <td class="text-end"><a class="btn" href="#">Details</a></td>
         </tr>`
     
         volume_list += details;    
@@ -71,21 +75,20 @@ export const Volumes = async function(req, res) {
 
 
 
-
-
-
 export const removeVolume = async function(req, res) {
-    
     let volumes = req.body.select;
 
     for (let i = 0; i < volumes.length; i++) {
-        let volume = docker.getVolume(volumes[i]);
-        try {
-            volume.remove();
-        }   catch (error) {
-                console.log(`Unable to remove volume ${volumes[i]}`);
+        
+        if (volumes[i] != 'on') {
+            try {
+                console.log(`Removing volume: ${volumes[i]}`);
+                let volume = docker.getVolume(volumes[i]);
+                await volume.remove();
+            } catch (error) {
+                console.log(`Unable to remove volume: ${volumes[i]}`);
+            }
         }
     }
-    
     res.redirect("/volumes");
 }

@@ -11,6 +11,7 @@ import { Images, removeImage } from "../controllers/images.js";
 import { Networks, removeNetwork } from "../controllers/networks.js";
 import { Volumes, removeVolume } from "../controllers/volumes.js";
 import { Account } from "../controllers/account.js";
+import { Variables } from "../controllers/variables.js";
 import { Settings } from "../controllers/settings.js";
 import { Supporters } from "../controllers/supporters.js";
 import { Syslogs } from "../controllers/syslogs.js";
@@ -55,6 +56,7 @@ router.get("/users", auth, Users);
 router.get("/syslogs", auth, Syslogs);
 
 router.get("/account", Account);
+router.get("/variables", auth, Variables);
 router.get("/settings", auth, Settings);
 router.get("/supporters", Supporters);
 

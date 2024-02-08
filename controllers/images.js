@@ -16,6 +16,10 @@ export const Images = async function(req, res) {
             <th><button class="table-sort" data-sort="sort-quantity">Size</button></th>
             <th><button class="table-sort" data-sort="sort-progress">Action</button></th>
         </tr>
+        <!-- Hidden checkbox so that the form returns an array each time -->
+        <tr class="d-none">
+            <td><input class="form-check-input m-0 align-middle" name="select" value="on" type="checkbox" checked="" aria-label="Select"></td>
+        </tr>
     </thead>
     <tbody class="table-tbody">`
 
@@ -33,7 +37,7 @@ export const Images = async function(req, res) {
                 <td><input class="form-check-input m-0 align-middle" name="select" value="${images[i].Id}" type="checkbox" aria-label="Select"></td>
                 <td class="sort-name">${images[i].RepoTags}</td>
                 <td class="sort-city">${images[i].Id}</td>
-                <td class="sort-type">Latest</td>
+                <td class="sort-type"> - </td>
                 <td class="sort-score text-green"> - </td>
                 <td class="sort-date" data-date="1628122643">${created}</td>
                 <td class="sort-quantity">${size} MB</td>
@@ -58,7 +62,6 @@ export const Images = async function(req, res) {
 
 
 export const removeImage = async function(req, res) {
-    
     let images = req.body.select;
 
     console.log(images);
@@ -75,6 +78,5 @@ export const removeImage = async function(req, res) {
             }
         }
     }
-
     res.redirect("/images");
 }
