@@ -8,12 +8,12 @@ export const permissionsModal = (data) => {
               <h5 class="modal-title">Permissions</h5>
             </div>
             <div class="modal-body">
-              <form action="" id="details_modal" method="POST">
+              <form action="" id="permissions_modal" method="POST">
             
               <div class="accordion" id="modal-accordion">
 
 
-                <div class="accordion-item" style="border: 1px solid grey;">
+                <div class="accordion-item mb-3" style="border: 1px solid grey;">
                   <h2 class="accordion-header" id="heading-1">
                     <button class="accordion-button collapsed row" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-1" aria-expanded="false">
                       <span class="avatar avatar-sm bg-green-lt col-3 text-start">JD</span>
@@ -24,7 +24,166 @@ export const permissionsModal = (data) => {
                     <div class="accordion-body pt-0">
 
 
-                      <div class="mb-2">
+                      <div class="">
+                        <div class="">
+
+                          <div class="row mb-3">
+                            <div class="col-9">
+                              <label class="row text-start">
+                                <span class="col">
+                                  All
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-3">
+                              <label class="form-check form-check-single form-switch text-end">
+                                <input class="form-check-input" type="checkbox" name="all">
+                              </label>
+                            </div>
+                          </div>
+          
+                          <div class="row mb-2">
+                            <div class="col-9">
+                              <label class="row text-start">
+                                <span class="col">
+                                  Uninstall
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-3">
+                              <label class="form-check form-check-single form-switch text-end">
+                                <input class="form-check-input" type="checkbox" name="uninstall">
+                              </label>
+                            </div>
+                          </div>
+          
+                          <div class="row mb-2">
+                            <div class="col-9">
+                              <label class="row text-start">
+                                <span class="col">
+                                  Edit
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-3">
+                              <label class="form-check form-check-single form-switch text-end">
+                                <input class="form-check-input" type="checkbox" name="edit">
+                              </label>
+                            </div>
+                          </div>
+
+                          <div class="row mb-2">
+                            <div class="col-9">
+                              <label class="row text-start">
+                                <span class="col">
+                                  Upgrade
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-3">
+                              <label class="form-check form-check-single form-switch text-end">
+                                <input class="form-check-input" type="checkbox" name="upgrade">
+                              </label>
+                            </div>
+                          </div>
+
+                          <div class="row mb-2">
+                            <div class="col-9">
+                              <label class="row text-start">
+                                <span class="col">
+                                  Start
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-3">
+                              <label class="form-check form-check-single form-switch text-end">
+                                <input class="form-check-input" type="checkbox" name="start">
+                              </label>
+                            </div>
+                          </div>
+
+                          <div class="row mb-2">
+                            <div class="col-9">
+                              <label class="row text-start">
+                                <span class="col">
+                                  Stop
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-3">
+                              <label class="form-check form-check-single form-switch text-end">
+                                <input class="form-check-input" type="checkbox" name="stop">
+                              </label>
+                            </div>
+                          </div>
+
+                          <div class="row mb-2">
+                            <div class="col-9">
+                              <label class="row text-start">
+                                <span class="col">
+                                  Pause
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-3">
+                              <label class="form-check form-check-single form-switch text-end">
+                                <input class="form-check-input" type="checkbox" name="pause">
+                              </label>
+                            </div>
+                          </div>
+
+                          <div class="row mb-2">
+                            <div class="col-9">
+                              <label class="row text-start">
+                                <span class="col">
+                                  Restart
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-3">
+                              <label class="form-check form-check-single form-switch text-end">
+                                <input class="form-check-input" type="checkbox" name="restart">
+                              </label>
+                            </div>
+                          </div>
+
+
+                          <div class="row mb-2">
+                            <div class="col-9">
+                              <label class="row text-start">
+                                <span class="col">
+                                  Logs
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-3">
+                              <label class="form-check form-check-single form-switch text-end">
+                                <input class="form-check-input" type="checkbox" name="logs">
+                              </label>
+                            </div>
+                          </div>
+
+
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="accordion-item mb-3" style="border: 1px solid grey;">
+                  <h2 class="accordion-header" id="heading-2">
+                    <button class="accordion-button collapsed row" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-2" aria-expanded="false">
+                      <span class="avatar avatar-sm bg-cyan-lt col-3 text-start">JD</span>
+                        <div class="col text-end" style="margin-right: 10px;">John Doe</div>
+                    </button>
+                  </h2>
+                  <div id="collapse-2" class="accordion-collapse collapse" data-bs-parent="#modal-accordion">
+                    <div class="accordion-body pt-0">
+
+
+                      <div class="">
                         <div class="">
 
                           <div class="row mb-3">
@@ -186,62 +345,6 @@ export const permissionsModal = (data) => {
                   </div>
                 </div>
 
-
-                <div class="accordion-item mt-2" style="border: 1px solid grey;">
-                  <h2 class="accordion-header" id="heading-2">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-2" aria-expanded="false">
-                      Volumes
-                    </button>
-                  </h2>
-
-                  <div id="collapse-2" class="accordion-collapse collapse" data-bs-parent="#modal-accordion">
-                    <div class="accordion-body pt-0">
-                      
-                    </div>
-                  </div>
-                </div>
-
-
-                <div class="accordion-item mt-2" style="border: 1px solid grey;">
-                  <h2 class="accordion-header" id="heading-3">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-3" aria-expanded="false">
-                      Environment Variables
-                    </button>
-                  </h2>
-                  <div id="collapse-3" class="accordion-collapse collapse" data-bs-parent="#modal-accordion">
-                    <div class="accordion-body pt-0">
-    
-                    </div>
-                  </div>
-                </div>
-
-
-                <div class="accordion-item mt-2" style="border: 1px solid grey;">
-                  <h2 class="accordion-header" id="heading-4">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-4" aria-expanded="false">
-                      Labels
-                    </button>
-                  </h2>
-                  <div id="collapse-4" class="accordion-collapse collapse" data-bs-parent="#modal-accordion">
-                    <div class="accordion-body pt-0">
-    
-                    </div>
-                  </div>
-                </div>
-
-
-                <div class="accordion-item mt-2" style="border: 1px solid grey;">
-                  <h2 class="accordion-header" id="heading-5">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-5" aria-expanded="false">
-                      Extras
-                    </button>
-                  </h2>
-                  <div id="collapse-5" class="accordion-collapse collapse" data-bs-parent="#modal-accordion">
-                    <div class="accordion-body pt-0">
-    
-                    </div>
-                  </div>
-                </div>
 
               </div>
               </form>

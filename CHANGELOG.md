@@ -1,4 +1,4 @@
-## v0.21 (dev) - Another rewrite
+## v0.30 (dev) - Another rewrite
 * Rewrote the dashboard to use HTMX.
 * Removed Socket.io.
 * Views are now HTML instead of EJS.

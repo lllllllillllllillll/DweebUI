@@ -5,7 +5,7 @@ import ejs from 'ejs';
 import Docker from 'dockerode';
 import { Readable } from 'stream';
 import { router } from './router/index.js';
-import { sequelize, Container } from './database/models.js';
+import { sequelize, Container, Permission } from './database/models.js';
 import { currentLoad, mem, networkStats, fsSize, dockerContainerStats, dockerImages, networkInterfaces } from 'systeminformation';
 import { containerCard } from './components/containerCard.js';
 import { modal } from './components/modal.js';
@@ -313,6 +313,9 @@ router.get('/modal', async (req, res) => {
     let id = req.header('hx-trigger');
 
     if (id == 'permissions') {
+        let containerPermissions = await Permission.findAll({ where: {containerName: name}});
+        console.log(containerPermissions);
+
         let form = permissionsModal();
         res.send(form);
         return;
