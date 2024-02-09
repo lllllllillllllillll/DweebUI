@@ -87,19 +87,17 @@ export const createVolume = async function(req, res) {
 export const removeVolume = async function(req, res) {
     let volumes = req.body.select;
 
-    console.log(volumes);
-
-    // for (let i = 0; i < volumes.length; i++) {
+    for (let i = 0; i < volumes.length; i++) {
         
-    //     if (volumes[i] != 'on') {
-    //         try {
-    //             console.log(`Removing volume: ${volumes[i]}`);
-    //             let volume = docker.getVolume(volumes[i]);
-    //             await volume.remove();
-    //         } catch (error) {
-    //             console.log(`Unable to remove volume: ${volumes[i]}`);
-    //         }
-    //     }
-    // }
+        if (volumes[i] != 'on') {
+            try {
+                console.log(`Removing volume: ${volumes[i]}`);
+                let volume = docker.getVolume(volumes[i]);
+                await volume.remove();
+            } catch (error) {
+                console.log(`Unable to remove volume: ${volumes[i]}`);
+            }
+        }
+    }
     res.redirect("/volumes");
 }

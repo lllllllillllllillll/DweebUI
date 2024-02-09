@@ -63,9 +63,6 @@ export const Images = async function(req, res) {
 
 export const removeImage = async function(req, res) {
     let images = req.body.select;
-
-    console.log(images);
-
     for (let i = 0; i < images.length; i++) {
         
         if (images[i] != 'on') {

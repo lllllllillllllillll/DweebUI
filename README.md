@@ -31,8 +31,9 @@ Alpha v0.21 ( :fire: Experimental :fire: )
 * [x] Dashboard provides server metrics, container metrics, and container controls, on a single page.
 * [x] View container logs.
 * [ ] Update containers (planned).
-* [ ] Manage your Docker networks, images, and volumes (in development).
+* [x] Manage your Docker networks, images, and volumes.
 * [x] Light/Dark Mode.
+* [x] Mobile Friendly.
 * [x] Easy to install app templates.
 * [x] Multi-User built-in.
 * [ ] Permissions system (in development).
