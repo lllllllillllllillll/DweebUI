@@ -115,13 +115,12 @@
     <script>
       function selectAll() {
         let checkboxes = document.getElementsByName('select');
-        // loops start at 1 to ignore the hidden checkbox
-        if (checkboxes[1].checked == true) {
-          for (var i = 1; i < checkboxes.length; i++) {
+        if (checkboxes[0].checked == true) {
+          for (var i = 0; i < checkboxes.length; i++) {
             checkboxes[i].checked = true;
           }
         } else {
-          for (var i = 1; i < checkboxes.length; i++) {
+          for (var i = 0; i < checkboxes.length; i++) {
             checkboxes[i].checked = false;
           }
         }

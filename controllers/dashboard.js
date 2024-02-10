@@ -12,7 +12,7 @@ export const Dashboard = (req, res) => {
 
 export const searchDashboard = (req, res) => {
 
-    console.log(req.params);
+    // console.log(req.params);
 
     res.render("dashboard", {
         name: req.session.user,

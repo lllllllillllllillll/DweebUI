@@ -8,10 +8,6 @@ export const Volumes = async function(req, res) {
 
     let volume_list = `
     <thead>
-        <!-- Hidden checkbox so that the form returns an array each time -->
-        <tr class="d-none">
-            <td><input class="form-check-input m-0 align-middle" name="select" value="on" type="checkbox" checked="" aria-label="Select"></td>
-        </tr>
         <tr>
             <th class="w-1"><input class="form-check-input m-0 align-middle" name="select" type="checkbox" aria-label="Select all" onclick="selectAll()"></th>
             <th><button class="table-sort" data-sort="sort-name">Name</button></th>
@@ -86,6 +82,10 @@ export const createVolume = async function(req, res) {
 
 export const removeVolume = async function(req, res) {
     let volumes = req.body.select;
+    
+    if (typeof(volumes) == 'string') {
+        volumes = [volumes];
+    }
 
     for (let i = 0; i < volumes.length; i++) {
         
@@ -99,5 +99,6 @@ export const removeVolume = async function(req, res) {
             }
         }
     }
+
     res.redirect("/volumes");
 }

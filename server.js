@@ -18,6 +18,7 @@ const port = process.env.PORT || 8000;
 let [ hidden, activeEvent, cardList, clicked ] = ['', '', '', false];
 let sentList = '';
 let SSE = false;
+app.locals.installCard = '';
 let thanks = 0;
 
 // Session middleware
@@ -314,7 +315,7 @@ router.get('/modal', async (req, res) => {
 
     if (id == 'permissions') {
         let containerPermissions = await Permission.findAll({ where: {containerName: name}});
-        console.log(containerPermissions);
+
 
         let form = permissionsModal();
         res.send(form);
@@ -387,7 +388,6 @@ router.get('/chart', async (req, res) => {
 
 
 router.get('/thank', async (req, res) => {
-    let name = req.header('hx-trigger-name');
     thanks++;
     let data = thanks.toString();
     if (thanks > 999) {

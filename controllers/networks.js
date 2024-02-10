@@ -7,10 +7,6 @@ export const Networks = async function(req, res) {
 
     let network_list = `
         <thead>
-            <!-- Hidden checkbox so that the form returns an array each time -->
-            <tr class="d-none">
-                <td><input class="form-check-input m-0 align-middle" name="select" value="on" type="checkbox" checked="" aria-label="Select"></td>
-            </tr>
             <tr>
                 <th class="w-1"><input class="form-check-input m-0 align-middle" name="select" type="checkbox" aria-label="Select all" onclick="selectAll()"></th>
                 <th><button class="table-sort" data-sort="sort-name">Name</button></th>
@@ -56,6 +52,11 @@ export const Networks = async function(req, res) {
 
 export const removeNetwork = async function(req, res) {
     let networks = req.body.select;
+
+    if (typeof(networks) == 'string') {
+        networks = [networks];
+    }
+
     for (let i = 0; i < networks.length; i++) {
         
         if (networks[i] != 'on') {

@@ -37,7 +37,7 @@ export const permissionsModal = (data) => {
                             </div>
                             <div class="col-3">
                               <label class="form-check form-check-single form-switch text-end">
-                                <input class="form-check-input" type="checkbox" name="all">
+                                <input class="form-check-input" type="checkbox" name="select" onclick="selectAll('select')">
                               </label>
                             </div>
                           </div>
@@ -52,7 +52,7 @@ export const permissionsModal = (data) => {
                             </div>
                             <div class="col-3">
                               <label class="form-check form-check-single form-switch text-end">
-                                <input class="form-check-input" type="checkbox" name="uninstall">
+                                <input class="form-check-input" type="checkbox" name="select">
                               </label>
                             </div>
                           </div>
@@ -67,7 +67,7 @@ export const permissionsModal = (data) => {
                             </div>
                             <div class="col-3">
                               <label class="form-check form-check-single form-switch text-end">
-                                <input class="form-check-input" type="checkbox" name="edit">
+                                <input class="form-check-input" type="checkbox" name="select">
                               </label>
                             </div>
                           </div>
@@ -82,7 +82,7 @@ export const permissionsModal = (data) => {
                             </div>
                             <div class="col-3">
                               <label class="form-check form-check-single form-switch text-end">
-                                <input class="form-check-input" type="checkbox" name="upgrade">
+                                <input class="form-check-input" type="checkbox" name="select">
                               </label>
                             </div>
                           </div>
@@ -97,7 +97,7 @@ export const permissionsModal = (data) => {
                             </div>
                             <div class="col-3">
                               <label class="form-check form-check-single form-switch text-end">
-                                <input class="form-check-input" type="checkbox" name="start">
+                                <input class="form-check-input" type="checkbox" name="select">
                               </label>
                             </div>
                           </div>
@@ -112,7 +112,7 @@ export const permissionsModal = (data) => {
                             </div>
                             <div class="col-3">
                               <label class="form-check form-check-single form-switch text-end">
-                                <input class="form-check-input" type="checkbox" name="stop">
+                                <input class="form-check-input" type="checkbox" name="select">
                               </label>
                             </div>
                           </div>
@@ -127,7 +127,7 @@ export const permissionsModal = (data) => {
                             </div>
                             <div class="col-3">
                               <label class="form-check form-check-single form-switch text-end">
-                                <input class="form-check-input" type="checkbox" name="pause">
+                                <input class="form-check-input" type="checkbox" name="select">
                               </label>
                             </div>
                           </div>
@@ -142,7 +142,7 @@ export const permissionsModal = (data) => {
                             </div>
                             <div class="col-3">
                               <label class="form-check form-check-single form-switch text-end">
-                                <input class="form-check-input" type="checkbox" name="restart">
+                                <input class="form-check-input" type="checkbox" name="select">
                               </label>
                             </div>
                           </div>
@@ -158,7 +158,7 @@ export const permissionsModal = (data) => {
                             </div>
                             <div class="col-3">
                               <label class="form-check form-check-single form-switch text-end">
-                                <input class="form-check-input" type="checkbox" name="logs">
+                                <input class="form-check-input" type="checkbox" name="select">
                               </label>
                             </div>
                           </div>
