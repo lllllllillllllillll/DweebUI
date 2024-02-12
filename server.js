@@ -15,11 +15,6 @@ export var docker = new Docker();
 const app = express();
 const MemoryStore = memorystore(session);
 const port = process.env.PORT || 8000;
-let [ hidden, activeEvent, cardList, clicked ] = ['', '', '', false];
-let sentList = '';
-let SSE = false;
-app.locals.installCard = '';
-let thanks = 0;
 
 // Session middleware
 const sessionMiddleware = session({
@@ -59,14 +54,15 @@ app.listen(port, async () => {
     });
 });
 
-// Get hidden containers
-async function getHidden() {
-    hidden = await Container.findAll({ where: {visibility:false}});
-    hidden = hidden.map((container) => container.name);
-}
+let [ cpu, ram, tx, rx, disk ] = [0, 0, 0, 0, 0];
+let [ hidden, cardList, sentList ] = ['', '', ''];
+let thanks = 0;
+
+let event = false;
+let sse = false;
+let eventInfo = '';
 
 // Server metrics
-let [ cpu, ram, tx, rx, disk ] = [0, 0, 0, 0, 0];
 let serverMetrics = async () => {
     currentLoad().then(data => { 
         cpu = Math.round(data.currentLoad); 
@@ -84,7 +80,45 @@ let serverMetrics = async () => {
 }
 setInterval(serverMetrics, 1000);
 
-// Docker containers
+
+router.get('/stats', async (req, res) => {
+    let name = req.header('hx-trigger-name');
+    let color = req.header('hx-trigger');
+    let value = 0;
+
+    switch (name) {
+        case 'CPU':
+            value = cpu;
+            break;
+        case 'RAM':
+            value = ram;
+            break;
+        case 'TX':
+            value = tx;
+            break;
+        case 'RX':
+            value = rx;
+            break;
+        case 'DISK':
+            value = disk;
+            break;
+    }
+    let info = `<div class="font-weight-medium">
+                    <label class="cpu-text mb-1">${name} ${value}%</label>
+                </div>
+                <div class="cpu-bar meter animate ${color}">
+                    <span style="width:${value}%"><span></span></span>
+                </div>`;
+    res.send(info);
+});
+
+// Get hidden containers
+async function getHidden() {
+    hidden = await Container.findAll({ where: {visibility:false}});
+    hidden = hidden.map((container) => container.name);
+}
+
+// Create list of docker containers cards
 let containerCards = async () => {
     let list = '';
     const allContainers = await docker.listContainers({ all: true });
@@ -129,93 +163,41 @@ let containerCards = async () => {
     cardList = list;
 }
 
-
-// Store docker events 
+// Docker events
 docker.getEvents((err, stream) => {
     if (err) throw err;
     stream.on('data', (chunk) => {
-        activeEvent += chunk.toString('utf8');
+        event = true;
+        eventInfo = 'docker';
     });
 });
 
 // Check if the container cards need to be updated
 setInterval(async () => {
-    if (activeEvent == '') { return; }
-    activeEvent = '';
+    if (event == false) { return; }
     await getHidden();
     await containerCards();
     if (cardList != sentList) {
         cardList = sentList;
-        SSE = true;
+        sse = true;
     }
+    event = false;
 }, 1000);
 
-
-
-/////////////////// HTMX routes //////////////////////////
-
-
-router.get('/stats', async (req, res) => {
-    if (req.session.UUID == undefined) { return; }
-
-    switch (req.header('HX-Trigger')) {
-        case 'cpu': 
-        let info = '<div class="font-weight-medium">';
-            info += '<label class="cpu-text mb-1" for="cpu">CPU ' + cpu + '%</label>';
-            info += '</div>';
-            info += '<div class="cpu-bar meter animate">';
-            info += '<span style="width:' + cpu + '%"><span></span></span>';
-            info += '</div>';
-            res.send(info);
-            break;
-        case 'ram':
-        let info2 = '<div class="font-weight-medium">';
-            info2 += '<label class="ram-text mb-1" for="ram">RAM ' + ram + '%</label>';
-            info2 += '</div>';
-            info2 += '<div class="ram-bar meter animate orange">';
-            info2 += '<span style="width:' + ram + '%"><span></span></span>';
-            info2 += '</div>';
-            res.send(info2);
-            break;
-        case 'tx':
-            res.send('TX ' + tx.toFixed(2) + ' MB');
-            break;
-        case 'rx':
-            res.send('RX ' + rx.toFixed(2) + ' MB');
-            break;
-        case 'disk':
-        let info5 = '<div class="font-weight-medium">';
-            info5 += '<label class="disk-text mb-1" for="disk">Disk ' + disk + '%</label>';
-            info5 += '</div>';
-            info5 += '<div class="disk-bar meter animate red">';
-            info5 += '<span style="width:' + disk + '%"><span></span></span>';
-            info5 += '</div>';
-            res.send(info5);
-            break;
-        default:
-            console.log('Unknown trigger');
-            break;
-    }
-});
-
+// Gets called at load and after server-side events
 router.get('/containers', async (req, res) => {
-    if (req.session.UUID == undefined) { return; }
-
     await getHidden();
     await containerCards();
     sentList = cardList;
     res.send(cardList);
 });
 
+// Dashboard controls
 router.get('/action', async (req, res) => {
-    if (req.session.UUID == undefined) { return; }
-
     let name = req.header('hx-trigger-name');
     let id = req.header('hx-trigger');
     let value = req.query[name];
-
     var containerName = docker.getContainer(name);
-
     if ((id == 'start') && (value == 'stopped')) {
         containerName.start();
     } else if ((id == 'start') && (value == 'paused')) {
@@ -232,34 +214,23 @@ router.get('/action', async (req, res) => {
 });
 
 router.get('/hide', async (req, res) => {
-    if (req.session.UUID == undefined) { return; }
-
     let name = req.header('hx-trigger-name');
     let id = req.header('hx-trigger');
-
     if (id == 'hide') {
         let exists = await Container.findOne({ where: {name: name}});
         if (!exists) {
             const newContainer = await Container.create({ name: name, visibility: false, });
-            SSE = true;
-            return;
         } else {
             exists.update({ visibility: false });
-            SSE = true;
-            return;
         }
-    }
-
-    if (id == 'reset') {
+    } else if (id == 'reset') {
         Container.update({ visibility: true }, { where: {} });
-        SSE = true;
     }
+    event = true;
+    eventInfo = 'docker';
 });
 
-
-
 router.get('/logs', async (req, res) => {
-    if (req.session.UUID == undefined) { return; }
     
     let name = req.header('hx-trigger-name');
     
@@ -291,24 +262,23 @@ router.get('/logs', async (req, res) => {
 });
 
 
+
 router.get('/sse_event', (req, res) => {
     res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive', });
     let eventCheck = setInterval(async () => {
-        if (SSE == true) {
-            SSE = false;
-            res.write(`event: docker\n`);
-            res.write(`data: there was a docker event!\n\n`);
+        if (sse == true) {
+            res.write(`event: ${eventInfo}\n`);
+            res.write(`data: there was an event!\n\n`);
+            sse = false;
         }
     }, 1000);
     req.on('close', () => {
         clearInterval(eventCheck);
     });
+    return;
 });
 
-
-
 router.get('/modal', async (req, res) => {
-    if (req.session.UUID == undefined) { return; }
 
     let name = req.header('hx-trigger-name');
     let id = req.header('hx-trigger');
@@ -358,7 +328,6 @@ router.get('/modal', async (req, res) => {
 
 let stats = {};
 router.get('/chart', async (req, res) => {
-    if (req.session.UUID == undefined) { return; }
 
     let name = req.header('hx-trigger-name');
     // create an empty array if it doesn't exist

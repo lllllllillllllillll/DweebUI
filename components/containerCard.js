@@ -111,7 +111,7 @@ export const containerCard = (data) => {
           </script>
 
           <div class="chart-sm">
-            <div id="${chartName}_chart" data-hx-trigger="load, every 3s" data-hx-get="/chart" name="${chartName}">
+            <div id="${chartName}_chart" data-hx-trigger="load, every 2s" data-hx-get="/chart" name="${chartName}">
               <script>
                 ${chartName}chart.render();
               </script>

@@ -46,11 +46,11 @@
                         </div>
 
                         <!-- HTMX -->
-                        <div class="col" id="cpu" data-hx-get="/stats" data-hx-trigger="load, every 1s" data-hx-target="#cpu">
+                        <div class="col" name="CPU" id="green" data-hx-get="/stats" data-hx-trigger="load, every 1s">
                           <div class="font-weight-medium">
                             <label class="cpu-text mb-1" for="cpu">CPU 0%</label>
                           </div>
-                          <div class="cpu-bar meter animate">
+                          <div class="cpu-bar meter animate green">
                             <span style="width:20%"><span></span></span>
                           </div>
                         </div>
@@ -71,7 +71,7 @@
                         </div>
 
                         <!-- HTMX -->
-                        <div class="col" id="ram" data-hx-get="/stats" data-hx-trigger="load, every 2s">
+                        <div class="col" name="RAM" id="orange" data-hx-get="/stats" data-hx-trigger="load, every 2s">
                           <div class="font-weight-medium">
                             <label class="ram-text mb-1" for="ram">RAM 0%</label>
                           </div>
@@ -118,7 +118,7 @@
                         </div>
 
                         <!-- HTMX -->
-                        <div class="col" id="disk" data-hx-get="/stats" data-hx-trigger="load, every 2s">
+                        <div class="col" name="DISK" id="red" data-hx-get="/stats" data-hx-trigger="load, every 2s">
                           <div class="font-weight-medium">
                             <label class="disk-text mb-1" for="disk">DISK 0%</label>
                           </div>
@@ -143,6 +143,14 @@
               </div>
             </div>
 
+            <!-- HTMX -->
+            <div class="col-12" hx-ext="sse" sse-connect="/sse_event">
+              <div class="row row-cards" data-hx-get="/installing" data-hx-trigger="load, sse:install" data-hx-swap="innerHTML">
+
+              </div>
+            </div>
+
+            <!-- HTMX Target-->
             <div id="modals-here" class="modal modal-blur fade" style="display: none" aria-hidden="false" tabindex="-1">
               <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -237,7 +245,7 @@
         },
         yaxis: {
           min: 0,
-          max: 150,
+          max: 100,
           labels: {
             padding: 4
           }

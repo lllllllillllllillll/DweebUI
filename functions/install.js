@@ -9,8 +9,6 @@ import { containerCard } from "../components/containerCard.js";
 // This entire page hurts to look at. 
 export const Install = async (req, res) => {
 
-        console.log(req.app.locals.installCard);
-
         let data = req.body;
 
         let { service_name, name, image, command_check, command, net_mode, restart_policy } = data;        
