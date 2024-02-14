@@ -3,14 +3,13 @@ import session from 'express-session';
 import memorystore from 'memorystore';
 import ejs from 'ejs';
 import Docker from 'dockerode';
-import { Readable } from 'stream';
 import { router } from './router/index.js';
-import { sequelize, Container, Permission } from './database/models.js';
-import { currentLoad, mem, networkStats, fsSize, dockerContainerStats, dockerImages, networkInterfaces } from 'systeminformation';
+import { sequelize, Container } from './database/models.js';
+import { currentLoad, mem, networkStats, fsSize } from 'systeminformation';
 import { containerCard } from './components/containerCard.js';
-import { modal } from './components/modal.js';
-import { permissionsModal } from './components/permissions_modal.js';
 export var docker = new Docker();
+
+export { event, sse, cpu, ram, tx, rx, disk }
 
 const app = express();
 const MemoryStore = memorystore(session);
@@ -56,8 +55,6 @@ app.listen(port, async () => {
 
 let [ cpu, ram, tx, rx, disk ] = [0, 0, 0, 0, 0];
 let [ hidden, cardList, sentList ] = ['', '', ''];
-let thanks = 0;
-
 let event = false;
 let sse = false;
 let eventInfo = '';
@@ -79,38 +76,6 @@ let serverMetrics = async () => {
     });
 }
 setInterval(serverMetrics, 1000);
-
-
-router.get('/stats', async (req, res) => {
-    let name = req.header('hx-trigger-name');
-    let color = req.header('hx-trigger');
-    let value = 0;
-
-    switch (name) {
-        case 'CPU':
-            value = cpu;
-            break;
-        case 'RAM':
-            value = ram;
-            break;
-        case 'TX':
-            value = tx;
-            break;
-        case 'RX':
-            value = rx;
-            break;
-        case 'DISK':
-            value = disk;
-            break;
-    }
-    let info = `<div class="font-weight-medium">
-                    <label class="cpu-text mb-1">${name} ${value}%</label>
-                </div>
-                <div class="cpu-bar meter animate ${color}">
-                    <span style="width:${value}%"><span></span></span>
-                </div>`;
-    res.send(info);
-});
 
 // Get hidden containers
 async function getHidden() {
@@ -192,175 +157,36 @@ router.get('/containers', async (req, res) => {
     res.send(cardList);
 });
 
-// Dashboard controls
-router.get('/action', async (req, res) => {
-    let name = req.header('hx-trigger-name');
-    let id = req.header('hx-trigger');
-    let value = req.query[name];
-    var containerName = docker.getContainer(name);
-    if ((id == 'start') && (value == 'stopped')) {
-        containerName.start();
-    } else if ((id == 'start') && (value == 'paused')) {
-        containerName.unpause();
-    } else if ((id == 'stop') && (value != 'stopped')) {
-        containerName.stop();
-    } else if ((id == 'pause') && (value == 'running')) {
-        containerName.pause();
-    } else if ((id == 'pause') && (value == 'paused')) {
-        containerName.unpause();
-    } else if (id == 'restart') {
-        containerName.restart();
-    }
-});
-
-router.get('/hide', async (req, res) => {
-    let name = req.header('hx-trigger-name');
-    let id = req.header('hx-trigger');
-    if (id == 'hide') {
-        let exists = await Container.findOne({ where: {name: name}});
-        if (!exists) {
-            const newContainer = await Container.create({ name: name, visibility: false, });
-        } else {
-            exists.update({ visibility: false });
-        }
-    } else if (id == 'reset') {
-        Container.update({ visibility: true }, { where: {} });
-    }
-    event = true;
-    eventInfo = 'docker';
-});
-
-router.get('/logs', async (req, res) => {
-    
-    let name = req.header('hx-trigger-name');
-    
-    function containerLogs (data) {
-        return new Promise((resolve, reject) => {
-            let logString = '';
-            var options = {
-                follow: false,
-                stdout: true,
-                stderr: false,
-                timestamps: false
-            };
-            var containerName = docker.getContainer(data);
-            containerName.logs(options, function (err, stream) {
-                if (err) { reject(err); return; }
-                const readableStream = Readable.from(stream);
-                readableStream.on('data', function (chunk) {
-                    logString += chunk.toString('utf8');
-                });
-                readableStream.on('end', function () {
-                    resolve(logString);
-                });
-            });
-        });
-    };
-    containerLogs(name).then((data) => {
-        res.send(`<pre>${data}</pre> `)
-    });
-});
-
-
 
 router.get('/sse_event', (req, res) => {
     res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive', });
     let eventCheck = setInterval(async () => {
         if (sse == true) {
+            sse = false;
+            console.log(`event: ${eventInfo}`);
             res.write(`event: ${eventInfo}\n`);
             res.write(`data: there was an event!\n\n`);
-            sse = false;
         }
     }, 1000);
     req.on('close', () => {
         clearInterval(eventCheck);
     });
-    return;
 });
 
-router.get('/modal', async (req, res) => {
 
-    let name = req.header('hx-trigger-name');
-    let id = req.header('hx-trigger');
-
-    if (id == 'permissions') {
-        let containerPermissions = await Permission.findAll({ where: {containerName: name}});
-
-
-        let form = permissionsModal();
-        res.send(form);
-        return;
-    }
-
-
-    let containerId = docker.getContainer(name);
-    let containerInfo = await containerId.inspect();
-    let ports_list = [];
-    try {
-    for (const [key, value] of Object.entries(containerInfo.HostConfig.PortBindings)) {
-        let ports = {
-            check: 'checked',
-            external: value[0].HostPort,
-            internal: key.split('/')[0],
-            protocol: key.split('/')[1]
-        }
-        ports_list.push(ports);
-    }
-    } catch {}
-
-    let external_port = ports_list[0]?.external || 0;
-    let internal_port = ports_list[0]?.internal || 0;
-
-    let container_info = {
-        name: containerInfo.Name.slice(1),
-        state: containerInfo.State.Status,
-        image: containerInfo.Config.Image,
-        external_port: external_port,
-        internal_port: internal_port,
-        ports: ports_list,
+router.get('/installing', async (req, res) => {
+    
+    let install_info = {
+        name: 'App Name',
+        service: '',
+        id: '',
+        state: 'Installing',
+        image: '',
+        external_port: 0,
+        internal_port: 0,
+        ports: '',
         link: 'localhost',
     }
-    
-    let form = modal(container_info);
-    res.send(form);
-});
-
-
-let stats = {};
-router.get('/chart', async (req, res) => {
-
-    let name = req.header('hx-trigger-name');
-    // create an empty array if it doesn't exist
-    if (!stats[name]) {
-        stats[name] = { cpuArray: Array(15).fill(0), ramArray: Array(15).fill(0) };
-    }
-    // get the stats
-    const info = await dockerContainerStats(name);
-    // update the arrays
-    stats[name].cpuArray.push(Math.round(info[0].cpuPercent));
-    stats[name].ramArray.push(Math.round(info[0].memPercent));
-    // slice them down to the last 15 values
-    stats[name].cpuArray = stats[name].cpuArray.slice(-15);
-    stats[name].ramArray = stats[name].ramArray.slice(-15);
-    // replace the chart with the new data
-    let chart = `
-        <script>
-            ${name}chart.updateSeries([{
-                data: [${stats[name].cpuArray}]
-            }, {
-                data: [${stats[name].ramArray}]
-            }])
-        </script>`
-    res.send(chart);
-});
-
-
-
-router.get('/thank', async (req, res) => {
-    thanks++;
-    let data = thanks.toString();
-    if (thanks > 999) {
-        data = 'Did you really click 1000 times?!';
-    }
-    res.send(data);
+    let card = containerCard(install_info);
+    res.send(card);
 });

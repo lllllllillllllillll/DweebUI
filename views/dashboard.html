@@ -22,7 +22,7 @@
   </head>
   <body >
   
-  <div class="page">
+  <div class="page" hx-ext="sse" sse-connect="/sse_event">
 
     <%- include('navbar.html') %>
     
@@ -137,15 +137,15 @@
             </div>
 
             <!-- HTMX -->
-            <div class="col-12" hx-ext="sse" sse-connect="/sse_event">
+            <div class="col-12">
               <div class="row row-cards" data-hx-get="/containers" data-hx-trigger="load, sse:docker" data-hx-swap="innerHTML">
 
               </div>
             </div>
 
             <!-- HTMX -->
-            <div class="col-12" hx-ext="sse" sse-connect="/sse_event">
-              <div class="row row-cards" data-hx-get="/installing" data-hx-trigger="load, sse:install" data-hx-swap="innerHTML">
+            <div class="col-12">
+              <div class="row row-cards" data-hx-get="/installing" data-hx-trigger="sse:install" data-hx-swap="innerHTML">
 
               </div>
             </div>

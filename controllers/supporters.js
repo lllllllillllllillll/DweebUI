@@ -19,3 +19,14 @@ export const Supporters = async (req, res) => {
 
 
 }
+
+
+let thanks = 0;
+export const Thanks = async (req, res) => {
+    thanks++;
+    let data = thanks.toString();
+    if (thanks > 999) {
+        data = 'Did you really click 1000 times?!';
+    }
+    res.send(data);
+}
