@@ -8,7 +8,9 @@
 * Improvements to container charts.
 * Created Supporters page.
 * Ability to remove images, volumes, or networks.
+* Fixed list.js sorting.
 * Updated templates.json.
+* New logo.
 
 ## v0.20 (Jan 20th 2024) - The rewrite. Jumping all the way to v0.20.
 * Changed to ES6 imports.

@@ -20,7 +20,7 @@
     "express-session": "^1.18.0",
     "js-yaml": "^4.1.0",
     "memorystore": "^1.6.7",
-    "sequelize": "^6.36.0",
+    "sequelize": "^6.37.0",
     "sqlite3": "^5.1.7",
     "systeminformation": "^5.21.24"
   }

@@ -1,7 +1,7 @@
 # DweebUI
 DweebUI is a web interface for managing Docker, with a zero-config dashboard for controlling and monitoring your containers.
 
-Alpha v0.21 ( :fire: Experimental :fire: )
+Alpha v0.30 ( :fire: Experimental :fire: )
 
    
 [:warning: DweebUI is a management interface and should not be directly exposed to the internet :warning:](https://github.com/lllllllillllllillll/DweebUI/wiki/Exposing-DweebUI-to-the-Internet)
