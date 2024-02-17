@@ -174,19 +174,3 @@ router.get('/sse_event', (req, res) => {
 });
 
 
-router.get('/installing', async (req, res) => {
-    
-    let install_info = {
-        name: 'App Name',
-        service: '',
-        id: '',
-        state: 'Installing',
-        image: '',
-        external_port: 0,
-        internal_port: 0,
-        ports: '',
-        link: 'localhost',
-    }
-    let card = containerCard(install_info);
-    res.send(card);
-});

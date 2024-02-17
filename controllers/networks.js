@@ -9,14 +9,14 @@ export const Networks = async function(req, res) {
         <thead>
             <tr>
                 <th class="w-1"><input class="form-check-input m-0 align-middle" name="select" type="checkbox" aria-label="Select all" onclick="selectAll()"></th>
-                <th><button class="table-sort" data-sort="sort-name">Name</button></th>
-                <th><button class="table-sort" data-sort="sort-city">ID</button></th>
-                <th><button class="table-sort" data-sort="sort-score">Status</button></th>
-                <th><button class="table-sort" data-sort="sort-date">Created</button></th>
-                <th><button class="table-sort" data-sort="sort-progress">Action</button></th>
+                <th><label class="table-sort" data-sort="sort-name">Name</label></th>
+                <th><label class="table-sort" data-sort="sort-city">ID</label></th>
+                <th><label class="table-sort" data-sort="sort-score">Status</label></th>
+                <th><label class="table-sort" data-sort="sort-date">Created</label></th>
+                <th><label class="table-sort" data-sort="sort-progress">Action</label></th>
             </tr>
         </thead>
-    <tbody class="table-tbody">`
+        <tbody class="table-tbody">`
 
 
     for (let i = 0; i < networks.length; i++) {

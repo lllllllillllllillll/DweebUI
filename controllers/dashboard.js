@@ -5,6 +5,7 @@ import { modal } from '../components/modal.js';
 import { permissionsModal } from '../components/permissions_modal.js';
 import { cpu, ram, tx, rx, disk } from '../server.js';
 import { dockerContainerStats } from 'systeminformation';
+import { containerCard } from '../components/containerCard.js';
 
 
 
@@ -241,4 +242,23 @@ export const Chart = async (req, res) => {
             }])
         </script>`
     res.send(chart);
+}
+
+
+
+export const Installing = (req, res) => {
+    
+    let install_info = {
+        name: 'App Name',
+        service: '',
+        id: '',
+        state: 'Installing',
+        image: '',
+        external_port: 0,
+        internal_port: 0,
+        ports: '',
+        link: 'localhost',
+    }
+    let card = containerCard(install_info);
+    res.send(card);
 }

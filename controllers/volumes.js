@@ -10,12 +10,12 @@ export const Volumes = async function(req, res) {
     <thead>
         <tr>
             <th class="w-1"><input class="form-check-input m-0 align-middle" name="select" type="checkbox" aria-label="Select all" onclick="selectAll()"></th>
-            <th><button class="table-sort" data-sort="sort-name">Name</button></th>
-            <th><button class="table-sort" data-sort="sort-city">Mount point</button></th>
-            <th><button class="table-sort" data-sort="sort-score">Status</button></th>
-            <th><button class="table-sort" data-sort="sort-date">Created</button></th>
-            <th><button class="table-sort" data-sort="sort-quantity">Size</button></th>
-            <th><button class="table-sort" data-sort="sort-progress">Action</button></th>
+            <th><label class="table-sort" data-sort="sort-name">Name</label></th>
+            <th><label class="table-sort" data-sort="sort-city">Mount point</label></th>
+            <th><label class="table-sort" data-sort="sort-score">Status</label></th>
+            <th><label class="table-sort" data-sort="sort-date">Created</label></th>
+            <th><label class="table-sort" data-sort="sort-quantity">Size</label></th>
+            <th><label class="table-sort" data-sort="sort-progress">Action</label></th>
         </tr>
     </thead>
     <tbody class="table-tbody">`
