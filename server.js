@@ -9,7 +9,7 @@ import { currentLoad, mem, networkStats, fsSize } from 'systeminformation';
 import { containerCard } from './components/containerCard.js';
 export var docker = new Docker();
 
-export { event, sse, cpu, ram, tx, rx, disk }
+export { setEvent, sse, cpu, ram, tx, rx, disk }
 
 const app = express();
 const MemoryStore = memorystore(session);
@@ -49,7 +49,7 @@ app.listen(port, async () => {
             () => { console.log('Synced Models: ✔️') }); }
             catch { console.log('Synced Models: ❌'); } }
         await init().then(() => { 
-            console.log(`Listening on http://localhost:${port} ✔️`);
+            console.log(`Listening on http://localhost:${port}`);
     });
 });
 
@@ -58,6 +58,11 @@ let [ hidden, cardList, sentList ] = ['', '', ''];
 let event = false;
 let sse = false;
 let eventInfo = '';
+
+function setEvent(value, type) {
+    event = value;
+    eventInfo = type;
+}
 
 // Server metrics
 let serverMetrics = async () => {
@@ -127,6 +132,7 @@ let containerCards = async () => {
     }
     cardList = list;
 }
+
 
 // Docker events
 docker.getEvents((err, stream) => {

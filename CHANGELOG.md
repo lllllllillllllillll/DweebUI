@@ -9,7 +9,7 @@
 * Created Supporters page.
 * Ability to remove images, volumes, or networks.
 * Fixed list.js sorting.
-* Updated templates.json.
+* Removed stackfiles from templates.json and updated some icons.
 * New logo.
 
 ## v0.20 (Jan 20th 2024) - The rewrite. Jumping all the way to v0.20.

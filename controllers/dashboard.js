@@ -1,12 +1,10 @@
-import { docker, event } from "../server.js";
 import { Readable } from 'stream';
 import { Permission, Container } from '../database/models.js';
 import { modal } from '../components/modal.js';
 import { permissionsModal } from '../components/permissions_modal.js';
-import { cpu, ram, tx, rx, disk } from '../server.js';
+import { setEvent, sse, cpu, ram, tx, rx, disk, docker } from '../server.js';
 import { dockerContainerStats } from 'systeminformation';
 import { containerCard } from '../components/containerCard.js';
-
 
 
 export const Dashboard = (req, res) => {
@@ -201,16 +199,14 @@ export const Hide = async (req, res) => {
     } else {
         exists.update({ visibility: false });
     }
-    event = true;
-    eventInfo = 'docker';
+    setEvent(true, 'docker');
     res.send("ok");
 }
 
 
 export const Reset = async (req, res) => {
     Container.update({ visibility: true }, { where: {} });
-    event = true;
-    eventInfo = 'docker';
+    setEvent(true, 'docker');
     res.send("ok");
 }
 

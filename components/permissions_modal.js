@@ -148,7 +148,7 @@ export const permissionsModal = (data) => {
                           </div>
 
 
-                          <div class="row mb-2">
+                          <div class="row mb-4">
                             <div class="col-9">
                               <label class="row text-start">
                                 <span class="col">
@@ -161,6 +161,10 @@ export const permissionsModal = (data) => {
                                 <input class="form-check-input" type="checkbox" name="select">
                               </label>
                             </div>
+                          </div>
+
+                          <div class="row mb-2">
+                            <button class="btn" type="submit" formaction="/updatePermissions">Update</button>
                           </div>
 
 
