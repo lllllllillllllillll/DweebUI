@@ -2,10 +2,11 @@ import { Readable } from 'stream';
 import { Permission, Container } from '../database/models.js';
 import { modal } from '../components/modal.js';
 import { permissionsModal } from '../components/permissions_modal.js';
-import { setEvent, sse, cpu, ram, tx, rx, disk, docker } from '../server.js';
+import { setEvent, cpu, ram, tx, rx, disk, docker } from '../server.js';
 import { dockerContainerStats } from 'systeminformation';
 import { containerCard } from '../components/containerCard.js';
 
+let [ hidden, cardList, sentList ] = [ '', '', ''];
 
 export const Dashboard = (req, res) => {
     res.render("dashboard", {
@@ -14,17 +15,6 @@ export const Dashboard = (req, res) => {
         avatar: req.session.avatar,
     });
 }
-
-
-export const searchDashboard = (req, res) => {
-    // console.log(req.params);
-    res.render("dashboard", {
-        name: req.session.user,
-        role: req.session.role,
-        avatar: req.session.avatar,
-    });
-}
-
 
 export const Start = (req, res) => {
     let name = req.header('hx-trigger-name');
@@ -44,8 +34,6 @@ export const Start = (req, res) => {
 
 export const Stop = (req, res) => {
         
-    console.log(`Clicked on stop`);
-
     let name = req.header('hx-trigger-name');
     let state = req.header('hx-trigger');
 
@@ -58,8 +46,6 @@ export const Stop = (req, res) => {
 }
 
 export const Pause = (req, res) => {
-        
-    console.log(`Clicked on pause`);
 
     let name = req.header('hx-trigger-name');
     let state = req.header('hx-trigger');
@@ -77,8 +63,6 @@ export const Pause = (req, res) => {
 
 export const Restart = (req, res) => {
         
-    console.log(`Clicked on restart`);
-
     let name = req.header('hx-trigger-name');
     var containerName = docker.getContainer(name);
     containerName.restart();
@@ -161,7 +145,6 @@ export const Modal = async (req, res) => {
 
 }
 
-
 export const Stats = async (req, res) => {
     let name = req.header('hx-trigger-name');
     let color = req.header('hx-trigger');
@@ -188,11 +171,8 @@ export const Stats = async (req, res) => {
 }
 
 
-
 export const Hide = async (req, res) => {
     let name = req.header('hx-trigger-name');
-    let id = req.header('hx-trigger');
-
     let exists = await Container.findOne({ where: {name: name}});
     if (!exists) {
         const newContainer = await Container.create({ name: name, visibility: false, });
@@ -202,7 +182,6 @@ export const Hide = async (req, res) => {
     setEvent(true, 'docker');
     res.send("ok");
 }
-
 
 export const Reset = async (req, res) => {
     Container.update({ visibility: true }, { where: {} });
@@ -257,4 +236,76 @@ export const Installing = (req, res) => {
     }
     let card = containerCard(install_info);
     res.send(card);
+}
+
+
+
+// Get hidden containers
+async function getHidden() {
+    hidden = await Container.findAll({ where: {visibility:false}});
+    hidden = hidden.map((container) => container.name);
+}
+
+// Create list of docker containers cards
+async function containerCards() {
+    let list = '';
+    const allContainers = await docker.listContainers({ all: true });
+    for (const container of allContainers) {
+        if (!hidden.includes(container.Names[0].slice(1))) {
+
+            let imageVersion = container.Image.split('/');
+            let service = imageVersion[imageVersion.length - 1].split(':')[0];
+            let containerId = docker.getContainer(container.Id);
+            let containerInfo = await containerId.inspect();
+            let ports_list = [];
+            try {
+            for (const [key, value] of Object.entries(containerInfo.HostConfig.PortBindings)) {
+                let ports = {
+                    check: 'checked',
+                    external: value[0].HostPort,
+                    internal: key.split('/')[0],
+                    protocol: key.split('/')[1]
+                }
+                ports_list.push(ports);
+            }
+            } catch {}
+
+            let external_port = ports_list[0]?.external || 0;
+            let internal_port = ports_list[0]?.internal || 0;
+
+            let container_info = {
+                name: container.Names[0].slice(1),
+                service: service,
+                id: container.Id,
+                state: container.State,
+                image: container.Image,
+                external_port: external_port,
+                internal_port: internal_port,
+                ports: ports_list,
+                link: 'localhost',
+            }
+            let card = containerCard(container_info);
+            list += card;
+        }
+    }
+    cardList = list;
+}
+
+export async function sendCheck() {
+    await getHidden();
+    await containerCards();
+    if (cardList != sentList) {
+        cardList = sentList;
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
+export const Containers = async (req, res) => {
+    await getHidden();
+    await containerCards();
+    sentList = cardList;
+    res.send(cardList);
 }

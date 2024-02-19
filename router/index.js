@@ -4,7 +4,7 @@ export const router = express.Router();
 // Controllers
 import { Login, submitLogin, Logout } from "../controllers/login.js";
 import { Register, submitRegister } from "../controllers/register.js";
-import { Dashboard, searchDashboard, Start, Stop, Pause, Restart, Logs, Modal, Stats, Hide, Reset, Chart, Installing } from "../controllers/dashboard.js";
+import { Dashboard, Start, Stop, Pause, Restart, Logs, Modal, Stats, Hide, Reset, Chart, Installing, Containers } from "../controllers/dashboard.js";
 import { Apps, appSearch } from "../controllers/apps.js";
 import { Users } from "../controllers/users.js";
 import { Images, removeImage } from "../controllers/images.js";
@@ -26,14 +26,9 @@ const auth = (req, res, next) => {
     }
 };
 
-// Routes
-router.get("/login", Login);
-router.post("/login", submitLogin);
-router.get("/register", Register);
-router.post("/register", submitRegister);  
-router.get("/logout", Logout);
-
+// Admin routes
 router.get("/", auth, Dashboard);
+router.get("/containers", auth, Containers);
 router.post("/start", auth, Start);
 router.post("/stop", auth, Stop);
 router.post("/pause", auth, Pause);
@@ -46,17 +41,14 @@ router.post("/reset", auth, Reset);
 router.get("/chart", auth, Chart);
 router.get("/installing", auth, Installing);
 
-
 router.get("/images", auth, Images);
-router.post("/removeImage", removeImage);
+router.post("/removeImage", auth, removeImage);
 
 router.get("/volumes", auth, Volumes);
 router.post("/removeVolume", auth, removeVolume);
 
 router.get("/networks", auth, Networks);
-router.post("/removeNetwork", removeNetwork);
-
-router.get("/portal", Portal)
+router.post("/removeNetwork", auth, removeNetwork);
 
 router.get("/apps", auth, Apps);
 router.get("/apps/:page", auth, Apps);
@@ -65,12 +57,20 @@ router.post("/apps", auth, appSearch);
 router.get("/users", auth, Users);
 router.get("/syslogs", auth, Syslogs);
 
-router.get("/account", Account);
 router.get("/variables", auth, Variables);
 router.get("/settings", auth, Settings);
 
+// User routes
+router.get("/portal", Portal);
+router.get("/account", Account);
 router.get("/supporters", Supporters);
 router.post("/thank", Thanks);
+
+router.get("/login", Login);
+router.post("/login", submitLogin);
+router.get("/register", Register);
+router.post("/register", submitRegister);  
+router.get("/logout", Logout);
 
 
 // Functions
