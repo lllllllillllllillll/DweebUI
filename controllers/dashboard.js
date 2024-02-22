@@ -291,21 +291,8 @@ async function containerCards() {
     cardList = list;
 }
 
-export async function sendCheck() {
-    await getHidden();
-    await containerCards();
-    if (cardList != sentList) {
-        cardList = sentList;
-        return true;
-    } else {
-        return false;
-    }
-}
-
-
 export const Containers = async (req, res) => {
     await getHidden();
     await containerCards();
-    sentList = cardList;
     res.send(cardList);
 }

@@ -6,7 +6,6 @@ import Docker from 'dockerode';
 import { router } from './router/index.js';
 import { sequelize } from './database/models.js';
 import { currentLoad, mem, networkStats, fsSize } from 'systeminformation';
-import { sendCheck } from './controllers/dashboard.js';
 
 export var docker = new Docker();
 export { setEvent, cpu, ram, tx, rx, disk }
@@ -80,34 +79,29 @@ let serverMetrics = async () => {
 setInterval(serverMetrics, 1000);
 
 
-// Docker events
-docker.getEvents((err, stream) => {
-    if (err) throw err;
-    stream.on('data', (chunk) => {
-        event = true;
-        eventType = 'docker';
-    });
-});
 
-// Check if the container cards need to be updated
-setInterval(async () => {
-    if (event == false) { return; }
-    sse = await sendCheck();
-    event = false;
-}, 500);
-
-
-
+let sent_list = '';
 router.get('/sse_event', (req, res) => {
     res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive', });
-    let eventCheck = setInterval(async () => {
-        if (sse == true) {
-            sse = false;
+    
+    let eventCheck = setInterval(async() => {
+        let all_containers = '';
+    
+        await docker.listContainers({ all: true }).then(containers => {
+            containers.forEach(container => {
+                all_containers += `${container.Names}: ${container.State}\n`;
+            });
+        });
+        if (all_containers != sent_list) {
+            sent_list = all_containers;
+            setEvent(true, 'docker');
             res.write(`event: ${eventType}\n`);
             res.write(`data: there was an event!\n\n`);
         }
-    }, 500);
+    }, 1000);
     req.on('close', () => {
         clearInterval(eventCheck);
     });
 });
+
+
