@@ -13,6 +13,8 @@ export { setEvent, cpu, ram, tx, rx, disk }
 const app = express();
 const MemoryStore = memorystore(session);
 const port = process.env.PORT || 8000;
+let [ cpu, ram, tx, rx, disk ] = [0, 0, 0, 0, 0];
+let [ event, sse, eventType ] = [false, false, ''];
 
 // Session middleware
 const sessionMiddleware = session({
@@ -52,9 +54,6 @@ app.listen(port, async () => {
     });
 });
 
-let [ cpu, ram, tx, rx, disk ] = [0, 0, 0, 0, 0];
-let [ event, sse, eventType ] = [false, false, ''];
-
 function setEvent(value, type) {
     event = value;
     eventType = type;
@@ -78,24 +77,19 @@ let serverMetrics = async () => {
 }
 setInterval(serverMetrics, 1000);
 
-
-
 let sent_list = '';
 router.get('/sse_event', (req, res) => {
     res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive', });
-    
     let eventCheck = setInterval(async() => {
         let all_containers = '';
-    
         await docker.listContainers({ all: true }).then(containers => {
             containers.forEach(container => {
                 all_containers += `${container.Names}: ${container.State}\n`;
             });
         });
-        if (all_containers != sent_list) {
+        if ((all_containers != sent_list) || event) {
             sent_list = all_containers;
-            setEvent(true, 'docker');
-            res.write(`event: ${eventType}\n`);
+            res.write(`event: docker\n`);
             res.write(`data: there was an event!\n\n`);
         }
     }, 1000);

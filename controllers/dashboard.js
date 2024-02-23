@@ -6,7 +6,7 @@ import { setEvent, cpu, ram, tx, rx, disk, docker } from '../server.js';
 import { dockerContainerStats } from 'systeminformation';
 import { containerCard } from '../components/containerCard.js';
 
-let [ hidden, cardList, sentList ] = [ '', '', ''];
+let [ hidden, cardList ] = [ '', '' ];
 
 export const Dashboard = (req, res) => {
     res.render("dashboard", {
@@ -15,62 +15,6 @@ export const Dashboard = (req, res) => {
         avatar: req.session.avatar,
     });
 }
-
-export const Start = (req, res) => {
-    let name = req.header('hx-trigger-name');
-    let state = req.header('hx-trigger');
-
-    if (state == 'stopped') {
-        var containerName = docker.getContainer(name);
-        containerName.start();
-    } else if (state == 'paused') {
-        var containerName = docker.getContainer(name);
-        containerName.unpause();
-    }
-
-    res.send("ok");
-}
-
-
-export const Stop = (req, res) => {
-        
-    let name = req.header('hx-trigger-name');
-    let state = req.header('hx-trigger');
-
-    if (state != 'stopped') {
-        var containerName = docker.getContainer(name);
-        containerName.stop();
-    }
-
-    res.send("ok");
-}
-
-export const Pause = (req, res) => {
-
-    let name = req.header('hx-trigger-name');
-    let state = req.header('hx-trigger');
-
-    if (state == 'running') {
-        var containerName = docker.getContainer(name);
-        containerName.pause();
-    } else if (state == 'paused') {
-        var containerName = docker.getContainer(name);
-        containerName.unpause();
-    }
-
-    res.send("ok");
-}
-
-export const Restart = (req, res) => {
-        
-    let name = req.header('hx-trigger-name');
-    var containerName = docker.getContainer(name);
-    containerName.restart();
-
-    res.send("ok");
-}
-
-
 
 export const Logs = (req, res) => {
     let name = req.header('hx-trigger-name');
@@ -101,18 +45,15 @@ export const Logs = (req, res) => {
     });
 }
 
-
 export const Modal = async (req, res) => {
     let name = req.header('hx-trigger-name');
     let id = req.header('hx-trigger');
-
     if (id == 'permissions') {
         let containerPermissions = await Permission.findAll({ where: {containerName: name}});
         let form = permissionsModal();
         res.send(form);
         return;
     }
-
     let containerId = docker.getContainer(name);
     let containerInfo = await containerId.inspect();
     let ports_list = [];
@@ -127,7 +68,6 @@ export const Modal = async (req, res) => {
         ports_list.push(ports);
     }
     } catch {}
-
     let external_port = ports_list[0]?.external || 0;
     let internal_port = ports_list[0]?.internal || 0;
 
@@ -142,7 +82,6 @@ export const Modal = async (req, res) => {
     }
     let form = modal(container_info);
     res.send(form);
-
 }
 
 export const Stats = async (req, res) => {
@@ -190,8 +129,6 @@ export const Reset = async (req, res) => {
 }
 
 
-
-
 let stats = {};
 export const Chart = async (req, res) => {
     let name = req.header('hx-trigger-name');
@@ -218,27 +155,6 @@ export const Chart = async (req, res) => {
         </script>`
     res.send(chart);
 }
-
-
-
-export const Installing = (req, res) => {
-    
-    let install_info = {
-        name: 'App Name',
-        service: '',
-        id: '',
-        state: 'Installing',
-        image: '',
-        external_port: 0,
-        internal_port: 0,
-        ports: '',
-        link: 'localhost',
-    }
-    let card = containerCard(install_info);
-    res.send(card);
-}
-
-
 
 // Get hidden containers
 async function getHidden() {
@@ -295,4 +211,47 @@ export const Containers = async (req, res) => {
     await getHidden();
     await containerCards();
     res.send(cardList);
+}
+
+export const Start = (req, res) => {
+    let name = req.header('hx-trigger-name');
+    let state = req.header('hx-trigger');
+    if (state == 'stopped') {
+        var containerName = docker.getContainer(name);
+        containerName.start();
+    } else if (state == 'paused') {
+        var containerName = docker.getContainer(name);
+        containerName.unpause();
+    }
+    res.send("ok");
+}
+
+export const Stop = (req, res) => {   
+    let name = req.header('hx-trigger-name');
+    let state = req.header('hx-trigger');
+    if (state != 'stopped') {
+        var containerName = docker.getContainer(name);
+        containerName.stop();
+    }
+    res.send("ok");
+}
+
+export const Pause = (req, res) => {
+    let name = req.header('hx-trigger-name');
+    let state = req.header('hx-trigger');
+    if (state == 'running') {
+        var containerName = docker.getContainer(name);
+        containerName.pause();
+    } else if (state == 'paused') {
+        var containerName = docker.getContainer(name);
+        containerName.unpause();
+    }
+    res.send("ok");
+}
+
+export const Restart = (req, res) => {   
+    let name = req.header('hx-trigger-name');
+    var containerName = docker.getContainer(name);
+    containerName.restart();
+    res.send("ok");
 }

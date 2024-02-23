@@ -1,4 +1,4 @@
-## v0.30 (dev) - Another rewrite
+## v0.30 (dev) - HTMX rewrite
 * Rewrote the dashboard to use HTMX.
 * Removed Socket.io.
 * Views are now HTML instead of EJS.
@@ -11,6 +11,8 @@
 * Fixed list.js sorting.
 * Removed stackfiles from templates.json and updated some icons.
 * New logo.
+* Improved handling of Docker events.
+* Improved dashboard responsiveness.
 
 ## v0.20 (Jan 20th 2024) - The rewrite. Jumping all the way to v0.20.
 * Changed to ES6 imports.

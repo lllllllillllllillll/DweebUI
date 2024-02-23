@@ -93,3 +93,4 @@ Compose setup:
 ## Supporters
 
 * MM (Patreon)
+* PD (Buymeacoffee)
