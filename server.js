@@ -14,7 +14,7 @@ const app = express();
 const MemoryStore = memorystore(session);
 const port = process.env.PORT || 8000;
 let [ cpu, ram, tx, rx, disk ] = [0, 0, 0, 0, 0];
-let [ event, sse, eventType ] = [false, false, ''];
+let [ event, eventType ] = [false, 'docker'];
 
 // Session middleware
 const sessionMiddleware = session({
@@ -87,9 +87,10 @@ router.get('/sse_event', (req, res) => {
                 all_containers += `${container.Names}: ${container.State}\n`;
             });
         });
-        if ((all_containers != sent_list) || event) {
+        if ((all_containers != sent_list) || (event == true)) {
             sent_list = all_containers;
-            res.write(`event: docker\n`);
+            event = false;
+            res.write(`event: ${eventType}\n`);
             res.write(`data: there was an event!\n\n`);
         }
     }, 1000);
@@ -97,5 +98,3 @@ router.get('/sse_event', (req, res) => {
         clearInterval(eventCheck);
     });
 });
-
-

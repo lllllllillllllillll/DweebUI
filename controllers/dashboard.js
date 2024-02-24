@@ -223,7 +223,7 @@ export const Start = (req, res) => {
         var containerName = docker.getContainer(name);
         containerName.unpause();
     }
-    res.send("ok");
+    res.send("starting");
 }
 
 export const Stop = (req, res) => {   
@@ -233,7 +233,7 @@ export const Stop = (req, res) => {
         var containerName = docker.getContainer(name);
         containerName.stop();
     }
-    res.send("ok");
+    res.send("stopping");
 }
 
 export const Pause = (req, res) => {
@@ -246,12 +246,43 @@ export const Pause = (req, res) => {
         var containerName = docker.getContainer(name);
         containerName.unpause();
     }
-    res.send("ok");
+    res.send("pausing");
 }
 
 export const Restart = (req, res) => {   
     let name = req.header('hx-trigger-name');
     var containerName = docker.getContainer(name);
     containerName.restart();
-    res.send("ok");
+    res.send("restarting");
+}
+
+export const Installs = async (req, res) => {
+
+    let name = req.header('hx-trigger-name');
+    let all_containers = '';
+
+    await docker.listContainers({ all: true }).then(containers => {
+        containers.forEach(container => {
+            if (container.Names[0].slice(1) == name) {
+                return;
+            }
+        });
+
+        let install_info = {
+            name: name,
+            service: 'Service Name',
+            id: '',
+            state: '',
+            image: '',
+            external_port: 0,
+            internal_port: 0,
+            ports: '',
+            link: 'localhost',
+        }
+        let card = containerCard(install_info);
+        res.send(card);
+
+    });
+
+    
 }

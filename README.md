@@ -42,6 +42,7 @@ Alpha v0.30 ( :fire: Experimental :fire: )
 * [x] Templates.json maintains compatability with Portainer, allowing you to use the template without needing to use DweebUI.
 * [x] Automatically persists data in docker volumes if bind mount isn't used.
 * [ ] Preset variables (planned).
+* [ ] Themes (planned).
 
 
 ## Setup
