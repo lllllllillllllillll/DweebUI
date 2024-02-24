@@ -213,6 +213,15 @@ export const Containers = async (req, res) => {
     res.send(cardList);
 }
 
+
+function status (state) {
+    let status = `<span class="text-yellow align-items-center lh-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-point-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M12 7a5 5 0 1 1 -4.995 5.217l-.005 -.217l.005 -.217a5 5 0 0 1 4.995 -4.783z" stroke-width="0" fill="currentColor"></path></svg>
+                    ${state}
+                </span>`;
+    return status;
+}
+
 export const Start = (req, res) => {
     let name = req.header('hx-trigger-name');
     let state = req.header('hx-trigger');
@@ -223,7 +232,8 @@ export const Start = (req, res) => {
         var containerName = docker.getContainer(name);
         containerName.unpause();
     }
-    res.send("starting");
+
+    res.send(status('starting'));
 }
 
 export const Stop = (req, res) => {   
@@ -233,7 +243,7 @@ export const Stop = (req, res) => {
         var containerName = docker.getContainer(name);
         containerName.stop();
     }
-    res.send("stopping");
+    res.send(status('stopping'));
 }
 
 export const Pause = (req, res) => {
@@ -246,14 +256,14 @@ export const Pause = (req, res) => {
         var containerName = docker.getContainer(name);
         containerName.unpause();
     }
-    res.send("pausing");
+    res.send(status('pausing'));
 }
 
 export const Restart = (req, res) => {   
     let name = req.header('hx-trigger-name');
     var containerName = docker.getContainer(name);
     containerName.restart();
-    res.send("restarting");
+    res.send(status('restarting'));
 }
 
 export const Installs = async (req, res) => {
