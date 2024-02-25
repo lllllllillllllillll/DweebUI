@@ -2,7 +2,7 @@ version: "3.9"
 services:
   dweebui:
     container_name: dweebui
-    image: lllllllillllllillll/dweebui:v0.30-dev
+    image: lllllllillllllillll/dweebui:v0.40-dev
     environment:
       PORT: 8000
       SECRET: MrWiskers
@@ -11,7 +11,10 @@ services:
       - 8000:8000
     volumes:
       - dweebui:/app/database/db.sqlite
+      # Docker socket
       - /var/run/docker.sock:/var/run/docker.sock
+      # Podman socket
+      #- /var/run/podman/podman.sock:/var/run/docker.sock
     networks:
       - dweebui_net
 

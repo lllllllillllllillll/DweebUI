@@ -149,11 +149,11 @@
             </div>
 
             <!-- HTMX -->
-            <div class="col-12">
+            <!-- <div class="col-12">
               <div class="row row-cards" data-hx-get="/installs" name="jellyfin" data-hx-trigger="load delay:2s, sse:install" data-hx-swap="beforeend" hx-target="#containerCards">
 
               </div>
-            </div>
+            </div> -->
             
             <!-- HTMX Target-->
             <div id="modals-here" class="modal modal-blur fade" style="display: none" aria-hidden="false" tabindex="-1">
@@ -229,10 +229,10 @@
         },
         series: [{
           name: "CPU",
-          data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+          data: []
         }, {
           name: "RAM",
-          data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+          data: []
         }],
         tooltip: {
           enabled: false
