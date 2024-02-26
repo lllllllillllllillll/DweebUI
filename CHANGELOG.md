@@ -1,4 +1,4 @@
-## v0.40 (dev) - HTMX rewrite
+## v0.40 (Feb 26th 2024) - HTMX rewrite
 * Pages rewritten to use HTMX.
 * Removed Socket.io.
 * Changed view files to *.HTML instead of *.EJS.
