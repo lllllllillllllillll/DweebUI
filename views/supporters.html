@@ -1,0 +1,85 @@
+	<!doctype html>
+	<html lang="en">
+	<head>
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+		<meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+		<title>DweebUI - Settings</title>
+		<!-- CSS files -->
+		<link href="/css/tabler.min.css" rel="stylesheet"/>
+		<link href="/css/demo.min.css" rel="stylesheet"/>
+		<script src="/js/htmx.min.js"></script>
+		<style>
+			@import url('/fonts/inter.css');
+			:root {
+			  --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+			}
+			body {
+			  font-feature-settings: "cv03", "cv04", "cv11";
+			}
+		  </style>
+	</head>
+	<body >
+	<div class="page">
+		<!-- Navbar -->
+		<%- include('navbar.html') %>
+		<div class="page-wrapper">
+			<!-- Page header -->
+			<div class="page-header d-print-none">
+				<div class="container-xl">
+					<div class="row g-2 align-items-center">
+						<div class="col">
+							<h2 class="page-title">
+								Settings
+							</h2>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Page body -->
+			<div class="page-body">
+				<div class="container-xl">
+					<div class="card">
+						<div class="row g-0">
+							<%- include('sidebar.html') %>
+							<div class="col d-flex flex-column">
+					
+								<div class="card-body">
+									<h2 class="mb-2">Supporters</h2>
+									<p class="text-muted mb-4">[Click to Thank]</p>
+									<div class="row align-items-center">
+										<div class="col">
+
+											<span type="button" class="avatar avatar-md bg-green-lt" hx-trigger="load, click" hx-post="/thank" hx-target="#count" name="MM"  title="MM" style="margin-right: 5px;">mm</span>
+
+											<span type="button" class="avatar avatar-md bg-cyan-lt" hx-trigger="click" hx-post="/thank" hx-target="#count" name="PD" title="PD" style="margin-right: 5px;">pd</span>
+
+
+										</div>
+									</div>
+								</div>
+								<div class="card-body">
+									<p class="text-muted mb-4">Thanks counter:</p>
+									<div class="row align-items-center">
+										<div class="col">
+
+											<span class="avatar avatar-md bg-yellow-lt" id="count" style="margin-right: 5px;">0</span>
+
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+				  	</div>
+				</div>
+			</div>
+
+				<%- include('footer.html') %>
+		</div>
+	</div>
+		<!-- Libs JS -->
+		<!-- Tabler Core -->
+		<script src="/js/tabler.min.js" defer></script>
+		<script src="/js/demo.min.js" defer></script>
+	</body>
+	</html>

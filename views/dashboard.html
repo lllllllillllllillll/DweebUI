@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>DweebUI - Dashboard</title>
+    <!-- CSS files -->
+    <link href="/css/tabler.min.css" rel="stylesheet"/>
+    <link href="/css/meters.css" rel="stylesheet"/>
+    <script src="/js/htmx.min.js"></script>
+    <script src="/js/htmx-sse.js"></script>
+    <style>
+      @import url('/fonts/inter.css');
+      :root {
+        --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+      }
+      body {
+        font-feature-settings: "cv03", "cv04", "cv11";
+      }
+    </style>
+  </head>
+  <body >
+  
+  <div class="page">
+
+    <%- include('navbar.html') %>
+    
+    <div class="page-wrapper">
+
+      <div class="page-body">
+        <div class="container-xl">
+          <div class="row row-deck row-cards" hx-ext="sse" sse-connect="/sse_event">
+            
+            <div class="col-12">
+              <div class="row row-cards">
+                
+                <div class="col-sm-6 col-lg-3">
+                  <div class="card card-sm">
+                    <div class="card-body">
+                      <div class="row align-items-center">
+                        <div class="col-auto">
+                          <span class="bg-green text-white avatar">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-cpu" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M5 5m0 1a1 1 0 0 1 1 -1h12a1 1 0 0 1 1 1v12a1 1 0 0 1 -1 1h-12a1 1 0 0 1 -1 -1z"></path><path d="M9 9h6v6h-6z"></path><path d="M3 10h2"></path><path d="M3 14h2"></path><path d="M10 3v2"></path><path d="M14 3v2"></path><path d="M21 10h-2"></path><path d="M21 14h-2"></path><path d="M14 21v-2"></path><path d="M10 21v-2"></path></svg>
+                          </span>
+                        </div>
+
+                        <!-- HTMX -->
+                        <div class="col" name="CPU" id="green" data-hx-get="/stats" data-hx-trigger="load, every 1s">
+                          <div class="font-weight-medium">
+                            <label class="cpu-text mb-1" for="cpu">CPU 0%</label>
+                          </div>
+                          <div class="cpu-bar meter animate green">
+                            <span style="width:20%"><span></span></span>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-3">
+                  <div class="card card-sm">
+                    <div class="card-body">
+                      <div class="row align-items-center">
+                        <div class="col-auto">
+                          <span class="bg-blue text-white avatar">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-container" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M20 4v.01"></path> <path d="M20 20v.01"></path> <path d="M20 16v.01"></path> <path d="M20 12v.01"></path> <path d="M20 8v.01"></path> <path d="M8 4m0 1a1 1 0 0 1 1 -1h6a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1h-6a1 1 0 0 1 -1 -1z"></path> <path d="M4 4v.01"></path> <path d="M4 20v.01"></path> <path d="M4 16v.01"></path> <path d="M4 12v.01"></path> <path d="M4 8v.01"></path> </svg>                            
+                          </span>
+                        </div>
+
+                        <!-- HTMX -->
+                        <div class="col" name="RAM" id="blue" data-hx-get="/stats" data-hx-trigger="load, every 2s">
+                          <div class="font-weight-medium">
+                            <label class="ram-text mb-1" for="ram">RAM 0%</label>
+                          </div>
+                          <div class="ram-bar meter animate blue">
+                            <span style="width:20%"><span></span></span>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="col-sm-6 col-lg-3">
+                  <div class="card card-sm">
+                    <div class="card-body">
+                      <div class="row align-items-center">
+                        <div class="col-auto">
+                          <span class="bg-purple text-white avatar">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrows-left-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M21 17l-18 0"></path> <path d="M6 10l-3 -3l3 -3"></path> <path d="M3 7l18 0"></path> <path d="M18 20l3 -3l-3 -3"></path> </svg>                            
+                          </span>
+                        </div>
+
+                        <!-- HTMX -->
+                        <div class="col" name="NET" id="purple">
+                          <div class="font-weight-medium">
+                            <label id="net-text" class="net-text mb-1" for="network">Down: 0MB  Up: 0MB</label>
+                          </div>
+                          <div class="ram-bar meter animate purple">
+                            <span style="width:20%"><span></span></span>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-3">
+                  <div class="card card-sm">
+                    <div class="card-body">
+                      <div class="row align-items-center">
+                        <div class="col-auto">
+                          <span class="bg-orange text-white avatar">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-database" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M12 6m-8 0a8 3 0 1 0 16 0a8 3 0 1 0 -16 0"></path> <path d="M4 6v6a8 3 0 0 0 16 0v-6"></path> <path d="M4 12v6a8 3 0 0 0 16 0v-6"></path></svg>
+                          </span>
+                        </div>
+
+                        <!-- HTMX -->
+                        <div class="col" name="DISK" id="orange" data-hx-get="/stats" data-hx-trigger="load, every 3s">
+                          <div class="font-weight-medium">
+                            <label class="disk-text mb-1" for="disk">DISK 0%</label>
+                          </div>
+                          <div class="meter animate orange">
+                            <span style="width:20%"><span></span></span>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+              </div>
+            </div>
+
+
+            
+            <!-- HTMX -->
+            <div class="col-12">
+              <div class="row row-cards" id="containerCards" data-hx-get="/containers" data-hx-trigger="load, sse:docker" data-hx-swap="innerHTML">
+
+              </div>
+            </div>
+
+            <!-- HTMX -->
+            <!-- <div class="col-12">
+              <div class="row row-cards" data-hx-get="/installs" name="jellyfin" data-hx-trigger="load delay:2s, sse:install" data-hx-swap="beforeend" hx-target="#containerCards">
+
+              </div>
+            </div> -->
+            
+            <!-- HTMX Target-->
+            <div id="modals-here" class="modal modal-blur fade" style="display: none" aria-hidden="false" tabindex="-1">
+              <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                <div class="modal-content">
+                </div>
+              </div>
+            </div>
+            
+
+            <div class="modal modal-blur fade" id="log_view" tabindex="-1" style="display: none;" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Logs</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    
+                  <div class="card-body">
+                        <h4>Logs:</h4>
+                        <div id="logView">
+                          <pre>No logs available</pre>
+                        </div>
+                  </div>
+        
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-info" onclick="viewLogs(this)" name="refresh"> 
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-refresh" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4"></path> <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"></path> </svg>
+                        Refresh
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            
+
+          </div>
+        </div>
+      </div>
+      
+    <%- include('footer.html') %>
+      
+    </div>
+  </div>
+    
+
+  <script src="/libs/apexcharts/dist/apexcharts.min.js"></script>
+  <script src="/js/tabler.min.js"></script>
+  <script>
+    var options = {
+        chart: {
+          type: "line",
+          height: 40.0,
+          sparkline: {
+            enabled: true
+          },
+          animations: {
+            enabled: false
+          }
+        },
+        fill: {
+          opacity: 1
+        },
+        stroke: {
+          width: [2, 1],
+          dashArray: [0, 3],
+          lineCap: "round",
+          curve: "smooth"
+        },
+        series: [{
+          name: "CPU",
+          data: []
+        }, {
+          name: "RAM",
+          data: []
+        }],
+        tooltip: {
+          enabled: false
+        },
+        grid: {
+          strokeDashArray: 4
+        },
+        xaxis: {
+          labels: {
+            padding: 0
+          },
+          tooltip: {
+            enabled: false
+          }
+        },
+        yaxis: {
+          min: 0,
+          max: 100,
+          labels: {
+            padding: 4
+          }
+        },
+        colors: [tabler.getColor("primary"), tabler.getColor("gray-600")],
+        legend: {
+          show: false
+        }
+    }
+  </script>
+  <script>
+    function selectAll(group) {
+      
+      let checkboxes = document.getElementsByName(group);
+      if (checkboxes[0].checked == true) {
+        for (var i = 0; i < checkboxes.length; i++) {
+          checkboxes[i].checked = true;
+        }
+      } else {
+        for (var i = 0; i < checkboxes.length; i++) {
+          checkboxes[i].checked = false;
+        }
+      }
+    }
+  </script>
+
+  </body>
+</html>
+

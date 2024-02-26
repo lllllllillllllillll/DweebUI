@@ -9,7 +9,7 @@
     <link href="/css/tabler.min.css" rel="stylesheet"/>
     <link href="/css/demo.min.css" rel="stylesheet"/>
     <style>
-      @import url('fonts/inter.css');
+      @import url('/fonts/inter.css');
       :root {
         --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
       }
@@ -26,7 +26,7 @@
       <form class="container container-tight py-4" action="/register" method="POST" novalidate>
         
         <div class="text-center mb-4">
-          <a href="#" class="navbar-brand navbar-brand-autodark d-none"><img src="/static/logo.svg" height="36" alt=""></a>
+          <a href="#" class="navbar-brand navbar-brand-autodark d-none"><img src="/images/logo.svg" height="36" alt=""></a>
         </div>
 
         <div class="card">
@@ -88,7 +88,7 @@
                   <label class="form-imagecheck mb-2">
                     <input name="avatar" type="radio" value="rus.jpg" class="form-imagecheck-input" checked/>
                     <span class="form-imagecheck-figure">
-                      <img src="img/avatars/rus.jpg" alt="Rich Uncle Skeleton" title="Rich Uncle Skeleton" class="form-imagecheck-image" width="100px">
+                      <img src="/images/avatars/rus.jpg" alt="Rich Uncle Skeleton" title="Rich Uncle Skeleton" class="form-imagecheck-image" width="100px">
                     </span>
                   </label>
                 </div>
@@ -96,7 +96,7 @@
                   <label class="form-imagecheck mb-2">
                     <input name="avatar" type="radio" value="burns.jpg" class="form-imagecheck-input"/>
                     <span class="form-imagecheck-figure">
-                      <img src="img/avatars/burns.jpg" alt="Montgomery Burns" title="Montgomery Burns" class="form-imagecheck-image" width="100px">
+                      <img src="/images/avatars/burns.jpg" alt="Montgomery Burns" title="Montgomery Burns" class="form-imagecheck-image" width="100px">
                     </span>
                   </label>
                 </div>
@@ -104,7 +104,7 @@
                   <label class="form-imagecheck mb-2">
                     <input name="avatar" type="radio" value="frank.jpg" class="form-imagecheck-input" />
                     <span class="form-imagecheck-figure">
-                      <img src="img/avatars/frank.jpg" alt="Frank Grimes" title= "Frank Grimes" class="form-imagecheck-image" width="100px">
+                      <img src="/images/avatars/frank.jpg" alt="Frank Grimes" title= "Frank Grimes" class="form-imagecheck-image" width="100px">
                     </span>
                   </label>
                 </div>
@@ -112,7 +112,7 @@
                   <label class="form-imagecheck mb-2">
                     <input name="avatar" type="radio" value="moe.jpg" class="form-imagecheck-input"/>
                     <span class="form-imagecheck-figure">
-                      <img src="img/avatars/moe.jpg" alt="Moe Szyslak" title="Moe Szyslak" class="form-imagecheck-image" width="100px">
+                      <img src="/images/avatars/moe.jpg" alt="Moe Szyslak" title="Moe Szyslak" class="form-imagecheck-image" width="100px">
                     </span>
                   </label>
                 </div>
@@ -120,7 +120,7 @@
                   <label class="form-imagecheck mb-2">
                     <input name="avatar" type="radio" value="poochie.jpg" class="form-imagecheck-input" />
                     <span class="form-imagecheck-figure">
-                      <img src="img/avatars/poochie.jpg" alt="Poochie" title="Poochie" class="form-imagecheck-image" width="100px">
+                      <img src="/images/avatars/poochie.jpg" alt="Poochie" title="Poochie" class="form-imagecheck-image" width="100px">
                     </span>
                   </label>
                 </div>
@@ -128,7 +128,7 @@
                   <label class="form-imagecheck mb-2">
                     <input name="avatar" type="radio" value="skinner.jpg" class="form-imagecheck-input" />
                     <span class="form-imagecheck-figure">
-                      <img src="img/avatars/skinner.jpg" alt="Seymour Skinner" title="Seymour Skinner" class="form-imagecheck-image" width="100px">
+                      <img src="/images/avatars/skinner.jpg" alt="Seymour Skinner" title="Seymour Skinner" class="form-imagecheck-image" width="100px">
                     </span>
                   </label>
                 </div>
@@ -136,7 +136,7 @@
                   <label class="form-imagecheck mb-2">
                     <input name="avatar" type="radio" value="moleman.png" class="form-imagecheck-input" />
                     <span class="form-imagecheck-figure">
-                      <img src="img/avatars/moleman.png" alt="Hans Moleman" title="Hans Moleman" class="form-imagecheck-image" width="100px">
+                      <img src="/images/avatars/moleman.png" alt="Hans Moleman" title="Hans Moleman" class="form-imagecheck-image" width="100px">
                     </span>
                   </label>
                 </div>
@@ -144,7 +144,7 @@
                   <label class="form-imagecheck mb-2">
                     <input name="avatar" type="radio" value="duffman.png" class="form-imagecheck-input" />
                     <span class="form-imagecheck-figure">
-                      <img src="img/avatars/duffman.png" alt="Duffman" title="Duffman" class="form-imagecheck-image" width="100px">
+                      <img src="/images/avatars/duffman.png" alt="Duffman" title="Duffman" class="form-imagecheck-image" width="100px">
                     </span>
                   </label>
                 </div>
@@ -176,11 +176,9 @@
               <div class="d-none d-md-flex">
                 
                 <a href="?theme=dark" class="nav-link px-0 hide-theme-dark" title="Enable dark mode" data-bs-toggle="tooltip" data-bs-placement="bottom">
-                  <!-- Download SVG icon from http://tabler-icons.io/i/moon -->
                   <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" /></svg>
                 </a>
                 <a href="?theme=light" class="nav-link px-0 hide-theme-light" title="Enable light mode" data-bs-toggle="tooltip" data-bs-placement="bottom">
-                  <!-- Download SVG icon from http://tabler-icons.io/i/sun -->
                   <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" /></svg>
                 </a>
               </div>

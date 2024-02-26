@@ -1,3 +1,27 @@
+## v0.40 (Feb 26th 2024) - HTMX rewrite
+* Pages rewritten to use HTMX.
+* Removed Socket.io.
+* Changed view files to *.HTML instead of *.EJS.
+* Removed "USER root" from Dockerfile.
+* Express sessions configured to use memorystore.
+* Improved chart rendering.
+* Improvements to container charts.
+* Created Variables page.
+* Created Supporters page.
+* Ability to remove images, volumes, or networks.
+* Fixed list.js sorting.
+* Fixed apps.js page navigation.
+* Removed stackfiles from templates.json and updated some icons.
+* New logo.
+* Improved handling of Docker events.
+* Improved dashboard responsiveness.
+* Updated server metrics styles.
+* Container cards display pending action.
+* Container charts only rendered if container running.
+* Created permissions modal.
+* Podman support (untested).
+* Started a new template for FOSS apps.
+
 ## v0.20 (Jan 20th 2024) - The rewrite. Jumping all the way to v0.20.
 * Changed to ES6 imports.
 * Cleaned up file structure and code layout.

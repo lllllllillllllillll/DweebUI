@@ -1,6 +1,8 @@
 import { User, Syslog } from '../database/models.js';
 import bcrypt from 'bcrypt';
 
+
+
 export const Login = function(req,res){
     if(req.session.user){
         res.redirect("/logout");

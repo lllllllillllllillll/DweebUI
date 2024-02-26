@@ -83,6 +83,10 @@
   .blue > span {
     background-image: linear-gradient(#2478f5, #22017e);
   }
+
+  .purple > span {
+    background-image: linear-gradient(#bd14d3, #670370);
+  }
   
   .nostripes > span > span,
   .nostripes > span::after {

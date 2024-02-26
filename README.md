@@ -1,7 +1,7 @@
 # DweebUI
 DweebUI is a web interface for managing Docker, with a zero-config dashboard for controlling and monitoring your containers.
 
-Alpha v0.20 ( :fire: Experimental :fire: )
+Alpha v0.40 ( :fire: Experimental :fire: )
 
    
 [:warning: DweebUI is a management interface and should not be directly exposed to the internet :warning:](https://github.com/lllllllillllllillll/DweebUI/wiki/Exposing-DweebUI-to-the-Internet)
@@ -10,7 +10,7 @@ Alpha v0.20 ( :fire: Experimental :fire: )
 [![GitHub Activity](https://img.shields.io/github/commit-activity/y/lllllllillllllillll/DweebUI)](https://github.com/lllllllillllllillll)
 [![Docker Pulls](https://img.shields.io/docker/pulls/lllllllillllllillll/dweebui)](https://hub.docker.com/repository/docker/lllllllillllllillll/dweebui)
 [![GitHub License](https://img.shields.io/github/license/lllllllillllllillll/DweebUI)](https://github.com/lllllllillllllillll/DweebUI/blob/main/LICENSE)
-[![GitHub License](https://img.shields.io/badge/-buy_me_a%C2%A0coffee-gray?logo=buy-me-a-coffee)](https://www.buymeacoffee.com/lllllllillllllillll)
+[![Coffee](https://img.shields.io/badge/-buy_me_a%C2%A0coffee-gray?logo=buy-me-a-coffee)](https://www.buymeacoffee.com/lllllllillllllillll)
 
 * This is a personal project I started to get more familiar with Javascript and Node.js.
 * Some UI elements are placeholders and every version may have breaking changes.
@@ -31,8 +31,9 @@ Alpha v0.20 ( :fire: Experimental :fire: )
 * [x] Dashboard provides server metrics, container metrics, and container controls, on a single page.
 * [x] View container logs.
 * [ ] Update containers (planned).
-* [ ] Manage your Docker networks, images, and volumes (in development).
+* [x] Manage your Docker networks, images, and volumes.
 * [x] Light/Dark Mode.
+* [x] Mobile Friendly.
 * [x] Easy to install app templates.
 * [x] Multi-User built-in.
 * [ ] Permissions system (in development).
@@ -41,6 +42,7 @@ Alpha v0.20 ( :fire: Experimental :fire: )
 * [x] Templates.json maintains compatability with Portainer, allowing you to use the template without needing to use DweebUI.
 * [x] Automatically persists data in docker volumes if bind mount isn't used.
 * [ ] Preset variables (planned).
+* [ ] Themes (planned).
 
 
 ## Setup
@@ -51,9 +53,8 @@ version: "3.9"
 services:
   dweebui:
     container_name: dweebui
-    image: lllllllillllllillll/dweebui:v0.20
+    image: lllllllillllllillll/dweebui:v0.40
     environment:
-      NODE_ENV: production
       PORT: 8000
       SECRET: MrWiskers
     restart: unless-stopped
@@ -61,7 +62,11 @@ services:
       - 8000:8000
     volumes:
       - dweebui:/app
+      # Docker socket
       - /var/run/docker.sock:/var/run/docker.sock
+      # Podman socket
+      #- /run/podman/podman.sock:/var/run/docker.sock
+
     networks:
       - dweebui_net
 
@@ -92,3 +97,4 @@ Compose setup:
 ## Supporters
 
 * MM (Patreon)
+* PD (Buymeacoffee)

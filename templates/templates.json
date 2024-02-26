@@ -1128,7 +1128,7 @@
         }
       ],
       "image": "linuxserver/minetest:latest",
-      "logo": "https://raw.githubusercontent.com/linuxserver/beta-templates/master/lsiodev/img/minetest-icon.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/minetest.png",
       "platform": "linux",
       "ports": [
         "30000/udp"
@@ -1260,7 +1260,7 @@
         }
       ],
       "image": "linuxserver/letsencrypt:latest",
-      "logo": "https://raw.githubusercontent.com/thesugarat/portainer_templates-1/master/Images/letsencrypt.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/letsencrypt.png",
       "platform": "linux",
       "ports": [
         "80/tcp",
@@ -1467,7 +1467,7 @@
       "note": "",
       "description": "Changedetection.io provides free, open-source web page monitoring, notification and change detection. (https://github.com/dgtlmoon/changedetection.io)",
       "platform": "linux",
-      "logo": "https://github.com/linuxserver/docker-templates/raw/master/linuxserver.io/img/changedetection-icon.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/changedetection.io.png",
       "image": "linuxserver/changedetection.io:latest",
       "env": [
         {
@@ -1841,7 +1841,7 @@
       "note": "",
       "description": "[Embystat](https://github.com/mregni/EmbyStat) is a personal web server that can calculate all kinds of statistics from your (local) Emby server. Just install this on your server and let him calculate all kinds of fun stuff.",
       "platform": "linux",
-      "logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/embystat-logo.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/embystat.png",
       "image": "linuxserver/embystat:latest",
       "env": [
         {
@@ -2686,7 +2686,7 @@
       "note": "",
       "description": "SWAG - Secure Web Application Gateway (formerly known as letsencrypt, no relation to Let's Encrypt\u2122) sets up an Nginx webserver and reverse proxy with php support and a built-in certbot client that automates free SSL server certificate generation and renewal processes (Let's Encrypt and ZeroSSL). It also contains fail2ban for intrusion prevention.",
       "platform": "linux",
-      "logo": "https://github.com/linuxserver/docker-templates/raw/master/linuxserver.io/img/swag.gif",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/linuxserverio.png",
       "image": "linuxserver/swag:latest",
       "env": [
         {
@@ -2996,38 +2996,6 @@
     },
     {
       "categories": [
-        "Authentication"
-      ],
-      "note": "recommend requirements: a host with at least 2 CPU cores and 2 GB of RAM",
-      "description": "authentik is an open-source Identity Provider focused on flexibility and versatility. You can use authentik in an existing environment to add support for new protocols, implement sign-up/recovery/etc. in your application so you don't have to deal with it, and many other things.",
-      "env": [
-        {
-          "default": "1000",
-          "label": "PUID",
-          "name": "PUID"
-        },
-        {
-          "default": "1000",
-          "label": "PGID",
-          "name": "PGID"
-        },
-        {
-          "label": "PORT",
-          "name": "PORT"
-        }
-      ],
-      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/authentik.png",
-      "name": "authentik",
-      "platform": "linux",
-      "repository": {
-        "stackfile": "Template/Stack/authentik.yml",
-        "url": "https://github.com/xneo1/portainer_templates"
-      },
-      "title": "Authentik",
-      "type": 3
-    },
-    {
-      "categories": [
         "Productivity"
       ],
       "description": "Trilium Notes is a hierarchical note taking application with focus on building large personal knowledge bases",
@@ -3043,7 +3011,7 @@
         }
       ],
       "image": "zadam/trilium:latest",
-      "logo": "https://www.saashub.com/images/app/service_logos/55/2901389fab77/large.png?1561117248",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/trilium.png",
       "name": "trilium",
       "platform": "linux",
       "ports": [
@@ -3058,50 +3026,6 @@
           "container": "/home/node/trilium-data"
         }
       ]
-    },
-    {
-      "categories": [
-        "Communication"
-      ],
-      "description": "Rocket.Chat is an open-source fully customizable communications platform developed in JavaScript for organizations with high standards of data protection.",
-      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/rocketchat.png",
-      "note": "Rocket.Chat Server Container",
-      "platform": "linux",
-      "repository": {
-        "stackfile": "Template/Stack/rocketchat.yml",
-        "url": "https://github.com/mycroftwilde/portainer_templates"
-      },
-      "title": "Rocket Chat",
-      "name": "rocketchat",
-      "type": 3
-    },
-    {
-      "categories": [
-        "Other"
-      ],
-      "description": "Joplin is an open-source note-taking app",
-      "env": [
-        {
-          "default": "22300",
-          "label": "PORT",
-          "name": "PORT"
-        },
-        {
-          "default": "http://joplin.yourdomain.tld:22300",
-          "label": "URL",
-          "name": "URL"
-        }
-      ],
-      "logo": "https://raw.githubusercontent.com/laurent22/joplin/master/Assets/SquareIcon512.png",
-      "note": "Joplin is an open-source note-taking app",
-      "platform": "linux",
-      "repository": {
-        "stackfile": "Template/Stack/joplin.yml",
-        "url": "https://github.com/mycroftwilde/portainer_templates"
-      },
-      "title": "Joplin",
-      "name": "joplin",
-      "type": 3
     },
     {
       "categories": [
@@ -3552,7 +3476,7 @@
       ],
       "description": "YoutubeDL-Material is a Material Design frontend for youtube-dl. It's coded using Angular 9 for the frontend, and Node.js on the backend.",
       "image": "tzahi12345/youtubedl-material:latest",
-      "logo": "https://raw.githubusercontent.com/Qballjos/portainer_templates/master/Images/ytdlm.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/youtubedl.png",
       "name": "youtubedl-material",
       "platform": "linux",
       "ports": [
@@ -4679,50 +4603,6 @@
     },
     {
       "categories": [
-        "Finance",
-        "Productivity"
-      ],
-      "description": "Invoices, Expenses and Tasks built with Laravel and Flutter.",
-      "env": [
-        {
-          "default": "invoice.my.domain",
-          "label": "URL",
-          "name": "URL"
-        },
-        {
-          "label": "APP_KEY",
-          "name": "APP_KEY"
-        },
-        {
-          "label": "TZ",
-          "name": "TZ"
-        },
-        {
-          "label": "DATABASE_PASSWORD",
-          "name": "DATABASE_PASSWORD"
-        },
-        {
-          "label": "MYSQL_ROOT_PASSWORD",
-          "name": "MYSQL_ROOT_PASSWORD"
-        },
-        {
-          "label": "PORT",
-          "name": "PORT"
-        }
-      ],
-      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/invoiceninja.png",
-      "name": "invoice_ninja",
-      "note": "The database user is invoice_ninja and the database is ninja_db. Please generate an app key following the documentation <a href='https://github.com/invoiceninja/dockerfiles'>here</a>. ",
-      "platform": "linux",
-      "repository": {
-        "stackfile": "Template/Stack/invoice-ninja.yml",
-        "url": "https://github.com/SelfhostedPro/selfhosted_templates"
-      },
-      "title": "Invoice Ninja",
-      "type": 3
-    },
-    {
-      "categories": [
         "Gaming"
       ],
       "description": "McMyAdmin 2 is the leading web control panel and administration console for Minecraft servers.",
@@ -4914,68 +4794,6 @@
       ]
     },
     {
-      "categories": [
-        "Downloaders"
-      ],
-      "description": "A docker image with qBittorrent and the Flood UI, also optional WireGuard VPN support.",
-      "logo": "https://hotio.dev/img/image-logos/flood.svg",
-      "name": "flood",
-      "platform": "linux",
-      "repository": {
-        "stackfile": "Template/Stack/flood.yml",
-        "url": "https://github.com/xneo1/portainer_templates"
-      },
-      "title": "Flood",
-      "type": 3
-    },
-    {
-      "categories": [
-        "Multimedia",
-        "Productivity"
-      ],
-      "description": "PhotoPrism is an AI-powered app for browsing, organizing & sharing your photo collection. It makes use of the latest technologies to tag and find pictures automatically without getting in your way.| Copy as Custom stack and EDIT environment variables.",
-      "logo": "https://photoprism.app/static/img/logo.svg",
-      "name": "photoprism",
-      "platform": "linux",
-      "repository": {
-        "stackfile": "Template/Stack/photoprism.yml",
-        "url": "https://github.com/xneo1/portainer_templates"
-      },
-      "title": "Photoprism",
-      "type": 3
-    },
-    {
-      "categories": [
-        "Multimedia",
-        "AI"
-      ],
-      "description": "Immich is a high performance self-hosted photo and video backup solution.",
-      "logo": "https://github.com/immich-app/immich/raw/main/design/immich-logo.svg",
-      "name": "immich",
-      "platform": "linux",
-      "repository": {
-        "stackfile": "Template/Stack/immich.yml",
-        "url": "https://github.com/xneo1/portainer_templates"
-      },
-      "title": "Immich",
-      "type": 3
-    },
-    {
-      "categories": [
-        "Tools"
-      ],
-      "description": "The recipe manager that allows you to manage your ever growing collection of digital recipes.",
-      "logo": "https://docs.tandoor.dev/logo_color.svg",
-      "name": "tandoor",
-      "platform": "linux",
-      "repository": {
-        "stackfile": "Template/Stack/tandoor.yml",
-        "url": "https://github.com/xneo1/portainer_templates"
-      },
-      "title": "Tandoor",
-      "type": 3
-    },
-    {
       "type": 1,
       "name": "influxdb",
       "title": "InfluxDB",
@@ -5022,36 +4840,6 @@
           "default": "mydb"
         }
       ]
-    },
-    {
-      "categories": [
-        "Media Server"
-      ],
-      "description": "Your media enjoyed through a minimal lightweight media server.",
-      "logo": "https://github.com/midarrlabs/midarr-server/raw/master/priv/static/logo.svg",
-      "name": "midarr",
-      "platform": "linux",
-      "repository": {
-        "stackfile": "Template/Stack/midarr.yml",
-        "url": "https://github.com/xneo1/portainer_templates"
-      },
-      "title": "Midarr",
-      "type": 3
-    },
-    {
-      "categories": [
-        "Development"
-      ],
-      "description": "Appwrite is a self-hosted backend-as-a-service platform that provides developers with all the core APIs required to build any application.",
-      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/appwrite.png",
-      "name": "appwrite",
-      "platform": "linux",
-      "repository": {
-        "stackfile": "Template/Stack/appwrite.yml",
-        "url": "https://github.com/xneo1/portainer_templates"
-      },
-      "title": "Appwrite",
-      "type": 3
     },
     {
       "categories": [
@@ -5123,72 +4911,6 @@
     },
     {
       "categories": [
-        "Downloaders",
-        "Multimedia"
-      ],
-      "description": "Autobrr is the modern download automation tool for torrents.",
-      "logo": "https://autobrr.com/img/logo.png",
-      "name": "autobrr",
-      "platform": "linux",
-      "repository": {
-        "stackfile": "Template/Stack/autobrr.yml",
-        "url": "https://github.com/xneo1/portainer_templates"
-      },
-      "title": "Autobrr",
-      "type": 3
-    },
-    {
-      "categories": [
-        "Monitoring"
-      ],
-      "description": "Glances is an open-source system cross-platform monitoring tool. It allows real-time monitoring of various aspects of your system such as CPU, memory, disk, network usage etc.",
-      "logo": "https://raw.githubusercontent.com/nicolargo/glances/develop/docs/_static/glances-responsive-webdesign.png",
-      "name": "glances",
-      "platform": "linux",
-      "repository": {
-        "stackfile": "Template/Stack/glances.yml",
-        "url": "https://github.com/xneo1/portainer_templates"
-      },
-      "title": "Glances",
-      "type": 3
-    },
-    {
-      "categories": [
-        "Development",
-        "Low Code",
-        "No code"
-      ],
-      "description": "Tooljet is an Open-source low-code application development platform for building and deploying business applications.",
-      "logo": "https://uploads-ssl.webflow.com/6266634263b9179f76b2236e/63aaa161e3b3be42ec50eb6f_Logomark.svg",
-      "name": "tooljet",
-      "platform": "linux",
-      "repository": {
-        "stackfile": "Template/Stack/tooljet.yml",
-        "url": "https://github.com/xneo1/portainer_templates"
-      },
-      "title": "Tooljet",
-      "type": 3
-    },
-    {
-      "categories": [
-        "Productivity",
-        "Development",
-        "Low-code",
-        "No-code"
-      ],
-      "description": "Budibase allows no-code users to build apps quickly, with more functionality available with a little bit of inline code.",
-      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/budibase.png",
-      "name": "budibase",
-      "platform": "linux",
-      "repository": {
-        "stackfile": "Template/Stack/budibase.yml",
-        "url": "https://github.com/xneo1/portainer_templates"
-      },
-      "title": "Budibase",
-      "type": 3
-    },
-    {
-      "categories": [
         "Development"
       ],
       "description": "Appsmith (www.appsmith.com) is the first open-source low code tool that helps developers build dashboards and admin panels very quickly.",
@@ -5207,68 +4929,6 @@
           "container": "/appsmith-stacks"
         }
       ],
-      "type": 3
-    },
-    {
-      "categories": [
-        "Networking",
-        "Monitoring"
-      ],
-      "description": "Lazytainer monitors network traffic to containers. If there is traffic, the container runs, otherwise the container is stopped/paused.",
-      "logo": "https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/lazytainer.png",
-      "name": "lazytainer",
-      "platform": "linux",
-      "repository": {
-        "stackfile": "Template/Stack/lazytainer.yml",
-        "url": "https://github.com/xneo1/portainer_templates"
-      },
-      "title": "Lazytainer",
-      "type": 3
-    },
-    {
-      "categories": [
-        "Finance"
-      ],
-      "description": "I hate money is a web application made to ease shared budget management. It keeps track of who bought what, when, and for whom; and helps to settle the bills.",
-      "logo": "https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/ihatemoney.png",
-      "name": "ihatemoney",
-      "platform": "linux",
-      "repository": {
-        "stackfile": "Template/Stack/ihatemoney.yml",
-        "url": "https://github.com/xneo1/portainer_templates"
-      },
-      "title": "I hate money",
-      "type": 3
-    },
-    {
-      "categories": [
-        "Media Server",
-        "LDAP"
-      ],
-      "description": "Fireshare: Share your game clips, videos, or other media via unique links.",
-      "logo": "https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/fireshare.png",
-      "name": "fireshare",
-      "platform": "linux",
-      "repository": {
-        "stackfile": "Template/Stack/fireshare.yml",
-        "url": "https://github.com/xneo1/portainer_templates"
-      },
-      "title": "Fireshare",
-      "type": 3
-    },
-    {
-      "categories": [
-        "Productivity"
-      ],
-      "description": "Xwiki s a free wiki software platform written in Java with a design emphasis on extensibility. XWiki is an enterprise wiki.",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/e/e2/Logo-xwikiorange.svg",
-      "name": "xwiki",
-      "platform": "linux",
-      "repository": {
-        "stackfile": "Template/Stack/xwiki.yml",
-        "url": "https://github.com/xneo1/portainer_templates"
-      },
-      "title": "Xwiki",
       "type": 3
     },
     {
@@ -5341,21 +5001,6 @@
     },
     {
       "categories": [
-        "Productivity"
-      ],
-      "description": "Trudesk is an Open Source Help Desk Software and Ticketing System",
-      "logo": "https://trudesk.io/wp-content/uploads/2019/10/logo-med.png",
-      "name": "trudesk",
-      "platform": "linux",
-      "repository": {
-        "stackfile": "Template/Stack/trudesk.yml",
-        "url": "https://github.com/xneo1/portainer_templates"
-      },
-      "title": "Trudesk",
-      "type": 3
-    },
-    {
-      "categories": [
         "Dashboard"
       ],
       "description": "Dashdot is a modern server dashboard, running on the latest tech, designed with glassmorphism in mind. It is intended to be used for smaller VPS and private servers.",
@@ -5375,23 +5020,6 @@
         }
       ],
       "privileged": true
-    },
-    {
-      "categories": [
-        "Productivity",
-        "Development",
-        "No-code"
-      ],
-      "description": "Open source no-code database and Airtable alternative.Create your own online database without technical experience. Our user friendly no-code tool gives you the powers of a developer without leaving your browser.",
-      "logo": "https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/baserow.png",
-      "name": "baserow",
-      "platform": "linux",
-      "repository": {
-        "stackfile": "Template/Stack/baserow.yml",
-        "url": "https://github.com/xneo1/portainer_templates"
-      },
-      "title": "Baserow",
-      "type": 3
     },
     {
       "name": "nocodb",
@@ -5453,25 +5081,6 @@
           "default": "nocodb"
         }
       ]
-    },
-    {
-      "categories": [
-        "Analytics",
-        "Tools"
-      ],
-      "description": "Google Analytics alternative that protects your data and your customers' privacy",
-      "logo": "https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/matomo.png",
-      "name": "matomo",
-      "platform": "linux",
-      "repository": {
-        "stackfile": "Template/Stack/matomo.yml",
-        "url": "https://github.com/xneo1/portainer_templates"
-      },
-      "ports": [
-        "8282:80/tcp"
-      ],
-      "title": "Matomo",
-      "type": 3
     },
     {
       "categories": [
@@ -5914,7 +5523,7 @@
       "note": "",
       "description": "Nvidia HWA Test is a test container for NVIDIA hardware acceleration. Start the container then check the logs to confirm your output matches the example from this page: <a href='https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/sample-workload.html'>Running a Sample Workload</a>. <a href='https://www.nvidia.com/' target='_blank'>Website</a>. <a href='https://hub.docker.com/r/nvidia/cuda' target='_blank'>Docker Hub</a>",
       "platform": "linux",
-      "logo": "https://avatars.githubusercontent.com/u/1728152",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/nvidia.png",
 	    "image": "nvidia/cuda:12.2.0-base-ubuntu20.04",
       "env": [
         {

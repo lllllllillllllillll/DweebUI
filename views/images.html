@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>DweebUI - Images</title>
+    <link href="/css/tabler.min.css" rel="stylesheet"/>
+    <link href="/css/demo.min.css" rel="stylesheet"/>
+    <style>
+      @import url('/fonts/inter.css');
+      :root {
+        --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+      }
+      body {
+        font-feature-settings: "cv03", "cv04", "cv11";
+      }
+    </style>
+  </head>
+  <body >
+    <div class="page">
+      <!-- Navbar -->
+      <%- include('navbar.html') %>
+      <div class="page-wrapper">
+        <!-- Page header -->
+        
+        <!-- Page body -->
+        <div class="page-body">
+          <div class="container-xl">
+            <div class="row row-deck row-cards">
+
+              <div class="col-12 mt-12">
+                <div class="card">
+                  <form method="post">
+                    <div class="card-header">
+                      <h3 class="card-title">Docker Images</h3>
+                        <div class="card-options btn-list">                  
+                            <a href="#" class="btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-refresh" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4"></path> <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"></path> </svg>
+                              Refresh
+                            </a>
+                            <a href="#" class="btn" data-bs-toggle="modal" data-bs-target="#not_add-site">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M12 5l0 14"></path> <path d="M5 12l14 0"></path> </svg>
+                              New Image
+                            </a>
+                        </div>
+                    </div>
+                    
+
+                    <div id="table-default" class="table-responsive">
+                      <table class="table">
+                        
+                        <%- image_list %>
+
+                      </table>
+                    </div>
+
+                    <div class="card-footer d-flex align-items-center">
+
+                      <button class="btn" type="submit" formaction="/removeImage">Remove</button>
+
+                      </form>
+                                          
+                      <p class="m-0 text-muted ms-auto"><%- image_count %> Images</p>
+
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        
+        <%- include('footer.html') %>
+        
+      </div>
+    </div>
+    
+    <!-- Libs JS -->
+    <script src="/libs/list.js/dist/list.min.js" defer></script>
+    <!-- Tabler Core -->
+    <script src="/js/tabler.min.js" defer></script>
+    <script src="/js/demo.min.js" defer></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+      const list = new List('table-default', {
+      	sortClass: 'table-sort',
+      	listClass: 'table-tbody',
+      	valueNames: [ 'sort-name', 'sort-type', 'sort-city', 'sort-score',
+      		{ attr: 'data-date', name: 'sort-date' },
+      		{ attr: 'data-progress', name: 'sort-progress' },
+      		'sort-quantity'
+      	]
+      });
+      })
+    </script>
+
+    <script>
+      function selectAll() {
+        let checkboxes = document.getElementsByName('select');
+        if (checkboxes[0].checked == true) {
+          for (var i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = true;
+          }
+        } else {
+          for (var i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = false;
+          }
+        }
+      }
+    </script>
+    
+  </body>
+</html>

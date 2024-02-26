@@ -9,8 +9,6 @@ import { containerCard } from "../components/containerCard.js";
 // This entire page hurts to look at. 
 export const Install = async (req, res) => {
 
-        console.log(req.app.locals.installCard);
-
         let data = req.body;
 
         let { service_name, name, image, command_check, command, net_mode, restart_policy } = data;        
@@ -170,39 +168,40 @@ export const Install = async (req, res) => {
             try {   
                 mkdirSync(`./appdata/${name}`, { recursive: true });
                 writeFileSync(`./appdata/${name}/docker-compose.yml`, compose_file, function (err) { console.log(err) });
+                var compose = new DockerodeCompose(docker, `./appdata/${name}/docker-compose.yml`, `${name}`);
 
-            } catch { console.log('error creating directory or compose file') }
+            } catch { 
+                const syslog = await Syslog.create({
+                    user: req.session.user,
+                    email: null,
+                    event: "App Installation",
+                    message: `${name} installation failed - error creating directory or compose file : ${err}`,
+                    ip: req.socket.remoteAddress
+                });
+             }
 
-            var compose = new DockerodeCompose(docker, `./appdata/${name}/docker-compose.yml`, `${name}`);
-
-            (async () => {
-                try {
+            try {
+                (async () => {
                     await compose.pull();
-                    await compose.up().then(() => {
-                        const syslog = Syslog.create({
-                            user: req.session.user,
-                            email: null,
-                            event: "App Installation",
-                            message: `${name} installed successfully`,
-                            ip: req.socket.remoteAddress
-                        });
-                    });
-                } catch (err) {
-                    console.error(err);
+                    await compose.up();
+
                     const syslog = await Syslog.create({
                         user: req.session.user,
                         email: null,
                         event: "App Installation",
-                        message: `${name} installation failed: ${err}`,
+                        message: `${name} installed successfully`,
                         ip: req.socket.remoteAddress
-                    });
-                }
-            })();
+                    });  
+                })();
+            } catch (err) {
+                const syslog = await Syslog.create({
+                    user: req.session.user,
+                    email: null,
+                    event: "App Installation",
+                    message: `${name} installation failed: ${err}`,
+                    ip: req.socket.remoteAddress
+                });
+            }
         }
-
-
     res.redirect('/');
-
 }
-
-

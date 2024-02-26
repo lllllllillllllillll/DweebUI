@@ -9,7 +9,7 @@
     <link href="/css/tabler.min.css" rel="stylesheet"/>
     <link href="/css/demo.min.css" rel="stylesheet"/>
     <style>
-      @import url('fonts/inter.css');
+      @import url('/fonts/inter.css');
       :root {
         --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
       }
@@ -22,19 +22,27 @@
     <script src="/js/demo-theme.js"></script>
     <div class="page page-center">
       <div class="container container-tight py-4">
-        <div class="text-center mb-4">
-          <a href="." class="navbar-brand navbar-brand-autodark"><img src="/static/logo.svg" height="50" alt=""></a>
+        <div class="text-center">
+          <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+              <img src="/images/logo.png" alt="DweebUI" title="DweebUI" height="100px">
+          </h1>
         </div>
+        <div class="text-center mb-4">
+          <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+            <img src="/images/dweebui.svg" alt="DweebUI" title="DweebUI" class="navbar-brand-image">
+          </h1>
+        </div>
+
         <div class="card card-md">
           <div class="card-body">
             <h2 class="h2 text-center mb-4">Login to your account</h2>
             <form action="/login" method="POST" novalidate>
 
-                <% if(error) { %>
-                    <div class="alert alert-danger" role="alert">
-                        <%= error %>
-                    </div>
-                <% } %>
+              <% if(error) { %>
+                <div class="alert alert-danger" role="alert">
+                    <%= error %>
+                </div>
+              <% } %>
 
               <div class="mb-2">
                 <label class="form-label">Email address</label>
@@ -70,9 +78,12 @@
         </div>
       </div>
     </div>
+ 
     <!-- Libs JS -->
     <!-- Tabler Core -->
     <script src="/js/tabler.min.js" defer></script>
     <script src="/js/demo.min.js" defer></script>
+    
+
   </body>
 </html>
