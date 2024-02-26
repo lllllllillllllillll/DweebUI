@@ -53,9 +53,8 @@ version: "3.9"
 services:
   dweebui:
     container_name: dweebui
-    image: lllllllillllllillll/dweebui:v0.20
+    image: lllllllillllllillll/dweebui:v0.40
     environment:
-      NODE_ENV: production
       PORT: 8000
       SECRET: MrWiskers
     restart: unless-stopped
@@ -63,7 +62,11 @@ services:
       - 8000:8000
     volumes:
       - dweebui:/app
+      # Docker socket
       - /var/run/docker.sock:/var/run/docker.sock
+      # Podman socket
+      #- /run/podman/podman.sock:/var/run/docker.sock
+
     networks:
       - dweebui_net
 

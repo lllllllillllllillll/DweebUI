@@ -168,6 +168,7 @@ export const Install = async (req, res) => {
             try {   
                 mkdirSync(`./appdata/${name}`, { recursive: true });
                 writeFileSync(`./appdata/${name}/docker-compose.yml`, compose_file, function (err) { console.log(err) });
+                var compose = new DockerodeCompose(docker, `./appdata/${name}/docker-compose.yml`, `${name}`);
 
             } catch { 
                 const syslog = await Syslog.create({
@@ -178,8 +179,6 @@ export const Install = async (req, res) => {
                     ip: req.socket.remoteAddress
                 });
              }
-
-            var compose = new DockerodeCompose(docker, `./appdata/${name}/docker-compose.yml`, `${name}`);
 
             try {
                 (async () => {

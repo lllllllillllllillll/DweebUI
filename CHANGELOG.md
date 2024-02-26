@@ -2,7 +2,7 @@
 * Pages rewritten to use HTMX.
 * Removed Socket.io.
 * Changed view files to *.HTML instead of *.EJS.
-* Improved Dockerfile.
+* Removed "USER root" from Dockerfile.
 * Express sessions configured to use memorystore.
 * Improved chart rendering.
 * Improvements to container charts.
@@ -20,6 +20,7 @@
 * Container charts only rendered if container running.
 * Created permissions modal.
 * Podman support (untested).
+* Started a new template for FOSS apps.
 
 ## v0.20 (Jan 20th 2024) - The rewrite. Jumping all the way to v0.20.
 * Changed to ES6 imports.
