@@ -88,6 +88,7 @@ router.get('/sse_event', (req, res) => {
             });
         });
         if ((all_containers != sent_list) || (event == true)) {
+            console.log('event triggered');
             sent_list = all_containers;
             event = false;
             res.write(`event: ${eventType}\n`);

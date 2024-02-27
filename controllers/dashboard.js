@@ -4,7 +4,10 @@ import { modal } from '../components/modal.js';
 import { permissionsModal } from '../components/permissions_modal.js';
 import { setEvent, cpu, ram, tx, rx, disk, docker } from '../server.js';
 import { dockerContainerStats } from 'systeminformation';
-import { containerCard } from '../components/containerCard.js';
+// import { containerCard } from '../components/containerCard.js';
+import { readFileSync } from 'fs';
+
+let containerCard = readFileSync('./views/components/containerCard.html', 'utf8');
 
 let [ hidden, cardList ] = [ '', '' ];
 
@@ -200,12 +203,68 @@ async function containerCards() {
                 ports: ports_list,
                 link: 'localhost',
             }
-            let card = containerCard(container_info);
+            
+            let name = container.Names[0].slice(1);
+            let state = container.State;
+            
+            let wrapped = name;
+            let disable = "";
+            let chartName = name.replace(/-/g, '');
+          
+            // shorten long names
+            if (name.length > 13) { wrapped = name.slice(0, 10) + '...'; }
+            // disable buttons for dweebui
+            if (name.startsWith('dweebui')) { disable = 'disabled=""'; }
+          
+            // if ( external_port == undefined ) { external_port = 0; }
+            // if ( internal_port == undefined ) { internal_port = 0; }
+          
+            let state_indicator = 'green';
+            if (state == 'exited') {
+                state = 'stopped';
+                state_indicator = 'red';
+            } else if (state == 'paused') {
+                state_indicator = 'orange';
+            }
+          
+            let noChart = 'hx-swap="none"';
+            if (state == 'running') { noChart = ''; }
+          
+            let ports_data = [];
+            // if (ports) {
+            //   ports_data = ports;
+            // } else {
+            //   for (let i = 0; i < 12; i++) {
+          
+            //     let port_check = "checked";
+            //     let external = i;
+            //     let internal = i;
+            //     let protocol = "tcp";
+          
+            //     ports_data.push({
+            //       check: port_check,
+            //       external: external,
+            //       internal: internal,
+            //       protocol: protocol
+            //     });
+            //   }
+            // }
+          
+            let card = containerCard;
+            card = card.replace(/AppName/g, name);
+            card = card.replace(/AppShortName/g, wrapped);
+            card = card.replace(/ChartName/g, chartName);
+            card = card.replace(/AppIcon/g, service);
+            card = card.replace(/AppState/g, state);
+            card = card.replace(/StateColor/g, state_indicator);
             list += card;
         }
     }
     cardList = list;
 }
+
+
+
 
 export const Containers = async (req, res) => {
     await getHidden();
@@ -271,28 +330,6 @@ export const Installs = async (req, res) => {
     let name = req.header('hx-trigger-name');
     let all_containers = '';
 
-    await docker.listContainers({ all: true }).then(containers => {
-        containers.forEach(container => {
-            if (container.Names[0].slice(1) == name) {
-                return;
-            }
-        });
-
-        let install_info = {
-            name: name,
-            service: 'Service Name',
-            id: '',
-            state: '',
-            image: '',
-            external_port: 0,
-            internal_port: 0,
-            ports: '',
-            link: 'localhost',
-        }
-        let card = containerCard(install_info);
-        res.send(card);
-
-    });
-
-    
+    res.send('ok');
+   
 }
