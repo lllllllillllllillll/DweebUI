@@ -1,10 +1,8 @@
 import { Readable } from 'stream';
 import { Permission, Container } from '../database/models.js';
-import { modal } from '../components/modal.js';
 import { permissionsModal } from '../components/permissions_modal.js';
 import { setEvent, cpu, ram, tx, rx, disk, docker } from '../server.js';
 import { dockerContainerStats } from 'systeminformation';
-// import { containerCard } from '../components/containerCard.js';
 import { readFileSync } from 'fs';
 
 let containerCard = readFileSync('./views/components/containerCard.html', 'utf8');
@@ -51,12 +49,14 @@ export const Logs = (req, res) => {
 export const Modal = async (req, res) => {
     let name = req.header('hx-trigger-name');
     let id = req.header('hx-trigger');
+
     if (id == 'permissions') {
         let containerPermissions = await Permission.findAll({ where: {containerName: name}});
-        let form = permissionsModal();
-        res.send(form);
+        let permissions = readFileSync('./views/modals/permissions.html', 'utf8');
+        res.send(permissions);
         return;
     }
+
     let containerId = docker.getContainer(name);
     let containerInfo = await containerId.inspect();
     let ports_list = [];
@@ -83,8 +83,13 @@ export const Modal = async (req, res) => {
         ports: ports_list,
         link: 'localhost',
     }
-    let form = modal(container_info);
-    res.send(form);
+
+    let details = readFileSync('./views/modals/details.html', 'utf8');
+    details = details.replace(/AppName/g, containerInfo.Name.slice(1));
+    details = details.replace(/AppImage/g, containerInfo.Config.Image);
+    
+
+    res.send(details);
 }
 
 export const Stats = async (req, res) => {
