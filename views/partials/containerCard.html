@@ -27,10 +27,10 @@
                   </a>
                   <div class="dropdown-menu dropdown-menu-end">
                     <button class="dropdown-item text-secondary" name="AppName" id="details" data-hx-get="/modal" data-hx-target="#modals-here" hx-swap="innerHTML" data-hx-trigger="click" data-bs-toggle="modal" data-bs-target="#modals-here">Details</button>
-                    <button class="dropdown-item text-secondary" name="AppName" id="logs" data-hx-get="/logs" data-hx-target="#logView" data-bs-toggle="modal" data-bs-target="#log_view">Logs</button>
+                    <button class="dropdown-item text-secondary" name="AppName" id="logs" data-hx-get="/logs" hx-swap="innerHTML" data-hx-target="#logView" data-bs-toggle="modal" data-bs-target="#log_view">Logs</button>
                     <button class="dropdown-item text-secondary" name="AppName" id="edit">Edit</button>
                     <button class="dropdown-item text-primary" name="AppName" id="update" disabled="">Update</button>
-                    <button class="dropdown-item text-danger" name="AppName" id="remove" data-bs-toggle="modal" data-bs-target="#AppName_uninstall_modal" href="#">Remove</button>
+                    <button class="dropdown-item text-danger" name="AppName" id="remove" hx-trigger="click" data-hx-get="/modal" hx-swap="innerHTML" data-bs-toggle="modal" data-hx-target="#modals-here" data-bs-target="#modals-here">Remove</button>
                   </div>
                 </div>
                 <div class="dropdown">

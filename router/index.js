@@ -74,8 +74,8 @@ router.get("/logout", Logout);
 
 
 // Functions
-import { Install } from "../functions/install.js"
+// import { Install } from "../functions/install.js"
 import { Uninstall } from "../functions/uninstall.js"
 
-router.post("/install", auth, Install);
+// router.post("/install", auth, Install);
 router.post("/uninstall", auth, Uninstall);

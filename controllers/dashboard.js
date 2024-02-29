@@ -1,11 +1,10 @@
 import { Readable } from 'stream';
 import { Permission, Container } from '../database/models.js';
-import { permissionsModal } from '../components/permissions_modal.js';
 import { setEvent, cpu, ram, tx, rx, disk, docker } from '../server.js';
 import { dockerContainerStats } from 'systeminformation';
 import { readFileSync } from 'fs';
 
-let containerCard = readFileSync('./views/components/containerCard.html', 'utf8');
+let containerCard = readFileSync('./views/partials/containerCard.html', 'utf8');
 
 let [ hidden, cardList ] = [ '', '' ];
 
@@ -57,6 +56,13 @@ export const Modal = async (req, res) => {
         return;
     }
 
+    if (id == 'remove') {
+        let containerPermissions = await Permission.findAll({ where: {containerName: name}});
+        let remove = readFileSync('./views/modals/remove.html', 'utf8');
+        res.send(remove);
+        return;
+    }
+
     let containerId = docker.getContainer(name);
     let containerInfo = await containerId.inspect();
     let ports_list = [];
@@ -87,8 +93,6 @@ export const Modal = async (req, res) => {
     let details = readFileSync('./views/modals/details.html', 'utf8');
     details = details.replace(/AppName/g, containerInfo.Name.slice(1));
     details = details.replace(/AppImage/g, containerInfo.Config.Image);
-    
-
     res.send(details);
 }
 

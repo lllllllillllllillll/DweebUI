@@ -144,21 +144,25 @@
             <!-- HTMX -->
             <div class="col-12">
               <div class="row row-cards" id="containerCards" data-hx-get="/containers" data-hx-trigger="load" data-hx-swap="beforeend">
-
               </div>
             </div>
 
             <!-- HTMX -->
             <div class="col-12">
               <div class="row row-cards" data-hx-get="/installs" data-hx-trigger="" data-hx-swap="beforeend" hx-target="#containerCards">
-
               </div>
             </div>
             
             <!-- HTMX Target-->
             <div id="modals-here" class="modal modal-blur fade" style="display: none" aria-hidden="false" tabindex="-1">
-              <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+              <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollables">
                 <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title">Loading</h5>
+                  </div>
+                  <div class="modal-body text-center">
+                    <div class="spinner-border"></div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -172,14 +176,12 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
-                    
-                  <div class="card-body">
-                        <h4>Logs:</h4>
+                    <div class="card-body">
+                      <h4>Logs:</h4>
                         <div id="logView">
                           <pre>No logs available</pre>
                         </div>
-                  </div>
-        
+                    </div>
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
@@ -191,8 +193,6 @@
                 </div>
               </div>
             </div>
-
-            
 
           </div>
         </div>
@@ -261,6 +261,8 @@
         }
     }
   </script>
+  
+  <!-- SelectAll for the permissions modal -->
   <script>
     function selectAll(group) {
       
