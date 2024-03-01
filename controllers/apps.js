@@ -1,5 +1,4 @@
 import { readFileSync } from 'fs';
-import { appCard } from '../components/appCard.js';
 
 let templatesJSON = readFileSync('./templates/templates.json');
 let templates = JSON.parse(templatesJSON).templates;

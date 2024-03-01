@@ -79,3 +79,9 @@ import { Uninstall } from "../functions/uninstall.js"
 
 // router.post("/install", auth, Install);
 router.post("/uninstall", auth, Uninstall);
+
+
+router.get("/card", (req, res) => {
+    console.log('card route hit');
+    res.send('ok');
+});

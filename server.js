@@ -77,21 +77,35 @@ let serverMetrics = async () => {
 }
 setInterval(serverMetrics, 1000);
 
-let sent_list = '';
+
+let containersArray = [];
+let sentArray = [];
+
+function addContainer(container, state) {
+    containersArray.push({ container, state });
+}
+
 router.get('/sse_event', (req, res) => {
-    res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive', });
-    let eventCheck = setInterval(async() => {
-        let all_containers = '';
+    res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive' });
+    let eventCheck = setInterval(async () => {
+        containersArray = [];
         await docker.listContainers({ all: true }).then(containers => {
             containers.forEach(container => {
-                all_containers += `${container.Names}: ${container.State}\n`;
+                let name = container.Names[0].replace('/', '');
+                addContainer(name, container.State);
             });
         });
-        if ((all_containers != sent_list) || (event == true)) {
-            sent_list = all_containers;
-            event = false;
-            res.write(`event: ${eventType}\n`);
-            res.write(`data: there was an event!\n\n`);
+
+        if ((JSON.stringify(containersArray) !== JSON.stringify(sentArray)) || event) {
+            console.log('Event triggered');
+            for (let i = 0; i < containersArray.length; i++) {
+                const container = containersArray[i];
+                if (!sentArray[i] || JSON.stringify(container) !== JSON.stringify(sentArray[i])) {
+                    res.write(`event: ${container.container}\n`);
+                    res.write(`data: ${JSON.stringify(container)}\n\n`);
+                }
+            }
+            sentArray = containersArray.slice();
         }
     }, 1000);
     req.on('close', () => {
