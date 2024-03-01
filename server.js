@@ -97,12 +97,12 @@ router.get('/sse_event', (req, res) => {
         });
 
         if ((JSON.stringify(containersArray) !== JSON.stringify(sentArray)) || event) {
-            console.log('Event triggered');
             for (let i = 0; i < containersArray.length; i++) {
-                const container = containersArray[i];
-                if (!sentArray[i] || JSON.stringify(container) !== JSON.stringify(sentArray[i])) {
-                    res.write(`event: ${container.container}\n`);
-                    res.write(`data: ${JSON.stringify(container)}\n\n`);
+                const { container, state } = containersArray[i];
+                if (!sentArray[i] || JSON.stringify({ container, state }) !== JSON.stringify(sentArray[i])) {
+                    console.log(`Event: ${container}`);
+                    res.write(`event: ${container}\n`);
+                    res.write(`data: ${state}\n\n`);
                 }
             }
             sentArray = containersArray.slice();
