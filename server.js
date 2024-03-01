@@ -100,7 +100,7 @@ router.get('/sse_event', (req, res) => {
             for (let i = 0; i < containersArray.length; i++) {
                 const { container, state } = containersArray[i];
                 if (!sentArray[i] || JSON.stringify({ container, state }) !== JSON.stringify(sentArray[i])) {
-                    console.log(`Event: ${container}`);
+                    console.log(`Event: ${container} ${state}`);
                     res.write(`event: ${container}\n`);
                     res.write(`data: ${state}\n\n`);
                 }
