@@ -1,13 +1,16 @@
 import { Readable } from 'stream';
 import { Permission, Container } from '../database/models.js';
-import { setEvent, cpu, ram, tx, rx, disk, docker } from '../server.js';
+import { docker } from '../server.js';
 import { dockerContainerStats } from 'systeminformation';
 import { readFileSync } from 'fs';
+import { currentLoad, mem, networkStats, fsSize } from 'systeminformation';
 
-let containerCard = readFileSync('./views/partials/containerCard.html', 'utf8');
+const permissionsModal = readFileSync('./views/modals/permissions.html', 'utf8');
+const uninstallModal = readFileSync('./views/modals/uninstall.html', 'utf8');
+const detailsModal = readFileSync('./views/modals/details.html', 'utf8');
 
-let [ hidden, cardList ] = [ '', '' ];
 
+// The actual page
 export const Dashboard = (req, res) => {
     res.render("dashboard", {
         name: req.session.user,
@@ -16,85 +19,25 @@ export const Dashboard = (req, res) => {
     });
 }
 
-export const Logs = (req, res) => {
-    let name = req.header('hx-trigger-name');
-    function containerLogs (data) {
-        return new Promise((resolve, reject) => {
-            let logString = '';
-            var options = {
-                follow: false,
-                stdout: true,
-                stderr: false,
-                timestamps: false
-            };
-            var containerName = docker.getContainer(data);
-            containerName.logs(options, function (err, stream) {
-                if (err) { reject(err); return; }
-                const readableStream = Readable.from(stream);
-                readableStream.on('data', function (chunk) {
-                    logString += chunk.toString('utf8');
-                });
-                readableStream.on('end', function () {
-                    resolve(logString);
-                });
-            });
-        });
-    };
-    containerLogs(name).then((data) => {
-        res.send(`<pre>${data}</pre> `)
+// Server metrics (CPU, RAM, TX, RX, DISK)
+let [ cpu, ram, tx, rx, disk, stats ] = [0, 0, 0, 0, 0, {}];
+
+let serverMetrics = setInterval(async () => {
+    currentLoad().then(data => { 
+        cpu = Math.round(data.currentLoad); 
     });
-}
+    mem().then(data => { 
+        ram = Math.round((data.active / data.total) * 100); 
+    });
+    networkStats().then(data => { 
+        tx = data[0].tx_bytes / (1024 * 1024); 
+        rx = data[0].rx_bytes / (1024 * 1024); 
+    });
+    fsSize().then(data => { 
+        disk = data[0].use; 
+    });
+}, 1000);
 
-export const Modal = async (req, res) => {
-    let name = req.header('hx-trigger-name');
-    let id = req.header('hx-trigger');
-
-    if (id == 'permissions') {
-        let containerPermissions = await Permission.findAll({ where: {containerName: name}});
-        let permissions = readFileSync('./views/modals/permissions.html', 'utf8');
-        res.send(permissions);
-        return;
-    }
-
-    if (id == 'remove') {
-        let containerPermissions = await Permission.findAll({ where: {containerName: name}});
-        let remove = readFileSync('./views/modals/remove.html', 'utf8');
-        res.send(remove);
-        return;
-    }
-
-    let containerId = docker.getContainer(name);
-    let containerInfo = await containerId.inspect();
-    let ports_list = [];
-    try {
-    for (const [key, value] of Object.entries(containerInfo.HostConfig.PortBindings)) {
-        let ports = {
-            check: 'checked',
-            external: value[0].HostPort,
-            internal: key.split('/')[0],
-            protocol: key.split('/')[1]
-        }
-        ports_list.push(ports);
-    }
-    } catch {}
-    let external_port = ports_list[0]?.external || 0;
-    let internal_port = ports_list[0]?.internal || 0;
-
-    let container_info = {
-        name: containerInfo.Name.slice(1),
-        state: containerInfo.State.Status,
-        image: containerInfo.Config.Image,
-        external_port: external_port,
-        internal_port: internal_port,
-        ports: ports_list,
-        link: 'localhost',
-    }
-
-    let details = readFileSync('./views/modals/details.html', 'utf8');
-    details = details.replace(/AppName/g, containerInfo.Name.slice(1));
-    details = details.replace(/AppImage/g, containerInfo.Config.Image);
-    res.send(details);
-}
 
 export const Stats = async (req, res) => {
     let name = req.header('hx-trigger-name');
@@ -122,41 +65,100 @@ export const Stats = async (req, res) => {
 }
 
 
-export const Hide = async (req, res) => {
-    let name = req.header('hx-trigger-name');
-    let exists = await Container.findOne({ where: {name: name}});
-    if (!exists) {
-        const newContainer = await Container.create({ name: name, visibility: false, });
-    } else {
-        exists.update({ visibility: false });
-    }
-    setEvent(true, 'docker');
-    res.send("ok");
+let [ hidden, cardList, eventType, containersArray, sentArray ] = [ '', '', '', [], [] ];
+
+// Container cards
+export const Containers = async (req, res) => {
+    console.log('Containers called');
+    res.send(cardList);
 }
 
-export const Reset = async (req, res) => {
-    Container.update({ visibility: true }, { where: {} });
-    setEvent(true, 'docker');
-    res.send("ok");
+function addContainer(container, state) {
+    containersArray.push({ container, state });
 }
 
+let cardUpdates = [];
+let newCards = '';
+export const SSE = (req, res) => {
+    res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive' });
 
-let stats = {};
+    let eventCheck = setInterval(async () => {
+        // builds array of containers and their states
+        containersArray = [];
+        await docker.listContainers({ all: true }).then(containers => {
+            containers.forEach(container => {
+                let name = container.Names[0].replace('/', '');
+                if (hidden.includes(name)) {
+                    // do nothing
+                } else {
+                    addContainer(name, container.State);
+                }
+
+            });
+        });
+
+        if ((JSON.stringify(containersArray) !== JSON.stringify(sentArray))) {
+            cardList = '';
+            newCards = '';
+            cardUpdates = [];
+            containersArray.forEach(container => {
+                const { container: containerName, state } = container;
+                const existingContainer = sentArray.find(c => c.container === containerName);
+                if (!existingContainer) {
+                    console.log(`New container: ${containerName}`);
+                    addCard(containerName, 'newCards');
+                    res.write(`event: update\n`);
+                    res.write(`data: 'update cards'\n\n`);
+                } else if (existingContainer.state !== state) {
+                    console.log(`State of ${containerName} changed`);
+                    cardUpdates.push(containerName);
+                }
+                addCard(containerName, 'cardList');
+            });
+
+            sentArray.forEach(container => {
+                const { container: containerName } = container;
+                const existingContainer = containersArray.find(c => c.container === containerName);
+                if (!existingContainer) {
+                    console.log(`Removed container: ${containerName}`);
+                    cardUpdates.push(containerName);
+                }
+            });
+
+            for (let i = 0; i < cardUpdates.length; i++) {
+                res.write(`event: ${cardUpdates[i]}\n`);
+                res.write(`data: 'update cards'\n\n`);
+            }
+
+            sentArray = containersArray.slice();
+        }
+
+    }, 1000);
+
+
+    req.on('close', () => {
+        clearInterval(eventCheck);
+    });
+};
+
+
+
+
+
+
+
+
+// Container charts
 export const Chart = async (req, res) => {
     let name = req.header('hx-trigger-name');
-    // create an empty array if it doesn't exist
     if (!stats[name]) {
         stats[name] = { cpuArray: Array(15).fill(0), ramArray: Array(15).fill(0) };
     }
-    // get the stats
     const info = await dockerContainerStats(name);
-    // update the arrays
     stats[name].cpuArray.push(Math.round(info[0].cpuPercent));
     stats[name].ramArray.push(Math.round(info[0].memPercent));
-    // slice them down to the last 15 values
     stats[name].cpuArray = stats[name].cpuArray.slice(-15);
     stats[name].ramArray = stats[name].ramArray.slice(-15);
-    // replace the chart with the new data
     let chart = `
         <script>
             ${name}chart.updateSeries([{
@@ -168,117 +170,118 @@ export const Chart = async (req, res) => {
     res.send(chart);
 }
 
-// Get hidden containers
-async function getHidden() {
-    hidden = await Container.findAll({ where: {visibility:false}});
-    hidden = hidden.map((container) => container.name);
+
+export const Installs = async (req, res) => {
+    let name = req.header('hx-trigger-name');
+    let all_containers = '';
+    res.send('ok');
 }
 
-// Create list of docker containers cards
-async function containerCards() {
-    let list = '';
-    const allContainers = await docker.listContainers({ all: true });
-    for (const container of allContainers) {
-        if (!hidden.includes(container.Names[0].slice(1))) {
+async function addCard(container, list) {
+    let card  = readFileSync('./views/partials/containerCard.html', 'utf8');
+    let containerId = docker.getContainer(container);
+    containerId.inspect().then(data => {
 
-            let imageVersion = container.Image.split('/');
-            let service = imageVersion[imageVersion.length - 1].split(':')[0];
-            let containerId = docker.getContainer(container.Id);
-            let containerInfo = await containerId.inspect();
-            let ports_list = [];
-            try {
-            for (const [key, value] of Object.entries(containerInfo.HostConfig.PortBindings)) {
-                let ports = {
-                    check: 'checked',
-                    external: value[0].HostPort,
-                    internal: key.split('/')[0],
-                    protocol: key.split('/')[1]
-                }
-                ports_list.push(ports);
-            }
-            } catch {}
-
-            let external_port = ports_list[0]?.external || 0;
-            let internal_port = ports_list[0]?.internal || 0;
-
-            let container_info = {
-                name: container.Names[0].slice(1),
-                service: service,
-                id: container.Id,
-                state: container.State,
-                image: container.Image,
-                external_port: external_port,
-                internal_port: internal_port,
-                ports: ports_list,
-                link: 'localhost',
-            }
-            
-            let name = container.Names[0].slice(1);
-            let state = container.State;
-            
-            let wrapped = name;
-            let disable = "";
-            let chartName = name.replace(/-/g, '');
-          
-            // shorten long names
-            if (name.length > 13) { wrapped = name.slice(0, 10) + '...'; }
-            // disable buttons for dweebui
-            if (name.startsWith('dweebui')) { disable = 'disabled=""'; }
-          
-            // if ( external_port == undefined ) { external_port = 0; }
-            // if ( internal_port == undefined ) { internal_port = 0; }
-          
-            let state_indicator = 'green';
-            if (state == 'exited') {
-                state = 'stopped';
-                state_indicator = 'red';
-            } else if (state == 'paused') {
-                state_indicator = 'orange';
-            }
-          
-            let noChart = 'hx-swap="none"';
-            if (state == 'running') { noChart = ''; }
-          
-            let ports_data = [];
-            // if (ports) {
-            //   ports_data = ports;
-            // } else {
-            //   for (let i = 0; i < 12; i++) {
-          
-            //     let port_check = "checked";
-            //     let external = i;
-            //     let internal = i;
-            //     let protocol = "tcp";
-          
-            //     ports_data.push({
-            //       check: port_check,
-            //       external: external,
-            //       internal: internal,
-            //       protocol: protocol
-            //     });
-            //   }
-            // }
-          
-            let card = containerCard;
-            card = card.replace(/AppName/g, name);
-            card = card.replace(/AppShortName/g, wrapped);
-            card = card.replace(/ChartName/g, chartName);
-            card = card.replace(/AppIcon/g, service);
-            card = card.replace(/AppState/g, state);
-            card = card.replace(/StateColor/g, state_indicator);
-            list += card;
+        let state = data.State.Status;
+        let wrapped = container;
+        let disable = "";
+        let chartName = container.replace(/-/g, '');
+        
+        // shorten long names
+        if (container.length > 13) { wrapped = container.slice(0, 10) + '...'; }
+        // disable buttons for dweebui
+        if (container.startsWith('dweebui')) { disable = 'disabled=""'; }
+        
+        // if ( external_port == undefined ) { external_port = 0; }
+        // if ( internal_port == undefined ) { internal_port = 0; }
+        
+        let state_indicator = 'green';
+        if (state == 'exited') {
+            state = 'stopped';
+            state_indicator = 'red';
+        } else if (state == 'paused') {
+            state_indicator = 'orange';
         }
-    }
-    cardList = list;
+        
+        let noChart = 'hx-swap="none"';
+        if (state == 'running') { noChart = ''; }
+
+        let imageVersion = data.Config.Image.split('/');
+        let service = imageVersion[imageVersion.length - 1].split(':')[0];
+        let ports_list = [];
+        try {
+        for (const [key, value] of Object.entries(data.HostConfig.PortBindings)) {
+            let ports = {
+                check: 'checked',
+                external: value[0].HostPort,
+                internal: key.split('/')[0],
+                protocol: key.split('/')[1]
+            }
+            ports_list.push(ports);
+        }
+        } catch {}
+        let external_port = ports_list[0]?.external || 0;
+        let internal_port = ports_list[0]?.internal || 0;
+        card = card.replace(/AppName/g, container);
+        card = card.replace(/AppShortName/g, wrapped);
+        card = card.replace(/AppIcon/g, service);
+        card = card.replace(/AppState/g, state);
+        card = card.replace(/StateColor/g, state_indicator);
+        card = card.replace(/ChartName/g, chartName);
+        card = card.replace(/AppNameState/g, `${container}State`);
+        if (list == 'newCards') {
+            newCards += card;
+        } else {
+            cardList += card;
+        }
+    });   
+}
+
+export const updateCards = async (req, res) => {
+    console.log('updateCards called');
+    res.send(newCards);
 }
 
 
 
 
-export const Containers = async (req, res) => {
-    await getHidden();
-    await containerCards();
-    res.send(cardList);
+
+
+export const Card = (req, res) => {
+    let name = req.header('hx-trigger-name');
+    console.log(`Updated card for ${name}`);
+
+    let newCard = readFileSync('./views/partials/containerCard.html', 'utf8');
+    let containerId = docker.getContainer(name);
+    containerId.inspect().then(data => {
+        let imageVersion = data.Config.Image.split('/');
+        let service = imageVersion[imageVersion.length - 1].split(':')[0];
+        let ports_list = [];
+        try {
+        for (const [key, value] of Object.entries(data.HostConfig.PortBindings)) {
+            let ports = {
+                check: 'checked',
+                external: value[0].HostPort,
+                internal: key.split('/')[0],
+                protocol: key.split('/')[1]
+            }
+            ports_list.push(ports);
+        }
+        } catch {}
+        let external_port = ports_list[0]?.external || 0;
+        let internal_port = ports_list[0]?.internal || 0;
+        
+
+        newCard = newCard.replace(/AppName/g, name);
+        newCard = newCard.replace(/AppShortName/g, name);
+        newCard = newCard.replace(/AppIcon/g, service);
+        newCard = newCard.replace(/AppState/g, data.State.Status);
+        newCard = newCard.replace(/AppImage/g, data.Config.Image.split('/'));
+
+        if (hidden.includes(name)) { newCard = ''; }
+
+        res.send(newCard);
+    });
 }
 
 
@@ -334,11 +337,95 @@ export const Restart = (req, res) => {
     res.send(status('restarting'));
 }
 
-export const Installs = async (req, res) => {
-
+export const Logs = (req, res) => {
     let name = req.header('hx-trigger-name');
-    let all_containers = '';
+    function containerLogs (data) {
+        return new Promise((resolve, reject) => {
+            let logString = '';
+            var options = { follow: false, stdout: true, stderr: false, timestamps: false };
+            var containerName = docker.getContainer(data);
+            containerName.logs(options, function (err, stream) {
+                if (err) { reject(err); return; }
+                const readableStream = Readable.from(stream);
+                readableStream.on('data', function (chunk) {
+                    logString += chunk.toString('utf8');
+                });
+                readableStream.on('end', function () {
+                    resolve(logString);
+                });
+            });
+        });
+    };
+    containerLogs(name).then((data) => {
+        res.send(`<pre>${data}</pre> `)
+    });
+}
 
-    res.send('ok');
-   
+export const Hide = async (req, res) => {
+    let name = req.header('hx-trigger-name');
+    let exists = await Container.findOne({ where: {name: name}});
+    if (!exists) {
+        const newContainer = await Container.create({ name: name, visibility: false, });
+    } else {
+        exists.update({ visibility: false });
+    }
+    hidden = await Container.findAll({ where: {visibility:false}});
+    hidden = hidden.map((container) => container.name);
+    res.send("ok");
+}
+
+export const Reset = async (req, res) => {
+    await Container.update({ visibility: true }, { where: {} });
+    hidden = await Container.findAll({ where: {visibility:false}});
+    hidden = hidden.map((container) => container.name);
+    res.send("ok");
+}
+
+export const Modal = async (req, res) => {
+    let name = req.header('hx-trigger-name');
+    let id = req.header('hx-trigger');
+
+    if (id == 'permissions') {
+        // let containerPermissions = await Permission.findAll({ where: {containerName: name}});
+        res.send(permissionsModal);
+        return;
+    }
+
+    if (id == 'uninstall') {
+        // let containerPermissions = await Permission.findAll({ where: {containerName: name}});
+        res.send(uninstallModal);
+        return;
+    }
+
+    let containerId = docker.getContainer(name);
+    let containerInfo = await containerId.inspect();
+    let ports_list = [];
+    try {
+    for (const [key, value] of Object.entries(containerInfo.HostConfig.PortBindings)) {
+        let ports = {
+            check: 'checked',
+            external: value[0].HostPort,
+            internal: key.split('/')[0],
+            protocol: key.split('/')[1]
+        }
+        ports_list.push(ports);
+    }
+    } catch {}
+    let external_port = ports_list[0]?.external || 0;
+    let internal_port = ports_list[0]?.internal || 0;
+
+    let container_info = {
+        name: containerInfo.Name.slice(1),
+        state: containerInfo.State.Status,
+        image: containerInfo.Config.Image,
+        external_port: external_port,
+        internal_port: internal_port,
+        ports: ports_list,
+        link: 'localhost',
+    }
+
+    let details = detailsModal;
+    details = details.replace(/AppName/g, containerInfo.Name.slice(1));
+    details = details.replace(/AppImage/g, containerInfo.Config.Image);
+    res.send(details);
 }

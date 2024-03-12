@@ -1,3 +1,10 @@
+## v0.50 (dev)
+* Converted template literals into html.
+* Converted modals into html/htmx.
+* Moved functions into dashboard controller.
+* Added modal placeholder with loading spinner.
+* Independently updating container cards.
+
 ## v0.40 (Feb 26th 2024) - HTMX rewrite
 * Pages rewritten to use HTMX.
 * Removed Socket.io.

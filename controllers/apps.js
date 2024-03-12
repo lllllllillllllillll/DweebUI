@@ -27,7 +27,7 @@ export const Apps = (req, res) => {
 
     let apps_list = '';
     for (let i = list_start; i < list_end && i < templates.length; i++) {
-        let app_card = appCard(templates[i]);
+        let app_card = readFileSync('./views/partials/appCard.html', 'utf8');
 
         apps_list += app_card;
     }
