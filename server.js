@@ -49,3 +49,61 @@ app.listen(port, async () => {
     });
 });
 
+function setEvent(value, type) {
+    event = value;
+    eventType = type;
+}
+
+// Server metrics
+let serverMetrics = async () => {
+    currentLoad().then(data => { 
+        cpu = Math.round(data.currentLoad); 
+    });
+    mem().then(data => { 
+        ram = Math.round((data.active / data.total) * 100); 
+    });
+    networkStats().then(data => { 
+        tx = data[0].tx_bytes / (1024 * 1024); 
+        rx = data[0].rx_bytes / (1024 * 1024); 
+    });
+    fsSize().then(data => { 
+        disk = data[0].use; 
+    });
+}
+setInterval(serverMetrics, 1000);
+
+
+let containersArray = [];
+let sentArray = [];
+
+function addContainer(container, state) {
+    containersArray.push({ container, state });
+}
+
+router.get('/sse_event', (req, res) => {
+    res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive' });
+    let eventCheck = setInterval(async () => {
+        containersArray = [];
+        await docker.listContainers({ all: true }).then(containers => {
+            containers.forEach(container => {
+                let name = container.Names[0].replace('/', '');
+                addContainer(name, container.State);
+            });
+        });
+
+        if ((JSON.stringify(containersArray) !== JSON.stringify(sentArray)) || event) {
+            for (let i = 0; i < containersArray.length; i++) {
+                const { container, state } = containersArray[i];
+                if (!sentArray[i] || JSON.stringify({ container, state }) !== JSON.stringify(sentArray[i])) {
+                    console.log(`Event: ${container}`);
+                    res.write(`event: ${container}\n`);
+                    res.write(`data: ${state}\n\n`);
+                }
+            }
+            sentArray = containersArray.slice();
+        }
+    }, 1000);
+    req.on('close', () => {
+        clearInterval(eventCheck);
+    });
+});
