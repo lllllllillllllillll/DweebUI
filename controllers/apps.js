@@ -27,9 +27,19 @@ export const Apps = (req, res) => {
 
     let apps_list = '';
     for (let i = list_start; i < list_end && i < templates.length; i++) {
-        let app_card = readFileSync('./views/partials/appCard.html', 'utf8');
+        let appCard = readFileSync('./views/partials/appCard.html', 'utf8');
+        let name = templates[i].name || templates[i].title.toLowerCase();
+        let desc = templates[i].description.slice(0, 60) + "...";
+        let description = templates[i].description.replaceAll(". ", ".\n") || "no description available";
+        let note = templates[i].note ? templates[i].note.replaceAll(". ", ".\n") : "no notes available";
+        let image = templates[i].image;
+        let logo = templates[i].logo;
 
-        apps_list += app_card;
+        appCard = appCard.replace(/AppShortName/g, name);
+        appCard = appCard.replace(/AppDesc/g, desc);
+        appCard = appCard.replace(/AppLogo/g, logo);
+
+        apps_list += appCard;
     }
     
     res.render("apps", {
