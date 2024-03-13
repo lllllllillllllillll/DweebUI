@@ -4,6 +4,8 @@
 * Moved functions into dashboard controller.
 * Added modal placeholder with loading spinner.
 * Independently updating container cards.
+* Container cards display pending actions (starting, stopping, pausing, restarting).
+* Dynamically generated avatars.
 
 ## v0.40 (Feb 26th 2024) - HTMX rewrite
 * Pages rewritten to use HTMX.

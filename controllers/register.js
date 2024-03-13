@@ -17,7 +17,7 @@ export const Register = function(req,res){
 
 export const submitRegister = async function(req,res){
 
-    let { name, username, email, password, confirmPassword, avatar, warning, secret } = req.body;
+    let { name, username, email, password, confirmPassword, warning, secret } = req.body;
 
 
     if (secret != SECRET) {
@@ -55,7 +55,6 @@ export const submitRegister = async function(req,res){
                     password: bcrypt.hashSync(password,10),
                     role: await userRole(),
                     group: 'all',
-                    avatar: `<img src="/images/avatars/${avatar}">`,
                     lastLogin: newLogin,
                 });
 
@@ -67,7 +66,6 @@ export const submitRegister = async function(req,res){
                     req.session.user = newUser.username;
                     req.session.UUID = newUser.UUID;
                     req.session.role = newUser.role;
-                    req.session.avatar = newUser.avatar;
 
                     const syslog = await Syslog.create({
                         user: req.session.user,
