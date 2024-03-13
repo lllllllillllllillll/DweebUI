@@ -24,7 +24,7 @@
   
   <div class="page">
 
-    <%- include('navbar.html') %>
+    <%- include('partials/navbar.html') %>
     
     <div class="page-wrapper">
 
@@ -142,13 +142,13 @@
             
             <!-- HTMX -->
             <div class="col-12">
-              <div class="row row-cards" data-hx-get="/containers" data-hx-trigger="load" data-hx-swap="innerHTML" id="containers">
+              <div class="row row-cards" data-hx-get="/containers" data-hx-trigger="" data-hx-swap="innerHTML" id="containers">
               </div>
             </div>
 
             <!-- HTMX -->
             <div class="col-12">
-              <div class="row row-cards" data-hx-get="/new_cards" data-hx-trigger="sse:update" data-hx-swap="beforeend" hx-target="#containers">
+              <div class="row row-cards" data-hx-get="/new_cards" data-hx-trigger="load, sse:update" data-hx-swap="beforeend" hx-target="#containers">
               </div>
             </div>
             
@@ -197,7 +197,7 @@
         </div>
       </div>
       
-    <%- include('footer.html') %>
+    <%- include('partials/footer.html') %>
       
     </div>
   </div>

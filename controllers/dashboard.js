@@ -257,6 +257,15 @@ export const Card = (req, res) => {
     containerId.inspect().then(data => {
 
         let state = data.State.Status;
+
+        let state_indicator = 'green';
+        if (state == 'exited') {
+            state = 'stopped';
+            state_indicator = 'red';
+        } else if (state == 'paused') {
+            state_indicator = 'orange';
+        }
+
         let wrapped = name;
         let disable = "";
         let chartName = name.replace(/-/g, '');
@@ -269,13 +278,7 @@ export const Card = (req, res) => {
         // if ( external_port == undefined ) { external_port = 0; }
         // if ( internal_port == undefined ) { internal_port = 0; }
         
-        let state_indicator = 'green';
-        if (state == 'exited') {
-            state = 'stopped';
-            state_indicator = 'red';
-        } else if (state == 'paused') {
-            state_indicator = 'orange';
-        }
+
         
         let trigger = 'data-hx-trigger="load, every 2s"';
         if (state != 'running') {  trigger = 'data-hx-trigger="load"'; }
@@ -301,7 +304,7 @@ export const Card = (req, res) => {
         newCard = newCard.replace(/AppName/g, name);
         newCard = newCard.replace(/AppShortName/g, wrapped);
         newCard = newCard.replace(/AppIcon/g, service);
-        newCard = newCard.replace(/AppState/g, data.State.Status);
+        newCard = newCard.replace(/AppState/g, state);
         newCard = newCard.replace(/AppImage/g, data.Config.Image.split('/'));
         newCard = newCard.replace(/StateColor/g, state_indicator);
         newCard = newCard.replace(/ChartName/g, chartName);
