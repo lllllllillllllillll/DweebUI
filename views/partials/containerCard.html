@@ -65,10 +65,10 @@
         
         <script>
           var ChartNamechart = new ApexCharts(document.querySelector("#ChartName_chart"), options);
-      </script>
+        </script>
 
       <div class="chart-sm">
-        <div id="ChartName_chart" data-hx-trigger="load, every 2s" data-hx-get="/chart" name="ChartName" ${noChart}>
+        <div id="ChartName_chart" data-hx-trigger="load, every 2s" data-hx-get="/chart" name="ChartName" hx-swap="innerHTML">
           <script>
             ChartNamechart.render();
           </script>

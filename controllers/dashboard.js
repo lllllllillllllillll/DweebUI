@@ -73,9 +73,7 @@ export const Containers = async (req, res) => {
     res.send(cardList);
 }
 
-function addContainer(container, state) {
-    containersArray.push({ container, state });
-}
+
 
 let cardUpdates = [];
 let newCards = '';
@@ -91,7 +89,7 @@ export const SSE = (req, res) => {
                 if (hidden.includes(name)) {
                     // do nothing
                 } else {
-                    addContainer(name, container.State);
+                    containersArray.push({ container: name, state: container.State });
                 }
 
             });
@@ -151,6 +149,7 @@ export const SSE = (req, res) => {
 // Container charts
 export const Chart = async (req, res) => {
     let name = req.header('hx-trigger-name');
+    console.log(`Chart called for ${name}`);
     if (!stats[name]) {
         stats[name] = { cpuArray: Array(15).fill(0), ramArray: Array(15).fill(0) };
     }
@@ -252,8 +251,34 @@ export const Card = (req, res) => {
     console.log(`Updated card for ${name}`);
 
     let newCard = readFileSync('./views/partials/containerCard.html', 'utf8');
+    
     let containerId = docker.getContainer(name);
     containerId.inspect().then(data => {
+
+        let state = data.State.Status;
+        let wrapped = name;
+        let disable = "";
+        let chartName = name.replace(/-/g, '');
+        
+        // shorten long names
+        if (name.length > 13) { wrapped = name.slice(0, 10) + '...'; }
+        // disable buttons for dweebui
+        if (name.startsWith('dweebui')) { disable = 'disabled=""'; }
+        
+        // if ( external_port == undefined ) { external_port = 0; }
+        // if ( internal_port == undefined ) { internal_port = 0; }
+        
+        let state_indicator = 'green';
+        if (state == 'exited') {
+            state = 'stopped';
+            state_indicator = 'red';
+        } else if (state == 'paused') {
+            state_indicator = 'orange';
+        }
+        
+        let noChart = 'hx-swap="none"';
+        if (state == 'running') { noChart = ''; }
+
         let imageVersion = data.Config.Image.split('/');
         let service = imageVersion[imageVersion.length - 1].split(':')[0];
         let ports_list = [];
@@ -273,10 +298,12 @@ export const Card = (req, res) => {
         
 
         newCard = newCard.replace(/AppName/g, name);
-        newCard = newCard.replace(/AppShortName/g, name);
+        newCard = newCard.replace(/AppShortName/g, wrapped);
         newCard = newCard.replace(/AppIcon/g, service);
         newCard = newCard.replace(/AppState/g, data.State.Status);
         newCard = newCard.replace(/AppImage/g, data.Config.Image.split('/'));
+        newCard = newCard.replace(/StateColor/g, state_indicator);
+        newCard = newCard.replace(/ChartName/g, chartName);
 
         if (hidden.includes(name)) { newCard = ''; }
 
