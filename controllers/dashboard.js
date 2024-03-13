@@ -202,8 +202,8 @@ async function addCard(container, list) {
             state_indicator = 'orange';
         }
         
-        let noChart = 'hx-swap="none"';
-        if (state == 'running') { noChart = ''; }
+        let trigger = 'data-hx-trigger="load, every 2s"';
+        if (state != 'running') {  trigger = 'data-hx-trigger="load"'; }
 
         let imageVersion = data.Config.Image.split('/');
         let service = imageVersion[imageVersion.length - 1].split(':')[0];
@@ -228,6 +228,7 @@ async function addCard(container, list) {
         card = card.replace(/StateColor/g, state_indicator);
         card = card.replace(/ChartName/g, chartName);
         card = card.replace(/AppNameState/g, `${container}State`);
+        card = card.replace(/data-trigger=""/, trigger);
         if (list == 'newCards') {
             newCards += card;
         } else {
@@ -276,8 +277,8 @@ export const Card = (req, res) => {
             state_indicator = 'orange';
         }
         
-        let noChart = 'hx-swap="none"';
-        if (state == 'running') { noChart = ''; }
+        let trigger = 'data-hx-trigger="load, every 2s"';
+        if (state != 'running') {  trigger = 'data-hx-trigger="load"'; }
 
         let imageVersion = data.Config.Image.split('/');
         let service = imageVersion[imageVersion.length - 1].split(':')[0];
@@ -304,6 +305,7 @@ export const Card = (req, res) => {
         newCard = newCard.replace(/AppImage/g, data.Config.Image.split('/'));
         newCard = newCard.replace(/StateColor/g, state_indicator);
         newCard = newCard.replace(/ChartName/g, chartName);
+        newCard = newCard.replace(/data-trigger=""/, trigger);
 
         if (hidden.includes(name)) { newCard = ''; }
 
