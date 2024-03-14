@@ -160,6 +160,69 @@ export const Installs = async (req, res) => {
     res.send('ok');
 }
 
+
+async function containerInfo (containerName) {
+
+    let card  = readFileSync('./views/partials/containerCard.html', 'utf8');
+    let container = docker.getContainer(containerName);
+    let info = await container.inspect();
+   
+    let name = containerName;
+    let state = info.State.Status;
+    let state_color = '';
+    switch (state) {
+        case 'running':
+            state_color = 'green';
+            break;
+        case 'exited':
+            state_color = 'red';
+            state = 'stopped';
+            break;
+        case 'paused':
+            state_color = 'orange';
+            break;
+    }
+    
+    let wrapped = name;
+    if (name.length > 13) { wrapped = name.slice(0, 10) + '...'; }
+    if (name.startsWith('dweebui')) { disable = 'disabled=""'; }
+    let disable = "";
+    let chartName = name.replace(/-/g, '');
+
+    let trigger = 'data-hx-trigger="load, every 3s"';
+    if (state != 'running') {  trigger = 'data-hx-trigger="load"'; }
+
+    let imageVersion = info.Config.Image.split('/');
+    let service = imageVersion[imageVersion.length - 1].split(':')[0];
+
+    let ports_list = [];
+    try {
+        for (const [key, value] of Object.entries(info.HostConfig.PortBindings)) {
+            let ports = {
+                check: 'checked',
+                external: value[0].HostPort,
+                internal: key.split('/')[0],
+                protocol: key.split('/')[1]
+            }
+            ports_list.push(ports);
+        }
+    } catch {}
+        let external_port = ports_list[0]?.external || 0;
+        let internal_port = ports_list[0]?.internal || 0;
+        
+    card = card.replace(/AppName/g, name);
+    card = card.replace(/AppShortName/g, wrapped);
+    card = card.replace(/AppIcon/g, service);
+    card = card.replace(/AppState/g, state);
+    card = card.replace(/StateColor/g, state_color);
+    card = card.replace(/ChartName/g, chartName);
+    card = card.replace(/data-trigger=""/, trigger);
+    if (hidden.includes(name)) { card = ''; }
+
+    return card;
+}
+
+
 async function addCard(container, list) {
     let card  = readFileSync('./views/partials/containerCard.html', 'utf8');
     let containerId = docker.getContainer(container);
@@ -178,12 +241,12 @@ async function addCard(container, list) {
         // if ( external_port == undefined ) { external_port = 0; }
         // if ( internal_port == undefined ) { internal_port = 0; }
         
-        let state_indicator = 'green';
+        let state_color = 'green';
         if (state == 'exited') {
             state = 'stopped';
-            state_indicator = 'red';
+            state_color = 'red';
         } else if (state == 'paused') {
-            state_indicator = 'orange';
+            state_color = 'orange';
         }
         
         let trigger = 'data-hx-trigger="load, every 3s"';
@@ -209,13 +272,13 @@ async function addCard(container, list) {
         card = card.replace(/AppShortName/g, wrapped);
         card = card.replace(/AppIcon/g, service);
         card = card.replace(/AppState/g, state);
-        card = card.replace(/StateColor/g, state_indicator);
+        card = card.replace(/StateColor/g, state_color);
         card = card.replace(/ChartName/g, chartName);
         card = card.replace(/AppNameState/g, `${container}State`);
         card = card.replace(/data-trigger=""/, trigger);
         if (list == 'newCards') {
             newCards += card;
-        } else {
+        } else if (list == 'cardList'){
             cardList += card;
         }
     });   
@@ -231,73 +294,11 @@ export const updateCards = async (req, res) => {
 
 
 
-export const Card = (req, res) => {
+export const Card = async (req, res) => {
     let name = req.header('hx-trigger-name');
     console.log(`Updated card for ${name}`);
-
-    let newCard = readFileSync('./views/partials/containerCard.html', 'utf8');
-    
-    let containerId = docker.getContainer(name);
-    containerId.inspect().then(data => {
-
-        let state = data.State.Status;
-
-        let state_indicator = 'green';
-        if (state == 'exited') {
-            state = 'stopped';
-            state_indicator = 'red';
-        } else if (state == 'paused') {
-            state_indicator = 'orange';
-        }
-
-        let wrapped = name;
-        let disable = "";
-        let chartName = name.replace(/-/g, '');
-        
-        // shorten long names
-        if (name.length > 13) { wrapped = name.slice(0, 10) + '...'; }
-        // disable buttons for dweebui
-        if (name.startsWith('dweebui')) { disable = 'disabled=""'; }
-        
-        // if ( external_port == undefined ) { external_port = 0; }
-        // if ( internal_port == undefined ) { internal_port = 0; }
-        
-
-        
-        let trigger = 'data-hx-trigger="load, every 3s"';
-        if (state != 'running') {  trigger = 'data-hx-trigger="load"'; }
-
-        let imageVersion = data.Config.Image.split('/');
-        let service = imageVersion[imageVersion.length - 1].split(':')[0];
-        let ports_list = [];
-        try {
-        for (const [key, value] of Object.entries(data.HostConfig.PortBindings)) {
-            let ports = {
-                check: 'checked',
-                external: value[0].HostPort,
-                internal: key.split('/')[0],
-                protocol: key.split('/')[1]
-            }
-            ports_list.push(ports);
-        }
-        } catch {}
-        let external_port = ports_list[0]?.external || 0;
-        let internal_port = ports_list[0]?.internal || 0;
-        
-
-        newCard = newCard.replace(/AppName/g, name);
-        newCard = newCard.replace(/AppShortName/g, wrapped);
-        newCard = newCard.replace(/AppIcon/g, service);
-        newCard = newCard.replace(/AppState/g, state);
-        newCard = newCard.replace(/AppImage/g, data.Config.Image.split('/'));
-        newCard = newCard.replace(/StateColor/g, state_indicator);
-        newCard = newCard.replace(/ChartName/g, chartName);
-        newCard = newCard.replace(/data-trigger=""/, trigger);
-
-        if (hidden.includes(name)) { newCard = ''; }
-
-        res.send(newCard);
-    });
+    let card = await containerInfo(name);
+    res.send(card);
 }
 
 

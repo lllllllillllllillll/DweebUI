@@ -9,6 +9,8 @@ templates = templates.sort((a, b) => {
     }
 });
 
+
+
 export const Apps = (req, res) => {
     
     let page = Number(req.params.page) || 1;
@@ -35,9 +37,21 @@ export const Apps = (req, res) => {
         let image = templates[i].image;
         let logo = templates[i].logo;
 
+        let categories = '';
+
+          // set data.catagories to 'other' if data.catagories is empty or undefined
+        if (templates[i].categories == null || templates[i].categories == undefined || templates[i].categories == '') {
+            templates[i].categories = ['Other'];
+        }
+
+        for (let c = 0; c < templates[i].categories.length; c++) {
+          categories += CatagoryColor(templates[i].categories[c]);
+        }
+
         appCard = appCard.replace(/AppShortName/g, name);
         appCard = appCard.replace(/AppDesc/g, desc);
         appCard = appCard.replace(/AppLogo/g, logo);
+        appCard = appCard.replace(/AppCategories/g, categories);
 
         apps_list += appCard;
     }
@@ -105,3 +119,49 @@ export const appSearch = async (req, res) => {
     });
 
 }
+
+
+function CatagoryColor(category) {
+    switch (category) {
+      case 'Other':
+        return '<span class="badge bg-blue-lt">Other</span> ';
+      case 'Productivity':
+        return '<span class="badge bg-blue-lt">Productivity</span> ';
+      case 'Tools':
+        return '<span class="badge bg-blue-lt">Tools</span> ';
+      case 'Dashboard':
+        return '<span class="badge bg-blue-lt">Dashboard</span> ';
+      case 'Communication':
+        return '<span class="badge bg-azure-lt">Communication</span> ';
+      case 'Media':
+        return '<span class="badge bg-azure-lt">Media</span> ';
+      case 'CMS':
+        return '<span class="badge bg-azure-lt">CMS</span> ';
+      case 'Monitoring':
+        return '<span class="badge bg-indigo-lt">Monitoring</span> ';
+      case 'LDAP':
+        return '<span class="badge bg-purple-lt">LDAP</span> ';
+      case 'Arr':
+        return '<span class="badge bg-purple-lt">Arr</span> ';
+      case 'Database':
+        return '<span class="badge bg-red-lt">Database</span> ';
+      case 'Paid':
+        return '<span class="badge bg-red-lt" title="This is a paid product or contains paid features.">Paid</span> ';
+      case 'Gaming':
+        return '<span class="badge bg-pink-lt">Gaming</span> ';
+      case 'Finance':
+        return '<span class="badge bg-orange-lt">Finance</span> ';
+      case 'Networking':
+        return '<span class="badge bg-yellow-lt">Networking</span> ';
+      case 'Authentication':
+        return '<span class="badge bg-lime-lt">Authentication</span> ';
+      case 'Development':
+        return '<span class="badge bg-green-lt">Development</span> ';
+      case 'Media Server':
+        return '<span class="badge bg-teal-lt">Media Server</span> ';
+      case 'Downloaders':
+        return '<span class="badge bg-cyan-lt">Downloaders</span> ';
+      default:
+        return ''; // default to other if the category is not recognized
+    }
+  }
