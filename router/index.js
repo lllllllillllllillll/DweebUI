@@ -4,7 +4,7 @@ export const router = express.Router();
 // Controllers
 import { Login, submitLogin, Logout } from "../controllers/login.js";
 import { Register, submitRegister } from "../controllers/register.js";
-import { Dashboard, Start, Stop, Pause, Restart, Logs, Modal, Stats, Hide, Reset, Chart, Containers, Installs, SSE, Card, updateCards } from "../controllers/dashboard.js";
+import { Dashboard, Start, Stop, Pause, Restart, Logs, Modal, Stats, Hide, Reset, Chart, Installs, SSE, Card, updateCards } from "../controllers/dashboard.js";
 import { Apps, appSearch } from "../controllers/apps.js";
 import { Users } from "../controllers/users.js";
 import { Images, removeImage } from "../controllers/images.js";
@@ -28,7 +28,6 @@ const auth = (req, res, next) => {
 
 // Admin routes
 router.get("/", auth, Dashboard);
-router.get("/containers", auth, Containers);
 router.post("/start", auth, Start);
 router.post("/stop", auth, Stop);
 router.post("/pause", auth, Pause);

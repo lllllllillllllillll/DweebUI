@@ -24,6 +24,7 @@ export const Users = async (req, res) => {
         let lastLogin = new Date(account.lastLogin);
         let currentDate = new Date();
         let days = Math.floor((currentDate - lastLogin) / (1000 * 60 * 60 * 24));
+        let avatar = account.username.charAt(0);
 
         if (days > 30) {
             active = '<span class="badge badge-outline text-grey">Inactive</span>';
@@ -35,7 +36,7 @@ export const Users = async (req, res) => {
         <tr>
             <td><input class="form-check-input" type="checkbox"></td>
             <td>${account.id}</td>
-            <td><span class="avatar me-2">${account.avatar}</span></td>
+            <td><span class="avatar avatar-sm bg-green-lt">${avatar}</span></span>
             <td>${account.name}</td>
             <td>${account.username}</td>
             <td>${account.email}</td>

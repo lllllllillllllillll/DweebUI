@@ -67,12 +67,6 @@ export const Stats = async (req, res) => {
 
 let [ hidden, cardList, eventType, containersArray, sentArray ] = [ '', '', '', [], [] ];
 
-// Container cards
-export const Containers = async (req, res) => {
-    console.log('Containers called');
-    res.send(cardList);
-}
-
 
 
 let cardUpdates = [];
@@ -103,12 +97,10 @@ export const SSE = (req, res) => {
                 const { container: containerName, state } = container;
                 const existingContainer = sentArray.find(c => c.container === containerName);
                 if (!existingContainer) {
-                    console.log(`New container: ${containerName}`);
                     addCard(containerName, 'newCards');
                     res.write(`event: update\n`);
                     res.write(`data: 'update cards'\n\n`);
                 } else if (existingContainer.state !== state) {
-                    console.log(`State of ${containerName} changed`);
                     cardUpdates.push(containerName);
                 }
                 addCard(containerName, 'cardList');
@@ -118,7 +110,6 @@ export const SSE = (req, res) => {
                 const { container: containerName } = container;
                 const existingContainer = containersArray.find(c => c.container === containerName);
                 if (!existingContainer) {
-                    console.log(`Removed container: ${containerName}`);
                     cardUpdates.push(containerName);
                 }
             });
@@ -140,16 +131,9 @@ export const SSE = (req, res) => {
 };
 
 
-
-
-
-
-
-
 // Container charts
 export const Chart = async (req, res) => {
     let name = req.header('hx-trigger-name');
-    console.log(`Chart called for ${name}`);
     if (!stats[name]) {
         stats[name] = { cpuArray: Array(15).fill(0), ramArray: Array(15).fill(0) };
     }
@@ -202,7 +186,7 @@ async function addCard(container, list) {
             state_indicator = 'orange';
         }
         
-        let trigger = 'data-hx-trigger="load, every 2s"';
+        let trigger = 'data-hx-trigger="load, every 3s"';
         if (state != 'running') {  trigger = 'data-hx-trigger="load"'; }
 
         let imageVersion = data.Config.Image.split('/');
@@ -280,7 +264,7 @@ export const Card = (req, res) => {
         
 
         
-        let trigger = 'data-hx-trigger="load, every 2s"';
+        let trigger = 'data-hx-trigger="load, every 3s"';
         if (state != 'running') {  trigger = 'data-hx-trigger="load"'; }
 
         let imageVersion = data.Config.Image.split('/');
