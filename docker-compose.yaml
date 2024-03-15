@@ -7,7 +7,7 @@ services:
       PORT: 8000
       SECRET: MrWiskers
     restart: unless-stopped
-    ports:
+    expose:
       - 8000:8000
     volumes:
       - dweebui:/app

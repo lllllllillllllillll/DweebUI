@@ -7,7 +7,6 @@ import { currentLoad, mem, networkStats, fsSize } from 'systeminformation';
 
 const permissionsModal = readFileSync('./views/modals/permissions.html', 'utf8');
 const uninstallModal = readFileSync('./views/modals/uninstall.html', 'utf8');
-const detailsModal = readFileSync('./views/modals/details.html', 'utf8');
 
 
 // The actual page
@@ -21,7 +20,6 @@ export const Dashboard = (req, res) => {
 
 // Server metrics (CPU, RAM, TX, RX, DISK)
 let [ cpu, ram, tx, rx, disk, stats ] = [0, 0, 0, 0, 0, {}];
-
 let serverMetrics = setInterval(async () => {
     currentLoad().then(data => { 
         cpu = Math.round(data.currentLoad); 
@@ -37,7 +35,6 @@ let serverMetrics = setInterval(async () => {
         disk = data[0].use; 
     });
 }, 1000);
-
 
 export const Stats = async (req, res) => {
     let name = req.header('hx-trigger-name');
@@ -64,13 +61,73 @@ export const Stats = async (req, res) => {
     res.send(info);
 }
 
+async function containerInfo (containerName) {
+    let container = docker.getContainer(containerName);
+    let info = await container.inspect();
+    let image = info.Config.Image.split('/');
+    let ports_list = [];
+    try {
+        for (const [key, value] of Object.entries(info.HostConfig.PortBindings)) {
+            let ports = {
+                check: 'checked',
+                external: value[0].HostPort,
+                internal: key.split('/')[0],
+                protocol: key.split('/')[1]
+            }
+            ports_list.push(ports);
+        }
+    } catch {
+        // no exposed ports
+    }
+    let details = {
+        name: containerName,
+        image: image,
+        service: image[image.length - 1].split(':')[0],
+        state: info.State.Status,
+        external_port: ports_list[0]?.external || 0,
+        internal_port: ports_list[0]?.internal || 0,
+        ports: ports_list,
+        link: 'localhost',
+    }
+    return details;
+}
 
-let [ hidden, cardList, eventType, containersArray, sentArray ] = [ '', '', '', [], [] ];
+async function createCard (details) {
+    if (hidden.includes(details.name)) { return;}
+    let shortname = details.name.slice(0, 10) + '...';
+    let trigger = 'data-hx-trigger="load, every 3s"';
+    let state = details.state;
+    let state_color = '';
+    switch (state) {
+        case 'running':
+            state_color = 'green';
+            break;
+        case 'exited':
+            state = 'stopped';
+            state_color = 'red';
+            trigger = 'data-hx-trigger="load"';
+            break;
+        case 'paused':
+            state_color = 'orange';
+            trigger = 'data-hx-trigger="load"';
+            break;
+    }
+    // if (name.startsWith('dweebui')) { disable = 'disabled=""'; }
+    let card  = readFileSync('./views/partials/containerCard.html', 'utf8');
+    card = card.replace(/AppName/g, details.name);
+    card = card.replace(/AppShortName/g, shortname);
+    card = card.replace(/AppIcon/g, details.service);
+    card = card.replace(/AppState/g, state);
+    card = card.replace(/StateColor/g, state_color);
+    card = card.replace(/ChartName/g, details.name.replace(/-/g, ''));
+    card = card.replace(/AppNameState/g, `${details.name}State`);
+    card = card.replace(/data-trigger=""/, trigger);
+    return card;
+}
 
+// HTMX server-side events
+let [ hidden, cardList, newCards, containersArray, sentArray, updatesArray ] = [ '', '', '', [], [], [] ];
 
-
-let cardUpdates = [];
-let newCards = '';
 export const SSE = (req, res) => {
     res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive' });
 
@@ -80,45 +137,49 @@ export const SSE = (req, res) => {
         await docker.listContainers({ all: true }).then(containers => {
             containers.forEach(container => {
                 let name = container.Names[0].replace('/', '');
-                if (hidden.includes(name)) {
-                    // do nothing
-                } else {
+                if (!hidden.includes(name)) { // if not hidden
                     containersArray.push({ container: name, state: container.State });
-                }
-
+                } 
             });
         });
 
         if ((JSON.stringify(containersArray) !== JSON.stringify(sentArray))) {
             cardList = '';
             newCards = '';
-            cardUpdates = [];
             containersArray.forEach(container => {
                 const { container: containerName, state } = container;
                 const existingContainer = sentArray.find(c => c.container === containerName);
                 if (!existingContainer) {
-                    addCard(containerName, 'newCards');
+                    containerInfo(containerName).then(details => {
+                        createCard(details).then(card => {
+                            newCards += card;
+                        });
+                    });
                     res.write(`event: update\n`);
                     res.write(`data: 'update cards'\n\n`);
                 } else if (existingContainer.state !== state) {
-                    cardUpdates.push(containerName);
+                    updatesArray.push(containerName);
                 }
-                addCard(containerName, 'cardList');
+                containerInfo(containerName).then(details => {
+                    createCard(details).then(card => {
+                        cardList += card;
+                    });
+                });
             });
 
             sentArray.forEach(container => {
                 const { container: containerName } = container;
                 const existingContainer = containersArray.find(c => c.container === containerName);
                 if (!existingContainer) {
-                    cardUpdates.push(containerName);
+                    updatesArray.push(containerName);
                 }
             });
 
-            for (let i = 0; i < cardUpdates.length; i++) {
-                res.write(`event: ${cardUpdates[i]}\n`);
+            for (let i = 0; i < updatesArray.length; i++) {
+                res.write(`event: ${updatesArray[i]}\n`);
                 res.write(`data: 'update cards'\n\n`);
             }
-
+            updatesArray = [];
             sentArray = containersArray.slice();
         }
 
@@ -161,143 +222,21 @@ export const Installs = async (req, res) => {
 }
 
 
-async function containerInfo (containerName) {
-
-    let card  = readFileSync('./views/partials/containerCard.html', 'utf8');
-    let container = docker.getContainer(containerName);
-    let info = await container.inspect();
-   
-    let name = containerName;
-    let state = info.State.Status;
-    let state_color = '';
-    switch (state) {
-        case 'running':
-            state_color = 'green';
-            break;
-        case 'exited':
-            state_color = 'red';
-            state = 'stopped';
-            break;
-        case 'paused':
-            state_color = 'orange';
-            break;
-    }
-    
-    let wrapped = name;
-    if (name.length > 13) { wrapped = name.slice(0, 10) + '...'; }
-    if (name.startsWith('dweebui')) { disable = 'disabled=""'; }
-    let disable = "";
-    let chartName = name.replace(/-/g, '');
-
-    let trigger = 'data-hx-trigger="load, every 3s"';
-    if (state != 'running') {  trigger = 'data-hx-trigger="load"'; }
-
-    let imageVersion = info.Config.Image.split('/');
-    let service = imageVersion[imageVersion.length - 1].split(':')[0];
-
-    let ports_list = [];
-    try {
-        for (const [key, value] of Object.entries(info.HostConfig.PortBindings)) {
-            let ports = {
-                check: 'checked',
-                external: value[0].HostPort,
-                internal: key.split('/')[0],
-                protocol: key.split('/')[1]
-            }
-            ports_list.push(ports);
-        }
-    } catch {}
-        let external_port = ports_list[0]?.external || 0;
-        let internal_port = ports_list[0]?.internal || 0;
-        
-    card = card.replace(/AppName/g, name);
-    card = card.replace(/AppShortName/g, wrapped);
-    card = card.replace(/AppIcon/g, service);
-    card = card.replace(/AppState/g, state);
-    card = card.replace(/StateColor/g, state_color);
-    card = card.replace(/ChartName/g, chartName);
-    card = card.replace(/data-trigger=""/, trigger);
-    if (hidden.includes(name)) { card = ''; }
-
-    return card;
-}
-
-
-async function addCard(container, list) {
-    let card  = readFileSync('./views/partials/containerCard.html', 'utf8');
-    let containerId = docker.getContainer(container);
-    containerId.inspect().then(data => {
-
-        let state = data.State.Status;
-        let wrapped = container;
-        let disable = "";
-        let chartName = container.replace(/-/g, '');
-        
-        // shorten long names
-        if (container.length > 13) { wrapped = container.slice(0, 10) + '...'; }
-        // disable buttons for dweebui
-        if (container.startsWith('dweebui')) { disable = 'disabled=""'; }
-        
-        // if ( external_port == undefined ) { external_port = 0; }
-        // if ( internal_port == undefined ) { internal_port = 0; }
-        
-        let state_color = 'green';
-        if (state == 'exited') {
-            state = 'stopped';
-            state_color = 'red';
-        } else if (state == 'paused') {
-            state_color = 'orange';
-        }
-        
-        let trigger = 'data-hx-trigger="load, every 3s"';
-        if (state != 'running') {  trigger = 'data-hx-trigger="load"'; }
-
-        let imageVersion = data.Config.Image.split('/');
-        let service = imageVersion[imageVersion.length - 1].split(':')[0];
-        let ports_list = [];
-        try {
-        for (const [key, value] of Object.entries(data.HostConfig.PortBindings)) {
-            let ports = {
-                check: 'checked',
-                external: value[0].HostPort,
-                internal: key.split('/')[0],
-                protocol: key.split('/')[1]
-            }
-            ports_list.push(ports);
-        }
-        } catch {}
-        let external_port = ports_list[0]?.external || 0;
-        let internal_port = ports_list[0]?.internal || 0;
-        card = card.replace(/AppName/g, container);
-        card = card.replace(/AppShortName/g, wrapped);
-        card = card.replace(/AppIcon/g, service);
-        card = card.replace(/AppState/g, state);
-        card = card.replace(/StateColor/g, state_color);
-        card = card.replace(/ChartName/g, chartName);
-        card = card.replace(/AppNameState/g, `${container}State`);
-        card = card.replace(/data-trigger=""/, trigger);
-        if (list == 'newCards') {
-            newCards += card;
-        } else if (list == 'cardList'){
-            cardList += card;
-        }
-    });   
-}
-
 export const updateCards = async (req, res) => {
     console.log('updateCards called');
     res.send(newCards);
 }
 
 
-
-
-
+export const Containers = async (req, res) => {
+    res.send(cardList);
+}
 
 export const Card = async (req, res) => {
     let name = req.header('hx-trigger-name');
     console.log(`Updated card for ${name}`);
-    let card = await containerInfo(name);
+    let details = await containerInfo(name);
+    let card = await createCard(details);
     res.send(card);
 }
 
@@ -398,7 +337,7 @@ export const Reset = async (req, res) => {
     res.send("ok");
 }
 
-export const Modal = async (req, res) => {
+export const Modals = async (req, res) => {
     let name = req.header('hx-trigger-name');
     let id = req.header('hx-trigger');
 
@@ -414,35 +353,10 @@ export const Modal = async (req, res) => {
         return;
     }
 
-    let containerId = docker.getContainer(name);
-    let containerInfo = await containerId.inspect();
-    let ports_list = [];
-    try {
-    for (const [key, value] of Object.entries(containerInfo.HostConfig.PortBindings)) {
-        let ports = {
-            check: 'checked',
-            external: value[0].HostPort,
-            internal: key.split('/')[0],
-            protocol: key.split('/')[1]
-        }
-        ports_list.push(ports);
-    }
-    } catch {}
-    let external_port = ports_list[0]?.external || 0;
-    let internal_port = ports_list[0]?.internal || 0;
+    let modal = readFileSync('./views/modals/details.html', 'utf8');
+    let details = await containerInfo(name);
 
-    let container_info = {
-        name: containerInfo.Name.slice(1),
-        state: containerInfo.State.Status,
-        image: containerInfo.Config.Image,
-        external_port: external_port,
-        internal_port: internal_port,
-        ports: ports_list,
-        link: 'localhost',
-    }
-
-    let details = detailsModal;
-    details = details.replace(/AppName/g, containerInfo.Name.slice(1));
-    details = details.replace(/AppImage/g, containerInfo.Config.Image);
-    res.send(details);
+    modal = modal.replace(/AppName/g, details.name);
+    modal = modal.replace(/AppImage/g, details.image);
+    res.send(modal);
 }

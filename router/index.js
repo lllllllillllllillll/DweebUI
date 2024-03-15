@@ -4,7 +4,7 @@ export const router = express.Router();
 // Controllers
 import { Login, submitLogin, Logout } from "../controllers/login.js";
 import { Register, submitRegister } from "../controllers/register.js";
-import { Dashboard, Start, Stop, Pause, Restart, Logs, Modal, Stats, Hide, Reset, Chart, Installs, SSE, Card, updateCards } from "../controllers/dashboard.js";
+import { Dashboard, Start, Stop, Pause, Restart, Logs, Modals, Stats, Hide, Reset, Chart, Installs, SSE, Card, updateCards, Containers } from "../controllers/dashboard.js";
 import { Apps, appSearch } from "../controllers/apps.js";
 import { Users } from "../controllers/users.js";
 import { Images, removeImage } from "../controllers/images.js";
@@ -33,13 +33,14 @@ router.post("/stop", auth, Stop);
 router.post("/pause", auth, Pause);
 router.post("/restart", auth, Restart);
 router.get("/logs", auth, Logs);
-router.get ("/modal", auth, Modal);
+router.get ("/modals", auth, Modals);
 router.get("/stats", auth, Stats);
 router.post("/hide", auth, Hide);
 router.post("/reset", auth, Reset);
 router.get("/chart", auth, Chart);
 router.get("/installs", auth, Installs);
 router.get("/sse_event", auth, SSE);
+router.get("/containers", auth, Containers);
 router.get("/card", auth, Card);
 router.get("/new_cards", auth, updateCards);
 
