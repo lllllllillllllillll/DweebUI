@@ -1,3 +1,5 @@
 **/db.sqlite
 **/node_modules
 **/appdata
+.github
+.git

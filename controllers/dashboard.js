@@ -5,10 +5,6 @@ import { dockerContainerStats } from 'systeminformation';
 import { readFileSync } from 'fs';
 import { currentLoad, mem, networkStats, fsSize } from 'systeminformation';
 
-const permissionsModal = readFileSync('./views/modals/permissions.html', 'utf8');
-const uninstallModal = readFileSync('./views/modals/uninstall.html', 'utf8');
-
-
 // The actual page
 export const Dashboard = (req, res) => {
     res.render("dashboard", {
@@ -19,37 +15,35 @@ export const Dashboard = (req, res) => {
 }
 
 // Server metrics (CPU, RAM, TX, RX, DISK)
-let [ cpu, ram, tx, rx, disk, stats ] = [0, 0, 0, 0, 0, {}];
-let serverMetrics = setInterval(async () => {
-    currentLoad().then(data => { 
-        cpu = Math.round(data.currentLoad); 
-    });
-    mem().then(data => { 
-        ram = Math.round((data.active / data.total) * 100); 
-    });
-    networkStats().then(data => { 
-        tx = data[0].tx_bytes / (1024 * 1024); 
-        rx = data[0].rx_bytes / (1024 * 1024); 
-    });
-    fsSize().then(data => { 
-        disk = data[0].use; 
-    });
-}, 1000);
-
 export const Stats = async (req, res) => {
     let name = req.header('hx-trigger-name');
     let color = req.header('hx-trigger');
     let value = 0;
     switch (name) {
-        case 'CPU': value = cpu;
+        case 'CPU': 
+            await currentLoad().then(data => { 
+                value = Math.round(data.currentLoad); 
+            });
             break;
-        case 'RAM': value = ram;
+        case 'RAM': 
+            await mem().then(data => { 
+                value = Math.round((data.active / data.total) * 100); 
+            });
             break;
-        case 'TX': value = tx;
+        case 'TX':
+            await networkStats().then(data => { 
+                value = data[0].tx_bytes / (1024 * 1024); 
+            });
             break;
-        case 'RX': value = rx;
+        case 'RX':
+            await networkStats().then(data => { 
+                value = data[0].rx_bytes / (1024 * 1024); 
+            });
             break;
-        case 'DISK': value = disk;
+        case 'DISK':
+            await fsSize().then(data => { 
+                value = data[0].use; 
+            });
             break;
     }
     let info = `<div class="font-weight-medium">
@@ -191,7 +185,7 @@ export const SSE = (req, res) => {
     });
 };
 
-
+let stats = {};
 // Container charts
 export const Chart = async (req, res) => {
     let name = req.header('hx-trigger-name');
@@ -225,6 +219,7 @@ export const Installs = async (req, res) => {
 export const updateCards = async (req, res) => {
     console.log('updateCards called');
     res.send(newCards);
+    newCards = '';
 }
 
 
@@ -342,14 +337,18 @@ export const Modals = async (req, res) => {
     let id = req.header('hx-trigger');
 
     if (id == 'permissions') {
+        let modal = readFileSync('./views/modals/permissions.html', 'utf8');
+        modal = modal.replace(/AppName/g, name);
         // let containerPermissions = await Permission.findAll({ where: {containerName: name}});
-        res.send(permissionsModal);
+        res.send(modal);
         return;
     }
 
     if (id == 'uninstall') {
+        let modal = readFileSync('./views/modals/uninstall.html', 'utf8');
+        modal = modal.replace(/AppName/g, name);
         // let containerPermissions = await Permission.findAll({ where: {containerName: name}});
-        res.send(uninstallModal);
+        res.send(modal);
         return;
     }
 
