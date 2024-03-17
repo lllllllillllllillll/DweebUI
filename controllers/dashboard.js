@@ -244,49 +244,6 @@ function status (state) {
     return status;
 }
 
-export const Start = (req, res) => {
-    let name = req.header('hx-trigger-name');
-    let state = req.header('hx-trigger');
-    if (state == 'stopped') {
-        var containerName = docker.getContainer(name);
-        containerName.start();
-    } else if (state == 'paused') {
-        var containerName = docker.getContainer(name);
-        containerName.unpause();
-    }
-
-    res.send(status('starting'));
-}
-
-export const Stop = (req, res) => {   
-    let name = req.header('hx-trigger-name');
-    let state = req.header('hx-trigger');
-    if (state != 'stopped') {
-        var containerName = docker.getContainer(name);
-        containerName.stop();
-    }
-    res.send(status('stopping'));
-}
-
-export const Pause = (req, res) => {
-    let name = req.header('hx-trigger-name');
-    let state = req.header('hx-trigger');
-    if (state == 'running') {
-        var containerName = docker.getContainer(name);
-        containerName.pause();
-    } else if (state == 'paused') {
-        var containerName = docker.getContainer(name);
-        containerName.unpause();
-    }
-    res.send(status('pausing'));
-}
-
-export const Restart = (req, res) => {   
-    let name = req.header('hx-trigger-name');
-    var containerName = docker.getContainer(name);
-    containerName.restart();
-    res.send(status('restarting'));
-}
 
 export const Logs = (req, res) => {
     let name = req.header('hx-trigger-name');
@@ -310,26 +267,6 @@ export const Logs = (req, res) => {
     containerLogs(name).then((data) => {
         res.send(`<pre>${data}</pre> `)
     });
-}
-
-export const Hide = async (req, res) => {
-    let name = req.header('hx-trigger-name');
-    let exists = await Container.findOne({ where: {name: name}});
-    if (!exists) {
-        const newContainer = await Container.create({ name: name, visibility: false, });
-    } else {
-        exists.update({ visibility: false });
-    }
-    hidden = await Container.findAll({ where: {visibility:false}});
-    hidden = hidden.map((container) => container.name);
-    res.send("ok");
-}
-
-export const Reset = async (req, res) => {
-    await Container.update({ visibility: true }, { where: {} });
-    hidden = await Container.findAll({ where: {visibility:false}});
-    hidden = hidden.map((container) => container.name);
-    res.send("ok");
 }
 
 export const Modals = async (req, res) => {
@@ -361,6 +298,49 @@ export const Modals = async (req, res) => {
 }
 
 export const Action = async (req, res) => {
+    let name = req.header('hx-trigger-name');
+    let state = req.header('hx-trigger');
     let action = req.params.action;
-    console.log(action);
+    // Start
+    if ((action == 'start') && (state == 'stopped')) {
+        var containerName = docker.getContainer(name);
+        containerName.start();
+        res.send(status('starting'));
+    } else if ((action == 'start') && (state == 'paused')) {
+        var containerName = docker.getContainer(name);
+        containerName.unpause();
+        res.send(status('starting'));
+    // Stop
+    } else if ((action == 'stop') && (state != 'stopped')) {
+        var containerName = docker.getContainer(name);
+        containerName.stop();
+        res.send(status('stopping'));
+    // Pause
+    } else if ((action == 'pause') && (state == 'paused')) {
+        var containerName = docker.getContainer(name);
+        containerName.unpause();
+        res.send(status('pausing'));
+    // Restart
+    } else if (action == 'restart') {
+        var containerName = docker.getContainer(name);
+        containerName.restart();
+        res.send(status('restarting'));
+    // Hide
+    } else if (action == 'hide') {
+        let exists = await Container.findOne({ where: {name: name}});
+        if (!exists) {
+            const newContainer = await Container.create({ name: name, visibility: false, });
+        } else {
+            exists.update({ visibility: false });
+        }
+        hidden = await Container.findAll({ where: {visibility:false}});
+        hidden = hidden.map((container) => container.name);
+        res.send("ok");
+    // Reset View
+    } else if (action == 'reset') {
+        await Container.update({ visibility: true }, { where: {} });
+        hidden = await Container.findAll({ where: {visibility:false}});
+        hidden = hidden.map((container) => container.name);
+        res.send("ok");
+    }   
 }
