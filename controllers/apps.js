@@ -322,6 +322,10 @@ export const InstallModal = async (req, res) => {
   modal = modal.replace(/NetDocker/g, net_docker);
   modal = modal.replace(/NetName/g, net_name);
   modal = modal.replace(/ModalName/g, modal_name);
+  modal = modal.replace(/FormId/g, form_id);
+  modal = modal.replace(/CommandCheck/g, command_check);
+  modal = modal.replace(/CommandValue/g, command);
+  modal = modal.replace(/PrivilegedCheck/g, privileged_check);
 
 
   for (let i = 0; i < 12; i++) {

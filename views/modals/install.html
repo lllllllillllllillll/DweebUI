@@ -11,7 +11,7 @@
             
                 <pre class="text-secondary">AppNote</pre>
                 
-                <form action="/install" name="${form_id}_install" id="${form_id}_install" method="POST">
+                <form action="/install" name="FormId_install" id="FormId_install" method="POST">
                 
                 <div class="row mb-3 align-items-end">
                     
@@ -684,18 +684,18 @@
 
                     <div class="row mb-1 align-items-end">
                         <div class="col-auto">
-                        <input class="form-check-input" name="command_check" type="checkbox" ${command_check}>
+                        <input class="form-check-input" name="command_check" type="checkbox" CommandCheck>
                         </div>
                         <div class="col">
                         <label class="form-label">Command</label>
-                        <input type="text" class="form-control" name="command" value="${command}"/>
+                        <input type="text" class="form-control" name="command" value="CommandValue"/>
                         </div>
                     </div>
 
 
                     <div class="row mb-1 align-items-end">
                         <div class="col-auto">
-                        <input class="form-check-input" name="privileged" type="checkbox" ${privileged_check}>
+                        <input class="form-check-input" name="privileged" type="checkbox" PrivilegedCheck>
                         </div>
                         <div class="col">
                         <label class="form-label">Privileged Mode</label>
@@ -704,7 +704,7 @@
 
                     </div>
                 </div>
-                </div>
+            </div>
 
 
 
@@ -714,7 +714,7 @@
 
 
                 
-            </div>
+        </div>
 
 
             
@@ -722,7 +722,7 @@
             </div>
             <div class="modal-footer">
             <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
-            <input type="submit" form="${form_id}_install" class="btn btn-success" value="Install"/>
+            <input type="submit" form="FormId_install" class="btn btn-success" value="Install"/>
             </div>
         </div>
     </div>

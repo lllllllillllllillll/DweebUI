@@ -4,7 +4,6 @@ import { execSync } from "child_process";
 import { docker } from "../server.js";
 import DockerodeCompose from "dockerode-compose";
 import { Syslog } from "../database/models.js";
-import { containerCard } from "../components/containerCard.js";
 
 // This entire page hurts to look at. 
 export const Install = async (req, res) => {
