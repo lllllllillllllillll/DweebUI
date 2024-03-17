@@ -4,8 +4,8 @@ export const router = express.Router();
 // Controllers
 import { Login, submitLogin, Logout } from "../controllers/login.js";
 import { Register, submitRegister } from "../controllers/register.js";
-import { Dashboard, Start, Stop, Pause, Restart, Logs, Modals, Stats, Hide, Reset, Chart, Installs, SSE, Card, updateCards, Containers } from "../controllers/dashboard.js";
-import { Apps, appSearch } from "../controllers/apps.js";
+import { Dashboard, Start, Stop, Pause, Restart, Logs, Modals, Stats, Hide, Reset, Chart, Installs, SSE, Card, updateCards, Containers, Action } from "../controllers/dashboard.js";
+import { Apps, appSearch, InstallModal, LearnMore } from "../controllers/apps.js";
 import { Users } from "../controllers/users.js";
 import { Images, removeImage } from "../controllers/images.js";
 import { Networks, removeNetwork } from "../controllers/networks.js";
@@ -28,15 +28,18 @@ const auth = (req, res, next) => {
 
 // Admin routes
 router.get("/", auth, Dashboard);
+router.get("/action/:action", auth, Action);
+
 router.post("/start", auth, Start);
 router.post("/stop", auth, Stop);
 router.post("/pause", auth, Pause);
 router.post("/restart", auth, Restart);
+router.post("/hide", auth, Hide);
+router.post("/reset", auth, Reset);
+
 router.get("/logs", auth, Logs);
 router.get ("/modals", auth, Modals);
 router.get("/stats", auth, Stats);
-router.post("/hide", auth, Hide);
-router.post("/reset", auth, Reset);
 router.get("/chart", auth, Chart);
 router.get("/installs", auth, Installs);
 router.get("/sse_event", auth, SSE);
@@ -56,6 +59,8 @@ router.post("/removeNetwork", auth, removeNetwork);
 router.get("/apps", auth, Apps);
 router.get("/apps/:page", auth, Apps);
 router.post("/apps", auth, appSearch);
+router.get("/install_modal", auth, InstallModal)
+router.get("/learn_more", auth, LearnMore)
 
 router.get("/users", auth, Users);
 router.get("/syslogs", auth, Syslogs);

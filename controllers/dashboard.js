@@ -359,3 +359,8 @@ export const Modals = async (req, res) => {
     modal = modal.replace(/AppImage/g, details.image);
     res.send(modal);
 }
+
+export const Action = async (req, res) => {
+    let action = req.params.action;
+    console.log(action);
+}
