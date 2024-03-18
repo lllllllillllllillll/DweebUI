@@ -7,10 +7,10 @@ services:
       PORT: 8000
       SECRET: MrWiskers
     restart: unless-stopped
-    expose:
+    ports:
       - 8000:8000
     volumes:
-      - dweebui:/app
+      - dweebui:/app/database/
       # Docker socket
       - /var/run/docker.sock:/var/run/docker.sock
       # Podman socket

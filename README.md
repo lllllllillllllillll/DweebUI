@@ -12,8 +12,8 @@ Alpha v0.50 ( :fire: Experimental :fire: )
 [![GitHub License](https://img.shields.io/github/license/lllllllillllllillll/DweebUI)](https://github.com/lllllllillllllillll/DweebUI/blob/main/LICENSE)
 [![Coffee](https://img.shields.io/badge/-buy_me_a%C2%A0coffee-gray?logo=buy-me-a-coffee)](https://www.buymeacoffee.com/lllllllillllllillll)
 
-* This is a personal project I started to get more familiar with Javascript and Node.js.
-* Some UI elements are placeholders and every version may have breaking changes.
+* I started this as a personal project to get more familiar with Javascript and Node.js. 
+* I'm open to any contributions, but you may want to wait until I reach v1.0 first.
 * Please post issues and discussions so I know what bugs and features to focus on.
 
 <a href="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/dashboard1.png"><img src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/dashboard1.png" width="25%"/></a>
@@ -30,6 +30,7 @@ Alpha v0.50 ( :fire: Experimental :fire: )
 ## Features
 * [x] Dashboard provides server metrics, container metrics, and container controls, on a single page.
 * [x] View container logs.
+* [x] View container logs.
 * [ ] Update containers (planned).
 * [x] Manage your Docker networks, images, and volumes.
 * [x] Light/Dark Mode.
@@ -38,9 +39,8 @@ Alpha v0.50 ( :fire: Experimental :fire: )
 * [x] Multi-User built-in.
 * [ ] Permissions system (in development).
 * [x] Support for Windows, Linux, and MacOS.
-* [ ] Docker compose import (in development).
+* [ ] Docker compose (in development).
 * [x] Templates.json maintains compatability with Portainer, allowing you to use the template without needing to use DweebUI.
-* [x] Automatically persists data in docker volumes if bind mount isn't used.
 * [ ] Preset variables (planned).
 * [ ] Themes (planned).
 
@@ -53,7 +53,7 @@ version: "3.9"
 services:
   dweebui:
     container_name: dweebui
-    image: lllllllillllllillll/dweebui:v0.40
+    image: lllllllillllllillll/dweebui:v0.50
     environment:
       PORT: 8000
       SECRET: MrWiskers

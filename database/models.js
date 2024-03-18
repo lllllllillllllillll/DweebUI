@@ -154,10 +154,10 @@ export const Permission = sequelize.define('Permission', {
   hide: {
     type: DataTypes.STRING
   },
-  view: {
+  reset_view: {
     type: DataTypes.STRING
   },
-  reset_view: {
+  view: {
     type: DataTypes.STRING
   },
 });
@@ -207,10 +207,40 @@ export const Notification = sequelize.define('Notification', {
   color: {
     type: DataTypes.STRING,
   },
+  read: {
+    type: DataTypes.STRING,
+  },
   createdAt : {
     type: DataTypes.STRING
   },
   createdBy : {
     type: DataTypes.STRING
   },
+});
+
+
+export const Settings = sequelize.define('Settings', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
+  },
+  key: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  value: {
+    type: DataTypes.STRING,
+    allowNull: false
+  }
+});
+
+
+export const Variables = sequelize.define('Variables', {
+  find: {
+    type: DataTypes.STRING,
+  },
+  replace: {
+    type: DataTypes.STRING,
+  }
 });

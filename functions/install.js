@@ -88,13 +88,6 @@ export const Install = async (req, res) => {
                 if ((data[`volume${i}`] == 'on') && (data[`volume_${i}_bind`] != '') && (data[`volume_${i}_container`] != '')) {
                     compose_file += `\n      - ${data[`volume_${i}_bind`]}:${data[`volume_${i}_container`]}:${data[`volume_${i}_readwrite`]}`
                 }
-
-                // if bind is empty create a docker volume (ex container_name_config:/config) convert any '/' in container name to '_'
-                else if ((data[`volume${i}`] == 'on') && (data[`volume_${i}_bind`] == '') && (data[`volume_${i}_container`] != '')) {
-                    let volume_name = data[`volume_${i}_container`].replace(/\//g, '_');
-                    compose_file += `\n      - ${name}_${volume_name}:${data[`volume_${i}_container`]}:${data[`volume_${i}_readwrite`]}`
-                    docker_volumes.push(`${name}_${volume_name}`);
-                } 
                 
             }
 

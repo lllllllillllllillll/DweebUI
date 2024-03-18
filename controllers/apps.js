@@ -103,8 +103,32 @@ export const appSearch = async (req, res) => {
     searchTemplates(search);
 
     for (let i = 0; i < results.length; i++) {
-        let app_card = appCard(results[i]);
-        apps_list += app_card;
+      let appCard = readFileSync('./views/partials/appCard.html', 'utf8');
+      let name = results[i].name || results[i].title.toLowerCase();
+      let desc = results[i].description.slice(0, 60) + "...";
+      let description = results[i].description.replaceAll(". ", ".\n") || "no description available";
+      let note = results[i].note ? results[i].note.replaceAll(". ", ".\n") : "no notes available";
+      let image = results[i].image;
+      let logo = results[i].logo;
+
+      let categories = '';
+
+        // set data.catagories to 'other' if data.catagories is empty or undefined
+      if (results[i].categories == null || results[i].categories == undefined || results[i].categories == '') {
+          results[i].categories = ['Other'];
+      }
+
+      for (let c = 0; c < results[i].categories.length; c++) {
+        categories += CatagoryColor(results[i].categories[c]);
+      }
+
+      appCard = appCard.replace(/AppName/g, name);
+      appCard = appCard.replace(/AppShortName/g, name);
+      appCard = appCard.replace(/AppDesc/g, desc);
+      appCard = appCard.replace(/AppLogo/g, logo);
+      appCard = appCard.replace(/AppCategories/g, categories);
+
+      apps_list += appCard;
     }
     
     res.render("apps", {
@@ -113,7 +137,7 @@ export const appSearch = async (req, res) => {
         avatar: req.session.avatar,
         list_start: list_start + 1,
         list_end: list_end,
-        app_count: templates.length,
+        app_count: results.length,
         prev: prev,
         next: next,
         apps_list: apps_list
