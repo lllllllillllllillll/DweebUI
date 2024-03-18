@@ -119,9 +119,12 @@ async function createCard (details) {
     return card;
 }
 
-// HTMX server-side events
-let [ hidden, cardList, newCards, containersArray, sentArray, updatesArray ] = [ '', '', '', [], [], [] ];
 
+let [ cardList, newCards, containersArray, sentArray, updatesArray ] = [ '', '', [], [], [] ];
+let hidden = await Container.findAll({ where: {visibility:false}});
+hidden = hidden.map((container) => container.name);
+
+// HTMX server-side events
 export const SSE = (req, res) => {
     res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive' });
 
