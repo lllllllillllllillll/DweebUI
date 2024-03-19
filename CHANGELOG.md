@@ -8,6 +8,7 @@
 * Dynamically generated avatars.
 * Updated database models.
 * Persistent Database.
+* Install cards displayed on dashboard.
 
 ## v0.40 (Feb 26th 2024) - HTMX rewrite
 * Pages rewritten to use HTMX.

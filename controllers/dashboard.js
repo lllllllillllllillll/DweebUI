@@ -30,16 +30,21 @@ export const Stats = async (req, res) => {
                 value = Math.round((data.active / data.total) * 100); 
             });
             break;
-        case 'TX':
-            await networkStats().then(data => { 
-                value = data[0].tx_bytes / (1024 * 1024); 
+        case 'NET':
+            let down = 0;
+            let up = 0;
+            await networkStats().then(data => {
+                down = Math.round(data[0].rx_bytes / (1024 * 1024));
+                up = Math.round(data[0].tx_bytes / (1024 * 1024));
             });
-            break;
-        case 'RX':
-            await networkStats().then(data => { 
-                value = data[0].rx_bytes / (1024 * 1024); 
-            });
-            break;
+            let net = `<div class="font-weight-medium">
+                        <label class="cpu-text mb-1">Down:${down} Up:${up}</label>
+                        </div>
+                        <div class="cpu-bar meter animate ${color}">
+                            <span style="width:20%"><span></span></span>
+                        </div>`;           
+            res.send(net);
+            return;
         case 'DISK':
             await fsSize().then(data => { 
                 value = data[0].use; 

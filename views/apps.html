@@ -38,14 +38,25 @@
                 <div class="d-flex align-items-center">
                   <div class="me-2">
                     <select class="form-select">
+                      <option>Category:</option>
+                      <option>Media</option>
+                      <option>Tools</option>
+                      <option>Gaming</option>
+                      <option>FOSS</option>
+                      <option>Database</option>
+                    </select>
+                  </div>
+                  <div class="me-2">
+                    <select class="form-select">
                       <option>Templates.json (default)</option>
                       <option>Compose</option>
                     </select>
                   </div>
+                  <button class="btn btn-primary h-50" name="Import" id="Import" data-hx-get="/import_modal" data-hx-target="#modals-here" hx-swap="innerHTML" data-hx-trigger="click" data-bs-toggle="modal" data-bs-target="#modals-here">Import</button>
                   <form action="/apps" id="search" name="search" method="POST">
                     <input type="search" class="form-control" name="search" placeholder="Search apps…" >
                   </form>
-                  <input type="submit" form="search" class="btn btn-outline-success h-50" value="search">
+                  <input type="submit" form="search" class="btn btn-primary h-50" value="Search">
                 </div>
               </div>
             </div>

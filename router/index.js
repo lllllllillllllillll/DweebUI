@@ -5,7 +5,7 @@ export const router = express.Router();
 import { Login, submitLogin, Logout } from "../controllers/login.js";
 import { Register, submitRegister } from "../controllers/register.js";
 import { Dashboard, Logs, Modals, Stats, Chart, SSE, Card, updateCards, Containers, Action } from "../controllers/dashboard.js";
-import { Apps, appSearch, InstallModal, LearnMore } from "../controllers/apps.js";
+import { Apps, appSearch, InstallModal, ImportModal, LearnMore } from "../controllers/apps.js";
 import { Users } from "../controllers/users.js";
 import { Images, removeImage } from "../controllers/images.js";
 import { Networks, removeNetwork } from "../controllers/networks.js";
@@ -52,6 +52,7 @@ router.get("/apps", auth, Apps);
 router.get("/apps/:page", auth, Apps);
 router.post("/apps", auth, appSearch);
 router.get("/install_modal", auth, InstallModal)
+router.get("/import_modal", auth, ImportModal)
 router.get("/learn_more", auth, LearnMore)
 
 router.get("/users", auth, Users);

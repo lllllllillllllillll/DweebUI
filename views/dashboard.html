@@ -96,7 +96,7 @@
                         </div>
 
                         <!-- HTMX -->
-                        <div class="col" name="NET" id="purple">
+                        <div class="col" name="NET" id="purple" data-hx-get="/stats" data-hx-trigger="load, every 2s">
                           <div class="font-weight-medium">
                             <label id="net-text" class="net-text mb-1" for="network">Down: 0MB  Up: 0MB</label>
                           </div>

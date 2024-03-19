@@ -384,3 +384,9 @@ export const LearnMore = async (req, res) => {
   let modal = readFileSync('./views/modals/learnmore.html', 'utf8');
   res.send(modal);
 }
+
+
+export const ImportModal = async (req, res) => {
+  let modal = readFileSync('./views/modals/import.html', 'utf8');
+  res.send(modal);
+}

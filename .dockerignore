@@ -5,3 +5,5 @@
 .gitignore
 .github
 .git
+Dockerfile
+docker-compose.yaml
