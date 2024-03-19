@@ -4,6 +4,7 @@ import { execSync } from "child_process";
 import { docker } from "../server.js";
 import DockerodeCompose from "dockerode-compose";
 import { Syslog } from "../database/models.js";
+import { addCard } from "../controllers/dashboard.js";
 
 // This entire page hurts to look at. 
 export const Install = async (req, res) => {
@@ -19,6 +20,8 @@ export const Install = async (req, res) => {
         let ports = [port0, port1, port2, port3, port4, port5]
 
         let docker_volumes = [];
+
+        addCard(name, 'installing');
 
         if (image.startsWith('https://')){
             mkdirSync(`./appdata/${name}`, { recursive: true });
@@ -88,6 +91,13 @@ export const Install = async (req, res) => {
                 if ((data[`volume${i}`] == 'on') && (data[`volume_${i}_bind`] != '') && (data[`volume_${i}_container`] != '')) {
                     compose_file += `\n      - ${data[`volume_${i}_bind`]}:${data[`volume_${i}_container`]}:${data[`volume_${i}_readwrite`]}`
                 }
+
+                // if bind is empty create a docker volume (ex container_name_config:/config) convert any '/' in container name to '_'
+                else if ((data[`volume${i}`] == 'on') && (data[`volume_${i}_bind`] == '') && (data[`volume_${i}_container`] != '')) {
+                    let volume_name = data[`volume_${i}_container`].replace(/\//g, '_');
+                    compose_file += `\n      - ${name}_${volume_name}:${data[`volume_${i}_container`]}:${data[`volume_${i}_readwrite`]}`
+                    docker_volumes.push(`${name}_${volume_name}`);
+                } 
                 
             }
 
@@ -170,7 +180,7 @@ export const Install = async (req, res) => {
                     message: `${name} installation failed - error creating directory or compose file : ${err}`,
                     ip: req.socket.remoteAddress
                 });
-             }
+            }
 
             try {
                 (async () => {

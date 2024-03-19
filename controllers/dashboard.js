@@ -105,6 +105,10 @@ async function createCard (details) {
             state_color = 'orange';
             trigger = 'data-hx-trigger="load"';
             break;
+        case 'installing':
+            state_color = 'blue';
+            trigger = 'data-hx-trigger="load"';
+            break;
     }
     // if (name.startsWith('dweebui')) { disable = 'disabled=""'; }
     let card  = readFileSync('./views/partials/containerCard.html', 'utf8');
@@ -123,6 +127,30 @@ async function createCard (details) {
 let [ cardList, newCards, containersArray, sentArray, updatesArray ] = [ '', '', [], [], [] ];
 let hidden = await Container.findAll({ where: {visibility:false}});
 hidden = hidden.map((container) => container.name);
+
+
+
+export async function addCard (name, state) {
+    console.log(`Adding card for ${name}: ${state}`);
+
+    let details = {
+        name: name,
+        image: name,
+        service: name,
+        state: 'installing',
+        external_port: 0,
+        internal_port: 0,
+        ports: [],
+        link: 'localhost',
+    
+    }
+    createCard(details).then(card => {
+        cardList += card;
+    });
+}
+
+
+
 
 // HTMX server-side events
 export const SSE = (req, res) => {
@@ -180,7 +208,7 @@ export const SSE = (req, res) => {
             sentArray = containersArray.slice();
         }
 
-    }, 1000);
+    }, 500);
 
 
     req.on('close', () => {
@@ -211,14 +239,6 @@ export const Chart = async (req, res) => {
     res.send(chart);
 }
 
-
-export const Installs = async (req, res) => {
-    let name = req.header('hx-trigger-name');
-    let all_containers = '';
-    res.send('ok');
-}
-
-
 export const updateCards = async (req, res) => {
     console.log('updateCards called');
     res.send(newCards);
@@ -232,11 +252,19 @@ export const Containers = async (req, res) => {
 
 export const Card = async (req, res) => {
     let name = req.header('hx-trigger-name');
-    console.log(`Updated card for ${name}`);
-    let details = await containerInfo(name);
-    let card = await createCard(details);
-    res.send(card);
+    console.log(`${name} requesting updated card`);
+    // return nothing if in hidden or not found in containersArray
+    if (hidden.includes(name) || !containersArray.find(c => c.container === name)) {
+        res.send('');
+        return;
+    } else {
+        let details = await containerInfo(name);
+        let card = await createCard(details);
+        res.send(card);
+    }
 }
+
+
 
 
 function status (state) {
@@ -322,6 +350,10 @@ export const Action = async (req, res) => {
     } else if ((action == 'pause') && (state == 'paused')) {
         var containerName = docker.getContainer(name);
         containerName.unpause();
+        res.send(status('starting'));
+    }   else if ((action == 'pause') && (state == 'running')) {
+        var containerName = docker.getContainer(name);
+        containerName.pause();
         res.send(status('pausing'));
     // Restart
     } else if (action == 'restart') {
