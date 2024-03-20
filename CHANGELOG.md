@@ -9,6 +9,7 @@
 * Updated database models.
 * Persistent Database.
 * Install cards displayed on dashboard.
+* Updated docker compose to include HTTPS Env.
 
 ## v0.40 (Feb 26th 2024) - HTMX rewrite
 * Pages rewritten to use HTMX.

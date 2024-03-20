@@ -78,13 +78,24 @@ async function containerInfo (containerName) {
     } catch {
         // no exposed ports
     }
+
+    let external = 0;
+    let internal = 0;
+    try {
+        external = ports_list[0].external;
+        internal = ports_list[0].internal;
+    }   catch {
+        // no exposed ports
+    }
+    
+
     let details = {
         name: containerName,
         image: image,
         service: image[image.length - 1].split(':')[0],
         state: info.State.Status,
-        external_port: ports_list[0]?.external || 0,
-        internal_port: ports_list[0]?.internal || 0,
+        external_port: external,
+        internal_port: internal,
         ports: ports_list,
         link: 'localhost',
     }
@@ -122,6 +133,8 @@ async function createCard (details) {
     card = card.replace(/AppIcon/g, details.service);
     card = card.replace(/AppState/g, state);
     card = card.replace(/StateColor/g, state_color);
+    card = card.replace(/ExternalPort/g, details.external_port);
+    card = card.replace(/InternalPort/g, details.internal_port);
     card = card.replace(/ChartName/g, details.name.replace(/-/g, ''));
     card = card.replace(/AppNameState/g, `${details.name}State`);
     card = card.replace(/data-trigger=""/, trigger);

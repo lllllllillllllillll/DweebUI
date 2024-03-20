@@ -1,31 +1,27 @@
-# DweebUI
-DweebUI is a web interface for managing Docker, with a zero-config dashboard for controlling and monitoring your containers.
+<h3 align="center"><img width="150" src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/public/images/logo.png"></h3>
+<h4 align="center">DweebUI Beta v0.50 ( :fire: Experimental :fire: )</h4>
+<h3 align="center">Free and Open-Source WebUI For Managing Your Containers.</h3>
 
-Alpha v0.50 ( :fire: Experimental :fire: )
 
-   
-[:warning: DweebUI is a management interface and should not be directly exposed to the internet :warning:](https://github.com/lllllllillllllillll/DweebUI/wiki/Exposing-DweebUI-to-the-Internet)
+<p align="center">
+    <a href="#"><img src="https://img.shields.io/github/stars/lllllllillllllillll/DweebUI?style=flat"/></a>
+    <a href="https://github.com/lllllllillllllillll"><img src="https://img.shields.io/github/commit-activity/y/lllllllillllllillll/DweebUI"/></a>
+    <a href="#"><img src="https://img.shields.io/docker/pulls/lllllllillllllillll/dweebui"/></a>
+    <a href="#"><img src="https://img.shields.io/github/languages/top/lllllllillllllillll/DweebUI"/></a>
+    <a href="#"><img src="https://img.shields.io/github/license/lllllllillllllillll/DweebUI"/></a>
+    <a href="https://www.reddit.com/r/dweebui"><img src="https://img.shields.io/badge/reddit-orange"/></a>
+    <a href="https://www.buymeacoffee.com/lllllllillllllillll"><img src="https://img.shields.io/badge/-buy_me_a%C2%A0coffee-gray?logo=buy-me-a-coffee"/></a>
+</p>
 
-[![GitHub Stars](https://img.shields.io/github/stars/lllllllillllllillll/DweebUI)](https://github.com/lllllllillllllillll)
-[![GitHub Activity](https://img.shields.io/github/commit-activity/y/lllllllillllllillll/DweebUI)](https://github.com/lllllllillllllillll)
-[![Docker Pulls](https://img.shields.io/docker/pulls/lllllllillllllillll/dweebui)](https://hub.docker.com/repository/docker/lllllllillllllillll/dweebui)
-[![GitHub License](https://img.shields.io/github/license/lllllllillllllillll/DweebUI)](https://github.com/lllllllillllllillll/DweebUI/blob/main/LICENSE)
-[![Coffee](https://img.shields.io/badge/-buy_me_a%C2%A0coffee-gray?logo=buy-me-a-coffee)](https://www.buymeacoffee.com/lllllllillllllillll)
 
-* I started this as a personal project to get more familiar with Javascript and Node.js. 
-* I'm open to any contributions, but you may want to wait until I reach v1.0 first.
+<h3 align="center"><img width="800" style="border-radius:5px;" alt="screenshot" src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/dashboard1.png"></h3>
+<br/>
+
+## About
+* I started this as a personal project to get more familiar with Javascript and Node.js. There may be some rough edges and spaghetti code .
+* I'm open to any contributions but you may want to wait until I reach v1.0 first.
 * Please post issues and discussions so I know what bugs and features to focus on.
-
-<a href="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/dashboard1.png"><img src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/dashboard1.png" width="25%"/></a>
-<a href="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/dashboard2.png"><img src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/dashboard2.png" width="25%"/></a>
-<a href="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/apps.png"><img src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/apps.png" width="25%"/></a>
-<a href="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/images.png"><img src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/images.png" width="25%"/></a>
-<a href="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/register.png"><img src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/register.png" width="25%"/></a>
-<a href="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/login.png"><img src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/login.png" width="25%"/></a>
-<a href="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/syslogs.png"><img src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/syslogs.png" width="25%"/></a>
-<a href="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/volumes.png"><img src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/volumes.png" width="25%"/></a>
-
-
+* DweebUI is a management interface and should not be directly exposed to the internet
 
 ## Features
 * [x] Dashboard provides server metrics, container metrics, and container controls, on a single page.
@@ -57,6 +53,7 @@ services:
     environment:
       PORT: 8000
       SECRET: MrWiskers
+      HTTPS: false
     restart: unless-stopped
     ports:
       - 8000:8000
