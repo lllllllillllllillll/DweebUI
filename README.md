@@ -1,5 +1,5 @@
 <h3 align="center"><img width="150" src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/public/images/logo.png"></h3>
-<h4 align="center">DweebUI Beta v0.50 (:fire: Experimental :fire:)</h4>
+<h4 align="center">DweebUI Beta v0.50 ( :fire: Experimental :fire: )</h4>
 <h3 align="center">Free and Open-Source WebUI For Managing Your Containers.</h3>
 <p align="center">
     <a href="#"><img src="https://img.shields.io/github/stars/lllllllillllllillll/DweebUI?style=flat"/></a>

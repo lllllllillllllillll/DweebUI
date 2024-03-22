@@ -37,11 +37,11 @@ app.use([
 
 // Initialize server
 app.listen(port, async () => {
-    async function init() {
+    async function init() {// I made sure the console.logs and emojis lined up
         try { await sequelize.authenticate().then(
             () => { console.log('DB Connection: ✔️') }); }
             catch { console.log('DB Connection: ❌'); }
-        try { await sequelize.sync().then( // check out that formatting
+        try { await sequelize.sync().then(
             () => { console.log('Synced Models: ✔️') }); }
             catch { console.log('Synced Models: ❌'); } }
         await init().then(() => { 
