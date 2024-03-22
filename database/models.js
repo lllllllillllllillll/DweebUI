@@ -110,11 +110,9 @@ export const Permission = sequelize.define('Permission', {
   },
   containerName: {
     type: DataTypes.STRING,
-    allowNull: false
   },
   containerID: {
     type: DataTypes.STRING,
-    allowNull: false
   },
   user: {
     type: DataTypes.STRING,

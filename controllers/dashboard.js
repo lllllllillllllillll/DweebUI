@@ -1,12 +1,15 @@
 import { Readable } from 'stream';
-import { Permission, Container } from '../database/models.js';
+import { Permission, Container, User } from '../database/models.js';
 import { docker } from '../server.js';
 import { dockerContainerStats } from 'systeminformation';
 import { readFileSync } from 'fs';
 import { currentLoad, mem, networkStats, fsSize } from 'systeminformation';
 
+let hidden = '';
+
 // The actual page
 export const Dashboard = (req, res) => {
+    
     res.render("dashboard", {
         name: req.session.user,
         role: req.session.role,
@@ -33,12 +36,15 @@ export const Stats = async (req, res) => {
         case 'NET':
             let down = 0;
             let up = 0;
+            let percent = 0;
             await networkStats().then(data => {
                 down = Math.round(data[0].rx_bytes / (1024 * 1024));
                 up = Math.round(data[0].tx_bytes / (1024 * 1024));
+                // percent of download vs max download if max download was 1GB
+                percent = Math.round((down / 1000) * 100);
             });
             let net = `<div class="font-weight-medium">
-                        <label class="cpu-text mb-1">Down:${down} Up:${up}</label>
+                        <label class="cpu-text mb-1">Down:${down}MB  Up:${up}MB</label>
                         </div>
                         <div class="cpu-bar meter animate ${color}">
                             <span style="width:20%"><span></span></span>
@@ -143,10 +149,6 @@ async function createCard (details) {
 
 
 let [ cardList, newCards, containersArray, sentArray, updatesArray ] = [ '', '', [], [], [] ];
-let hidden = await Container.findAll({ where: {visibility:false}});
-hidden = hidden.map((container) => container.name);
-
-
 
 export async function addCard (name, state) {
     console.log(`Adding card for ${name}: ${state}`);
@@ -321,14 +323,194 @@ export const Logs = (req, res) => {
 export const Modals = async (req, res) => {
     let name = req.header('hx-trigger-name');
     let id = req.header('hx-trigger');
+    let title = name.charAt(0).toUpperCase() + name.slice(1);
 
     if (id == 'permissions') {
         let modal = readFileSync('./views/modals/permissions.html', 'utf8');
-        modal = modal.replace(/AppName/g, name);
-        // let containerPermissions = await Permission.findAll({ where: {containerName: name}});
+        let permissions_list = '';
+        modal = modal.replace(/AppName/g, title);
+        let users = await User.findAll({ attributes: ['username', 'UUID']});
+
+        for (let i = 0; i < users.length; i++) {
+            // check if user Permission contains an entry for this container for this user. If not, create one.
+            let exists = await Permission.findOne({ where: {containerName: name, user: users[i].username}});
+            if (!exists) {
+                const newPermission = await Permission.create({ containerName: name, user: users[i].username, userID: users[i].UUID});
+            }
+            
+            let user_permissions = `
+            
+                <div class="accordion-item mb-3" style="border: 1px solid grey;">
+                  <h2 class="accordion-header" id="heading-${i}">
+                    <button class="accordion-button collapsed row" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-${i}" aria-expanded="false">
+                      <span class="avatar avatar-sm bg-green-lt col-3 text-start">JD</span>
+                        <div class="col text-end" style="margin-right: 10px;">${users[i].username}</div>
+                    </button>
+                  </h2>
+                  <div id="collapse-${i}" class="accordion-collapse collapse" data-bs-parent="#modal-accordion">
+                    <div class="accordion-body pt-0">
+
+
+                      <div class="">
+                        <div class="">
+
+                          <div class="row mb-3">
+                            <div class="col-9">
+                              <label class="row text-start">
+                                <span class="col">
+                                  All
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-3">
+                              <label class="form-check form-check-single form-switch text-end">
+                                <input class="form-check-input" type="checkbox" name="select" onclick="selectAll('select')">
+                              </label>
+                            </div>
+                          </div>
+          
+                          <div class="row mb-2">
+                            <div class="col-9">
+                              <label class="row text-start">
+                                <span class="col">
+                                  Uninstall
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-3">
+                              <label class="form-check form-check-single form-switch text-end">
+                                <input class="form-check-input" type="checkbox" name="select">
+                              </label>
+                            </div>
+                          </div>
+          
+                          <div class="row mb-2">
+                            <div class="col-9">
+                              <label class="row text-start">
+                                <span class="col">
+                                  Edit
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-3">
+                              <label class="form-check form-check-single form-switch text-end">
+                                <input class="form-check-input" type="checkbox" name="select">
+                              </label>
+                            </div>
+                          </div>
+
+                          <div class="row mb-2">
+                            <div class="col-9">
+                              <label class="row text-start">
+                                <span class="col">
+                                  Upgrade
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-3">
+                              <label class="form-check form-check-single form-switch text-end">
+                                <input class="form-check-input" type="checkbox" name="select">
+                              </label>
+                            </div>
+                          </div>
+
+                          <div class="row mb-2">
+                            <div class="col-9">
+                              <label class="row text-start">
+                                <span class="col">
+                                  Start
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-3">
+                              <label class="form-check form-check-single form-switch text-end">
+                                <input class="form-check-input" type="checkbox" name="select">
+                              </label>
+                            </div>
+                          </div>
+
+                          <div class="row mb-2">
+                            <div class="col-9">
+                              <label class="row text-start">
+                                <span class="col">
+                                  Stop
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-3">
+                              <label class="form-check form-check-single form-switch text-end">
+                                <input class="form-check-input" type="checkbox" name="select">
+                              </label>
+                            </div>
+                          </div>
+
+                          <div class="row mb-2">
+                            <div class="col-9">
+                              <label class="row text-start">
+                                <span class="col">
+                                  Pause
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-3">
+                              <label class="form-check form-check-single form-switch text-end">
+                                <input class="form-check-input" type="checkbox" name="select">
+                              </label>
+                            </div>
+                          </div>
+
+                          <div class="row mb-2">
+                            <div class="col-9">
+                              <label class="row text-start">
+                                <span class="col">
+                                  Restart
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-3">
+                              <label class="form-check form-check-single form-switch text-end">
+                                <input class="form-check-input" type="checkbox" name="select">
+                              </label>
+                            </div>
+                          </div>
+
+
+                          <div class="row mb-4">
+                            <div class="col-9">
+                              <label class="row text-start">
+                                <span class="col">
+                                  Logs
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-3">
+                              <label class="form-check form-check-single form-switch text-end">
+                                <input class="form-check-input" type="checkbox" name="select">
+                              </label>
+                            </div>
+                          </div>
+
+                          <div class="row mb-2">
+                            <button class="btn" type="submit" formaction="/updatePermissions">Update</button>
+                          </div>
+
+
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>`;
+
+            permissions_list += user_permissions;
+        }
+
+        modal = modal.replace(/PermissionsList/g, permissions_list);
         res.send(modal);
         return;
     }
+
+
 
     if (id == 'uninstall') {
         let modal = readFileSync('./views/modals/uninstall.html', 'utf8');

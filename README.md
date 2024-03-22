@@ -1,8 +1,6 @@
 <h3 align="center"><img width="150" src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/public/images/logo.png"></h3>
-<h4 align="center">DweebUI Beta v0.50 ( :fire: Experimental :fire: )</h4>
+<h4 align="center">DweebUI Beta v0.50 (:fire: Experimental :fire:)</h4>
 <h3 align="center">Free and Open-Source WebUI For Managing Your Containers.</h3>
-
-
 <p align="center">
     <a href="#"><img src="https://img.shields.io/github/stars/lllllllillllllillll/DweebUI?style=flat"/></a>
     <a href="https://github.com/lllllllillllllillll"><img src="https://img.shields.io/github/commit-activity/y/lllllllillllllillll/DweebUI"/></a>
@@ -12,13 +10,11 @@
     <a href="https://www.reddit.com/r/dweebui"><img src="https://img.shields.io/badge/reddit-orange"/></a>
     <a href="https://www.buymeacoffee.com/lllllllillllllillll"><img src="https://img.shields.io/badge/-buy_me_a%C2%A0coffee-gray?logo=buy-me-a-coffee"/></a>
 </p>
+<h3 align="center"><img width="800" src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/dashboard1.png"></h3>
 
-
-<h3 align="center"><img width="800" style="border-radius:5px;" alt="screenshot" src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/dashboard1.png"></h3>
-<br/>
 
 ## About
-* I started this as a personal project to get more familiar with Javascript and Node.js. There may be some rough edges and spaghetti code .
+* I started this as a personal project to get more familiar with Javascript and Node.js, so there may be some rough edges and spaghetti code.
 * I'm open to any contributions but you may want to wait until I reach v1.0 first.
 * Please post issues and discussions so I know what bugs and features to focus on.
 * DweebUI is a management interface and should not be directly exposed to the internet

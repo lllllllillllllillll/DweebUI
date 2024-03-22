@@ -10,6 +10,7 @@ export var docker = new Docker();
 const app = express();
 const MemoryStore = memorystore(session);
 const port = process.env.PORT || 8000;
+const connection = process.env.HTTPS || false;
 
 // Session middleware
 const sessionMiddleware = session({
@@ -18,8 +19,8 @@ const sessionMiddleware = session({
     resave: false, 
     saveUninitialized: false, 
     cookie:{
-        secure: process.env.HTTPS || false, // Only set to true if you are using HTTPS.
-        httpOnly: process.env.HTTPS || false, // Only set to true if you are using HTTPS.
+        secure: connection, 
+        httpOnly: connection,
         maxAge:3600000 * 8 // Session max age in milliseconds. 3600000 = 1 hour.
     }
 });
@@ -29,7 +30,6 @@ app.set('view engine', 'html');
 app.engine('html', ejs.renderFile);
 app.use([
     express.static('public'),
-    express.json(),
     express.urlencoded({ extended: true }),
     sessionMiddleware,
     router

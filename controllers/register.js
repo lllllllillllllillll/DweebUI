@@ -1,4 +1,4 @@
-import { User, Syslog } from '../database/models.js';
+import { User, Syslog, Permission } from '../database/models.js';
 import bcrypt from 'bcrypt';
 
 let SECRET = process.env.SECRET || "MrWiskers"
@@ -66,6 +66,11 @@ export const submitRegister = async function(req,res){
                     req.session.user = newUser.username;
                     req.session.UUID = newUser.UUID;
                     req.session.role = newUser.role;
+
+                    const permission = await Permission.create({
+                        user: newUser.username,
+                        userID: newUser.UUID
+                    });
 
                     const syslog = await Syslog.create({
                         user: req.session.user,
