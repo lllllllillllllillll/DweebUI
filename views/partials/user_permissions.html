@@ -1,0 +1,164 @@
+<div class="accordion-item mb-3" style="border: 1px solid grey;">
+    <h2 class="accordion-header" id="heading-EntryNumber">
+      <button class="accordion-button collapsed row" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-EntryNumber" aria-expanded="false">
+        <span class="avatar avatar-sm bg-green-lt col-3 text-start">JD</span>
+          <div class="col text-end" style="margin-right: 10px;">PermissionsUsername</div>
+      </button>
+    </h2>
+    <div id="collapse-EntryNumber" class="accordion-collapse collapse" data-bs-parent="#modal-accordion">
+      <div class="accordion-body pt-0">
+
+
+        <div class="">
+          <div class="">
+            <form id="updatePermissionsEntryNumber">
+              <div class="row mb-3">
+                <div class="col-9">
+                  <label class="row text-start">
+                    <span class="col">
+                      All
+                    </span>
+                  </label>
+                </div>
+                <div class="col-3">
+                  <label class="form-check form-check-single form-switch text-end">
+                    <input class="form-check-input" type="checkbox" name="selectEntryNumber" onclick="selectAll('selectEntryNumber')">
+                  </label>
+                </div>
+              </div>
+
+              <input type="hidden" name="username" value="PermissionsUsername">
+              <input type="hidden" name="container" value="PermissionsContainer">
+
+              <div class="row mb-2">
+                <div class="col-9">
+                  <label class="row text-start">
+                    <span class="col">
+                      Uninstall
+                    </span>
+                  </label>
+                </div>
+                <div class="col-3">
+                  <label class="form-check form-check-single form-switch text-end">
+                    <input class="form-check-input" type="checkbox" name="selectEntryNumber" value="uninstall">
+                  </label>
+                </div>
+              </div>
+
+              <div class="row mb-2">
+                <div class="col-9">
+                  <label class="row text-start">
+                    <span class="col">
+                      Edit
+                    </span>
+                  </label>
+                </div>
+                <div class="col-3">
+                  <label class="form-check form-check-single form-switch text-end">
+                    <input class="form-check-input" type="checkbox" name="selectEntryNumber" value="edit">
+                  </label>
+                </div>
+              </div>
+
+              <div class="row mb-2">
+                <div class="col-9">
+                  <label class="row text-start">
+                    <span class="col">
+                      Upgrade
+                    </span>
+                  </label>
+                </div>
+                <div class="col-3">
+                  <label class="form-check form-check-single form-switch text-end">
+                    <input class="form-check-input" type="checkbox" name="selectEntryNumber" value="upgrade">
+                  </label>
+                </div>
+              </div>
+
+              <div class="row mb-2">
+                <div class="col-9">
+                  <label class="row text-start">
+                    <span class="col">
+                      Start
+                    </span>
+                  </label>
+                </div>
+                <div class="col-3">
+                  <label class="form-check form-check-single form-switch text-end">
+                    <input class="form-check-input" type="checkbox" name="selectEntryNumber" value="start">
+                  </label>
+                </div>
+              </div>
+
+              <div class="row mb-2">
+                <div class="col-9">
+                  <label class="row text-start">
+                    <span class="col">
+                      Stop
+                    </span>
+                  </label>
+                </div>
+                <div class="col-3">
+                  <label class="form-check form-check-single form-switch text-end">
+                    <input class="form-check-input" type="checkbox" name="selectEntryNumber" value="stop">
+                  </label>
+                </div>
+              </div>
+
+              <div class="row mb-2">
+                <div class="col-9">
+                  <label class="row text-start">
+                    <span class="col">
+                      Pause
+                    </span>
+                  </label>
+                </div>
+                <div class="col-3">
+                  <label class="form-check form-check-single form-switch text-end">
+                    <input class="form-check-input" type="checkbox" name="selectEntryNumber" value="pause">
+                  </label>
+                </div>
+              </div>
+
+              <div class="row mb-2">
+                <div class="col-9">
+                  <label class="row text-start">
+                    <span class="col">
+                      Restart
+                    </span>
+                  </label>
+                </div>
+                <div class="col-3">
+                  <label class="form-check form-check-single form-switch text-end">
+                    <input class="form-check-input" type="checkbox" name="selectEntryNumber" value="restart">
+                  </label>
+                </div>
+              </div>
+
+
+              <div class="row mb-4">
+                <div class="col-9">
+                  <label class="row text-start">
+                    <span class="col">
+                      Logs
+                    </span>
+                  </label>
+                </div>
+                <div class="col-3">
+                  <label class="form-check form-check-single form-switch text-end">
+                    <input class="form-check-input" type="checkbox" name="selectEntryNumber" value="logs">
+                  </label>
+                </div>
+              </div>
+
+              <div class="row mb-2">
+                <button class="btn" type="button" id="submit" hx-post="/updatePermissions" hx-vals="#updatePermissionsEntryNumber" hx-swap="outerHTML">Update  </button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>

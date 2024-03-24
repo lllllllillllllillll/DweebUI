@@ -4,9 +4,9 @@
 <p align="center">
     <a href="#"><img src="https://img.shields.io/github/stars/lllllllillllllillll/DweebUI?style=flat"/></a>
     <a href="https://github.com/lllllllillllllillll"><img src="https://img.shields.io/github/commit-activity/y/lllllllillllllillll/DweebUI"/></a>
-    <a href="#"><img src="https://img.shields.io/docker/pulls/lllllllillllllillll/dweebui"/></a>
-    <a href="#"><img src="https://img.shields.io/github/languages/top/lllllllillllllillll/DweebUI"/></a>
-    <a href="#"><img src="https://img.shields.io/github/license/lllllllillllllillll/DweebUI"/></a>
+    <a href="https://hub.docker.com/r/lllllllillllllillll/dweebui"><img src="https://img.shields.io/docker/pulls/lllllllillllllillll/dweebui"/></a>
+    <a href="https://github.com/lllllllillllllillll/DweebUI"><img src="https://img.shields.io/github/languages/top/lllllllillllllillll/DweebUI"/></a>
+    <a href="https://github.com/lllllllillllllillll/DweebUI/blob/main/LICENSE"><img src="https://img.shields.io/github/license/lllllllillllllillll/DweebUI"/></a>
     <a href="https://www.reddit.com/r/dweebui"><img src="https://img.shields.io/badge/reddit-orange"/></a>
     <a href="https://www.buymeacoffee.com/lllllllillllllillll"><img src="https://img.shields.io/badge/-buy_me_a%C2%A0coffee-gray?logo=buy-me-a-coffee"/></a>
 </p>
@@ -21,7 +21,6 @@
 
 ## Features
 * [x] Dashboard provides server metrics, container metrics, and container controls, on a single page.
-* [x] View container logs.
 * [x] View container logs.
 * [ ] Update containers (planned).
 * [x] Manage your Docker networks, images, and volumes.

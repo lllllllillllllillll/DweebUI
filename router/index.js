@@ -1,10 +1,12 @@
 import express from "express";
+import { Permission, User } from '../database/models.js';
+
 export const router = express.Router();
 
 // Controllers
 import { Login, submitLogin, Logout } from "../controllers/login.js";
 import { Register, submitRegister } from "../controllers/register.js";
-import { Dashboard, Logs, Modals, Stats, Chart, SSE, Card, updateCards, Containers, Action } from "../controllers/dashboard.js";
+import { Dashboard, Logs, Modals, Stats, Chart, SSE, Card, updateCards, Containers, Action, UpdatePermissions } from "../controllers/dashboard.js";
 import { Apps, appSearch, InstallModal, ImportModal, LearnMore } from "../controllers/apps.js";
 import { Users } from "../controllers/users.js";
 import { Images, removeImage } from "../controllers/images.js";
@@ -38,6 +40,7 @@ router.get("/sse_event", auth, SSE);
 router.get("/containers", auth, Containers);
 router.get("/card", auth, Card);
 router.get("/new_cards", auth, updateCards);
+router.post("/updatePermissions", auth, UpdatePermissions);
 
 router.get("/images", auth, Images);
 router.post("/removeImage", auth, removeImage);
@@ -80,3 +83,4 @@ import { Uninstall } from "../functions/uninstall.js"
 
 router.post("/install", auth, Install);
 router.post("/uninstall", auth, Uninstall);
+

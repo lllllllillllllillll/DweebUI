@@ -9,6 +9,8 @@ let hidden = '';
 
 // The actual page
 export const Dashboard = (req, res) => {
+
+    if (!req.session.user) { res.redirect("/logout"); return; }
     
     res.render("dashboard", {
         name: req.session.user,
@@ -320,80 +322,6 @@ export const Logs = (req, res) => {
     });
 }
 
-export const Modals = async (req, res) => {
-    let name = req.header('hx-trigger-name');
-    let id = req.header('hx-trigger');
-    let title = name.charAt(0).toUpperCase() + name.slice(1);
-
-    if (id == 'permissions') {
-
-        let permissions_modal = `
-        <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollables">
-          <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">${title} Permissions</h5>
-            </div>
-            <div class="modal-body">
-                <form action="" id="permissions_modal" method="POST">
-                    <div class="accordion" id="modal-accordion">
-                        PermissionsList
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <div class="row">
-                
-                <div class="col">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" disabled="">Reset</button>
-                </div>
-                <div class="col">
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Update</button>
-                </div>
-                </div>
-              </div>
-            </div>
-          </div>`;
-
-        let permissions_list = '';
-        let users = await User.findAll({ attributes: ['username', 'UUID']});
-
-        for (let i = 0; i < users.length; i++) {
-            let user_permissions = readFileSync('./views/modals/permissions.html', 'utf8');
-
-            let exists = await Permission.findOne({ where: {containerName: name, user: users[i].username}});
-            if (!exists) {
-                const newPermission = await Permission.create({ containerName: name, user: users[i].username, userID: users[i].UUID});
-            }
-            
-            user_permissions = user_permissions.replace(/UserEntry/g, i);
-            user_permissions = user_permissions.replace(/PermissionsUsername/g, users[i].username);
-
-            permissions_list += user_permissions;
-        }
-
-        permissions_modal = permissions_modal.replace(/PermissionsList/g, permissions_list);
-        res.send(permissions_modal);
-        return;
-    }
-
-
-
-    if (id == 'uninstall') {
-        let modal = readFileSync('./views/modals/uninstall.html', 'utf8');
-        modal = modal.replace(/AppName/g, name);
-        // let containerPermissions = await Permission.findAll({ where: {containerName: name}});
-        res.send(modal);
-        return;
-    }
-
-    let modal = readFileSync('./views/modals/details.html', 'utf8');
-    let details = await containerInfo(name);
-
-    modal = modal.replace(/AppName/g, details.name);
-    modal = modal.replace(/AppImage/g, details.image);
-    res.send(modal);
-}
-
 export const Action = async (req, res) => {
     let name = req.header('hx-trigger-name');
     let state = req.header('hx-trigger');
@@ -444,4 +372,132 @@ export const Action = async (req, res) => {
         hidden = hidden.map((container) => container.name);
         res.send("ok");
     }   
+}
+
+
+export const Modals = async (req, res) => {
+    let name = req.header('hx-trigger-name');
+    let id = req.header('hx-trigger');
+    let title = name.charAt(0).toUpperCase() + name.slice(1);
+
+    if (id == 'permissions') {
+        let permissions_list = '';
+        let permissions_modal = readFileSync('./views/modals/permissions.html', 'utf8');
+        permissions_modal = permissions_modal.replace(/PermissionsTitle/g, title);
+        let users = await User.findAll({ attributes: ['username', 'UUID']});
+
+        for (let i = 0; i < users.length; i++) {
+            let user_permissions = readFileSync('./views/partials/user_permissions.html', 'utf8');
+            let exists = await Permission.findOne({ where: {containerName: name, user: users[i].username}});
+            if (!exists) {
+                const newPermission = await Permission.create({ containerName: name, user: users[i].username, userID: users[i].UUID});
+            }
+            
+            user_permissions = user_permissions.replace(/EntryNumber/g, i);
+            user_permissions = user_permissions.replace(/PermissionsUsername/g, users[i].username);
+            user_permissions = user_permissions.replace(/PermissionsContainer/g, name);
+
+            permissions_list += user_permissions;
+        }
+
+        permissions_modal = permissions_modal.replace(/PermissionsList/g, permissions_list);
+        res.send(permissions_modal);
+        return;
+    }
+
+
+
+    if (id == 'uninstall') {
+        let modal = readFileSync('./views/modals/uninstall.html', 'utf8');
+        modal = modal.replace(/AppName/g, name);
+        // let containerPermissions = await Permission.findAll({ where: {containerName: name}});
+        res.send(modal);
+        return;
+    }
+
+    let modal = readFileSync('./views/modals/details.html', 'utf8');
+    let details = await containerInfo(name);
+
+    modal = modal.replace(/AppName/g, details.name);
+    modal = modal.replace(/AppImage/g, details.image);
+    res.send(modal);
+}
+
+
+export const UpdatePermissions = async (req, res) => {
+
+    let user = req.body.username;
+    let container = req.body.container;
+    let id = req.header('hx-trigger');
+    
+    console.log(`${req.session.user} is updating permissions for: ${user} on ${container}`);
+
+    Object.keys(req.body).forEach(async function(key) {
+        if (key != 'username' && key != 'container') {
+            let permissions = req.body[key];
+
+            if (permissions.includes('uninstall')){
+                await Permission.update({ uninstall: true }, { where: {containerName: container, user: user}});
+            }   
+            else {
+                await Permission.update({ uninstall: false }, { where: {containerName: container, user: user}});
+            }
+
+            if (permissions.includes('edit')){
+                await Permission.update({ edit: true }, { where: {containerName: container, user: user}});
+            }   
+            else {
+                await Permission.update({ edit: false }, { where: {containerName: container, user: user}});
+            }
+
+            if (permissions.includes('upgrade')){
+                await Permission.update({ upgrade: true }, { where: {containerName: container, user: user}});
+            }   
+            else {
+                await Permission.update({ upgrade: false }, { where: {containerName: container, user: user}});
+            }
+            
+            if (permissions.includes('start')){
+                await Permission.update({ start: true }, { where: {containerName: container, user: user}});
+            }   else {
+                await Permission.update({ start: false }, { where: {containerName: container, user: user}});
+            }
+
+            if (permissions.includes('stop')){
+                await Permission.update({ stop: true }, { where: {containerName: container, user: user}});
+            }   else {
+                await Permission.update({ stop: false }, { where: {containerName: container, user: user}});
+            }
+
+            if (permissions.includes('pause')){
+                await Permission.update({ pause: true }, { where: {containerName: container, user: user}});
+            }   else {
+                await Permission.update({ pause: false }, { where: {containerName: container, user: user}});
+            }
+
+            if (permissions.includes('restart')){
+                await Permission.update({ restart: true }, { where: {containerName: container, user: user}});
+            }   else {
+                await Permission.update({ restart: false }, { where: {containerName: container, user: user}});
+            }
+
+            if (permissions.includes('logs')){
+                await Permission.update({ logs: true }, { where: {containerName: container, user: user}});
+            }
+            else {
+                await Permission.update({ logs: false }, { where: {containerName: container, user: user}});
+            }
+        }  
+    });
+
+    let submit = '';
+    if (id == 'submit') {
+        submit = `<button class="btn" type="button" id="confirmed" hx-post="/updatePermissions" hx-swap="outerHTML" hx-trigger="load delay:2s">Update ✔️</button>`;
+        res.send(submit);
+        return;
+    } else if (id == 'confirmed') {
+        submit = `<button class="btn" type="button" id="submit" hx-post="/updatePermissions" hx-vals="#updatePermissions" hx-swap="outerHTML">Update  </button>`;
+        res.send(submit);
+        return;
+    }
 }
