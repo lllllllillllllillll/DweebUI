@@ -59,10 +59,11 @@ router.post("/action/:action", auth, Action);
 router.post("/updatePermissions", auth, UpdatePermissions);
 
 router.get("/logs", Logs);
+
 router.get("/modals", Modals);
-router.get("/stats", Stats);
-router.get("/chart",  Chart);
-router.get("/sse_event", SSE);
+router.get("/stats", auth, Stats);
+router.get("/chart", auth, Chart);
+router.get("/sse_event", auth, SSE);
 router.get("/containers", Containers);
 router.get("/card", Card);
 router.get("/new_cards", updateCards);
