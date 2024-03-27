@@ -2,8 +2,6 @@ import { User } from "../database/models.js";
 
 export const Supporters = async (req, res) => {
     
-    if (!req.session.UUID) return res.redirect("/login");
-
     let user = await User.findOne({ where: { UUID: req.session.UUID }});
     
 

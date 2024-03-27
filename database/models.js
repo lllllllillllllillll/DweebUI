@@ -124,39 +124,51 @@ export const Permission = sequelize.define('Permission', {
   },
   install: {
     type: DataTypes.STRING,
+    defaultValue: false
   },
   uninstall: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+    defaultValue: false
   },
   edit: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+    defaultValue: false
   },
   upgrade: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+    defaultValue: false
   },
   start: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+    defaultValue: false
   },
   stop: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+    defaultValue: false
   },
   restart: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+    defaultValue: false
   },
   pause: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+    defaultValue: false
   },
   logs: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+    defaultValue: false
   },
   hide: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+    defaultValue: false
   },
   reset_view: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+    defaultValue: false
   },
   view: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+    defaultValue: false
   },
 });
 

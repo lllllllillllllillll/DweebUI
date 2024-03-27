@@ -9,13 +9,15 @@ let hidden = '';
 
 // The actual page
 export const Dashboard = (req, res) => {
-
-    if (!req.session.user) { res.redirect("/logout"); return; }
     
+    let name = req.session.user;
+    let role = req.session.role;
+    let avatar = name.charAt(0).toUpperCase();
+
     res.render("dashboard", {
-        name: req.session.user,
-        role: req.session.role,
-        avatar: req.session.avatar,
+        name: name,
+        avatar: avatar,
+        role: role
     });
 }
 
@@ -393,6 +395,16 @@ export const Modals = async (req, res) => {
                 const newPermission = await Permission.create({ containerName: name, user: users[i].username, userID: users[i].UUID});
             }
             
+            let permissions = await Permission.findOne({ where: {containerName: name, user: users[i].username}});
+            if (permissions.uninstall == true) { user_permissions = user_permissions.replace(/data-UninstallCheck/g, 'checked'); }
+            if (permissions.edit == true) { user_permissions = user_permissions.replace(/data-EditCheck/g, 'checked'); }
+            if (permissions.upgrade == true) { user_permissions = user_permissions.replace(/data-UpgradeCheck/g, 'checked'); }
+            if (permissions.start == true) { user_permissions = user_permissions.replace(/data-StartCheck/g, 'checked'); }
+            if (permissions.stop == true) { user_permissions = user_permissions.replace(/data-StopCheck/g, 'checked'); }
+            if (permissions.pause == true) { user_permissions = user_permissions.replace(/data-PauseCheck/g, 'checked'); }
+            if (permissions.restart == true) { user_permissions = user_permissions.replace(/data-RestartCheck/g, 'checked'); }
+            if (permissions.logs == true) { user_permissions = user_permissions.replace(/data-LogsCheck/g, 'checked'); }
+
             user_permissions = user_permissions.replace(/EntryNumber/g, i);
             user_permissions = user_permissions.replace(/PermissionsUsername/g, users[i].username);
             user_permissions = user_permissions.replace(/PermissionsContainer/g, name);

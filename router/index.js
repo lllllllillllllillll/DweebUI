@@ -1,5 +1,5 @@
 import express from "express";
-import { Permission, User } from '../database/models.js';
+import { Permission } from '../database/models.js';
 
 export const router = express.Router();
 
@@ -20,27 +20,53 @@ import { Syslogs } from "../controllers/syslogs.js";
 import { Portal } from "../controllers/portal.js"
 
 // Auth middleware
-const auth = (req, res, next) => {
-    if (req.session.role == "admin") {
+const auth = async (req, res, next) => {
+    if (!req.session.user) { res.redirect('/login'); return; }
+
+    let user = req.session.user;
+    let role = req.session.role;
+    let action = req.path.split("/")[2];
+    let trigger = req.header('hx-trigger-name');
+    // console.log("Auth: ", user, role, action, trigger);
+
+    if (role == "admin") {
         next();
-    } else {
-        res.redirect("/portal");
     }
-};
+    else if (action == "start" || action == "stop" || action == "pause" || action == "restart") {
+        let permission = await Permission.findOne({ where: { containerName: trigger, user: user }, attributes: [`${action}`] });
+        
+        if (permission) {
+            if (permission[action] == true) {
+                console.log(`User ${user} has permission to ${action} ${trigger}`);
+                next();
+            }
+            else {
+                console.log(`User ${user} does not have permission to ${action} ${trigger}`);
+            }
+        } else {
+            console.log(`No entry found for ${user} in ${trigger} permissions`);
+        }
+    }
+    else {
+        res.redirect('/portal');
+    }
+
+}
 
 // Admin routes
 router.get("/", auth, Dashboard);
 router.post("/action/:action", auth, Action);
-
-router.get("/logs", auth, Logs);
-router.get("/modals", auth, Modals);
-router.get("/stats", auth, Stats);
-router.get("/chart", auth, Chart);
-router.get("/sse_event", auth, SSE);
-router.get("/containers", auth, Containers);
-router.get("/card", auth, Card);
-router.get("/new_cards", auth, updateCards);
 router.post("/updatePermissions", auth, UpdatePermissions);
+
+router.get("/logs", Logs);
+router.get("/modals", Modals);
+router.get("/stats", Stats);
+router.get("/chart",  Chart);
+router.get("/sse_event", SSE);
+router.get("/containers", Containers);
+router.get("/card", Card);
+router.get("/new_cards", updateCards);
+
 
 router.get("/images", auth, Images);
 router.post("/removeImage", auth, removeImage);
@@ -81,6 +107,6 @@ router.get("/logout", Logout);
 import { Install } from "../functions/install.js"
 import { Uninstall } from "../functions/uninstall.js"
 
-router.post("/install", auth, Install);
-router.post("/uninstall", auth, Uninstall);
+router.post("/install", Install);
+router.post("/uninstall", Uninstall);
 
