@@ -22,51 +22,55 @@ import { Portal } from "../controllers/portal.js"
 // Auth middleware
 const auth = async (req, res, next) => {
     if (!req.session.user) { res.redirect('/login'); return; }
+    if (req.session.role == "admin") { next(); }
 
     let user = req.session.user;
     let role = req.session.role;
     let action = req.path.split("/")[2];
     let trigger = req.header('hx-trigger-name');
+    
     // console.log("Auth: ", user, role, action, trigger);
 
-    if (role == "admin") {
-        next();
-    }
-    else if (action == "start" || action == "stop" || action == "pause" || action == "restart") {
-        let permission = await Permission.findOne({ where: { containerName: trigger, user: user }, attributes: [`${action}`] });
+
+    // if (action == "start" || action == "stop" || action == "pause" || action == "restart") {
+    //     let permission = await Permission.findOne({ where: { containerName: trigger, user: user }, attributes: [`${action}`] });
         
-        if (permission) {
-            if (permission[action] == true) {
-                console.log(`User ${user} has permission to ${action} ${trigger}`);
-                next();
-            }
-            else {
-                console.log(`User ${user} does not have permission to ${action} ${trigger}`);
-            }
-        } else {
-            console.log(`No entry found for ${user} in ${trigger} permissions`);
-        }
-    }
-    else {
-        res.redirect('/portal');
-    }
+    //     if (permission) {
+    //         if (permission[action] == true) {
+    //             console.log(`User ${user} has permission to ${action} ${trigger}`);
+    //             next();
+    //         }
+    //         else {
+    //             console.log(`User ${user} does not have permission to ${action} ${trigger}`);
+    //         }
+    //     } else {
+    //         console.log(`No entry found for ${user} in ${trigger} permissions`);
+    //     }
+    // }
+    // else {
+    //     res.redirect('/portal');
+    // }
+
+    res.redirect('/portal');
 
 }
+
+
+
 
 // Admin routes
 router.get("/", auth, Dashboard);
 router.post("/action/:action", auth, Action);
 router.post("/updatePermissions", auth, UpdatePermissions);
 
-router.get("/logs", Logs);
-
-router.get("/modals", Modals);
+router.get("/logs", auth, Logs);
+router.get("/modals", auth, Modals);
 router.get("/stats", auth, Stats);
 router.get("/chart", auth, Chart);
 router.get("/sse_event", auth, SSE);
-router.get("/containers", Containers);
-router.get("/card", Card);
-router.get("/new_cards", updateCards);
+router.get("/containers", auth, Containers);
+router.get("/card", auth, Card);
+router.get("/new_cards", auth, updateCards);
 
 
 router.get("/images", auth, Images);

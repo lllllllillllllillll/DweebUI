@@ -3,7 +3,6 @@ import { Permission, Container, User } from '../database/models.js';
 import { docker } from '../server.js';
 import { dockerContainerStats } from 'systeminformation';
 import { readFileSync } from 'fs';
-import { currentLoad, mem, networkStats, fsSize } from 'systeminformation';
 
 let hidden = '';
 
@@ -20,6 +19,7 @@ export const Portal = (req, res) => {
         role: role
     });
 }
+
 
 async function containerInfo (containerName) {
     let container = docker.getContainer(containerName);
@@ -126,6 +126,72 @@ export async function addCard (name, state) {
 
 
 
+
+// HTMX server-side events
+export const SSE = (req, res) => {
+    res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive' });
+
+    let eventCheck = setInterval(async () => {
+        // builds array of containers and their states
+        containersArray = [];
+        await docker.listContainers({ all: true }).then(containers => {
+            containers.forEach(container => {
+                let name = container.Names[0].replace('/', '');
+                if (!hidden.includes(name)) { // if not hidden
+                    containersArray.push({ container: name, state: container.State });
+                } 
+            });
+        });
+
+        if ((JSON.stringify(containersArray) !== JSON.stringify(sentArray))) {
+            cardList = '';
+            newCards = '';
+            containersArray.forEach(container => {
+                const { container: containerName, state } = container;
+                const existingContainer = sentArray.find(c => c.container === containerName);
+                if (!existingContainer) {
+                    containerInfo(containerName).then(details => {
+                        createCard(details).then(card => {
+                            newCards += card;
+                        });
+                    });
+                    res.write(`event: update\n`);
+                    res.write(`data: 'update cards'\n\n`);
+                } else if (existingContainer.state !== state) {
+                    updatesArray.push(containerName);
+                }
+                containerInfo(containerName).then(details => {
+                    createCard(details).then(card => {
+                        cardList += card;
+                    });
+                });
+            });
+
+            sentArray.forEach(container => {
+                const { container: containerName } = container;
+                const existingContainer = containersArray.find(c => c.container === containerName);
+                if (!existingContainer) {
+                    updatesArray.push(containerName);
+                }
+            });
+
+            for (let i = 0; i < updatesArray.length; i++) {
+                res.write(`event: ${updatesArray[i]}\n`);
+                res.write(`data: 'update cards'\n\n`);
+            }
+            updatesArray = [];
+            sentArray = containersArray.slice();
+        }
+
+    }, 500);
+
+
+    req.on('close', () => {
+        clearInterval(eventCheck);
+    });
+};
+
+
 export const updateCards = async (req, res) => {
     console.log('updateCards called');
     res.send(newCards);
@@ -150,8 +216,6 @@ export const Card = async (req, res) => {
         res.send(card);
     }
 }
-
-
 
 
 function status (state) {

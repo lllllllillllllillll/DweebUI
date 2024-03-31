@@ -9,6 +9,7 @@
     <link href="/css/tabler.min.css" rel="stylesheet"/>
     <link href="/css/meters.css" rel="stylesheet"/>
     <script src="/js/htmx.min.js"></script>
+    <script src="/js/htmx-sse.js"></script>
     <style>
       @import url('/fonts/inter.css');
       :root {
@@ -29,7 +30,7 @@
 
       <div class="page-body">
         <div class="container-xl">
-          <div class="row row-deck row-cards">
+          <div class="row row-deck row-cards" hx-ext="sse" sse-connect="/sse_event">
             
             <div class="col-12">
               <div class="row row-cards">
@@ -45,7 +46,7 @@
                         </div>
 
                         <!-- HTMX -->
-                        <div class="col" name="CPU" id="green" data-hx-get="" data-hx-trigger="">
+                        <div class="col" name="CPU" id="green" data-hx-get="/stats" data-hx-trigger="load, every 1s">
                           <div class="font-weight-medium">
                             <label class="cpu-text mb-1" for="cpu">CPU 0%</label>
                           </div>
@@ -70,7 +71,7 @@
                         </div>
 
                         <!-- HTMX -->
-                        <div class="col" name="RAM" id="blue" data-hx-get="" data-hx-trigger="">
+                        <div class="col" name="RAM" id="blue" data-hx-get="/stats" data-hx-trigger="load, every 2s">
                           <div class="font-weight-medium">
                             <label class="ram-text mb-1" for="ram">RAM 0%</label>
                           </div>
@@ -95,7 +96,7 @@
                         </div>
 
                         <!-- HTMX -->
-                        <div class="col" name="NET" id="purple" data-hx-get="" data-hx-trigger="">
+                        <div class="col" name="NET" id="purple" data-hx-get="/stats" data-hx-trigger="load, every 2s">
                           <div class="font-weight-medium">
                             <label id="net-text" class="net-text mb-1" for="network">Down: 0MB  Up: 0MB</label>
                           </div>
@@ -120,7 +121,7 @@
                         </div>
 
                         <!-- HTMX -->
-                        <div class="col" name="DISK" id="orange" data-hx-get="" data-hx-trigger="">
+                        <div class="col" name="DISK" id="orange" data-hx-get="/stats" data-hx-trigger="load, every 3s">
                           <div class="font-weight-medium">
                             <label class="disk-text mb-1" for="disk">DISK 0%</label>
                           </div>

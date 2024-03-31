@@ -4,7 +4,7 @@
 <p align="center">
     <a href=""><img src="https://img.shields.io/github/stars/lllllllillllllillll/DweebUI?style=flat"/></a>
     <a href="https://github.com/lllllllillllllillll"><img src="https://img.shields.io/github/commit-activity/y/lllllllillllllillll/DweebUI%2Fdev"/></a>
-    <a href="https://github.com/lllllllillllllillll/DweebUI"><img src="https://img.shields.io/github/last-commit/lllllllillllllillll/DweebUI%2Fdev"/></a>
+    <a href="https://github.com/lllllllillllllillll/DweebUI%2Fdev"><img src="https://img.shields.io/github/last-commit/lllllllillllllillll/DweebUI%2Fdev"/></a>
     <a href="https://hub.docker.com/r/lllllllillllllillll/dweebui"><img src="https://img.shields.io/docker/pulls/lllllllillllllillll/dweebui"/></a>
     <a href="https://github.com/lllllllillllllillll/DweebUI/blob/main/LICENSE"><img src="https://img.shields.io/github/license/lllllllillllllillll/DweebUI"/></a>
     <a href="https://www.reddit.com/r/dweebui"><img src="https://img.shields.io/badge/reddit-orange"/></a>
@@ -27,7 +27,7 @@
 * [x] Light/Dark Mode.
 * [x] Mobile Friendly.
 * [x] Easy to install app templates.
-* [x] Multi-User built-in.
+* [x] Multiple Users.
 * [ ] Permissions system (in development).
 * [x] Support for Windows, Linux, and MacOS.
 * [ ] Docker compose (in development).
