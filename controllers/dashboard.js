@@ -177,7 +177,7 @@ export async function addCard (name, state) {
 
 
 // HTMX server-side events
-export const SSE = (req, res) => {
+export const SSE = async (req, res) => {
     res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive' });
 
     let eventCheck = setInterval(async () => {

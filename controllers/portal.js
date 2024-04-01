@@ -1,8 +1,8 @@
 import { Readable } from 'stream';
 import { Permission, Container, User } from '../database/models.js';
 import { docker } from '../server.js';
-import { dockerContainerStats } from 'systeminformation';
 import { readFileSync } from 'fs';
+
 
 let hidden = '';
 
@@ -20,6 +20,22 @@ export const Portal = (req, res) => {
     });
 }
 
+
+async function CardList () {
+    let name = req.session.user;
+    let containers = await Permission.findAll({ attributes: ['containerName'], where: { user: name }});
+    // for (let i = 0; i < containers.length; i++) {
+    //     let details = await containerInfo(containers[i].containerName);
+    //     let card = await createCard(details);
+    //     cardList += card;
+    // }
+
+    for (let i = 0; i < containers.length; i++) {
+        console.log(containers[i].containerName);
+    }
+    
+
+}
 
 async function containerInfo (containerName) {
     let container = docker.getContainer(containerName);
@@ -128,7 +144,7 @@ export async function addCard (name, state) {
 
 
 // HTMX server-side events
-export const SSE = (req, res) => {
+export const SSE = async (req, res) => {
     res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive' });
 
     let eventCheck = setInterval(async () => {

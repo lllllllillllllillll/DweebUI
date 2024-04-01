@@ -16,6 +16,7 @@ export const Login = function(req,res){
 export const submitLogin = async function(req,res){
 
     let { email, password } = req.body;
+    email = email.toLowerCase();
 
     if(email && password){
 

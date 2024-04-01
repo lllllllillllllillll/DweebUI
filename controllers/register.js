@@ -18,6 +18,7 @@ export const Register = function(req,res){
 export const submitRegister = async function(req,res){
 
     let { name, username, email, password, confirmPassword, warning, secret } = req.body;
+    email = email.toLowerCase();
 
 
     if (secret != SECRET) {

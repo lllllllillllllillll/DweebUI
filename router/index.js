@@ -21,15 +21,24 @@ import { Portal } from "../controllers/portal.js"
 
 // Auth middleware
 const auth = async (req, res, next) => {
-    if (!req.session.user) { res.redirect('/login'); return; }
-    if (req.session.role == "admin") { next(); }
 
     let user = req.session.user;
     let role = req.session.role;
-    let action = req.path.split("/")[2];
+    let path = req.path;
     let trigger = req.header('hx-trigger-name');
+
+    console.log("Auth: ", user, role, path, trigger);
+    console.log(req.path);
+
+    if (!user) { res.redirect('/login'); return; }
+    else if (role == "admin") { next(); return;}
+    else if (path == "/portal" || path == "/account" || path == "/supporters" || path == "/thank") { next(); return; }
+    else { res.redirect('/portal'); return; }
     
-    // console.log("Auth: ", user, role, action, trigger);
+
+    // let action = req.path.split("/")[2];
+
+    // else if (trigger == "portal" || "supporters" || "account" || "thank") { res.redirect() return; }
 
 
     // if (action == "start" || action == "stop" || action == "pause" || action == "restart") {
@@ -50,9 +59,6 @@ const auth = async (req, res, next) => {
     // else {
     //     res.redirect('/portal');
     // }
-
-    res.redirect('/portal');
-
 }
 
 
@@ -96,10 +102,10 @@ router.get("/variables", auth, Variables);
 router.get("/settings", auth, Settings);
 
 // User routes
-router.get("/portal", Portal);
-router.get("/account", Account);
-router.get("/supporters", Supporters);
-router.post("/thank", Thanks);
+router.get("/portal", auth, Portal);
+router.get("/account", auth, Account);
+router.get("/supporters", auth, Supporters);
+router.post("/thank", auth, Thanks);
 
 router.get("/login", Login);
 router.post("/login", submitLogin);
