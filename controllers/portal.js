@@ -37,6 +37,21 @@ async function CardList () {
 
 }
 
+export const UserContainers = async (req, res) => {
+    let name = req.session.user;
+    let containers = await Permission.findAll({ attributes: ['containerName'], where: { user: name }});
+
+    for (let i = 0; i < containers.length; i++) {
+        if (containers[i].containerName == null) { continue; }
+        let details = await containerInfo(containers[i].containerName);
+        let card = await createCard(details);
+        cardList += card;
+    }
+    res.send(cardList);
+}
+
+
+
 async function containerInfo (containerName) {
     let container = docker.getContainer(containerName);
     let info = await container.inspect();
@@ -104,7 +119,7 @@ async function createCard (details) {
             break;
     }
     // if (name.startsWith('dweebui')) { disable = 'disabled=""'; }
-    let card  = readFileSync('./views/partials/containerCard.html', 'utf8');
+    let card  = readFileSync('./views/partials/containerSimple.html', 'utf8');
     card = card.replace(/AppName/g, details.name);
     card = card.replace(/AppShortName/g, shortname);
     card = card.replace(/AppIcon/g, details.service);
@@ -216,7 +231,8 @@ export const updateCards = async (req, res) => {
 
 
 export const Containers = async (req, res) => {
-    res.send(cardList);
+    CardList();
+    // res.send(cardList);
 }
 
 export const Card = async (req, res) => {

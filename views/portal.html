@@ -142,15 +142,15 @@
             
             <!-- HTMX -->
             <div class="col-12">
-              <div class="row row-cards" id="containers" data-hx-get="/containers" data-hx-trigger="load" data-hx-swap="innerHTML">
+              <div class="row row-cards" id="containers" data-hx-get="/user_containers" data-hx-trigger="load" data-hx-swap="innerHTML">
               </div>
             </div>
 
             <!-- HTMX -->
-            <div class="col-12">
+            <!-- <div class="col-12">
               <div class="row row-cards" data-hx-get="/new_cards" data-hx-trigger="sse:update" data-hx-swap="afterbegin" hx-target="#containers">
               </div>
-            </div>
+            </div> -->
             
             <!-- HTMX Target-->
             <div id="modals-here" class="modal modal-blur fade" style="display: none" aria-hidden="false" tabindex="-1">

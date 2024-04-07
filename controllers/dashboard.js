@@ -137,7 +137,7 @@ async function createCard (details) {
             break;
     }
     // if (name.startsWith('dweebui')) { disable = 'disabled=""'; }
-    let card  = readFileSync('./views/partials/containerCard.html', 'utf8');
+    let card  = readFileSync('./views/partials/containerFull.html', 'utf8');
     card = card.replace(/AppName/g, details.name);
     card = card.replace(/AppShortName/g, shortname);
     card = card.replace(/AppIcon/g, details.service);

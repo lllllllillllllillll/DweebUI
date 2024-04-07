@@ -17,7 +17,7 @@ import { Variables } from "../controllers/variables.js";
 import { Settings } from "../controllers/settings.js";
 import { Supporters, Thanks } from "../controllers/supporters.js";
 import { Syslogs } from "../controllers/syslogs.js";
-import { Portal } from "../controllers/portal.js"
+import { Portal, UserContainers } from "../controllers/portal.js"
 
 // Auth middleware
 const auth = async (req, res, next) => {
@@ -27,12 +27,11 @@ const auth = async (req, res, next) => {
     let path = req.path;
     let trigger = req.header('hx-trigger-name');
 
-    console.log("Auth: ", user, role, path, trigger);
-    console.log(req.path);
+    // console.log("Auth: ", user, role, path, trigger, req.path);
 
     if (!user) { res.redirect('/login'); return; }
-    else if (role == "admin") { next(); return;}
-    else if (path == "/portal" || path == "/account" || path == "/supporters" || path == "/thank") { next(); return; }
+    else if (role == "admin") { next(); return; }
+    else if (path == "/portal" || path == "/account" || path == "/supporters" || path == "/thank" || path == "/user_containers") { next(); return; }
     else { res.redirect('/portal'); return; }
     
 
@@ -103,6 +102,7 @@ router.get("/settings", auth, Settings);
 
 // User routes
 router.get("/portal", auth, Portal);
+router.get("/user_containers", auth, UserContainers);
 router.get("/account", auth, Account);
 router.get("/supporters", auth, Supporters);
 router.post("/thank", auth, Thanks);
