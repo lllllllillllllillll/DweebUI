@@ -6036,7 +6036,7 @@ fieldset:disabled .btn {
   color: var(--tblr-alert-color);
   background-color: var(--tblr-alert-bg);
   border: var(--tblr-alert-border);
-  border-radius: var(--tblr-alert-border-radius)
+  border-radius: var(--tblr-alert-border-radius);
 }
 
 .alert-heading {
@@ -20221,11 +20221,11 @@ body[data-bs-theme=dark] .hide-theme-dark {
 }
 
 .alert {
-  --tblr-alert-color: var(--tblr-muted);
-  background: #fff;
+  --tblr-alert-color: var(--tblr-secondary);
+  --tblr-alert-bg: var(--tblr-surface);
   border: var(--tblr-border-width) var(--tblr-border-style) var(--tblr-border-color-translucent);
-  border-left: .25rem var(--tblr-border-style) var(--tblr-alert-color);
-  box-shadow: rgba(24, 36, 51, .04) 0 2px 4px 0
+  border-left: 0.25rem var(--tblr-border-style) var(--tblr-alert-color);
+  box-shadow: rgba(24, 36, 51, 0.04) 0 2px 4px 0;
 }
 
 .alert>:last-child {

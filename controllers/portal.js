@@ -24,20 +24,21 @@ export const Portal = (req, res) => {
 async function CardList () {
     let name = req.session.user;
     let containers = await Permission.findAll({ attributes: ['containerName'], where: { user: name }});
-    // for (let i = 0; i < containers.length; i++) {
-    //     let details = await containerInfo(containers[i].containerName);
-    //     let card = await createCard(details);
-    //     cardList += card;
-    // }
-
     for (let i = 0; i < containers.length; i++) {
-        console.log(containers[i].containerName);
+        let details = await containerInfo(containers[i].containerName);
+        let card = await createCard(details);
+        cardList += card;
     }
+
+    // for (let i = 0; i < containers.length; i++) {
+    //     console.log(containers[i].containerName);
+    // }
     
 
 }
 
 export const UserContainers = async (req, res) => {
+    let cardList = '';
     let name = req.session.user;
     let containers = await Permission.findAll({ attributes: ['containerName'], where: { user: name }});
 

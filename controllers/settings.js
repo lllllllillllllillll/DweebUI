@@ -5,5 +5,6 @@ export const Settings = (req, res) => {
         name: req.session.user,
         role: req.session.role,
         avatar: req.session.avatar,
+        alert: '',
     });
 }

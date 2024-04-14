@@ -27,7 +27,7 @@
     }
   }
 </script>
-<header class="navbar navbar-expand-md d-print-none">
+<header class="navbar navbar-expand-md d-print-none py-0">
   <div class="container-xl">
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu"
       aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,13 +40,17 @@
       <a href="#">
         <img src="/images/dweebui.svg" alt="DweebUI" title="DweebUI" class="navbar-brand-image">     
       </a>
-      
-
     </h1>
+
+    <% if(alert) { %>
+        <%- alert %>
+    <% } %>
+
     <div class="navbar-nav flex-row order-md-last">
       <div class="nav-item d-none d-md-flex me-3">
 
 
+    
         <!-- <div class="btn-list">
           <a href="#" class="btn text-green">
             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-lock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6z"></path> <path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0"></path> <path d="M8 11v-4a4 4 0 1 1 8 0v4"></path> </svg>

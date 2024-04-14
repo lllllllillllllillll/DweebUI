@@ -43,7 +43,8 @@ export const Networks = async function(req, res) {
         role: req.session.role,
         avatar: req.session.avatar,
         network_list: network_list,
-        network_count: networks.length
+        network_count: networks.length,
+        alert: '',
     });
 }
 

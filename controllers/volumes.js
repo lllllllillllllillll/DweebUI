@@ -64,7 +64,8 @@ export const Volumes = async function(req, res) {
         role: req.session.role,
         avatar: req.session.avatar,
         volume_list: volume_list,
-        volume_count: volumes.length
+        volume_count: volumes.length,
+        alert: '',
     });
 
 }

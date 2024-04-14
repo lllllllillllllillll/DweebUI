@@ -13,6 +13,7 @@ export const Account = async (req, res) => {
         email: user.email,
         role: user.role,
         avatar: user.avatar,
+        alert: '',
     });
 
 

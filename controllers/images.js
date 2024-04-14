@@ -50,7 +50,8 @@ export const Images = async function(req, res) {
         role: req.session.role,
         avatar: req.session.avatar,
         image_list: image_list,
-        image_count: images.length
+        image_count: images.length,
+        alert: '',
     });
 
 }

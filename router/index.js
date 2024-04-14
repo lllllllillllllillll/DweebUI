@@ -7,7 +7,7 @@ export const router = express.Router();
 import { Login, submitLogin, Logout } from "../controllers/login.js";
 import { Register, submitRegister } from "../controllers/register.js";
 import { Dashboard, Logs, Modals, Stats, Chart, SSE, Card, updateCards, Containers, Action, UpdatePermissions } from "../controllers/dashboard.js";
-import { Apps, appSearch, InstallModal, ImportModal, LearnMore } from "../controllers/apps.js";
+import { Apps, appSearch, InstallModal, ImportModal, LearnMore, Upload } from "../controllers/apps.js";
 import { Users } from "../controllers/users.js";
 import { Images, removeImage } from "../controllers/images.js";
 import { Networks, removeNetwork } from "../controllers/networks.js";
@@ -30,34 +30,31 @@ const auth = async (req, res, next) => {
     // console.log("Auth: ", user, role, path, trigger, req.path);
 
     if (!user) { res.redirect('/login'); return; }
-    else if (role == "admin") { next(); return; }
-    else if (path == "/portal" || path == "/account" || path == "/supporters" || path == "/thank" || path == "/user_containers") { next(); return; }
-    else { res.redirect('/portal'); return; }
+    else if (role == 'admin' || path == "/portal" || path == "/account" || path == "/supporters" || path == "/thank" || path == "/user_containers") { next(); return; }
+    // else { res.redirect('/portal'); return; }
     
 
-    // let action = req.path.split("/")[2];
-
-    // else if (trigger == "portal" || "supporters" || "account" || "thank") { res.redirect() return; }
+    let action = req.path.split("/")[2];
 
 
-    // if (action == "start" || action == "stop" || action == "pause" || action == "restart") {
-    //     let permission = await Permission.findOne({ where: { containerName: trigger, user: user }, attributes: [`${action}`] });
+    if (action == "start" || action == "stop" || action == "pause" || action == "restart") {
+        let permission = await Permission.findOne({ where: { containerName: trigger, user: user }, attributes: [`${action}`] });
         
-    //     if (permission) {
-    //         if (permission[action] == true) {
-    //             console.log(`User ${user} has permission to ${action} ${trigger}`);
-    //             next();
-    //         }
-    //         else {
-    //             console.log(`User ${user} does not have permission to ${action} ${trigger}`);
-    //         }
-    //     } else {
-    //         console.log(`No entry found for ${user} in ${trigger} permissions`);
-    //     }
-    // }
-    // else {
-    //     res.redirect('/portal');
-    // }
+        if (permission) {
+            if (permission[action] == true) {
+                console.log(`User ${user} has permission to ${action} ${trigger}`);
+                next();
+            }
+            else {
+                console.log(`User ${user} does not have permission to ${action} ${trigger}`);
+            }
+        } else {
+            console.log(`No entry found for ${user} in ${trigger} permissions`);
+        }
+    }
+    else {
+        res.redirect('/portal');
+    }
 }
 
 
@@ -93,6 +90,7 @@ router.post("/apps", auth, appSearch);
 router.get("/install_modal", auth, InstallModal)
 router.get("/import_modal", auth, ImportModal)
 router.get("/learn_more", auth, LearnMore)
+router.post("/upload", auth, Upload);
 
 router.get("/users", auth, Users);
 router.get("/syslogs", auth, Syslogs);

@@ -30,7 +30,8 @@ export const Syslogs = async function(req, res) {
         name: req.session.user || 'Dev',
         role: req.session.role || 'Dev',
         avatar: req.session.avatar || '<img src="/img/avatars/rus.jpg">',
-        logs: logs
+        logs: logs,
+        alert: '',
     });
 
 }

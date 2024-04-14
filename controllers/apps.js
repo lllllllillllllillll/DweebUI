@@ -1,148 +1,140 @@
 import { readFileSync } from 'fs';
+import multer from 'multer';
 
+const upload = multer({storage: multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'templates/')
+  },
+    filename: function (req, file, cb) {
+      cb(null, file.originalname)
+    }
+  })
+})
+
+// load the default template then sort the templates by name
 let templatesJSON = readFileSync('./templates/templates.json');
 let templates = JSON.parse(templatesJSON).templates;
-
 templates = templates.sort((a, b) => {
     if (a.name < b.name) {
       return -1;
     }
 });
 
-
+let alert = '';
 
 export const Apps = (req, res) => {
-    
-    let page = Number(req.params.page) || 1;
-    let list_start = (page-1)*28;
-    let list_end = (page*28);
-    let last_page = Math.ceil(templates.length/28);
 
-    let prev = '/apps/' + (page-1);
-    let next = '/apps/' + (page+1);
-    if (page == 1) {
-        prev = '/apps/' + (page);
-    }
-    if (page == last_page) {
-        next = '/apps/' + (page);
-    }
+  let page = Number(req.params.page) || 1;
+  let list_start = (page-1)*28;
+  let list_end = (page*28);
+  let last_page = Math.ceil(templates.length/28);
+  let prev = '/apps/' + (page-1);
+  let next = '/apps/' + (page+1);
+  if (page == 1) { prev = '/apps/' + (page); }
+  if (page == last_page) { next = '/apps/' + (page); }
 
-    let apps_list = '';
-    for (let i = list_start; i < list_end && i < templates.length; i++) {
-        let appCard = readFileSync('./views/partials/appCard.html', 'utf8');
-        let name = templates[i].name || templates[i].title.toLowerCase();
-        let desc = templates[i].description.slice(0, 60) + "...";
-        let description = templates[i].description.replaceAll(". ", ".\n") || "no description available";
-        let note = templates[i].note ? templates[i].note.replaceAll(". ", ".\n") : "no notes available";
-        let image = templates[i].image;
-        let logo = templates[i].logo;
-
-        let categories = '';
-
-          // set data.catagories to 'other' if data.catagories is empty or undefined
-        if (templates[i].categories == null || templates[i].categories == undefined || templates[i].categories == '') {
-            templates[i].categories = ['Other'];
-        }
-
-        for (let c = 0; c < templates[i].categories.length; c++) {
-          categories += CatagoryColor(templates[i].categories[c]);
-        }
-
-        appCard = appCard.replace(/AppName/g, name);
-        appCard = appCard.replace(/AppShortName/g, name);
-        appCard = appCard.replace(/AppDesc/g, desc);
-        appCard = appCard.replace(/AppLogo/g, logo);
-        appCard = appCard.replace(/AppCategories/g, categories);
-
-        apps_list += appCard;
-    }
-    
-    res.render("apps", {
-        name: req.session.user,
-        role: req.session.role,
-        avatar: req.session.avatar,
-        list_start: list_start + 1,
-        list_end: list_end,
-        app_count: templates.length,
-        prev: prev,
-        next: next,
-        apps_list: apps_list
-    });
-
-}
-
-
-
-export const appSearch = async (req, res) => {
-
-    let search = req.body.search.split(' ');
-    let apps_list = '';
-    let results = [];
-
-    let page = Number(req.query.page) || 1;
-    let list_start = (page - 1) * 28;
-    let list_end = (page * 28);
-    let last_page = Math.ceil(templates.length / 28);
-
-    let prev = '/apps?page=' + (page - 1);
-    let next = '/apps?page=' + (page + 1);
-    if (page == 1) {
-        prev = '/apps?page=' + (page);
-    }
-    if (page == last_page) {
-        next = '/apps?page=' + (page);
-    }
-
-    function searchTemplates(word) {
-        for (let i = 0; i < templates.length; i++) {
-            if ((templates[i].description.includes(word)) || (templates[i].name.includes(word)) || (templates[i].title.includes(word))) {
-                results.push(templates[i]);
-            }
-        }
-    }
-    searchTemplates(search);
-
-    for (let i = 0; i < results.length; i++) {
+  let apps_list = '';
+  for (let i = list_start; i < list_end && i < templates.length; i++) {
       let appCard = readFileSync('./views/partials/appCard.html', 'utf8');
-      let name = results[i].name || results[i].title.toLowerCase();
-      let desc = results[i].description.slice(0, 60) + "...";
-      let description = results[i].description.replaceAll(". ", ".\n") || "no description available";
-      let note = results[i].note ? results[i].note.replaceAll(". ", ".\n") : "no notes available";
-      let image = results[i].image;
-      let logo = results[i].logo;
-
+      let name = templates[i].name || templates[i].title.toLowerCase();
+      let desc = templates[i].description.slice(0, 60) + "...";
+      let description = templates[i].description.replaceAll(". ", ".\n") || "no description available";
+      let note = templates[i].note ? templates[i].note.replaceAll(". ", ".\n") : "no notes available";
+      let image = templates[i].image;
+      let logo = templates[i].logo;
       let categories = '';
-
-        // set data.catagories to 'other' if data.catagories is empty or undefined
-      if (results[i].categories == null || results[i].categories == undefined || results[i].categories == '') {
-          results[i].categories = ['Other'];
+      // set data.catagories to 'other' if data.catagories is empty or undefined
+      if (templates[i].categories == null || templates[i].categories == undefined || templates[i].categories == '') {
+          templates[i].categories = ['Other'];
       }
-
-      for (let c = 0; c < results[i].categories.length; c++) {
-        categories += CatagoryColor(results[i].categories[c]);
+      // loop through the categories and add the badge to the card
+      for (let j = 0; j < templates[i].categories.length; j++) {
+        categories += CatagoryColor(templates[i].categories[j]);
       }
-
       appCard = appCard.replace(/AppName/g, name);
       appCard = appCard.replace(/AppShortName/g, name);
       appCard = appCard.replace(/AppDesc/g, desc);
       appCard = appCard.replace(/AppLogo/g, logo);
       appCard = appCard.replace(/AppCategories/g, categories);
-
       apps_list += appCard;
-    }
-    
-    res.render("apps", {
-        name: req.session.user,
-        role: req.session.role,
-        avatar: req.session.avatar,
-        list_start: list_start + 1,
-        list_end: list_end,
-        app_count: results.length,
-        prev: prev,
-        next: next,
-        apps_list: apps_list
-    });
+  }
+  // let templatesJSON = readFileSync('./templates/templates.json');
+  // let templates = JSON.parse(templatesJSON).templates;
 
+  res.render("apps", {
+    name: req.session.user,
+    role: req.session.role,
+    avatar: req.session.user.charAt(0).toUpperCase(),
+    list_start: list_start + 1,
+    list_end: list_end,
+    app_count: templates.length,
+    prev: prev,
+    next: next,
+    apps_list: apps_list,
+    alert: alert || ''
+  });
+  alert = '';
+}
+
+export const appSearch = async (req, res) => {
+  let page = Number(req.params.page) || 1;
+  let list_start = (page-1)*28;
+  let list_end = (page*28);
+  let last_page = Math.ceil(templates.length/28);
+  let prev = '/apps/' + (page-1);
+  let next = '/apps/' + (page+1);
+  if (page == 1) { prev = '/apps/' + (page); }
+  if (page == last_page) { next = '/apps/' + (page); }
+
+  let search = req.body.search.split(' ');
+  let apps_list = '';
+  let results = [];
+
+  function searchTemplates(word) {
+    for (let i = 0; i < templates.length; i++) {
+      if ((templates[i].description.includes(word)) || (templates[i].name.includes(word)) || (templates[i].title.includes(word))) {
+          results.push(templates[i]);
+      }
+    }
+  }
+  searchTemplates(search);
+
+  for (let i = 0; i < results.length; i++) {
+    let appCard = readFileSync('./views/partials/appCard.html', 'utf8');
+    let name = results[i].name || results[i].title.toLowerCase();
+    let desc = results[i].description.slice(0, 60) + "...";
+    let description = results[i].description.replaceAll(". ", ".\n") || "no description available";
+    let note = results[i].note ? results[i].note.replaceAll(". ", ".\n") : "no notes available";
+    let image = results[i].image;
+    let logo = results[i].logo;let categories = '';
+    // set data.catagories to 'other' if data.catagories is empty or undefined
+    if (results[i].categories == null || results[i].categories == undefined || results[i].categories == '') {
+      results[i].categories = ['Other'];
+    }
+    // loop through the categories and add the badge to the card
+    for (let j = 0; j < results[i].categories.length; j++) {
+      categories += CatagoryColor(results[i].categories[j]);
+    }
+    appCard = appCard.replace(/AppName/g, name);
+    appCard = appCard.replace(/AppShortName/g, name);
+    appCard = appCard.replace(/AppDesc/g, desc);
+    appCard = appCard.replace(/AppLogo/g, logo);
+    appCard = appCard.replace(/AppCategories/g, categories);
+
+    apps_list += appCard;
+  }
+  res.render("apps", {
+      name: req.session.user,
+      role: req.session.role,
+      avatar: req.session.avatar,
+      list_start: list_start + 1,
+      list_end: list_end,
+      app_count: results.length,
+      prev: prev,
+      next: next,
+      apps_list: apps_list,
+      alert: res.locals.alert || ''
+  });
 }
 
 
@@ -390,3 +382,23 @@ export const ImportModal = async (req, res) => {
   let modal = readFileSync('./views/modals/import.html', 'utf8');
   res.send(modal);
 }
+
+
+export const Upload = (req, res) => {
+  upload.array('files', 10)(req, res, () => {
+
+    alert = `<div class="alert alert-success alert-dismissible mb-0 py-2" role="alert">
+              <div class="d-flex">
+                <div>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M5 12l5 5l10 -10"></path></svg>
+                </div>
+                <div>
+                  Template(s) Uploaded!
+                </div>
+              </div>
+              <a class="btn-close" data-bs-dismiss="alert" aria-label="close" style="padding-top: 0.5rem;"></a>
+            </div>`;
+    
+    res.redirect('/apps');
+  });
+};

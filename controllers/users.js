@@ -44,7 +44,7 @@ export const Users = async (req, res) => {
             <td>${account.role}</td>
             <td>${account.lastLogin}</td>
             <td>${active}</td>
-            <td><a href="#" class="btn">Edit</a></td>
+            <td><a href="#" class="btn">View</a></td>
         </tr>`
 
         user_list += info;

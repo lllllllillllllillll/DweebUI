@@ -17,7 +17,8 @@ export const Dashboard = (req, res) => {
     res.render("dashboard", {
         name: name,
         avatar: avatar,
-        role: role
+        role: role,
+        alert: ''
     });
 }
 
