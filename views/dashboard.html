@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
     <title>DweebUI - Dashboard</title>
-    <!-- CSS files -->
     <link href="/css/tabler.min.css" rel="stylesheet"/>
     <link href="/css/meters.css" rel="stylesheet"/>
     <script src="/js/htmx.min.js"></script>
@@ -30,7 +29,7 @@
 
       <div class="page-body">
         <div class="container-xl">
-          <div class="row row-deck row-cards" hx-ext="sse" sse-connect="/sse_event">
+          <div class="row row-deck row-cards" hx-ext="sse" sse-connect="/sse">
             
             <div class="col-12">
               <div class="row row-cards">
@@ -142,13 +141,13 @@
             
             <!-- HTMX -->
             <div class="col-12">
-              <div class="row row-cards" id="containers" data-hx-get="/containers" data-hx-trigger="load" data-hx-swap="innerHTML">
+              <div class="row row-cards" id="containers" data-hx-post="/dashboard/containers" data-hx-trigger="load" data-hx-swap="innerHTML">
               </div>
             </div>
 
             <!-- HTMX -->
             <div class="col-12">
-              <div class="row row-cards" data-hx-get="/new_cards" data-hx-trigger="sse:update" data-hx-swap="afterbegin" hx-target="#containers">
+              <div class="row row-cards" data-hx-post="/dashboard/updates" data-hx-trigger="sse:update" data-hx-swap="afterbegin" hx-target="#containers">
               </div>
             </div>
             

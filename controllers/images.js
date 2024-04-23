@@ -2,6 +2,31 @@ import { docker } from '../server.js';
 
 export const Images = async function(req, res) {
 
+    let action = req.params.action;
+    if (action == "remove") {
+        console.log("Removing images");
+        let images = req.body.select;
+
+        if (typeof(images) == 'string') {
+            images = [images];
+        }
+
+        for (let i = 0; i < images.length; i++) {
+            if (images[i] != 'on') {
+                try {
+                    console.log(`Removing image: ${images[i]}`);
+                    let image = docker.getImage(images[i]);
+                    await image.remove();
+                } catch (error) {
+                    console.log(`Unable to remove image: ${images[i]}`);
+                }
+            }
+        }
+    res.redirect("/images");
+    return;
+    }
+    
+
     let images = await docker.listImages({ all: true });
 
     let image_list = `
@@ -48,34 +73,10 @@ export const Images = async function(req, res) {
     res.render("images", {
         name: req.session.user,
         role: req.session.role,
-        avatar: req.session.avatar,
+        avatar: req.session.user.charAt(0).toUpperCase(),
         image_list: image_list,
         image_count: images.length,
         alert: '',
     });
 
-}
-
-
-
-export const removeImage = async function(req, res) {
-    let images = req.body.select;
-
-    if (typeof(images) == 'string') {
-        images = [images];
-    }
-
-    for (let i = 0; i < images.length; i++) {
-        
-        if (images[i] != 'on') {
-            try {
-                console.log(`Removing image: ${images[i]}`);
-                let image = docker.getImage(images[i]);
-                await image.remove();
-            } catch (error) {
-                console.log(`Unable to remove image: ${images[i]}`);
-            }
-        }
-    }
-    res.redirect("/images");
 }

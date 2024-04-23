@@ -5,7 +5,7 @@ import ejs from 'ejs';
 import Docker from 'dockerode';
 import { router } from './router/index.js';
 import { sequelize } from './database/models.js';
-export var docker = new Docker();
+export const docker = new Docker();
 
 const app = express();
 const MemoryStore = memorystore(session);

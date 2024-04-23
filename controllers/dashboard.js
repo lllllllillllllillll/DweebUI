@@ -7,19 +7,164 @@ import { currentLoad, mem, networkStats, fsSize } from 'systeminformation';
 
 let hidden = '';
 
-// The actual page
+// The page
 export const Dashboard = (req, res) => {
-    
     let name = req.session.user;
     let role = req.session.role;
-    let avatar = name.charAt(0).toUpperCase();
-
+    
     res.render("dashboard", {
         name: name,
-        avatar: avatar,
+        avatar: name.charAt(0).toUpperCase(),
         role: role,
         alert: ''
     });
+}
+
+// The page actions
+export const DashboardAction = async (req, res) => {
+    let name = req.header('hx-trigger-name');
+    let value = req.header('hx-trigger');
+    let action = req.params.action;
+    let modal = '';
+
+    switch (action) {
+        case 'permissions':
+            let title = name.charAt(0).toUpperCase() + name.slice(1);
+            let permissions_list = '';
+            let permissions_modal = readFileSync('./views/modals/permissions.html', 'utf8');
+            permissions_modal = permissions_modal.replace(/PermissionsTitle/g, title);
+            let users = await User.findAll({ attributes: ['username', 'UUID']});
+
+            for (let i = 0; i < users.length; i++) {
+                let user_permissions = readFileSync('./views/partials/user_permissions.html', 'utf8');
+                let exists = await Permission.findOne({ where: {containerName: name, user: users[i].username}});
+                
+                if (!exists) {
+                    const newPermission = await Permission.create({ containerName: name, user: users[i].username, userID: users[i].UUID});
+                }
+                
+                let permissions = await Permission.findOne({ where: {containerName: name, user: users[i].username}});
+                if (permissions.uninstall == true) { user_permissions = user_permissions.replace(/data-UninstallCheck/g, 'checked'); }
+                if (permissions.edit == true) { user_permissions = user_permissions.replace(/data-EditCheck/g, 'checked'); }
+                if (permissions.upgrade == true) { user_permissions = user_permissions.replace(/data-UpgradeCheck/g, 'checked'); }
+                if (permissions.start == true) { user_permissions = user_permissions.replace(/data-StartCheck/g, 'checked'); }
+                if (permissions.stop == true) { user_permissions = user_permissions.replace(/data-StopCheck/g, 'checked'); }
+                if (permissions.pause == true) { user_permissions = user_permissions.replace(/data-PauseCheck/g, 'checked'); }
+                if (permissions.restart == true) { user_permissions = user_permissions.replace(/data-RestartCheck/g, 'checked'); }
+                if (permissions.logs == true) { user_permissions = user_permissions.replace(/data-LogsCheck/g, 'checked'); }
+
+                user_permissions = user_permissions.replace(/EntryNumber/g, i);
+                user_permissions = user_permissions.replace(/EntryNumber/g, i);
+                user_permissions = user_permissions.replace(/EntryNumber/g, i);
+                user_permissions = user_permissions.replace(/PermissionsUsername/g, users[i].username);
+                user_permissions = user_permissions.replace(/PermissionsUsername/g, users[i].username);
+                user_permissions = user_permissions.replace(/PermissionsUsername/g, users[i].username);
+                user_permissions = user_permissions.replace(/PermissionsContainer/g, name);
+                user_permissions = user_permissions.replace(/PermissionsContainer/g, name);
+                user_permissions = user_permissions.replace(/PermissionsContainer/g, name);
+
+                permissions_list += user_permissions;
+            }
+
+            permissions_modal = permissions_modal.replace(/PermissionsList/g, permissions_list);
+            res.send(permissions_modal);
+            return;
+        case 'uninstall':
+            modal = readFileSync('./views/modals/uninstall.html', 'utf8');
+            modal = modal.replace(/AppName/g, name);
+            // let containerPermissions = await Permission.findAll({ where: {containerName: name}});
+            res.send(modal);
+            return;
+        case 'details':
+            modal = readFileSync('./views/modals/details.html', 'utf8');
+            let details = await containerInfo(name);
+            modal = modal.replace(/AppName/g, details.name);
+            modal = modal.replace(/AppImage/g, details.image);
+            res.send(modal);
+            return;
+        case 'containers':
+            res.send(cardList);
+            return;
+        case 'updates':
+            res.send(newCards);
+            newCards = '';
+            return;
+        case 'card':
+            if (hidden.includes(name) || !containersArray.find(c => c.container === name)) {
+                res.send('');
+                return;
+            } else {
+                let details = await containerInfo(name);
+                let card = await createCard(details);
+                res.send(card);
+                return;
+            }
+        case 'logs':
+            let logString = '';
+            let options = { follow: true, stdout: true, stderr: false, timestamps: false };
+            docker.getContainer(name).logs(options, function (err, stream) {
+                if (err) { console.log(err); return; }
+                const readableStream = Readable.from(stream);
+                readableStream.on('data', function (chunk) {
+                    logString += chunk.toString('utf8');
+                });
+                readableStream.on('end', function () {
+                    res.send(`<pre>${logString}</pre> `);
+                });
+            });
+            return;
+        case 'hide':
+            let exists = await Container.findOne({ where: {name: name}});
+            if (!exists) {
+                const newContainer = await Container.create({ name: name, visibility: false, });
+            } else {
+                exists.update({ visibility: false });
+            }
+            hidden = await Container.findAll({ where: {visibility:false}});
+            hidden = hidden.map((container) => container.name);
+            res.send("ok");
+            return;
+        case 'reset':
+            await Container.update({ visibility: true }, { where: {} });
+            hidden = await Container.findAll({ where: {visibility:false}});
+            hidden = hidden.map((container) => container.name);
+            res.send("ok");
+            return;
+
+
+    }
+
+    function status (state) {
+        let status = `<span class="text-yellow align-items-center lh-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-point-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M12 7a5 5 0 1 1 -4.995 5.217l-.005 -.217l.005 -.217a5 5 0 0 1 4.995 -4.783z" stroke-width="0" fill="currentColor"></path></svg>
+                        ${state}
+                    </span>`;
+        return status;
+    }
+
+    // Start
+    if ((action == 'start') && (value == 'stopped')) {
+        docker.getContainer(name).start();
+        res.send(status('starting'));
+    } else if ((action == 'start') && (value == 'paused')) {
+        docker.getContainer(name).unpause();
+        res.send(status('starting'));
+    // Stop
+    } else if ((action == 'stop') && (value != 'stopped')) {
+        docker.getContainer(name).stop();
+        res.send(status('stopping'));
+    // Pause
+    } else if ((action == 'pause') && (value == 'paused')) {
+        docker.getContainer(name).unpause();
+        res.send(status('starting'));
+    }   else if ((action == 'pause') && (value == 'running')) {
+        docker.getContainer(name).pause();
+        res.send(status('pausing'));
+    // Restart
+    } else if (action == 'restart') {
+        docker.getContainer(name).restart();
+        res.send(status('restarting'));
+    } 
 }
 
 // Server metrics (CPU, RAM, TX, RX, DISK)
@@ -155,28 +300,6 @@ async function createCard (details) {
 
 let [ cardList, newCards, containersArray, sentArray, updatesArray ] = [ '', '', [], [], [] ];
 
-export async function addCard (name, state) {
-    console.log(`Adding card for ${name}: ${state}`);
-
-    let details = {
-        name: name,
-        image: name,
-        service: name,
-        state: 'installing',
-        external_port: 0,
-        internal_port: 0,
-        ports: [],
-        link: 'localhost',
-    
-    }
-    createCard(details).then(card => {
-        cardList += card;
-    });
-}
-
-
-
-
 // HTMX server-side events
 export const SSE = async (req, res) => {
     res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive' });
@@ -264,241 +387,39 @@ export const Chart = async (req, res) => {
     res.send(chart);
 }
 
-export const updateCards = async (req, res) => {
-    console.log('updateCards called');
-    res.send(newCards);
-    newCards = '';
-}
-
-
-export const Containers = async (req, res) => {
-    res.send(cardList);
-}
-
-export const Card = async (req, res) => {
-    let name = req.header('hx-trigger-name');
-    console.log(`${name} requesting updated card`);
-    // return nothing if in hidden or not found in containersArray
-    if (hidden.includes(name) || !containersArray.find(c => c.container === name)) {
-        res.send('');
-        return;
-    } else {
-        let details = await containerInfo(name);
-        let card = await createCard(details);
-        res.send(card);
-    }
-}
-
-
-
-
-function status (state) {
-    let status = `<span class="text-yellow align-items-center lh-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-point-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M12 7a5 5 0 1 1 -4.995 5.217l-.005 -.217l.005 -.217a5 5 0 0 1 4.995 -4.783z" stroke-width="0" fill="currentColor"></path></svg>
-                    ${state}
-                </span>`;
-    return status;
-}
-
-
-export const Logs = (req, res) => {
-    let name = req.header('hx-trigger-name');
-    function containerLogs (data) {
-        return new Promise((resolve, reject) => {
-            let logString = '';
-            var options = { follow: false, stdout: true, stderr: false, timestamps: false };
-            var containerName = docker.getContainer(data);
-            containerName.logs(options, function (err, stream) {
-                if (err) { reject(err); return; }
-                const readableStream = Readable.from(stream);
-                readableStream.on('data', function (chunk) {
-                    logString += chunk.toString('utf8');
-                });
-                readableStream.on('end', function () {
-                    resolve(logString);
-                });
-            });
-        });
-    };
-    containerLogs(name).then((data) => {
-        res.send(`<pre>${data}</pre> `)
-    });
-}
-
-export const Action = async (req, res) => {
-    let name = req.header('hx-trigger-name');
-    let state = req.header('hx-trigger');
-    let action = req.params.action;
-    // Start
-    if ((action == 'start') && (state == 'stopped')) {
-        var containerName = docker.getContainer(name);
-        containerName.start();
-        res.send(status('starting'));
-    } else if ((action == 'start') && (state == 'paused')) {
-        var containerName = docker.getContainer(name);
-        containerName.unpause();
-        res.send(status('starting'));
-    // Stop
-    } else if ((action == 'stop') && (state != 'stopped')) {
-        var containerName = docker.getContainer(name);
-        containerName.stop();
-        res.send(status('stopping'));
-    // Pause
-    } else if ((action == 'pause') && (state == 'paused')) {
-        var containerName = docker.getContainer(name);
-        containerName.unpause();
-        res.send(status('starting'));
-    }   else if ((action == 'pause') && (state == 'running')) {
-        var containerName = docker.getContainer(name);
-        containerName.pause();
-        res.send(status('pausing'));
-    // Restart
-    } else if (action == 'restart') {
-        var containerName = docker.getContainer(name);
-        containerName.restart();
-        res.send(status('restarting'));
-    // Hide
-    } else if (action == 'hide') {
-        let exists = await Container.findOne({ where: {name: name}});
-        if (!exists) {
-            const newContainer = await Container.create({ name: name, visibility: false, });
-        } else {
-            exists.update({ visibility: false });
-        }
-        hidden = await Container.findAll({ where: {visibility:false}});
-        hidden = hidden.map((container) => container.name);
-        res.send("ok");
-    // Reset View
-    } else if (action == 'reset') {
-        await Container.update({ visibility: true }, { where: {} });
-        hidden = await Container.findAll({ where: {visibility:false}});
-        hidden = hidden.map((container) => container.name);
-        res.send("ok");
-    }   
-}
-
-
-export const Modals = async (req, res) => {
-    let name = req.header('hx-trigger-name');
-    let id = req.header('hx-trigger');
-    let title = name.charAt(0).toUpperCase() + name.slice(1);
-
-    if (id == 'permissions') {
-        let permissions_list = '';
-        let permissions_modal = readFileSync('./views/modals/permissions.html', 'utf8');
-        permissions_modal = permissions_modal.replace(/PermissionsTitle/g, title);
-        let users = await User.findAll({ attributes: ['username', 'UUID']});
-
-        for (let i = 0; i < users.length; i++) {
-            let user_permissions = readFileSync('./views/partials/user_permissions.html', 'utf8');
-            let exists = await Permission.findOne({ where: {containerName: name, user: users[i].username}});
-            if (!exists) {
-                const newPermission = await Permission.create({ containerName: name, user: users[i].username, userID: users[i].UUID});
-            }
-            
-            let permissions = await Permission.findOne({ where: {containerName: name, user: users[i].username}});
-            if (permissions.uninstall == true) { user_permissions = user_permissions.replace(/data-UninstallCheck/g, 'checked'); }
-            if (permissions.edit == true) { user_permissions = user_permissions.replace(/data-EditCheck/g, 'checked'); }
-            if (permissions.upgrade == true) { user_permissions = user_permissions.replace(/data-UpgradeCheck/g, 'checked'); }
-            if (permissions.start == true) { user_permissions = user_permissions.replace(/data-StartCheck/g, 'checked'); }
-            if (permissions.stop == true) { user_permissions = user_permissions.replace(/data-StopCheck/g, 'checked'); }
-            if (permissions.pause == true) { user_permissions = user_permissions.replace(/data-PauseCheck/g, 'checked'); }
-            if (permissions.restart == true) { user_permissions = user_permissions.replace(/data-RestartCheck/g, 'checked'); }
-            if (permissions.logs == true) { user_permissions = user_permissions.replace(/data-LogsCheck/g, 'checked'); }
-
-            user_permissions = user_permissions.replace(/EntryNumber/g, i);
-            user_permissions = user_permissions.replace(/PermissionsUsername/g, users[i].username);
-            user_permissions = user_permissions.replace(/PermissionsContainer/g, name);
-
-            permissions_list += user_permissions;
-        }
-
-        permissions_modal = permissions_modal.replace(/PermissionsList/g, permissions_list);
-        res.send(permissions_modal);
-        return;
-    }
-
-
-
-    if (id == 'uninstall') {
-        let modal = readFileSync('./views/modals/uninstall.html', 'utf8');
-        modal = modal.replace(/AppName/g, name);
-        // let containerPermissions = await Permission.findAll({ where: {containerName: name}});
-        res.send(modal);
-        return;
-    }
-
-    let modal = readFileSync('./views/modals/details.html', 'utf8');
-    let details = await containerInfo(name);
-
-    modal = modal.replace(/AppName/g, details.name);
-    modal = modal.replace(/AppImage/g, details.image);
-    res.send(modal);
-}
-
-
 export const UpdatePermissions = async (req, res) => {
-
-    let user = req.body.username;
-    let container = req.body.container;
+    let { user, container } = req.body;
     let id = req.header('hx-trigger');
-    
-    console.log(`${req.session.user} is updating permissions for: ${user} on ${container}`);
 
+    await Permission.update({ uninstall: false, edit: false, upgrade: false, start: false, stop: false, pause: false, restart: false, logs: false }, { where: { containerName: container, user: user } });
+    
     Object.keys(req.body).forEach(async function(key) {
-        if (key != 'username' && key != 'container') {
+        if (key != 'user' && key != 'container') {
             let permissions = req.body[key];
 
-            if (permissions.includes('uninstall')){
+            if (permissions.includes('uninstall')) {
                 await Permission.update({ uninstall: true }, { where: {containerName: container, user: user}});
-            }   
-            else {
-                await Permission.update({ uninstall: false }, { where: {containerName: container, user: user}});
-            }
-
-            if (permissions.includes('edit')){
+            }  
+            if (permissions.includes('edit')) {
                 await Permission.update({ edit: true }, { where: {containerName: container, user: user}});
             }   
-            else {
-                await Permission.update({ edit: false }, { where: {containerName: container, user: user}});
-            }
-
-            if (permissions.includes('upgrade')){
+            if (permissions.includes('upgrade')) {
                 await Permission.update({ upgrade: true }, { where: {containerName: container, user: user}});
             }   
-            else {
-                await Permission.update({ upgrade: false }, { where: {containerName: container, user: user}});
-            }
-            
-            if (permissions.includes('start')){
+            if (permissions.includes('start')) {
                 await Permission.update({ start: true }, { where: {containerName: container, user: user}});
-            }   else {
-                await Permission.update({ start: false }, { where: {containerName: container, user: user}});
-            }
-
-            if (permissions.includes('stop')){
+            }   
+            if (permissions.includes('stop')) {
                 await Permission.update({ stop: true }, { where: {containerName: container, user: user}});
-            }   else {
-                await Permission.update({ stop: false }, { where: {containerName: container, user: user}});
-            }
-
-            if (permissions.includes('pause')){
+            }   
+            if (permissions.includes('pause')) {
                 await Permission.update({ pause: true }, { where: {containerName: container, user: user}});
-            }   else {
-                await Permission.update({ pause: false }, { where: {containerName: container, user: user}});
-            }
-
-            if (permissions.includes('restart')){
+            }   
+            if (permissions.includes('restart')) {
                 await Permission.update({ restart: true }, { where: {containerName: container, user: user}});
-            }   else {
-                await Permission.update({ restart: false }, { where: {containerName: container, user: user}});
-            }
-
-            if (permissions.includes('logs')){
+            }   
+            if (permissions.includes('logs')) {
                 await Permission.update({ logs: true }, { where: {containerName: container, user: user}});
-            }
-            else {
-                await Permission.update({ logs: false }, { where: {containerName: container, user: user}});
             }
         }  
     });
@@ -509,8 +430,27 @@ export const UpdatePermissions = async (req, res) => {
         res.send(submit);
         return;
     } else if (id == 'confirmed') {
-        submit = `<button class="btn" type="button" id="submit" hx-post="/updatePermissions" hx-vals="#updatePermissions" hx-swap="outerHTML">Update  </button>`;
+        submit = `<button class="btn" type="button" id="submit" hx-post="/updatePermissions" hx-vals="#updatePermissions" hx-swap="outerHTML">Update  </button>`;
         res.send(submit);
         return;
     }
+}
+
+// Gets imported by install.js
+export async function addCard (name, state) {
+    console.log(`Adding card for ${name}: ${state}`);
+
+    let details = {
+        name: name,
+        image: name,
+        service: name,
+        state: 'installing',
+        external_port: 0,
+        internal_port: 0,
+        ports: [],
+        link: 'localhost',
+    }
+    createCard(details).then(card => {
+        cardList += card;
+    });
 }

@@ -43,13 +43,7 @@ export const submitLogin = async function(req,res){
                     message: "User logged in successfully",
                     ip: req.socket.remoteAddress
                 });
-
-                if (req.session.role == "admin") {
-                    res.redirect("/");
-                }
-                else {
-                    res.redirect("/portal");
-                }
+                res.redirect("/dashboard");
             }else{
 
                 const syslog = await Syslog.create({

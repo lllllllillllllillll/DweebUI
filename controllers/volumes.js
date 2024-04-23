@@ -62,7 +62,7 @@ export const Volumes = async function(req, res) {
     res.render("volumes", {
         name: req.session.user,
         role: req.session.role,
-        avatar: req.session.avatar,
+        avatar: req.session.user.charAt(0).toUpperCase(),
         volume_list: volume_list,
         volume_count: volumes.length,
         alert: '',

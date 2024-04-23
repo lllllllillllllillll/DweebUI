@@ -1,15 +1,17 @@
-import { readFileSync } from 'fs';
+import { readFileSync, readdirSync, renameSync, mkdirSync, unlinkSync } from 'fs';
 import multer from 'multer';
+
 
 const upload = multer({storage: multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'templates/')
+    cb(null, 'templates/tmp/')
   },
-    filename: function (req, file, cb) {
-      cb(null, file.originalname)
-    }
+  filename: function (req, file, cb) {
+    cb(null, file.originalname)
+  },
   })
 })
+
 
 // load the default template then sort the templates by name
 let templatesJSON = readFileSync('./templates/templates.json');
@@ -22,8 +24,9 @@ templates = templates.sort((a, b) => {
 
 let alert = '';
 
-export const Apps = (req, res) => {
 
+
+export const Apps = (req, res) => {
   let page = Number(req.params.page) || 1;
   let list_start = (page-1)*28;
   let list_end = (page*28);
@@ -71,7 +74,64 @@ export const Apps = (req, res) => {
     prev: prev,
     next: next,
     apps_list: apps_list,
-    alert: alert || ''
+    alert: alert,
+    template_list: '',
+  });
+  alert = '';
+}
+
+
+export const AppTemplate = (req, res) => {
+  let templateTest = Number(req.params.template) || 'template.json';
+  let page = Number(req.params.page) || 1;
+  let list_start = (page-1)*28;
+  let list_end = (page*28);
+  let last_page = Math.ceil(templates.length/28);
+  let prev = '/apps/' + (page-1);
+  let next = '/apps/' + (page+1);
+  if (page == 1) { prev = '/apps/' + (page); }
+  if (page == last_page) { next = '/apps/' + (page); }
+
+  let apps_list = '';
+  for (let i = list_start; i < list_end && i < templates.length; i++) {
+      let appCard = readFileSync('./views/partials/appCard.html', 'utf8');
+      let name = templates[i].name || templates[i].title.toLowerCase();
+      let desc = templates[i].description.slice(0, 60) + "...";
+      let description = templates[i].description.replaceAll(". ", ".\n") || "no description available";
+      let note = templates[i].note ? templates[i].note.replaceAll(". ", ".\n") : "no notes available";
+      let image = templates[i].image;
+      let logo = templates[i].logo;
+      let categories = '';
+      // set data.catagories to 'other' if data.catagories is empty or undefined
+      if (templates[i].categories == null || templates[i].categories == undefined || templates[i].categories == '') {
+          templates[i].categories = ['Other'];
+      }
+      // loop through the categories and add the badge to the card
+      for (let j = 0; j < templates[i].categories.length; j++) {
+        categories += CatagoryColor(templates[i].categories[j]);
+      }
+      appCard = appCard.replace(/AppName/g, name);
+      appCard = appCard.replace(/AppShortName/g, name);
+      appCard = appCard.replace(/AppDesc/g, desc);
+      appCard = appCard.replace(/AppLogo/g, logo);
+      appCard = appCard.replace(/AppCategories/g, categories);
+      apps_list += appCard;
+  }
+  // let templatesJSON = readFileSync('./templates/templates.json');
+  // let templates = JSON.parse(templatesJSON).templates;
+
+  res.render("apps", {
+    name: req.session.user,
+    role: req.session.role,
+    avatar: req.session.user.charAt(0).toUpperCase(),
+    list_start: list_start + 1,
+    list_end: list_end,
+    app_count: templates.length,
+    prev: prev,
+    next: next,
+    apps_list: apps_list,
+    alert: alert,
+    template_list: '',
   });
   alert = '';
 }
@@ -133,7 +193,8 @@ export const appSearch = async (req, res) => {
       prev: prev,
       next: next,
       apps_list: apps_list,
-      alert: res.locals.alert || ''
+      alert: alert,
+      template_list: '',
   });
 }
 
@@ -399,6 +460,19 @@ export const Upload = (req, res) => {
               <a class="btn-close" data-bs-dismiss="alert" aria-label="close" style="padding-top: 0.5rem;"></a>
             </div>`;
     
+    let files = readdirSync('templates/tmp/');
+
+    for (let i = 0; i < files.length; i++) {
+      if (files[i].endsWith('.json')) {
+        renameSync(`templates/tmp/${files[i]}`, `templates/json/${files[i]}`);
+      } else if (files[i].endsWith('.yml') || files[i].endsWith('.yaml')) {
+        mkdirSync(`templates/compose/${files[i].slice(0, -4)}`);
+        renameSync(`templates/tmp/${files[i]}`, `templates/compose/${files[i].slice(0, -4)}/${files[i]}`);
+      } else {
+        unlinkSync(`templates/tmp/${files[i]}`);
+      }
+    }
+        
     res.redirect('/apps');
   });
 };

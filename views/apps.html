@@ -35,8 +35,7 @@
                 <div class="card">
                   <div class="card-body text-center">
                     <div class="d-flex align-items-center">
-                      <div class="me-auto"><%= list_start %> - <%= list_end %> of <%= app_count %> Apps</div>
-                      <button class="btn btn-primary" name="Import" id="Import" data-hx-get="/import_modal" data-hx-target="#modals-here" hx-swap="innerHTML" data-hx-trigger="click" data-bs-toggle="modal" data-bs-target="#modals-here">Import</button>
+                      <div class="me-auto btn"><%= list_start %> - <%= list_end %> of <%= app_count %> Apps</div>
                     </div>
                   </div>
                 </div>
@@ -46,27 +45,34 @@
                 <div class="card">
                   <div class="card-body text-center">
                     <div class="d-flex align-items-center">
-                      <select class="form-select">
-                        <option>All</option>
-                        <option>Media</option>
-                        <option>Tools</option>
-                        <option>Gaming</option>
-                        <option>FOSS</option>
-                        <option>Database</option>
-                      </select>
+                      <div class="btn me-2">Category:</div>
+                      <div class="dropdown">
+                        <button class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">All</button>
+                        <ul class="dropdown-menu">
+                          <li><a class="dropdown-item" href="#">Media</a></li>
+                          <li><a class="dropdown-item" href="#">Tools</a></li>
+                          <li><a class="dropdown-item" href="#">Gaming</a></li>
+                          <li><a class="dropdown-item" href="#">FOSS</a></li>
+                          <li><a class="dropdown-item" href="#">Database</a></li>
+                        </ul>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-      
+
               <div class="col-md-6 col-lg-3">
                 <div class="card">
                   <div class="card-body text-center">
                     <div class="d-flex align-items-center">
-                      <select class="form-select">
-                        <option>Templates.json (default)</option>
-                        <option>Compose</option>
-                      </select>
+                      <dropdown class="me-2">
+                        <button class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Templates.json</button>
+                        <ul class="dropdown-menu">
+                          <li><a class="dropdown-item" href="#">Templates.json</a></li>
+                          <li><a class="dropdown-item" href="#">Compose</a></li>
+                        </ul>
+                      </dropdown>
+                      <button class="btn" name="Import" id="Import" data-hx-get="/import_modal" data-hx-target="#modals-here" hx-swap="innerHTML" data-hx-trigger="click" data-bs-toggle="modal" data-bs-target="#modals-here">Import</button>
                     </div>
                   </div>
                 </div>
@@ -78,7 +84,7 @@
                     <div class="text-secondary d-flex align-items-center">
                       <form action="/apps" id="search" name="search" method="POST" class="d-flex">
                         <input type="search" class="form-control me-2" name="search" placeholder="Search apps…" >
-                        <input type="submit" form="search" class="btn btn-primary" value="Search">
+                        <input type="submit" form="search" class="btn" value="Search">
                       </form>
                     </div>
                   </div>

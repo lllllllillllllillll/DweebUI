@@ -3,12 +3,10 @@ import { Permission, Container, User } from '../database/models.js';
 import { docker } from '../server.js';
 import { readFileSync } from 'fs';
 
-
 let hidden = '';
 
 // The actual page
 export const Portal = (req, res) => {
-    
     let name = req.session.user;
     let role = req.session.role;
     let avatar = name.charAt(0).toUpperCase();
@@ -16,7 +14,8 @@ export const Portal = (req, res) => {
     res.render("portal", {
         name: name,
         avatar: avatar,
-        role: role
+        role: role,
+        alert: '',
     });
 }
 
@@ -29,12 +28,6 @@ async function CardList () {
         let card = await createCard(details);
         cardList += card;
     }
-
-    // for (let i = 0; i < containers.length; i++) {
-    //     console.log(containers[i].containerName);
-    // }
-    
-
 }
 
 export const UserContainers = async (req, res) => {

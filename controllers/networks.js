@@ -41,7 +41,7 @@ export const Networks = async function(req, res) {
     res.render("networks", {
         name: req.session.user,
         role: req.session.role,
-        avatar: req.session.avatar,
+        avatar: req.session.user.charAt(0).toUpperCase(),
         network_list: network_list,
         network_count: networks.length,
         alert: '',

@@ -29,7 +29,7 @@ export const Syslogs = async function(req, res) {
     res.render("syslogs", {
         name: req.session.user || 'Dev',
         role: req.session.role || 'Dev',
-        avatar: req.session.avatar || '<img src="/img/avatars/rus.jpg">',
+        avatar: req.session.user.charAt(0).toUpperCase(),
         logs: logs,
         alert: '',
     });

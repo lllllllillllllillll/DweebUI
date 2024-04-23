@@ -54,8 +54,9 @@ export const Users = async (req, res) => {
     res.render("users", {
         name: req.session.user,
         role: req.session.role,
-        avatar: req.session.avatar,
-        user_list: user_list
+        avatar: req.session.user.charAt(0).toUpperCase(),
+        user_list: user_list,
+        alert: ''
     });
 
 }
