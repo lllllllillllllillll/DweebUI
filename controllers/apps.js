@@ -28,6 +28,9 @@ let alert = '';
 
 export const Apps = (req, res) => {
   let page = Number(req.params.page) || 1;
+  
+  console.log(req.params);
+
   let list_start = (page-1)*28;
   let list_end = (page*28);
   let last_page = Math.ceil(templates.length/28);
@@ -83,6 +86,7 @@ export const Apps = (req, res) => {
 
 export const AppTemplate = (req, res) => {
   let templateTest = Number(req.params.template) || 'template.json';
+  console.log(templateTest);
   let page = Number(req.params.page) || 1;
   let list_start = (page-1)*28;
   let list_end = (page*28);

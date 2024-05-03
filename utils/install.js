@@ -4,7 +4,7 @@ import { execSync } from "child_process";
 import { docker } from "../server.js";
 import DockerodeCompose from "dockerode-compose";
 import { Syslog } from "../database/models.js";
-import { addCard } from "../controllers/dashboard.js";
+import { addAlert } from "../controllers/dashboard.js";
 
 // This entire page hurts to look at. 
 export const Install = async (req, res) => {
@@ -21,7 +21,7 @@ export const Install = async (req, res) => {
 
         let docker_volumes = [];
 
-        addCard(name, 'installing');
+        addAlert(req.session, name);
 
         if (image.startsWith('https://')){
             mkdirSync(`./appdata/${name}`, { recursive: true });

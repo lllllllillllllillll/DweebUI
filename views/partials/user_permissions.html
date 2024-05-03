@@ -136,7 +136,7 @@
               </div>
 
 
-              <div class="row mb-4">
+              <div class="row mb-2">
                 <div class="col-9">
                   <label class="row text-start">
                     <span class="col">
@@ -150,6 +150,24 @@
                   </label>
                 </div>
               </div>
+
+
+              <div class="row mb-4">
+                <div class="col-9">
+                  <label class="row text-start">
+                    <span class="col">
+                      View
+                    </span>
+                  </label>
+                </div>
+                <div class="col-3">
+                  <label class="form-check form-check-single form-switch text-end">
+                    <input class="form-check-input" type="checkbox" name="selectEntryNumber" value="view" data-ViewCheck>
+                  </label>
+                </div>
+              </div>
+
+              
 
               <div class="row mb-2">
                 <button class="btn" type="button" id="submit" hx-post="/updatePermissions" hx-vals="#updatePermissionsEntryNumber" hx-swap="outerHTML">Update  </button>

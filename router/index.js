@@ -6,7 +6,7 @@ export const router = express.Router();
 import { Login, submitLogin, Logout } from "../controllers/login.js";
 import { Register, submitRegister } from "../controllers/register.js";
 import { Dashboard, DashboardAction, Stats, Chart, SSE, UpdatePermissions } from "../controllers/dashboard.js";
-import { Apps, appSearch, AppTemplate, InstallModal, ImportModal, LearnMore, Upload } from "../controllers/apps.js";
+import { Apps, appSearch, InstallModal, ImportModal, LearnMore, Upload } from "../controllers/apps.js";
 import { Users } from "../controllers/users.js";
 import { Images } from "../controllers/images.js";
 import { Networks, removeNetwork } from "../controllers/networks.js";
@@ -31,13 +31,12 @@ const sessionCheck = async (req, res, next) => {
 }
 
 const permissionCheck = async (req, res, next) => {
-    if (!req.session.user) { res.redirect('/login'); return; }
-    else if (req.session.role == 'admin') { next(); return; }
+    if (req.session.role == 'admin') { next(); return; }
     let user = req.session.user;
     let action = req.path.split("/")[2];
     let trigger = req.header('hx-trigger-name');
-    const userAction = ['start', 'stop', 'restart', 'pause', 'uninstall', 'upgrade', 'edit', 'logs', 'hide', 'reset_view'];
-    const userPaths = ['card', 'containers', 'updates'];
+    const userAction = ['start', 'stop', 'restart', 'pause', 'uninstall', 'upgrade', 'edit', 'logs', 'view'];
+    const userPaths = ['card', 'updates', 'hide', 'reset'];
     if (userAction.includes(action)) {
         let permission = await Permission.findOne({ where: { containerName: trigger, user: user }, attributes: [`${action}`] });
         if (permission) { 
@@ -69,7 +68,7 @@ router.post("/register", submitRegister);
 
 router.get("/", sessionCheck, Dashboard);
 router.get("/dashboard", sessionCheck, Dashboard);
-router.post("/dashboard/:action", permissionCheck, DashboardAction);
+router.post("/dashboard/:action", sessionCheck, permissionCheck, DashboardAction);
 router.get("/sse", sessionCheck, SSE);
 router.post("/updatePermissions", adminOnly, UpdatePermissions);
 router.get("/stats", sessionCheck, Stats);
@@ -84,10 +83,10 @@ router.post("/removeVolume", adminOnly, removeVolume);
 router.get("/networks", adminOnly, Networks);
 router.post("/removeNetwork", adminOnly, removeNetwork);
 
-router.get("/apps", adminOnly, Apps);
-router.get("/apps/:page", adminOnly, Apps);
-router.get("/apps/template/:template", adminOnly, AppTemplate);
+router.get("/apps/:page?/:template?", adminOnly, Apps);
+
 router.post("/apps", adminOnly, appSearch);
+
 router.get("/install_modal", adminOnly, InstallModal)
 router.get("/import_modal", adminOnly, ImportModal)
 router.get("/learn_more", adminOnly, LearnMore)

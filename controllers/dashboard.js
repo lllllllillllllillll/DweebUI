@@ -1,22 +1,26 @@
 import { Readable } from 'stream';
-import { Permission, Container, User } from '../database/models.js';
+import { Permission, User } from '../database/models.js';
 import { docker } from '../server.js';
 import { dockerContainerStats } from 'systeminformation';
 import { readFileSync } from 'fs';
 import { currentLoad, mem, networkStats, fsSize } from 'systeminformation';
+import { Op } from 'sequelize';
 
 let hidden = '';
+let alert = '';
+let [ cardList, newCards, stats ] = [ '', '', {}];
 
 // The page
 export const Dashboard = (req, res) => {
     let name = req.session.user;
     let role = req.session.role;
+    alert = req.session.alert;
     
     res.render("dashboard", {
         name: name,
         avatar: name.charAt(0).toUpperCase(),
         role: role,
-        alert: ''
+        alert: alert,
     });
 }
 
@@ -34,15 +38,10 @@ export const DashboardAction = async (req, res) => {
             let permissions_modal = readFileSync('./views/modals/permissions.html', 'utf8');
             permissions_modal = permissions_modal.replace(/PermissionsTitle/g, title);
             let users = await User.findAll({ attributes: ['username', 'UUID']});
-
             for (let i = 0; i < users.length; i++) {
                 let user_permissions = readFileSync('./views/partials/user_permissions.html', 'utf8');
                 let exists = await Permission.findOne({ where: {containerName: name, user: users[i].username}});
-                
-                if (!exists) {
-                    const newPermission = await Permission.create({ containerName: name, user: users[i].username, userID: users[i].UUID});
-                }
-                
+                if (!exists) { const newPermission = await Permission.create({ containerName: name, user: users[i].username, userID: users[i].UUID}); }
                 let permissions = await Permission.findOne({ where: {containerName: name, user: users[i].username}});
                 if (permissions.uninstall == true) { user_permissions = user_permissions.replace(/data-UninstallCheck/g, 'checked'); }
                 if (permissions.edit == true) { user_permissions = user_permissions.replace(/data-EditCheck/g, 'checked'); }
@@ -52,7 +51,7 @@ export const DashboardAction = async (req, res) => {
                 if (permissions.pause == true) { user_permissions = user_permissions.replace(/data-PauseCheck/g, 'checked'); }
                 if (permissions.restart == true) { user_permissions = user_permissions.replace(/data-RestartCheck/g, 'checked'); }
                 if (permissions.logs == true) { user_permissions = user_permissions.replace(/data-LogsCheck/g, 'checked'); }
-
+                if (permissions.view == true) { user_permissions = user_permissions.replace(/data-ViewCheck/g, 'checked'); }
                 user_permissions = user_permissions.replace(/EntryNumber/g, i);
                 user_permissions = user_permissions.replace(/EntryNumber/g, i);
                 user_permissions = user_permissions.replace(/EntryNumber/g, i);
@@ -62,17 +61,14 @@ export const DashboardAction = async (req, res) => {
                 user_permissions = user_permissions.replace(/PermissionsContainer/g, name);
                 user_permissions = user_permissions.replace(/PermissionsContainer/g, name);
                 user_permissions = user_permissions.replace(/PermissionsContainer/g, name);
-
                 permissions_list += user_permissions;
             }
-
             permissions_modal = permissions_modal.replace(/PermissionsList/g, permissions_list);
             res.send(permissions_modal);
             return;
         case 'uninstall':
             modal = readFileSync('./views/modals/uninstall.html', 'utf8');
             modal = modal.replace(/AppName/g, name);
-            // let containerPermissions = await Permission.findAll({ where: {containerName: name}});
             res.send(modal);
             return;
         case 'details':
@@ -82,15 +78,13 @@ export const DashboardAction = async (req, res) => {
             modal = modal.replace(/AppImage/g, details.image);
             res.send(modal);
             return;
-        case 'containers':
-            res.send(cardList);
-            return;
         case 'updates':
             res.send(newCards);
             newCards = '';
             return;
         case 'card':
-            if (hidden.includes(name) || !containersArray.find(c => c.container === name)) {
+            await userCards(req.session);
+            if (!req.session.container_list.find(c => c.container === name)) {
                 res.send('');
                 return;
             } else {
@@ -109,111 +103,51 @@ export const DashboardAction = async (req, res) => {
                     logString += chunk.toString('utf8');
                 });
                 readableStream.on('end', function () {
-                    res.send(`<pre>${logString}</pre> `);
+                    res.send(`<pre>${logString}</pre>`);
                 });
             });
             return;
         case 'hide':
-            let exists = await Container.findOne({ where: {name: name}});
-            if (!exists) {
-                const newContainer = await Container.create({ name: name, visibility: false, });
-            } else {
-                exists.update({ visibility: false });
-            }
-            hidden = await Container.findAll({ where: {visibility:false}});
-            hidden = hidden.map((container) => container.name);
+            let user = req.session.user;
+            let exists = await Permission.findOne({ where: {containerName: name, user: user}});
+            if (!exists) { const newPermission = await Permission.create({ containerName: name, user: user, hide: true, userID: req.session.UUID}); }
+            else { exists.update({ hide: true }); }
+            hidden = await Permission.findAll({ where: {user: user, hide: true}}, { attributes: ['containerName'] });
+            hidden = hidden.map((container) => container.containerName);
             res.send("ok");
             return;
         case 'reset':
-            await Container.update({ visibility: true }, { where: {} });
-            hidden = await Container.findAll({ where: {visibility:false}});
-            hidden = hidden.map((container) => container.name);
+            await Permission.update({ hide: false }, { where: { user: req.session.user } });
             res.send("ok");
             return;
-
-
     }
 
     function status (state) {
-        let status = `<span class="text-yellow align-items-center lh-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-point-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M12 7a5 5 0 1 1 -4.995 5.217l-.005 -.217l.005 -.217a5 5 0 0 1 4.995 -4.783z" stroke-width="0" fill="currentColor"></path></svg>
+        return(`<span class="text-yellow align-items-center lh-1"><svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-point-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M12 7a5 5 0 1 1 -4.995 5.217l-.005 -.217l.005 -.217a5 5 0 0 1 4.995 -4.783z" stroke-width="0" fill="currentColor"></path></svg>
                         ${state}
-                    </span>`;
-        return status;
+                </span>`);
     }
 
-    // Start
+    // Container actions
     if ((action == 'start') && (value == 'stopped')) {
         docker.getContainer(name).start();
         res.send(status('starting'));
     } else if ((action == 'start') && (value == 'paused')) {
         docker.getContainer(name).unpause();
         res.send(status('starting'));
-    // Stop
     } else if ((action == 'stop') && (value != 'stopped')) {
         docker.getContainer(name).stop();
         res.send(status('stopping'));
-    // Pause
     } else if ((action == 'pause') && (value == 'paused')) {
         docker.getContainer(name).unpause();
         res.send(status('starting'));
     }   else if ((action == 'pause') && (value == 'running')) {
         docker.getContainer(name).pause();
         res.send(status('pausing'));
-    // Restart
     } else if (action == 'restart') {
         docker.getContainer(name).restart();
         res.send(status('restarting'));
     } 
-}
-
-// Server metrics (CPU, RAM, TX, RX, DISK)
-export const Stats = async (req, res) => {
-    let name = req.header('hx-trigger-name');
-    let color = req.header('hx-trigger');
-    let value = 0;
-    switch (name) {
-        case 'CPU': 
-            await currentLoad().then(data => { 
-                value = Math.round(data.currentLoad); 
-            });
-            break;
-        case 'RAM': 
-            await mem().then(data => { 
-                value = Math.round((data.active / data.total) * 100); 
-            });
-            break;
-        case 'NET':
-            let down = 0;
-            let up = 0;
-            let percent = 0;
-            await networkStats().then(data => {
-                down = Math.round(data[0].rx_bytes / (1024 * 1024));
-                up = Math.round(data[0].tx_bytes / (1024 * 1024));
-                // percent of download vs max download if max download was 1GB
-                percent = Math.round((down / 1000) * 100);
-            });
-            let net = `<div class="font-weight-medium">
-                        <label class="cpu-text mb-1">Down:${down}MB  Up:${up}MB</label>
-                        </div>
-                        <div class="cpu-bar meter animate ${color}">
-                            <span style="width:20%"><span></span></span>
-                        </div>`;           
-            res.send(net);
-            return;
-        case 'DISK':
-            await fsSize().then(data => { 
-                value = data[0].use; 
-            });
-            break;
-    }
-    let info = `<div class="font-weight-medium">
-                    <label class="cpu-text mb-1">${name} ${value}%</label>
-                </div>
-                <div class="cpu-bar meter animate ${color}">
-                    <span style="width:${value}%"><span></span></span>
-                </div>`;
-    res.send(info);
 }
 
 async function containerInfo (containerName) {
@@ -221,6 +155,8 @@ async function containerInfo (containerName) {
     let info = await container.inspect();
     let image = info.Config.Image.split('/');
     let ports_list = [];
+    let external = 0;
+    let internal = 0;
     try {
         for (const [key, value] of Object.entries(info.HostConfig.PortBindings)) {
             let ports = {
@@ -231,20 +167,11 @@ async function containerInfo (containerName) {
             }
             ports_list.push(ports);
         }
-    } catch {
-        // no exposed ports
-    }
-
-    let external = 0;
-    let internal = 0;
+    } catch {}
     try {
         external = ports_list[0].external;
         internal = ports_list[0].internal;
-    }   catch {
-        // no exposed ports
-    }
-    
-
+    } catch {}
     let details = {
         name: containerName,
         image: image,
@@ -259,10 +186,11 @@ async function containerInfo (containerName) {
 }
 
 async function createCard (details) {
-    if (hidden.includes(details.name)) { return;}
     let shortname = details.name.slice(0, 10) + '...';
     let trigger = 'data-hx-trigger="load, every 3s"';
     let state = details.state;
+    let card  = readFileSync('./views/partials/containerFull.html', 'utf8');
+
     let state_color = '';
     switch (state) {
         case 'running':
@@ -283,7 +211,7 @@ async function createCard (details) {
             break;
     }
     // if (name.startsWith('dweebui')) { disable = 'disabled=""'; }
-    let card  = readFileSync('./views/partials/containerFull.html', 'utf8');
+
     card = card.replace(/AppName/g, details.name);
     card = card.replace(/AppShortName/g, shortname);
     card = card.replace(/AppIcon/g, details.service);
@@ -297,80 +225,156 @@ async function createCard (details) {
     return card;
 }
 
+async function userCards (session) {
+    session.container_list = [];
+    // check what containers the user wants hidden
+    let hidden = await Permission.findAll({ where: {user: session.user, hide: true}}, { attributes: ['containerName'] });
+    hidden = hidden.map((container) => container.containerName);
+    // check what containers the user has permission to view
+    let visable = await Permission.findAll({ where: { user: session.user, [Op.or]: [{ uninstall: true }, { edit: true }, { upgrade: true }, { start: true }, { stop: true }, { pause: true }, { restart: true }, { logs: true }, { view: true }] } });
+    visable = visable.map((container) => container.containerName);
+    // get all containers
+    let containers = await docker.listContainers({ all: true });
+    // loop through containers
+    for (let i = 0; i < containers.length; i++) {
+        let container_name = containers[i].Names[0].replace('/', '');
+        // skip hidden containers
+        if (hidden.includes(container_name)) { continue; }
+        // admin can see all containers that they don't have hidden
+        if (session.role == 'admin') { session.container_list.push({ container: container_name, state: containers[i].State }); }
+        // user can see any containers that they have any permissions for
+        else if (visable.includes(container_name)){ session.container_list.push({ container: container_name, state: containers[i].State }); }
+    }
+    // create a sent list if it doesn't exist
+    if (!session.sent_list) { session.sent_list = []; }
+    if (!session.update_list) { session.update_list = []; }
+    if (!session.new_cards) { session.new_cards = []; }
+}
 
-let [ cardList, newCards, containersArray, sentArray, updatesArray ] = [ '', '', [], [], [] ];
+async function updateDashboard (session) {
+    let container_list = session.container_list;
+    let sent_list = session.sent_list;
+    session.new_cards = [];
+    session.update_list = [];
+    // loop through the containers list
+    container_list.forEach(info => {
+        let { container, state } = info;
+        let sent = sent_list.find(c => c.container === container);
+        if (!sent) { session.new_cards.push(container);}
+        else if (sent.state !== state) { session.update_list.push(container); }
+    });
+    // loop through the sent list to see if any containers have been removed
+    sent_list.forEach(info => {
+        let { container } = info;
+        let exists = container_list.find(c => c.container === container);
+        if (!exists) { session.update_list.push(container); }
+    });
+}
 
 // HTMX server-side events
 export const SSE = async (req, res) => {
+    // set the headers for server-sent events
     res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive' });
-
+    // check for container changes every 500ms
     let eventCheck = setInterval(async () => {
-        // builds array of containers and their states
-        containersArray = [];
-        await docker.listContainers({ all: true }).then(containers => {
-            containers.forEach(container => {
-                let name = container.Names[0].replace('/', '');
-                if (!hidden.includes(name)) { // if not hidden
-                    containersArray.push({ container: name, state: container.State });
-                } 
-            });
-        });
+        await userCards(req.session);
+        // check if the cards displayed are the same as what's in the session
+        if ((JSON.stringify(req.session.container_list) === JSON.stringify(req.session.sent_list))) { return; }
+        await updateDashboard(req.session); 
 
-        if ((JSON.stringify(containersArray) !== JSON.stringify(sentArray))) {
-            cardList = '';
-            newCards = '';
-            containersArray.forEach(container => {
-                const { container: containerName, state } = container;
-                const existingContainer = sentArray.find(c => c.container === containerName);
-                if (!existingContainer) {
-                    containerInfo(containerName).then(details => {
-                        createCard(details).then(card => {
-                            newCards += card;
-                        });
-                    });
-                    res.write(`event: update\n`);
-                    res.write(`data: 'update cards'\n\n`);
-                } else if (existingContainer.state !== state) {
-                    updatesArray.push(containerName);
-                }
-                containerInfo(containerName).then(details => {
-                    createCard(details).then(card => {
-                        cardList += card;
-                    });
-                });
-            });
-
-            sentArray.forEach(container => {
-                const { container: containerName } = container;
-                const existingContainer = containersArray.find(c => c.container === containerName);
-                if (!existingContainer) {
-                    updatesArray.push(containerName);
-                }
-            });
-
-            for (let i = 0; i < updatesArray.length; i++) {
-                res.write(`event: ${updatesArray[i]}\n`);
-                res.write(`data: 'update cards'\n\n`);
-            }
-            updatesArray = [];
-            sentArray = containersArray.slice();
+        for (let i = 0; i < req.session.new_cards.length; i++) {
+            let details = await containerInfo(req.session.new_cards[i]);
+            let card = await createCard(details);
+            newCards += card;
+            req.session.alert = '';
         }
-
+        for (let i = 0; i < req.session.update_list.length; i++) {
+            res.write(`event: ${req.session.update_list[i]}\n`);
+            res.write(`data: 'update cards'\n\n`);
+        }
+        res.write(`event: update\n`);
+        res.write(`data: 'update cards'\n\n`);
+        req.session.sent_list = req.session.container_list.slice();
     }, 500);
-
-
     req.on('close', () => {
         clearInterval(eventCheck);
     });
 };
 
-let stats = {};
+// Server metrics (CPU, RAM, TX, RX, DISK)
+export const Stats = async (req, res) => {
+    let name = req.header('hx-trigger-name');
+    let color = req.header('hx-trigger');
+    let value = 0;
+    switch (name) {
+        case 'CPU': 
+            await currentLoad().then(data => { value = Math.round(data.currentLoad); });
+            break;
+        case 'RAM': 
+            await mem().then(data => { value = Math.round((data.active / data.total) * 100); });
+            break;
+        case 'NET':
+            let [down, up, percent] = [0, 0, 0];
+            await networkStats().then(data => { down = Math.round(data[0].rx_bytes / (1024 * 1024)); up = Math.round(data[0].tx_bytes / (1024 * 1024)); percent = Math.round((down / 1000) * 100); });
+            let net = `<div class="font-weight-medium"><label class="cpu-text mb-1">Down:${down}MB  Up:${up}MB</label></div>
+                        <div class="cpu-bar meter animate ${color}"><span style="width:20%"><span></span></span></div>`;           
+            res.send(net);
+            return;
+        case 'DISK':
+            await fsSize().then(data => { value = data[0].use; });
+            break;
+    }
+    let info = `<div class="font-weight-medium"> <label class="cpu-text mb-1">${name} ${value}%</label></div>
+                <div class="cpu-bar meter animate ${color}"> <span style="width:${value}%"><span></span></span> </div>`;
+    res.send(info);
+}
+
+// Imported by utils/install.js
+export async function addAlert (session, name) {
+    session.alert = `<div class="alert alert-success alert-dismissible mb-0 py-2" role="alert">
+    <div class="d-flex">
+      <div class="spinner-border text-info nav-link">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <div>
+        Installing ${name}. It should appear on the dashboard shortly.
+      </div>
+    </div>
+    <a class="btn-close" data-bs-dismiss="alert" aria-label="close" style="padding-top: 0.5rem;"></a>
+  </div>`;
+}
+
+export const UpdatePermissions = async (req, res) => {
+    let { user, container } = req.body;
+    let id = req.header('hx-trigger');
+    await Permission.update({ uninstall: false, edit: false, upgrade: false, start: false, stop: false, pause: false, restart: false, logs: false }, { where: { containerName: container, user: user } });
+    Object.keys(req.body).forEach(async function(key) {
+        if (key != 'user' && key != 'container') {
+            let permissions = req.body[key];
+            if (permissions.includes('uninstall')) { await Permission.update({ uninstall: true }, { where: {containerName: container, user: user}}); }  
+            if (permissions.includes('edit')) { await Permission.update({ edit: true }, { where: {containerName: container, user: user}}); }   
+            if (permissions.includes('upgrade')) { await Permission.update({ upgrade: true }, { where: {containerName: container, user: user}}); }   
+            if (permissions.includes('start')) { await Permission.update({ start: true }, { where: {containerName: container, user: user}}); }   
+            if (permissions.includes('stop')) { await Permission.update({ stop: true }, { where: {containerName: container, user: user}}); }   
+            if (permissions.includes('pause')) { await Permission.update({ pause: true }, { where: {containerName: container, user: user}}); }   
+            if (permissions.includes('restart')) { await Permission.update({ restart: true }, { where: {containerName: container, user: user}}); }   
+            if (permissions.includes('logs')) { await Permission.update({ logs: true }, { where: {containerName: container, user: user}}); }
+            if (permissions.includes('view')) { await Permission.update({ view: true }, { where: {containerName: container, user: user}}); }
+        }  
+    });
+    if (id == 'submit') {
+        res.send('<button class="btn" type="button" id="confirmed" hx-post="/updatePermissions" hx-swap="outerHTML" hx-trigger="load delay:2s">Update ✔️</button>');
+        return;
+    } else if (id == 'confirmed') {
+        res.send('<button class="btn" type="button" id="submit" hx-post="/updatePermissions" hx-vals="#updatePermissions" hx-swap="outerHTML">Update  </button>');
+        return;
+    }
+}
+
 // Container charts
 export const Chart = async (req, res) => {
     let name = req.header('hx-trigger-name');
-    if (!stats[name]) {
-        stats[name] = { cpuArray: Array(15).fill(0), ramArray: Array(15).fill(0) };
-    }
+    if (!stats[name]) { stats[name] = { cpuArray: Array(15).fill(0), ramArray: Array(15).fill(0) }; }
     const info = await dockerContainerStats(name);
     stats[name].cpuArray.push(Math.round(info[0].cpuPercent));
     stats[name].ramArray.push(Math.round(info[0].memPercent));
@@ -385,72 +389,4 @@ export const Chart = async (req, res) => {
             }])
         </script>`
     res.send(chart);
-}
-
-export const UpdatePermissions = async (req, res) => {
-    let { user, container } = req.body;
-    let id = req.header('hx-trigger');
-
-    await Permission.update({ uninstall: false, edit: false, upgrade: false, start: false, stop: false, pause: false, restart: false, logs: false }, { where: { containerName: container, user: user } });
-    
-    Object.keys(req.body).forEach(async function(key) {
-        if (key != 'user' && key != 'container') {
-            let permissions = req.body[key];
-
-            if (permissions.includes('uninstall')) {
-                await Permission.update({ uninstall: true }, { where: {containerName: container, user: user}});
-            }  
-            if (permissions.includes('edit')) {
-                await Permission.update({ edit: true }, { where: {containerName: container, user: user}});
-            }   
-            if (permissions.includes('upgrade')) {
-                await Permission.update({ upgrade: true }, { where: {containerName: container, user: user}});
-            }   
-            if (permissions.includes('start')) {
-                await Permission.update({ start: true }, { where: {containerName: container, user: user}});
-            }   
-            if (permissions.includes('stop')) {
-                await Permission.update({ stop: true }, { where: {containerName: container, user: user}});
-            }   
-            if (permissions.includes('pause')) {
-                await Permission.update({ pause: true }, { where: {containerName: container, user: user}});
-            }   
-            if (permissions.includes('restart')) {
-                await Permission.update({ restart: true }, { where: {containerName: container, user: user}});
-            }   
-            if (permissions.includes('logs')) {
-                await Permission.update({ logs: true }, { where: {containerName: container, user: user}});
-            }
-        }  
-    });
-
-    let submit = '';
-    if (id == 'submit') {
-        submit = `<button class="btn" type="button" id="confirmed" hx-post="/updatePermissions" hx-swap="outerHTML" hx-trigger="load delay:2s">Update ✔️</button>`;
-        res.send(submit);
-        return;
-    } else if (id == 'confirmed') {
-        submit = `<button class="btn" type="button" id="submit" hx-post="/updatePermissions" hx-vals="#updatePermissions" hx-swap="outerHTML">Update  </button>`;
-        res.send(submit);
-        return;
-    }
-}
-
-// Gets imported by install.js
-export async function addCard (name, state) {
-    console.log(`Adding card for ${name}: ${state}`);
-
-    let details = {
-        name: name,
-        image: name,
-        service: name,
-        state: 'installing',
-        external_port: 0,
-        internal_port: 0,
-        ports: [],
-        link: 'localhost',
-    }
-    createCard(details).then(card => {
-        cardList += card;
-    });
 }
