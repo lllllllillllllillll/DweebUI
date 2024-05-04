@@ -36,7 +36,7 @@ const permissionCheck = async (req, res, next) => {
     let action = req.path.split("/")[2];
     let trigger = req.header('hx-trigger-name');
     const userAction = ['start', 'stop', 'restart', 'pause', 'uninstall', 'upgrade', 'edit', 'logs', 'view'];
-    const userPaths = ['card', 'updates', 'hide', 'reset'];
+    const userPaths = ['card', 'updates', 'hide', 'reset', 'alert'];
     if (userAction.includes(action)) {
         let permission = await Permission.findOne({ where: { containerName: trigger, user: user }, attributes: [`${action}`] });
         if (permission) { 

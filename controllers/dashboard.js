@@ -120,6 +120,10 @@ export const DashboardAction = async (req, res) => {
             await Permission.update({ hide: false }, { where: { user: req.session.user } });
             res.send("ok");
             return;
+        case 'alert':
+            req.session.alert = '';
+            res.send('');
+            return;
     }
 
     function status (state) {
@@ -331,17 +335,17 @@ export const Stats = async (req, res) => {
 
 // Imported by utils/install.js
 export async function addAlert (session, name) {
-    session.alert = `<div class="alert alert-success alert-dismissible mb-0 py-2" role="alert">
-    <div class="d-flex">
-      <div class="spinner-border text-info nav-link">
-        <span class="visually-hidden">Loading...</span>
-      </div>
-      <div>
-        Installing ${name}. It should appear on the dashboard shortly.
-      </div>
-    </div>
-    <a class="btn-close" data-bs-dismiss="alert" aria-label="close" style="padding-top: 0.5rem;"></a>
-  </div>`;
+    session.alert = `<div class="alert alert-success alert-dismissible py-2 mb-0" role="alert" id="alert">
+                        <div class="d-flex">
+                        <div class="spinner-border text-info nav-link">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <div>
+                            Installing ${name}. It should appear on the dashboard shortly.
+                        </div>
+                        </div>
+                        <button class="btn-close" data-hx-post="/dashboard/alert" data-hx-trigger="click" data-hx-target="#alert" data-hx-swap="outerHTML" style="padding-top: 0.5rem;" ></button>
+                        </div>`;
 }
 
 export const UpdatePermissions = async (req, res) => {
