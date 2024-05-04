@@ -1,5 +1,5 @@
 <h3 align="center"><img width="150" src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/public/images/logo.png"></h3>
-<h4 align="center">DweebUI Beta v0.50 ( :fire: Experimental :fire: )</h4>
+<h4 align="center">DweebUI Beta v0.60 ( :fire: Experimental :fire: )</h4>
 <h3 align="center">Free and Open-Source WebUI For Managing Your Containers.</h3>
 <p align="center">
     <a href=""><img src="https://img.shields.io/github/stars/lllllllillllllillll/DweebUI?style=flat"/></a>
@@ -20,17 +20,16 @@
 * DweebUI is a management interface and should not be directly exposed to the internet
 
 ## Features
-* [x] Dashboard provides server metrics, container metrics, and container controls, on a single page.
+* [x] A dynamically updating dashboard that displays server metrics along with individual container metrics and container controls.
+* [x] Multi-users with permissions system.
 * [x] View container logs.
-* [ ] Update containers (planned).
 * [x] Manage your Docker networks, images, and volumes.
 * [x] Light/Dark Mode.
 * [x] Mobile Friendly.
 * [x] Easy to install app templates.
-* [x] Multiple Users.
-* [ ] Permissions system (in development).
-* [x] Support for Windows, Linux, and MacOS.
+* [x] Windows, Linux, and MacOS compatable.
 * [ ] Docker compose (in development).
+* [ ] Update containers (planned).
 * [x] Templates.json maintains compatability with Portainer, allowing you to use the template without needing to use DweebUI.
 * [ ] Preset variables (planned).
 * [ ] Themes (planned).
@@ -44,7 +43,7 @@ version: "3.9"
 services:
   dweebui:
     container_name: dweebui
-    image: lllllllillllllillll/dweebui:v0.50
+    image: lllllllillllllillll/dweebui:v0.60
     environment:
       PORT: 8000
       SECRET: MrWiskers

@@ -37,6 +37,7 @@ export const DashboardAction = async (req, res) => {
             let permissions_list = '';
             let permissions_modal = readFileSync('./views/modals/permissions.html', 'utf8');
             permissions_modal = permissions_modal.replace(/PermissionsTitle/g, title);
+            permissions_modal = permissions_modal.replace(/PermissionsContainer/g, name);
             let users = await User.findAll({ attributes: ['username', 'UUID']});
             for (let i = 0; i < users.length; i++) {
                 let user_permissions = readFileSync('./views/partials/user_permissions.html', 'utf8');
@@ -334,14 +335,14 @@ export const Stats = async (req, res) => {
 }
 
 // Imported by utils/install.js
-export async function addAlert (session, name) {
-    session.alert = `<div class="alert alert-success alert-dismissible py-2 mb-0" role="alert" id="alert">
+export async function addAlert (session, type, message) {
+    session.alert = `<div class="alert alert-${type} alert-dismissible py-2 mb-0" role="alert" id="alert">
                         <div class="d-flex">
                         <div class="spinner-border text-info nav-link">
                             <span class="visually-hidden">Loading...</span>
                         </div>
                         <div>
-                            Installing ${name}. It should appear on the dashboard shortly.
+                            ${message}
                         </div>
                         </div>
                         <button class="btn-close" data-hx-post="/dashboard/alert" data-hx-trigger="click" data-hx-target="#alert" data-hx-swap="outerHTML" style="padding-top: 0.5rem;" ></button>
@@ -349,8 +350,12 @@ export async function addAlert (session, name) {
 }
 
 export const UpdatePermissions = async (req, res) => {
-    let { user, container } = req.body;
+    let { user, container, reset_permissions } = req.body;
     let id = req.header('hx-trigger');
+    if (reset_permissions) {
+        await Permission.update({ uninstall: false, edit: false, upgrade: false, start: false, stop: false, pause: false, restart: false, logs: false, view: false }, { where: { containerName: container} });
+        return;
+    }
     await Permission.update({ uninstall: false, edit: false, upgrade: false, start: false, stop: false, pause: false, restart: false, logs: false }, { where: { containerName: container, user: user } });
     Object.keys(req.body).forEach(async function(key) {
         if (key != 'user' && key != 'container') {

@@ -21,7 +21,7 @@ export const Install = async (req, res) => {
 
         let docker_volumes = [];
 
-        addAlert(req.session, name);
+        addAlert(req.session, 'success', `Installing ${name}. It should appear on the dashboard shortly.`);
 
         if (image.startsWith('https://')){
             mkdirSync(`./appdata/${name}`, { recursive: true });

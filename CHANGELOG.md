@@ -1,4 +1,4 @@
-## v0.50 (dev)
+## v0.60 (dev)
 * Converted template literals into html.
 * Converted modals into html/htmx.
 * Moved functions into dashboard controller.
