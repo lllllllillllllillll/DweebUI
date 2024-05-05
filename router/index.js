@@ -84,7 +84,6 @@ router.get("/networks", adminOnly, Networks);
 router.post("/removeNetwork", adminOnly, removeNetwork);
 
 router.get("/apps/:page?/:template?", adminOnly, Apps);
-
 router.post("/apps", adminOnly, appSearch);
 
 router.get("/install_modal", adminOnly, InstallModal)

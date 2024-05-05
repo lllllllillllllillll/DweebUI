@@ -1,25 +1,19 @@
 import { readFileSync, readdirSync, renameSync, mkdirSync, unlinkSync } from 'fs';
 import multer from 'multer';
 
-
 const upload = multer({storage: multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'templates/tmp/')
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname)
-  },
-  })
-})
+  destination: function (req, file, cb) { cb(null, 'templates/tmp/') },
+  filename: function (req, file, cb) { cb(null, file.originalname) },
+})});
 
 
 // load the default template then sort the templates by name
 let templatesJSON = readFileSync('./templates/templates.json');
+
 let templates = JSON.parse(templatesJSON).templates;
+
 templates = templates.sort((a, b) => {
-    if (a.name < b.name) {
-      return -1;
-    }
+    if (a.name < b.name) { return -1; }
 });
 
 let alert = '';
@@ -27,67 +21,14 @@ let alert = '';
 
 
 export const Apps = (req, res) => {
-  let page = Number(req.params.page) || 1;
   
-  console.log(req.params);
-
-  let list_start = (page-1)*28;
-  let list_end = (page*28);
-  let last_page = Math.ceil(templates.length/28);
-  let prev = '/apps/' + (page-1);
-  let next = '/apps/' + (page+1);
-  if (page == 1) { prev = '/apps/' + (page); }
-  if (page == last_page) { next = '/apps/' + (page); }
-
-  let apps_list = '';
-  for (let i = list_start; i < list_end && i < templates.length; i++) {
-      let appCard = readFileSync('./views/partials/appCard.html', 'utf8');
-      let name = templates[i].name || templates[i].title.toLowerCase();
-      let desc = templates[i].description.slice(0, 60) + "...";
-      let description = templates[i].description.replaceAll(". ", ".\n") || "no description available";
-      let note = templates[i].note ? templates[i].note.replaceAll(". ", ".\n") : "no notes available";
-      let image = templates[i].image;
-      let logo = templates[i].logo;
-      let categories = '';
-      // set data.catagories to 'other' if data.catagories is empty or undefined
-      if (templates[i].categories == null || templates[i].categories == undefined || templates[i].categories == '') {
-          templates[i].categories = ['Other'];
-      }
-      // loop through the categories and add the badge to the card
-      for (let j = 0; j < templates[i].categories.length; j++) {
-        categories += CatagoryColor(templates[i].categories[j]);
-      }
-      appCard = appCard.replace(/AppName/g, name);
-      appCard = appCard.replace(/AppShortName/g, name);
-      appCard = appCard.replace(/AppDesc/g, desc);
-      appCard = appCard.replace(/AppLogo/g, logo);
-      appCard = appCard.replace(/AppCategories/g, categories);
-      apps_list += appCard;
-  }
-  // let templatesJSON = readFileSync('./templates/templates.json');
-  // let templates = JSON.parse(templatesJSON).templates;
-
-  res.render("apps", {
-    name: req.session.user,
-    role: req.session.role,
-    avatar: req.session.user.charAt(0).toUpperCase(),
-    list_start: list_start + 1,
-    list_end: list_end,
-    app_count: templates.length,
-    prev: prev,
-    next: next,
-    apps_list: apps_list,
-    alert: alert,
-    template_list: '',
-  });
-  alert = '';
-}
-
-
-export const AppTemplate = (req, res) => {
-  let templateTest = Number(req.params.template) || 'template.json';
-  console.log(templateTest);
   let page = Number(req.params.page) || 1;
+  let custom_template = req.params.template;
+
+  if (custom_template) {
+    console.log(custom_template);
+  }
+
   let list_start = (page-1)*28;
   let list_end = (page*28);
   let last_page = Math.ceil(templates.length/28);
@@ -139,6 +80,9 @@ export const AppTemplate = (req, res) => {
   });
   alert = '';
 }
+
+
+
 
 export const appSearch = async (req, res) => {
   let page = Number(req.params.page) || 1;
@@ -150,13 +94,27 @@ export const appSearch = async (req, res) => {
   if (page == 1) { prev = '/apps/' + (page); }
   if (page == last_page) { next = '/apps/' + (page); }
 
-  let search = req.body.search.split(' ');
+  let search = req.body.search;
+
   let apps_list = '';
   let results = [];
+  let [cat_1, cat_2, cat_3] = ['','',''];
 
-  function searchTemplates(word) {
+  function searchTemplates(terms) {
+    terms = terms.toLowerCase();
     for (let i = 0; i < templates.length; i++) {
-      if ((templates[i].description.includes(word)) || (templates[i].name.includes(word)) || (templates[i].title.includes(word))) {
+      if (templates[i].categories) {
+        if (templates[i].categories[0]) {
+          cat_1 = (templates[i].categories[0]).toLowerCase();
+        }
+        if (templates[i].categories[1]) {
+          cat_2 = (templates[i].categories[1]).toLowerCase();
+        }
+        if (templates[i].categories[2]) {
+          cat_3 = (templates[i].categories[2]).toLowerCase();
+        }
+      }
+      if ((templates[i].description.includes(terms)) || (templates[i].name.includes(terms)) || (templates[i].title.includes(terms)) || (cat_1.includes(terms)) || (cat_2.includes(terms)) || (cat_3.includes(terms))){
           results.push(templates[i]);
       }
     }
