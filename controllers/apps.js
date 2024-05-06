@@ -6,28 +6,22 @@ const upload = multer({storage: multer.diskStorage({
   filename: function (req, file, cb) { cb(null, file.originalname) },
 })});
 
-
-// load the default template then sort the templates by name
-let templatesJSON = readFileSync('./templates/templates.json');
-
-let templates = JSON.parse(templatesJSON).templates;
-
-templates = templates.sort((a, b) => {
-    if (a.name < b.name) { return -1; }
-});
-
 let alert = '';
-
-
 
 export const Apps = (req, res) => {
   
   let page = Number(req.params.page) || 1;
-  let custom_template = req.params.template;
+  let template_param = req.params.template || 'default';
 
-  if (custom_template) {
-    console.log(custom_template);
-  }
+  let template_file = readFileSync(`./templates/json/${template_param}.json`);
+
+  let templates = JSON.parse(template_file).templates;
+
+  templates = templates.sort((a, b) => {
+      if (a.name < b.name) { return -1; }
+  });
+
+
 
   let list_start = (page-1)*28;
   let list_end = (page*28);
@@ -62,8 +56,7 @@ export const Apps = (req, res) => {
       appCard = appCard.replace(/AppCategories/g, categories);
       apps_list += appCard;
   }
-  // let templatesJSON = readFileSync('./templates/templates.json');
-  // let templates = JSON.parse(templatesJSON).templates;
+
 
   res.render("apps", {
     name: req.session.user,
@@ -86,6 +79,17 @@ export const Apps = (req, res) => {
 
 export const appSearch = async (req, res) => {
   let page = Number(req.params.page) || 1;
+
+  let template_param = req.params.template || 'default';
+
+  let template_file = readFileSync(`./templates/json/${template_param}.json`);
+
+  let templates = JSON.parse(template_file).templates;
+
+  templates = templates.sort((a, b) => {
+      if (a.name < b.name) { return -1; }
+  });
+  
   let list_start = (page-1)*28;
   let list_end = (page*28);
   let last_page = Math.ceil(templates.length/28);

@@ -1,6 +1,6 @@
 ## v0.60 (dev)
-* Converted template literals into html.
-* Converted modals into html/htmx.
+* Converted JS template literals into HTML.
+* Converted modals into HTML/HTMX.
 * Moved functions into dashboard controller.
 * Added modal placeholder with loading spinner.
 * Independently updating container cards.
