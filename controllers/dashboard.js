@@ -12,6 +12,7 @@ let [ cardList, newCards, stats ] = [ '', '', {}];
 
 // The page
 export const Dashboard = (req, res) => {
+
     let name = req.session.user;
     let role = req.session.role;
     alert = req.session.alert;
@@ -338,15 +339,15 @@ export const Stats = async (req, res) => {
 export async function addAlert (session, type, message) {
     session.alert = `<div class="alert alert-${type} alert-dismissible py-2 mb-0" role="alert" id="alert">
                         <div class="d-flex">
-                        <div class="spinner-border text-info nav-link">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
-                        <div>
-                            ${message}
-                        </div>
+                            <div class="spinner-border text-info nav-link">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <div>
+                              ${message}
+                            </div>
                         </div>
                         <button class="btn-close" data-hx-post="/dashboard/alert" data-hx-trigger="click" data-hx-target="#alert" data-hx-swap="outerHTML" style="padding-top: 0.5rem;" ></button>
-                        </div>`;
+                    </div>`;
 }
 
 export const UpdatePermissions = async (req, res) => {

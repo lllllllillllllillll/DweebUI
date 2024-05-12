@@ -7,9 +7,13 @@
 * Container cards display pending actions (starting, stopping, pausing, restarting).
 * Dynamically generated avatars.
 * Updated database models.
-* Persistent Database.
-* Install cards displayed on dashboard.
+* Multi-user permission system.
+* Refactored dashboard to support multiple users.
+* New alert banner for installs and file uploads.
 * Updated docker compose to include HTTPS Env.
+* Updated Apps page to view or upload compose files.
+* Improved app search.
+* Updated dependencies.
 
 ## v0.40 (Feb 26th 2024) - HTMX rewrite
 * Pages rewritten to use HTMX.

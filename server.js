@@ -9,8 +9,7 @@ export const docker = new Docker();
 
 const app = express();
 const MemoryStore = memorystore(session);
-const port = process.env.PORT || 8000;
-const connection = process.env.HTTPS || false;
+const PORT = process.env.PORT || 8000;
 
 // Session middleware
 const sessionMiddleware = session({
@@ -19,9 +18,9 @@ const sessionMiddleware = session({
     resave: false, 
     saveUninitialized: false, 
     cookie:{
-        secure: connection, 
-        httpOnly: connection,
-        maxAge:3600000 * 8 // Session max age in milliseconds. 3600000 = 1 hour.
+        secure: false, 
+        httpOnly: false,
+        maxAge: 3600000 * 8 // Session max age in milliseconds. 3600000 = 1 hour.
     }
 });
 
@@ -36,7 +35,7 @@ app.use([
 ]);
 
 // Initialize server
-app.listen(port, async () => {
+app.listen(PORT, async () => {
     async function init() {// I made sure the console.logs and emojis lined up
         try { await sequelize.authenticate().then(
             () => { console.log('DB Connection: ✔️') }); }
@@ -45,6 +44,6 @@ app.listen(port, async () => {
             () => { console.log('Synced Models: ✔️') }); }
             catch { console.log('Synced Models: ❌'); } }
         await init().then(() => { 
-            console.log(`Listening on http://localhost:${port}`);
+            console.log(`Listening on http://localhost:${PORT}`);
     });
 });

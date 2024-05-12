@@ -1,5 +1,7 @@
-import { readFileSync, readdirSync, renameSync, mkdirSync, unlinkSync } from 'fs';
+import { readFileSync, readdirSync, renameSync, mkdirSync, unlinkSync, read } from 'fs';
+import { parse } from 'yaml';
 import multer from 'multer';
+import AdmZip from 'adm-zip';
 
 const upload = multer({storage: multer.diskStorage({
   destination: function (req, file, cb) { cb(null, 'templates/tmp/') },
@@ -7,55 +9,85 @@ const upload = multer({storage: multer.diskStorage({
 })});
 
 let alert = '';
+let templates_global = '';
 
-export const Apps = (req, res) => {
+export const Apps = async (req, res) => {
   
   let page = Number(req.params.page) || 1;
   let template_param = req.params.template || 'default';
 
-  let template_file = readFileSync(`./templates/json/${template_param}.json`);
-
-  let templates = JSON.parse(template_file).templates;
-
-  templates = templates.sort((a, b) => {
-      if (a.name < b.name) { return -1; }
-  });
-
-
-
-  let list_start = (page-1)*28;
-  let list_end = (page*28);
-  let last_page = Math.ceil(templates.length/28);
-  let prev = '/apps/' + (page-1);
-  let next = '/apps/' + (page+1);
-  if (page == 1) { prev = '/apps/' + (page); }
-  if (page == last_page) { next = '/apps/' + (page); }
-
   let apps_list = '';
-  for (let i = list_start; i < list_end && i < templates.length; i++) {
+  let app_count = '';
+  
+  let list_start = (page - 1) * 28;
+  let list_end = (page * 28);
+  let last_page = '';
+
+  let prev = '/apps/' + (page - 1) + '/' + template_param;
+  let next = '/apps/' + (page + 1) + '/' + template_param;
+  if (page == 1) { prev = '/apps/' + (page) + '/' + template_param; }
+  if (page == last_page) { next = '/apps/' + (page) + '/' + template_param;}
+
+
+  if (template_param == 'compose') {
+    let compose_files = readdirSync('templates/compose/');
+    
+    app_count = compose_files.length;
+    last_page = Math.ceil(compose_files.length/28);
+
+    compose_files.forEach(file => {
+      let compose = readFileSync(`templates/compose/${file}/compose.yaml`, 'utf8');
+      let compose_data = parse(compose);
+      let service_name = Object.keys(compose_data.services)
+      let container = compose_data.services[service_name].container_name;
+      let image = compose_data.services[service_name].image;
+
       let appCard = readFileSync('./views/partials/appCard.html', 'utf8');
-      let name = templates[i].name || templates[i].title.toLowerCase();
-      let desc = templates[i].description.slice(0, 60) + "...";
-      let description = templates[i].description.replaceAll(". ", ".\n") || "no description available";
-      let note = templates[i].note ? templates[i].note.replaceAll(". ", ".\n") : "no notes available";
-      let image = templates[i].image;
-      let logo = templates[i].logo;
-      let categories = '';
-      // set data.catagories to 'other' if data.catagories is empty or undefined
-      if (templates[i].categories == null || templates[i].categories == undefined || templates[i].categories == '') {
-          templates[i].categories = ['Other'];
-      }
-      // loop through the categories and add the badge to the card
-      for (let j = 0; j < templates[i].categories.length; j++) {
-        categories += CatagoryColor(templates[i].categories[j]);
-      }
-      appCard = appCard.replace(/AppName/g, name);
-      appCard = appCard.replace(/AppShortName/g, name);
-      appCard = appCard.replace(/AppDesc/g, desc);
-      appCard = appCard.replace(/AppLogo/g, logo);
-      appCard = appCard.replace(/AppCategories/g, categories);
+      appCard = appCard.replace(/AppName/g, service_name);
+      appCard = appCard.replace(/AppShortName/g, service_name);
+      appCard = appCard.replace(/AppDesc/g, 'Compose File');
+      appCard = appCard.replace(/AppLogo/g, `https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/${service_name}.png`);
+      appCard = appCard.replace(/AppCategories/g, '<span class="badge bg-orange-lt">Compose</span> ');
       apps_list += appCard;
-  }
+    });
+  } else {
+
+      let template_file = readFileSync(`./templates/json/default.json`);
+      let templates = JSON.parse(template_file).templates;
+      templates = templates.sort((a, b) => { if (a.name < b.name) { return -1; } });
+      app_count = templates.length; 
+
+      templates_global = templates;
+
+      apps_list = '';
+      for (let i = list_start; i < list_end && i < templates.length; i++) {
+          let appCard = readFileSync('./views/partials/appCard.html', 'utf8');
+          let name = templates[i].name || templates[i].title.toLowerCase();
+          let desc = templates[i].description.slice(0, 60) + "...";
+          let description = templates[i].description.replaceAll(". ", ".\n") || "no description available";
+          let note = templates[i].note ? templates[i].note.replaceAll(". ", ".\n") : "no notes available";
+          let image = templates[i].image;
+          let logo = templates[i].logo;
+          let categories = '';
+          // set data.catagories to 'other' if data.catagories is empty or undefined
+          if (templates[i].categories == null || templates[i].categories == undefined || templates[i].categories == '') {
+              templates[i].categories = ['Other'];
+          }
+          // loop through the categories and add the badge to the card
+          for (let j = 0; j < templates[i].categories.length; j++) {
+            categories += CatagoryColor(templates[i].categories[j]);
+          }
+          appCard = appCard.replace(/AppName/g, name);
+          appCard = appCard.replace(/AppShortName/g, name);
+          appCard = appCard.replace(/AppDesc/g, desc);
+          appCard = appCard.replace(/AppLogo/g, logo);
+          appCard = appCard.replace(/AppCategories/g, categories);
+          apps_list += appCard;
+      }
+    }
+
+  
+    
 
 
   res.render("apps", {
@@ -64,7 +96,7 @@ export const Apps = (req, res) => {
     avatar: req.session.user.charAt(0).toUpperCase(),
     list_start: list_start + 1,
     list_end: list_end,
-    app_count: templates.length,
+    app_count: app_count,
     prev: prev,
     next: next,
     apps_list: apps_list,
@@ -212,7 +244,7 @@ function CatagoryColor(category) {
 
 export const InstallModal = async (req, res) => {
   let input = req.header('hx-trigger-name');
-  let result = templates.find(t => t.name == input);
+  let result = templates_global.find(t => t.name == input);
 
   let name = result.name || result.title.toLowerCase();
   let short_name = name.slice(0, 25) + "...";
@@ -416,12 +448,8 @@ export const Upload = (req, res) => {
 
     alert = `<div class="alert alert-success alert-dismissible mb-0 py-2" role="alert">
               <div class="d-flex">
-                <div>
-                  <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M5 12l5 5l10 -10"></path></svg>
-                </div>
-                <div>
-                  Template(s) Uploaded!
-                </div>
+                <div><svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M5 12l5 5l10 -10"></path></svg> </div>
+                <div>Template(s) Uploaded!</div>
               </div>
               <a class="btn-close" data-bs-dismiss="alert" aria-label="close" style="padding-top: 0.5rem;"></a>
             </div>`;
@@ -429,16 +457,29 @@ export const Upload = (req, res) => {
     let files = readdirSync('templates/tmp/');
 
     for (let i = 0; i < files.length; i++) {
-      if (files[i].endsWith('.json')) {
+      if (files[i].endsWith('.zip')) {
+        let zip = new AdmZip(`templates/tmp/${files[i]}`);
+        zip.extractAllTo('templates/compose', true);
+        unlinkSync(`templates/tmp/${files[i]}`);
+      } else if (files[i].endsWith('.json')) {
         renameSync(`templates/tmp/${files[i]}`, `templates/json/${files[i]}`);
-      } else if (files[i].endsWith('.yml') || files[i].endsWith('.yaml')) {
-        mkdirSync(`templates/compose/${files[i].slice(0, -4)}`);
-        renameSync(`templates/tmp/${files[i]}`, `templates/compose/${files[i].slice(0, -4)}/${files[i]}`);
+      } else if (files[i].endsWith('.yml')) {
+        let compose = readFileSync(`templates/tmp/${files[i]}`, 'utf8');
+        let compose_data = parse(compose);
+        let service_name = Object.keys(compose_data.services)
+        mkdirSync(`templates/compose/${service_name}`);
+        renameSync(`templates/tmp/${files[i]}`, `templates/compose/${service_name}/compose.yaml`);
+      } else if (files[i].endsWith('.yaml')) {
+        let compose = readFileSync(`templates/tmp/${files[i]}`, 'utf8');
+        let compose_data = parse(compose);
+        let service_name = Object.keys(compose_data.services)
+        mkdirSync(`templates/compose/${service_name}`);
+        renameSync(`templates/tmp/${files[i]}`, `templates/compose/${service_name}/compose.yaml`);
       } else {
+        console.log('Unsupported file type');
         unlinkSync(`templates/tmp/${files[i]}`);
       }
-    }
-        
+    }   
     res.redirect('/apps');
   });
 };
