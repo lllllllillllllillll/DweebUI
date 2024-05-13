@@ -22,6 +22,6 @@
     "memorystore": "^1.6.7",
     "sequelize": "^6.37.1",
     "sqlite3": "^5.1.7",
-    "systeminformation": "^5.22.0"
+    "systeminformation": "^5.22.9"
   }
 }
