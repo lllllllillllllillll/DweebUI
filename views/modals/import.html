@@ -3,12 +3,12 @@
     <div class="modal-content">
         <div class="modal-body">
             <div class="modal-title">Import Template(s)</div>
-            <div class="text-muted mb-2">Template(s) can be *.json, *.yml, or *.yaml.</div>
-            <div class="text-muted mb-3">Multiple compose files can be imported from a zip file.</div>
+            <div class="text-muted mb-2">Individual template(s) can be *.json, *.yml, or *.yaml.</div>
+            <div class="text-muted mb-3">Multiple compose files can be imported from a zip file. Each folder should contain a single compose.yaml.</div>
             <img src = "/img/add to zip.jpg" alt = "Add to zip" class = "img-fluid" />
             <div class="mt-3">
                 <form method="post" action="/upload" enctype="multipart/form-data" id="upload">
-                    <input type="file" name="files" multiple />
+                    <input class="form-control" type="file" name="files" multiple />
                 </form>
             </div>
         </div>
