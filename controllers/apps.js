@@ -251,6 +251,7 @@ export const InstallModal = async (req, res) => {
   if (type == 'compose') {
     let compose = readFileSync(`templates/compose/${input}/compose.yaml`, 'utf8');
     let modal = readFileSync('./views/modals/compose.html', 'utf8');
+    modal = modal.replace(/AppName/g, input);
     modal = modal.replace(/COMPOSE_CONTENT/g, compose);
     res.send(modal);
     return;
