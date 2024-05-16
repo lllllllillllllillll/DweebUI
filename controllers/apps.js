@@ -2,6 +2,7 @@ import { readFileSync, readdirSync, renameSync, mkdirSync, unlinkSync, read, exi
 import { parse } from 'yaml';
 import multer from 'multer';
 import AdmZip from 'adm-zip';
+import { json } from 'sequelize';
 
 const upload = multer({storage: multer.diskStorage({
   destination: function (req, file, cb) { cb(null, 'templates/tmp/') },
@@ -10,11 +11,22 @@ const upload = multer({storage: multer.diskStorage({
 
 let alert = '';
 let templates_global = '';
+let json_templates = '';
 
 export const Apps = async (req, res) => {
   
   let page = Number(req.params.page) || 1;
   let template_param = req.params.template || 'default';
+
+  json_templates = '';
+  let json_files = readdirSync('templates/json/');
+  for (let i = 0; i < json_files.length; i++) {
+    if (json_files[i] != 'default.json') {
+      let filename = json_files[i].split('.')[0];
+      let link = `<li><a class="dropdown-item" href="/apps/1/${filename}">${filename}</a></li>`
+      json_templates += link;
+    }
+  }
 
   let apps_list = '';
   let app_count = '';
@@ -53,7 +65,7 @@ export const Apps = async (req, res) => {
     });
   } else {
 
-      let template_file = readFileSync(`./templates/json/default.json`);
+      let template_file = readFileSync(`./templates/json/${template_param}.json`);
       let templates = JSON.parse(template_file).templates;
       templates = templates.sort((a, b) => { if (a.name < b.name) { return -1; } });
       app_count = templates.length; 
@@ -104,6 +116,7 @@ export const Apps = async (req, res) => {
     apps_list: apps_list,
     alert: alert,
     template_list: '',
+    json_templates: json_templates,
   });
   alert = '';
 }

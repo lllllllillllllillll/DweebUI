@@ -83,6 +83,7 @@
                         <ul class="dropdown-menu">
                           <li><a class="dropdown-item" href="/apps">Default Templates</a></li>
                           <li><a class="dropdown-item" href="/apps/1/compose">Compose Files</a></li>
+                          <%- json_templates %>
                         </ul>
                       </dropdown>
                       <button class="btn" name="Import" id="Import" data-hx-get="/import_modal" data-hx-target="#modals-here" hx-swap="innerHTML" data-hx-trigger="click" data-bs-toggle="modal" data-bs-target="#modals-here">Import</button>
