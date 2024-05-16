@@ -1,4 +1,4 @@
-import { writeFileSync, mkdirSync, readFileSync } from "fs";
+import { writeFileSync, mkdirSync, readFileSync, readdirSync } from "fs";
 import yaml from 'js-yaml';
 import { execSync } from "child_process";
 import { docker } from "../server.js";
@@ -10,12 +10,23 @@ import { addAlert } from "../controllers/dashboard.js";
 export const Install = async (req, res) => {
 
         let data = req.body;
+        let name = data.name;
+
+        let containers = await docker.listContainers({ all: true });
+
+        for (let i = 0; i < containers.length; i++) {
+            if (containers[i].Names[0].includes(name)) {
+                addAlert(req.session, 'danger', `App ${name} already exists. Please remove it first.`);
+                res.redirect('/');
+                return;
+            }
+        }
 
         if (req.body.compose) {
-            let app = req.body.app;
-            writeFileSync(`./templates/compose/${app}/compose.yaml`, req.body.compose, function (err) { console.log(err) });
-            let compose = new DockerodeCompose(docker, `./templates/compose/${app}/compose.yaml`, `${app}`);
-            addAlert(req.session, 'success', `Installing ${app}. It should appear on the dashboard shortly.`);
+
+            writeFileSync(`./templates/compose/${name}/compose.yaml`, req.body.compose, function (err) { console.log(err) });
+            let compose = new DockerodeCompose(docker, `./templates/compose/${name}/compose.yaml`, `${name}`);
+            addAlert(req.session, 'success', `Installing ${name}. It should appear on the dashboard shortly.`);
             try {
                 (async () => {
                     await compose.pull();
@@ -40,7 +51,7 @@ export const Install = async (req, res) => {
             }
         } else {
 
-            let { service_name, name, image, command_check, command, net_mode, restart_policy } = data;        
+            let { service_name, image, command_check, command, net_mode, restart_policy } = data;        
             let { port0, port1, port2, port3, port4, port5 } = data;
             let { volume0, volume1, volume2, volume3, volume4, volume5 } = data;
             let { env0, env1, env2, env3, env4, env5, env6, env7, env8, env9, env10, env11 } = data;
@@ -196,8 +207,9 @@ export const Install = async (req, res) => {
                     }
                 }
 
+
+
                 try {   
-                    mkdirSync(`./appdata/${name}`, { recursive: true });
                     writeFileSync(`./appdata/${name}/docker-compose.yml`, compose_file, function (err) { console.log(err) });
                     var compose = new DockerodeCompose(docker, `./appdata/${name}/docker-compose.yml`, `${name}`);
 

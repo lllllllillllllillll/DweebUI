@@ -1,4 +1,4 @@
-import { readFileSync, readdirSync, renameSync, mkdirSync, unlinkSync, read } from 'fs';
+import { readFileSync, readdirSync, renameSync, mkdirSync, unlinkSync, read, existsSync } from 'fs';
 import { parse } from 'yaml';
 import multer from 'multer';
 import AdmZip from 'adm-zip';
@@ -468,6 +468,15 @@ export const Upload = (req, res) => {
               </div>
               <a class="btn-close" data-bs-dismiss="alert" aria-label="close" style="padding-top: 0.5rem;"></a>
             </div>`;
+
+            
+    let exists_alert = `<div class="alert alert-danger alert-dismissible mb-0 py-2" role="alert">
+              <div class="d-flex">
+              <div><svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M5 12l5 5l10 -10"></path></svg> </div>
+              <div>Template already exists</div>
+            </div>
+            <a class="btn-close" data-bs-dismiss="alert" aria-label="close" style="padding-top: 0.5rem;"></a>
+          </div>`;
     
     let files = readdirSync('templates/tmp/');
 
@@ -477,21 +486,39 @@ export const Upload = (req, res) => {
         zip.extractAllTo('templates/compose', true);
         unlinkSync(`templates/tmp/${files[i]}`);
       } else if (files[i].endsWith('.json')) {
+        if (existsSync(`templates/json/${files[i]}`)) {
+          unlinkSync(`templates/tmp/${files[i]}`);
+          alert = exists_alert;
+          res.redirect('/apps');
+          return;
+        }
         renameSync(`templates/tmp/${files[i]}`, `templates/json/${files[i]}`);
       } else if (files[i].endsWith('.yml')) {
         let compose = readFileSync(`templates/tmp/${files[i]}`, 'utf8');
         let compose_data = parse(compose);
-        let service_name = Object.keys(compose_data.services)
+        let service_name = Object.keys(compose_data.services);
+        if (existsSync(`templates/compose/${service_name}`)) {
+          unlinkSync(`templates/tmp/${files[i]}`);
+          alert = exists_alert;
+          res.redirect('/apps');
+          return;
+        }
         mkdirSync(`templates/compose/${service_name}`);
         renameSync(`templates/tmp/${files[i]}`, `templates/compose/${service_name}/compose.yaml`);
       } else if (files[i].endsWith('.yaml')) {
         let compose = readFileSync(`templates/tmp/${files[i]}`, 'utf8');
         let compose_data = parse(compose);
-        let service_name = Object.keys(compose_data.services)
+        let service_name = Object.keys(compose_data.services);
+        if (existsSync(`templates/compose/${service_name}`)) {
+          unlinkSync(`templates/tmp/${files[i]}`);
+          alert = exists_alert;
+          res.redirect('/apps');
+          return;
+        }
         mkdirSync(`templates/compose/${service_name}`);
         renameSync(`templates/tmp/${files[i]}`, `templates/compose/${service_name}/compose.yaml`);
       } else {
-        console.log('Unsupported file type');
+        // unsupported file type
         unlinkSync(`templates/tmp/${files[i]}`);
       }
     }   
