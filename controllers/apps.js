@@ -35,6 +35,13 @@ export const Apps = async (req, res) => {
   let list_end = (page * 28);
   let last_page = '';
 
+  let pages = `<li class="page-item"><a class="page-link" href="/apps/1/${template_param}">1</a></li>
+                <li class="page-item"><a class="page-link" href="/apps/2/${template_param}">2</a></li>
+                <li class="page-item"><a class="page-link" href="/apps/3/${template_param}">3</a></li>
+                <li class="page-item"><a class="page-link" href="/apps/4/${template_param}">4</a></li>
+                <li class="page-item"><a class="page-link" href="/apps/5/${template_param}">5</a></li>`
+
+
   let prev = '/apps/' + (page - 1) + '/' + template_param;
   let next = '/apps/' + (page + 1) + '/' + template_param;
   if (page == 1) { prev = '/apps/' + (page) + '/' + template_param; }
@@ -76,6 +83,7 @@ export const Apps = async (req, res) => {
       for (let i = list_start; i < list_end && i < templates.length; i++) {
           let appCard = readFileSync('./views/partials/appCard.html', 'utf8');
           let name = templates[i].name || templates[i].title.toLowerCase();
+          let title = templates[i].title || templates[i].name;
           let desc = templates[i].description.slice(0, 60) + "...";
           let description = templates[i].description.replaceAll(". ", ".\n") || "no description available";
           let note = templates[i].note ? templates[i].note.replaceAll(". ", ".\n") : "no notes available";
@@ -91,6 +99,7 @@ export const Apps = async (req, res) => {
             categories += CatagoryColor(templates[i].categories[j]);
           }
           appCard = appCard.replace(/AppName/g, name);
+          appCard = appCard.replace(/AppTitle/g, title);
           appCard = appCard.replace(/AppShortName/g, name);
           appCard = appCard.replace(/AppDesc/g, desc);
           appCard = appCard.replace(/AppLogo/g, logo);
@@ -117,6 +126,7 @@ export const Apps = async (req, res) => {
     alert: alert,
     template_list: '',
     json_templates: json_templates,
+    pages: pages,
   });
   alert = '';
 }
@@ -459,8 +469,12 @@ export const InstallModal = async (req, res) => {
 export const LearnMore = async (req, res) => {
   let name = req.header('hx-trigger-name');
   let id = req.header('hx-trigger');
-
+  let result = templates_global.find(t => t.name == name);
+  
   let modal = readFileSync('./views/modals/learnmore.html', 'utf8');
+  modal = modal.replace(/AppName/g, result.title);
+  modal = modal.replace(/AppDesc/g, result.description);
+
   res.send(modal);
 }
 

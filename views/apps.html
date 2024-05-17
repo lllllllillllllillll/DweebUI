@@ -140,11 +140,9 @@
                     prev
                   </a>
                 </li>
-                <li class="page-item"><a class="page-link" href="/apps/1">1</a></li>
-                <li class="page-item"><a class="page-link" href="/apps/2">2</a></li>
-                <li class="page-item"><a class="page-link" href="/apps/3">3</a></li>
-                <li class="page-item"><a class="page-link" href="/apps/4">4</a></li>
-                <li class="page-item"><a class="page-link" href="/apps/5">5</a></li>
+
+                <%- pages %>
+                
                 <li class="page-item">
                   <a class="page-link" href="<%- next %>">
                     next <!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
@@ -160,48 +158,9 @@
 
       </div>
     </div>
-    <!-- Libs JS -->
-    <!-- Tabler Core -->
+
     <script src="/js/tabler.min.js" defer></script>
     <script src="/js/demo.min.js" defer></script>
-    
-    <!-- <script>
-      async function sendData(form) {
-        const formData = new FormData(form);
-        const jsonData = {};
-
-        for (let [key, value] of formData.entries()) {
-          jsonData[key] = value;
-        }
-
-        try {
-          const response = await fetch("/install", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(jsonData),
-          });
-          console.log(await response.json());
-        } catch (e) {
-          console.error(e);
-        }
-      }
-
-      document.addEventListener("submit", (event) => {
-        event.preventDefault();
-
-        const buttonId = event.target.id;
-        console.log(buttonId);
-        const form = document.querySelector(`#${buttonId}`);
-
-        if (form) {
-          sendData(form);
-        } else {
-          console.error(`Form not found for button with ID: ${buttonId}`);
-        }
-      });
-    </script> -->
     
   </body>
 </html>
