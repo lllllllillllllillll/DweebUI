@@ -2,7 +2,6 @@ import { readFileSync, readdirSync, renameSync, mkdirSync, unlinkSync, read, exi
 import { parse } from 'yaml';
 import multer from 'multer';
 import AdmZip from 'adm-zip';
-import { json } from 'sequelize';
 
 const upload = multer({storage: multer.diskStorage({
   destination: function (req, file, cb) { cb(null, 'templates/tmp/') },
@@ -146,6 +145,13 @@ export const appSearch = async (req, res) => {
   templates = templates.sort((a, b) => {
       if (a.name < b.name) { return -1; }
   });
+
+  let pages = `<li class="page-item"><a class="page-link" href="/apps/1/${template_param}">1</a></li>
+  <li class="page-item"><a class="page-link" href="/apps/2/${template_param}">2</a></li>
+  <li class="page-item"><a class="page-link" href="/apps/3/${template_param}">3</a></li>
+  <li class="page-item"><a class="page-link" href="/apps/4/${template_param}">4</a></li>
+  <li class="page-item"><a class="page-link" href="/apps/5/${template_param}">5</a></li>`
+
   
   let list_start = (page-1)*28;
   let list_end = (page*28);
@@ -218,6 +224,8 @@ export const appSearch = async (req, res) => {
       apps_list: apps_list,
       alert: alert,
       template_list: '',
+      json_templates: json_templates,
+      pages: pages,
   });
 }
 
