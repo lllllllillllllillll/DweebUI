@@ -1,4 +1,4 @@
-import { writeFileSync, mkdirSync, readFileSync, readdirSync } from "fs";
+import { writeFileSync, mkdirSync, readFileSync, readdirSync, writeFile } from "fs";
 import yaml from 'js-yaml';
 import { execSync } from "child_process";
 import { docker } from "../server.js";
@@ -13,7 +13,6 @@ export const Install = async (req, res) => {
         let name = data.name;
 
         let containers = await docker.listContainers({ all: true });
-
         for (let i = 0; i < containers.length; i++) {
             if (containers[i].Names[0].includes(name)) {
                 addAlert(req.session, 'danger', `App ${name} already exists. Please remove it first.`);
@@ -24,6 +23,7 @@ export const Install = async (req, res) => {
 
         if (req.body.compose) {
 
+            mkdirSync(`./appdata/${name}`, { recursive: true });
             writeFileSync(`./templates/compose/${name}/compose.yaml`, req.body.compose, function (err) { console.log(err) });
             let compose = new DockerodeCompose(docker, `./templates/compose/${name}/compose.yaml`, `${name}`);
             addAlert(req.session, 'success', `Installing ${name}. It should appear on the dashboard shortly.`);
@@ -32,7 +32,7 @@ export const Install = async (req, res) => {
                     await compose.pull();
                     await compose.up();
 
-                    const syslog = await Syslog.create({
+                    await Syslog.create({
                         user: req.session.user,
                         email: null,
                         event: "App Installation",
@@ -41,7 +41,7 @@ export const Install = async (req, res) => {
                     });  
                 })();
             } catch (err) {
-                const syslog = await Syslog.create({
+                await Syslog.create({
                     user: req.session.user,
                     email: null,
                     event: "App Installation",
@@ -206,19 +206,18 @@ export const Install = async (req, res) => {
                         }
                     }
                 }
+                
 
-
-
-                try {   
+                try {
+                    mkdirSync(`./appdata/${name}`, { recursive: true });
                     writeFileSync(`./appdata/${name}/docker-compose.yml`, compose_file, function (err) { console.log(err) });
                     var compose = new DockerodeCompose(docker, `./appdata/${name}/docker-compose.yml`, `${name}`);
-
                 } catch { 
-                    const syslog = await Syslog.create({
+                    await Syslog.create({
                         user: req.session.user,
                         email: null,
                         event: "App Installation",
-                        message: `${name} installation failed - error creating directory or compose file : ${err}`,
+                        message: `${name} installation failed - error creating directory or compose file`,
                         ip: req.socket.remoteAddress
                     });
                 }
@@ -228,7 +227,7 @@ export const Install = async (req, res) => {
                         await compose.pull();
                         await compose.up();
 
-                        const syslog = await Syslog.create({
+                        await Syslog.create({
                             user: req.session.user,
                             email: null,
                             event: "App Installation",
@@ -237,7 +236,7 @@ export const Install = async (req, res) => {
                         });  
                     })();
                 } catch (err) {
-                    const syslog = await Syslog.create({
+                    await Syslog.create({
                         user: req.session.user,
                         email: null,
                         event: "App Installation",
