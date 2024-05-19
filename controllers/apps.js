@@ -1,4 +1,4 @@
-import { readFileSync, readdirSync, renameSync, mkdirSync, unlinkSync, read, existsSync } from 'fs';
+import { readFileSync, readdirSync, renameSync, mkdirSync, unlinkSync, existsSync } from 'fs';
 import { parse } from 'yaml';
 import multer from 'multer';
 import AdmZip from 'adm-zip';
@@ -493,6 +493,15 @@ export const InstallModal = async (req, res) => {
 export const LearnMore = async (req, res) => {
   let name = req.header('hx-trigger-name');
   let id = req.header('hx-trigger');
+
+  if (id == 'compose') {
+    let modal = readFileSync('./views/modals/learnmore.html', 'utf8');
+    modal = modal.replace(/AppName/g, name);
+    modal = modal.replace(/AppDesc/g, 'Compose File');
+    res.send(modal);
+    return;
+  }
+  
   let result = templates_global.find(t => t.name == name);
   
   let modal = readFileSync('./views/modals/learnmore.html', 'utf8');

@@ -1,19 +1,21 @@
-## v0.60 (May 19th 2024)
+## v0.60 (dev)
 * Converted JS template literals into HTML.
 * Converted modals into HTML/HTMX.
 * Moved functions into dashboard controller.
-* Added modal placeholder with loading spinner.
-* Independently updating container cards.
-* Container cards display pending actions (starting, stopping, pausing, restarting).
-* Dynamically generated avatars.
+* New - Modal placeholder with loading spinner.
+* Container cards now update independently.
+* Container cards now display pending action (starting, stopping, pausing, restarting).
+* User avatars are now automatically generated.
 * Updated database models.
-* Multi-user permission system.
+* New - Multi-user permission system.
 * Refactored dashboard to support multiple users.
-* New alert banner for installs and file uploads.
-* Updated docker compose to include HTTPS Env.
-* Updated Apps page to view or upload compose files.
+* New - Banner alerts.
+* New - Template importing (*.yml, *.yaml, *.json).
 * Improved app search.
+* New - Search by category.
 * Updated dependencies.
+* Removed warning from the bottom of the registration page. Will be added back in a different location.
+* New - admin checks, session checks, and permission checks for router. 
 
 ## v0.40 (Feb 26th 2024) - HTMX rewrite
 * Pages rewritten to use HTMX.

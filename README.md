@@ -12,28 +12,28 @@
 </p>
 <h3 align="center"><img width="800" src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/screenshots/dashboard1.png"></h3>
 
-
-## About
-* I started this as a personal project to get more familiar with Javascript and Node.js, so there may be some rough edges and spaghetti code.
-* I'm open to any contributions but you may want to wait until I reach v1.0 first.
-* Please post issues and discussions so I know what bugs and features to focus on.
-* DweebUI is a management interface and should not be directly exposed to the internet
-
 ## Features
+
 * [x] A dynamically updating dashboard that displays server metrics along with container metrics and container controls.
 * [x] Multi-user support with permissions system.
-* [x] View container logs.
-* [x] Manage your Docker networks, images, and volumes.
+* [x] Container actions: Start, Stop, Pause, Restart, View Details, View Logs.
+* [x] Windows, Linux, and MacOS compatable.
 * [x] Light/Dark Mode.
 * [x] Mobile Friendly.
+* [x] Manage your Docker networks, images, and volumes.
 * [x] Easy to install app templates.
-* [x] Windows, Linux, and MacOS compatable.
 * [x] Docker Compose Support.
 * [ ] Update containers (planned).
 * [x] Templates.json maintains compatability with Portainer, allowing you to use the template without needing to use DweebUI.
 * [ ] Preset variables (planned).
 * [ ] Themes (planned).
 
+## About
+
+* I started this as a personal project to get more familiar with Javascript and Node.js, so there may be some rough edges and spaghetti code.
+* I'm open to any contributions but you may want to wait until I reach v1.0 first.
+* Please post issues and discussions so I know what bugs and features to focus on.
+* DweebUI is a management interface and should not be directly exposed to the internet.
 
 ## Setup
 

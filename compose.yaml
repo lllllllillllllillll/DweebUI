@@ -2,11 +2,10 @@ version: "3.9"
 services:
   dweebui:
     container_name: dweebui
-    image: lllllllillllllillll/dweebui:v0.60-dev
+    image: lllllllillllllillll/dweebui:v0.60
     environment:
       PORT: 8000
       SECRET: MrWiskers
-      HTTPS: false
     restart: unless-stopped
     ports:
       - 8000:8000

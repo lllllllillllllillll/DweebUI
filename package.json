@@ -1,7 +1,7 @@
 {
   "name": "dweebui",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.60",
+  "description": "Free and Open-Source WebUI For Managing Your Containers.",
   "main": "server.js",
   "type": "module",
   "scripts": {
@@ -9,8 +9,8 @@
     "start": "node server.js"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "lllllllillllllillll",
+  "license": "MIT",
   "dependencies": {
     "adm-zip": "^0.5.12",
     "bcrypt": "^5.1.1",
@@ -23,7 +23,7 @@
     "multer": "^1.4.5-lts.1",
     "sequelize": "^6.37.3",
     "sqlite3": "^5.1.7",
-    "systeminformation": "^5.22.7",
+    "systeminformation": "^5.22.9",
     "yaml": "^2.4.2"
   }
 }
