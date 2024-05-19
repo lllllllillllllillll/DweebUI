@@ -11,11 +11,18 @@ const upload = multer({storage: multer.diskStorage({
 let alert = '';
 let templates_global = '';
 let json_templates = '';
+let remove_button = '';
 
 export const Apps = async (req, res) => {
   
   let page = Number(req.params.page) || 1;
   let template_param = req.params.template || 'default';
+
+  if ((template_param != 'default') && (template_param != 'compose')) {
+    remove_button = `<a href="/remove_template/${template_param}" class="btn" hx-confirm="Are you sure you want to remove this template?">Remove</a>`;
+  } else {
+    remove_button = '';
+  }
 
   json_templates = '';
   let json_files = readdirSync('templates/json/');
@@ -126,14 +133,22 @@ export const Apps = async (req, res) => {
     template_list: '',
     json_templates: json_templates,
     pages: pages,
+    remove_button: remove_button
   });
   alert = '';
 }
 
-
+export const removeTemplate = async (req, res) => {
+  let template = req.params.template;
+  unlinkSync(`templates/json/${template}.json`);
+  res.redirect('/apps');
+}
 
 
 export const appSearch = async (req, res) => {
+
+  let search = req.body.search;
+
   let page = Number(req.params.page) || 1;
 
   let template_param = req.params.template || 'default';
@@ -161,7 +176,6 @@ export const appSearch = async (req, res) => {
   if (page == 1) { prev = '/apps/' + (page); }
   if (page == last_page) { next = '/apps/' + (page); }
 
-  let search = req.body.search;
 
   let apps_list = '';
   let results = [];
@@ -209,6 +223,7 @@ export const appSearch = async (req, res) => {
     appCard = appCard.replace(/AppDesc/g, desc);
     appCard = appCard.replace(/AppLogo/g, logo);
     appCard = appCard.replace(/AppCategories/g, categories);
+    appCard = appCard.replace(/AppType/g, 'json');
 
     apps_list += appCard;
   }
@@ -226,6 +241,7 @@ export const appSearch = async (req, res) => {
       template_list: '',
       json_templates: json_templates,
       pages: pages,
+      remove_button: remove_button
   });
 }
 

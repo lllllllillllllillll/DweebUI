@@ -20,15 +20,15 @@
 * DweebUI is a management interface and should not be directly exposed to the internet
 
 ## Features
-* [x] A dynamically updating dashboard that displays server metrics along with individual container metrics and container controls.
-* [x] Multi-users with permissions system.
+* [x] A dynamically updating dashboard that displays server metrics along with container metrics and container controls.
+* [x] Multi-user support with permissions system.
 * [x] View container logs.
 * [x] Manage your Docker networks, images, and volumes.
 * [x] Light/Dark Mode.
 * [x] Mobile Friendly.
 * [x] Easy to install app templates.
 * [x] Windows, Linux, and MacOS compatable.
-* [ ] Docker compose (in development).
+* [x] Docker Compose Support.
 * [ ] Update containers (planned).
 * [x] Templates.json maintains compatability with Portainer, allowing you to use the template without needing to use DweebUI.
 * [ ] Preset variables (planned).

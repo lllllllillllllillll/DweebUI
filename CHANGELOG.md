@@ -1,4 +1,4 @@
-## v0.60 (dev)
+## v0.60 (May 19th 2024)
 * Converted JS template literals into HTML.
 * Converted modals into HTML/HTMX.
 * Moved functions into dashboard controller.
