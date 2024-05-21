@@ -16,6 +16,8 @@
 * Updated dependencies.
 * Removed warning from the bottom of the registration page. Will be added back in a different location.
 * New - admin checks, session checks, and permission checks for router. 
+* Added titles to activity indicators.
+* Created Github Wiki.
 
 ## v0.40 (Feb 26th 2024) - HTMX rewrite
 * Pages rewritten to use HTMX.
