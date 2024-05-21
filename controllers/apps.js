@@ -232,7 +232,7 @@ export const appSearch = async (req, res) => {
   res.render("apps", {
       name: req.session.user,
       role: req.session.role,
-      avatar: req.session.avatar,
+      avatar: req.session.user.charAt(0).toUpperCase(),
       list_start: list_start + 1,
       list_end: list_end,
       app_count: results.length,
