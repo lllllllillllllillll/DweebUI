@@ -61,6 +61,8 @@ export const Apps = async (req, res) => {
     last_page = Math.ceil(compose_files.length/28);
 
     compose_files.forEach(file => {
+      if (file == '.gitignore') { return; }
+
       let compose = readFileSync(`templates/compose/${file}/compose.yaml`, 'utf8');
       let compose_data = parse(compose);
       let service_name = Object.keys(compose_data.services)
@@ -541,6 +543,7 @@ export const Upload = (req, res) => {
     let files = readdirSync('templates/tmp/');
 
     for (let i = 0; i < files.length; i++) {
+      
       if (files[i].endsWith('.zip')) {
         let zip = new AdmZip(`templates/tmp/${files[i]}`);
         zip.extractAllTo('templates/compose', true);
