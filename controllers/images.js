@@ -40,9 +40,11 @@ export const Images = async function(req, res) {
         return;
     }
 
-
-
-    
+    let containers = await docker.listContainers({ all: true });
+    let container_images = [];
+    for (let i = 0; i < containers.length; i++) {
+        container_images.push(containers[i].Image);
+    }
 
     let images = await docker.listImages({ all: true });
 
@@ -70,13 +72,20 @@ export const Images = async function(req, res) {
         let size = images[i].Size / 1000 / 1000; // to match docker desktop
         size = size.toFixed(2);
 
+        let status = 'Unused';
+        let status_color = 'red';
+        if (container_images.includes(images[i].RepoTags[0])) {
+            status = 'In use';
+            status_color = 'green';
+        }
+
         let details = `
             <tr>
                 <td><input class="form-check-input m-0 align-middle" name="select" value="${images[i].Id}" type="checkbox" aria-label="Select"></td>
                 <td class="sort-name">${images[i].RepoTags}</td>
                 <td class="sort-city">${images[i].Id}</td>
                 <td class="sort-type"> - </td>
-                <td class="sort-score text-green"> - </td>
+                <td class="sort-score text-${status_color}">${status}</td>
                 <td class="sort-date" data-date="1628122643">${created}</td>
                 <td class="sort-quantity">${size} MB</td>
                 <td class="text-end"><a class="btn" href="#">Details</a></td>
