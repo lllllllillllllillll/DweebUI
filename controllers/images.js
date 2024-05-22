@@ -3,6 +3,7 @@ import { docker } from '../server.js';
 export const Images = async function(req, res) {
 
     let action = req.params.action;
+
     if (action == "remove") {
         console.log("Removing images");
         let images = req.body.select;
@@ -22,9 +23,25 @@ export const Images = async function(req, res) {
                 }
             }
         }
-    res.redirect("/images");
-    return;
+        res.redirect("/images");
+        return;
+    } else if (action == "add") {
+        console.log("Adding images");
+        let image = req.body.image;
+        let tag = req.body.tag;
+
+        try {
+            console.log(`Pulling image: ${image}:${tag}`);
+            await docker.pull(`${image}:${tag}`);
+        } catch (error) {
+            console.log(`Unable to pull image: ${image}:${tag}`);
+        }
+        res.redirect("/images");
+        return;
     }
+
+
+
     
 
     let images = await docker.listImages({ all: true });
