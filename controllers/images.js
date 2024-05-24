@@ -1,11 +1,11 @@
 import { docker } from '../server.js';
+import { addAlert } from './dashboard.js';
 
 export const Images = async function(req, res) {
 
     let action = req.params.action;
 
     if (action == "remove") {
-        console.log("Removing images");
         let images = req.body.select;
 
         if (typeof(images) == 'string') {
@@ -26,9 +26,8 @@ export const Images = async function(req, res) {
         res.redirect("/images");
         return;
     } else if (action == "add") {
-        console.log("Adding images");
         let image = req.body.image;
-        let tag = req.body.tag;
+        let tag = req.body.tag || 'latest';
 
         try {
             console.log(`Pulling image: ${image}:${tag}`);
@@ -53,8 +52,8 @@ export const Images = async function(req, res) {
         <tr>
             <th class="w-1"><input class="form-check-input m-0 align-middle" name="select" type="checkbox" aria-label="Select all" onclick="selectAll()"></th>
             <th><label class="table-sort" data-sort="sort-name">Name</label></th>
-            <th><label class="table-sort" data-sort="sort-city">ID</label></th>
             <th><label class="table-sort" data-sort="sort-type">Tag</label></th>
+            <th><label class="table-sort" data-sort="sort-city">ID</label></th>
             <th><label class="table-sort" data-sort="sort-score">Status</label></th>
             <th><label class="table-sort" data-sort="sort-date">Created</label></th>
             <th><label class="table-sort" data-sort="sort-quantity">Size</label></th>
@@ -66,29 +65,34 @@ export const Images = async function(req, res) {
 
     for (let i = 0; i < images.length; i++) {
 
+        let name = '';
+        let tag = ''; 
+        try { name = images[i].RepoTags[0].split(':')[0]; } catch {}
+        try { tag = images[i].RepoTags[0].split(':')[1]; } catch {}
+
         let date = new Date(images[i].Created * 1000);
         let created = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 
         let size = images[i].Size / 1000 / 1000; // to match docker desktop
         size = size.toFixed(2);
 
-        let status = 'Unused';
-        let status_color = 'red';
+        let status = 'unused';
+        let status_color = 'yellow';
         if (container_images.includes(images[i].RepoTags[0])) {
-            status = 'In use';
+            status = '<strong>In Use</strong>';
             status_color = 'green';
         }
 
         let details = `
             <tr>
                 <td><input class="form-check-input m-0 align-middle" name="select" value="${images[i].Id}" type="checkbox" aria-label="Select"></td>
-                <td class="sort-name">${images[i].RepoTags}</td>
+                <td class="sort-name">${name}</td>
+                <td class="sort-type">${tag}</td>
                 <td class="sort-city">${images[i].Id}</td>
-                <td class="sort-type"> - </td>
                 <td class="sort-score text-${status_color}">${status}</td>
                 <td class="sort-date" data-date="1628122643">${created}</td>
                 <td class="sort-quantity">${size} MB</td>
-                <td class="text-end"><a class="btn" href="#">Details</a></td>
+                <td class="text-end"><a class="btn" href="#"><svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-player-play" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M7 4v16l13 -8z"></path></svg></a></td>
             </tr>`
         image_list += details;
     }
