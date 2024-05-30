@@ -77,12 +77,12 @@ export const Volumes = async function(req, res) {
 
 }
 
-export const createVolume = async function(req, res) {
+export const addVolume = async function(req, res) {
     
-    let name = req.body.name;
+    let volume = req.body.volume;
 
     docker.createVolume({
-        Name: name
+        Name: volume
     });
     res.redirect("/volumes");
 }

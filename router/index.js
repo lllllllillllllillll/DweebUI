@@ -10,7 +10,7 @@ import { Apps, appSearch, InstallModal, ImportModal, LearnMore, Upload, removeTe
 import { Users } from "../controllers/users.js";
 import { Images } from "../controllers/images.js";
 import { Networks, removeNetwork } from "../controllers/networks.js";
-import { Volumes, removeVolume } from "../controllers/volumes.js";
+import { Volumes, addVolume, removeVolume } from "../controllers/volumes.js";
 import { Account } from "../controllers/account.js";
 import { Variables } from "../controllers/variables.js";
 import { Settings } from "../controllers/settings.js";
@@ -78,6 +78,7 @@ router.get("/images", adminOnly, Images);
 router.post("/images/:action", adminOnly, Images);
 
 router.get("/volumes", adminOnly, Volumes);
+router.post("/addVolume", adminOnly, addVolume);
 router.post("/removeVolume", adminOnly, removeVolume);
 
 router.get("/networks", adminOnly, Networks);
