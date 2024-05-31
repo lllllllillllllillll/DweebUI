@@ -19,10 +19,12 @@
 * Added titles to activity indicators.
 * Created Github Wiki.
 * Added image pull to images page.
-* Images display 'In use' or 'Unused'.
+* Images and volumes display 'In use'.
 * Images display tag.
 * Image pull gets latest if not set.
 * Updated buttons to trigger from 'mousedown' (John Carmack + Theo told me to).
+* Volumes page displays type (Volume or Bind).
+* New Volume button is now functional.
 
 ## v0.40 (Feb 26th 2024) - HTMX rewrite
 * Pages rewritten to use HTMX.

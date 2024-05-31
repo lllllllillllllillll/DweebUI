@@ -44,7 +44,7 @@ export const Volumes = async function(req, res) {
         let type = "Bind";
 
         // Check if the volume is being used by any of the containers
-        let status = ` - `;
+        let status = '';
         if (container_volumes.some(volume => volume.source === mount)) { status = "In use"; }
         if (container_volumes.some(volume => volume.source === mount && volume.type === 'volume')) { type = "Volume"; }
 

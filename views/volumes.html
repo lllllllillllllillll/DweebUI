@@ -81,8 +81,6 @@
                   </form>
 
 
-
-                  <!-- HTMX Modal Target -->
                   <div id="modals-here" class="modal modal-blur fade" style="display: none" aria-hidden="false" tabindex="-1">
                     <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollables">
                       <div class="modal-content">
@@ -93,9 +91,8 @@
                         <div class="modal-body text-center">
                           <form method="post" action="/addVolume">
 
-
                               <div class="row g-2 align-items-end">
-                                <div class="col-8">
+                                <div class="col-9">
                                   <label class="form-label text-muted">Volume Name</label>
                                   <input type="text" class="form-control" name="volume">
                                 </div>
@@ -104,7 +101,8 @@
                                   <button type="submit" class="btn mt-2">Create</button>
                                 </div>
                               </div>
-
+                                
+                                <label class="mt-3 text-muted"><label class="text-danger">*</label>Name cannot contain spaces or special characters.</label>
                           </form>
                         </div>
 

@@ -76,11 +76,9 @@ export const Images = async function(req, res) {
         let size = images[i].Size / 1000 / 1000; // to match docker desktop
         size = size.toFixed(2);
 
-        let status = 'unused';
-        let status_color = 'yellow';
+        let status = '';
         if (container_images.includes(images[i].RepoTags[0])) {
-            status = '<strong>In Use</strong>';
-            status_color = 'green';
+            status = 'In Use';
         }
 
         let details = `
@@ -89,7 +87,7 @@ export const Images = async function(req, res) {
                 <td class="sort-name">${name}</td>
                 <td class="sort-type">${tag}</td>
                 <td class="sort-city">${images[i].Id}</td>
-                <td class="sort-score text-${status_color}">${status}</td>
+                <td class="sort-score text-green">${status}</td>
                 <td class="sort-date" data-date="1628122643">${created}</td>
                 <td class="sort-quantity">${size} MB</td>
                 <td class="text-end"><a class="btn" href="#"><svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-player-play" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M7 4v16l13 -8z"></path></svg></a></td>
