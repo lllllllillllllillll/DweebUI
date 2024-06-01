@@ -78,7 +78,7 @@ export const Images = async function(req, res) {
 
         let status = '';
         if (container_images.includes(images[i].RepoTags[0])) {
-            status = 'In Use';
+            status = 'In use';
         }
 
         let details = `
