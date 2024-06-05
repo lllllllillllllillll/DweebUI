@@ -26,7 +26,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle><circle cx="12" cy="5" r="1"></circle></svg>
                   </a>
                   <div class="dropdown-menu dropdown-menu-end">
-                    <button class="dropdown-item text-secondary" name="AppName" id="details" data-hx-get="/dashboard/details" hx-swap="innerHTML" data-hx-trigger="mousedown" data-hx-target="#modals-here" data-bs-toggle="modal" data-bs-target="#modals-here">Details</button>
+                    <button class="dropdown-item text-secondary" name="AppName" id="details" data-hx-post="/dashboard/details" hx-swap="innerHTML" data-hx-trigger="mousedown" data-hx-target="#modals-here" data-bs-toggle="modal" data-bs-target="#modals-here">Details</button>
                     <button class="dropdown-item text-secondary" name="AppName" id="logs" data-hx-post="/dashboard/logs" hx-swap="innerHTML" hx-trigger="mousedown" data-hx-target="#logView" data-bs-toggle="modal" data-bs-target="#log_view">Logs</button>
                     <button class="dropdown-item text-secondary" name="AppName" id="edit">Edit</button>
                     <button class="dropdown-item text-primary" name="AppName" id="update" disabled="">Update</button>

@@ -74,10 +74,11 @@ export const DashboardAction = async (req, res) => {
             res.send(modal);
             return;
         case 'details':
-            modal = readFileSync('./views/modals/details.html', 'utf8');
+            modal = readFileSync('./views/modals/json.html', 'utf8');
             let details = await containerInfo(name);
             modal = modal.replace(/AppName/g, details.name);
             modal = modal.replace(/AppImage/g, details.image);
+            
             res.send(modal);
             return;
         case 'updates':
@@ -157,9 +158,14 @@ export const DashboardAction = async (req, res) => {
 }
 
 async function containerInfo (containerName) {
+    // get the container info
     let container = docker.getContainer(containerName);
     let info = await container.inspect();
-    let image = info.Config.Image.split('/');
+    let image = info.Config.Image;
+    // grab the service name from the end of the image name
+    let service = image.split('/').pop();
+    // remove the tag from the service name if it exists
+    try { service = service.split(':')[0]; } catch {}
     let ports_list = [];
     let external = 0;
     let internal = 0;
@@ -181,7 +187,7 @@ async function containerInfo (containerName) {
     let details = {
         name: containerName,
         image: image,
-        service: image[image.length - 1].split(':')[0],
+        service: service,
         state: info.State.Status,
         external_port: external,
         internal_port: internal,
@@ -217,6 +223,8 @@ async function createCard (details) {
             break;
     }
     // if (name.startsWith('dweebui')) { disable = 'disabled=""'; }
+
+    let app_icon = details.service;
 
     card = card.replace(/AppName/g, details.name);
     card = card.replace(/AppShortName/g, shortname);
