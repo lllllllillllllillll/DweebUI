@@ -7,11 +7,8 @@ import { router } from './router/index.js';
 import { sequelize } from './database/models.js';
 export const docker = new Docker();
 
-const app = express();
-const MemoryStore = memorystore(session);
-const PORT = process.env.PORT || 8000;
-
 // Session middleware
+const MemoryStore = memorystore(session);
 const sessionMiddleware = session({
     store: new MemoryStore({ checkPeriod: 86400000 }), // Prune expired entries every 24h
     secret: "keyboard cat", 
@@ -25,6 +22,8 @@ const sessionMiddleware = session({
 });
 
 // Express middleware
+const app = express();
+const PORT = process.env.PORT || 8000;
 app.set('view engine', 'html');
 app.engine('html', ejs.renderFile);
 app.use([
