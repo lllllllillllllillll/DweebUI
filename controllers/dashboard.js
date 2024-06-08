@@ -9,6 +9,7 @@ import { Op } from 'sequelize';
 let hidden = '';
 let alert = '';
 let [ cardList, newCards, stats ] = [ '', '', {}];
+let [ports_data, volumes_data, env_data, label_data] = [[], [], [], []];
 
 // The page
 export const Dashboard = (req, res) => {
@@ -74,11 +75,37 @@ export const DashboardAction = async (req, res) => {
             res.send(modal);
             return;
         case 'details':
-            modal = readFileSync('./views/modals/json.html', 'utf8');
+            modal = readFileSync('./views/modals/details.html', 'utf8');
             let details = await containerInfo(name);
+
             modal = modal.replace(/AppName/g, details.name);
             modal = modal.replace(/AppImage/g, details.image);
-            
+
+            for (let i = 0; i <= 6; i++) {
+                modal = modal.replaceAll(`Port${i}Check`, details.ports[i]?.check || '');
+                modal = modal.replaceAll(`Port${i}External`, details.ports[i]?.external || '');
+                modal = modal.replaceAll(`Port${i}Internal`, details.ports[i]?.internal || '');
+                modal = modal.replaceAll(`Port${i}Protocol`, details.ports[i]?.protocol || '');
+            }
+
+            for (let i = 0; i <= 6; i++) {
+                modal = modal.replaceAll(`Vol${i}Source`, details.volumes[i]?.Source || '');
+                modal = modal.replaceAll(`Vol${i}Destination`, details.volumes[i]?.Destination || '');
+                modal = modal.replaceAll(`Vol${i}RW`, details.volumes[i]?.RW || '');
+            }
+
+
+            for (let i = 0; i <= 19; i++) {
+                modal = modal.replaceAll(`Label${i}Key`, Object.keys(details.labels)[i] || '');
+                modal = modal.replaceAll(`Label${i}Value`, Object.values(details.labels)[i] || '');
+            }
+
+            // console.log(details.env);
+            for (let i = 0; i <= 19; i++) {
+                modal = modal.replaceAll(`Env${i}Key`, details.env[i]?.split('=')[0] || '');
+                modal = modal.replaceAll(`Env${i}Value`, details.env[i]?.split('=')[1] || '');
+            }
+
             res.send(modal);
             return;
         case 'updates':
@@ -169,6 +196,7 @@ async function containerInfo (containerName) {
     let ports_list = [];
     let external = 0;
     let internal = 0;
+    
     try {
         for (const [key, value] of Object.entries(info.HostConfig.PortBindings)) {
             let ports = {
@@ -184,6 +212,15 @@ async function containerInfo (containerName) {
         external = ports_list[0].external;
         internal = ports_list[0].internal;
     } catch {}
+
+    // console.log(ports_list);
+    // console.log(info.HostConfig.PortBindings);
+
+    // console.log(info.HostConfig.Binds);
+
+    // console.log(info.Config.Env);
+    // console.log(info.Config.Labels);
+
     let details = {
         name: containerName,
         image: image,
@@ -192,6 +229,9 @@ async function containerInfo (containerName) {
         external_port: external,
         internal_port: internal,
         ports: ports_list,
+        volumes: info.Mounts,
+        env: info.Config.Env,
+        labels: info.Config.Labels,
         link: 'localhost',
     }
     return details;
@@ -223,8 +263,6 @@ async function createCard (details) {
             break;
     }
     // if (name.startsWith('dweebui')) { disable = 'disabled=""'; }
-
-    let app_icon = details.service;
 
     card = card.replace(/AppName/g, details.name);
     card = card.replace(/AppShortName/g, shortname);

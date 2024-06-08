@@ -305,10 +305,7 @@ export const InstallModal = async (req, res) => {
     res.send(modal);
     return;
   } else {
-      
-
     let result = templates_global.find(t => t.name == input);
-
     let name = result.name || result.title.toLowerCase();
     let short_name = name.slice(0, 25) + "...";
     let desc = result.description.replaceAll(". ", ".\n") || "no description available";
