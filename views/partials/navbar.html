@@ -27,7 +27,7 @@
     }
   }
 </script>
-<header class="navbar navbar-expand-md d-print-none">
+<header class="navbar navbar-expand-md d-print-none py-0">
   <div class="container-xl">
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu"
       aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,18 +35,22 @@
     </button>
     <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0">
       <a href="#">
-        <img src="/images/logo.png" alt="DweebUI" title="DweebUI" height="40px">
+        <img src="/img/logo.png" alt="DweebUI" title="DweebUI" height="40px">
       </a>
       <a href="#">
-        <img src="/images/dweebui.svg" alt="DweebUI" title="DweebUI" class="navbar-brand-image">     
+        <img src="/img/dweebui.svg" alt="DweebUI" title="DweebUI" class="navbar-brand-image">     
       </a>
-      
-
     </h1>
+
+    <% if(alert) { %>
+        <%- alert %>
+    <% } %>
+
     <div class="navbar-nav flex-row order-md-last">
       <div class="nav-item d-none d-md-flex me-3">
 
 
+    
         <!-- <div class="btn-list">
           <a href="#" class="btn text-green">
             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-lock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6z"></path> <path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0"></path> <path d="M8 11v-4a4 4 0 1 1 8 0v4"></path> </svg>
@@ -61,6 +65,16 @@
             VNC
           </a>
         </div> -->
+
+        <!-- <% if(role == 'admin') { %>
+          <div class="btn-list">
+            <a href="#" class="btn text-red">
+              Admin
+            </a>
+          </div>
+        <% } %> -->
+
+
         
         
       </div>
@@ -78,7 +92,7 @@
           <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none" /> <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /> <path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" /> </svg>
         </button>
 
-        <div class="nav-item dropdown d-none d-md-flex me-3">
+        <div class="nav-item dropdown d-none d-md-flex me-2">
           <a href="#" class="nav-link px-0" data-bs-toggle="dropdown" tabindex="-1" aria-label="Show notifications">
             <!-- Download SVG icon from http://tabler-icons.io/i/bell -->
             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none" /> <path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" /> <path d="M9 17v1a3 3 0 0 0 6 0v-1" /> </svg>
@@ -138,7 +152,7 @@
       </div>
       <div class="nav-item dropdown">
         <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
-          <span class="avatar avatar-sm"><%- avatar %></span>
+          <span class="avatar avatar-sm bg-green-lt"><%= avatar %></span></span>
           <div class="d-none d-xl-block ps-2">
             <div>
               <%= name %>
@@ -150,7 +164,6 @@
         </a>
         <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
           <a href="/account" class="dropdown-item">Account</a>
-          <a href="/variables" class="dropdown-item">Variables</a>
           <a href="/settings" class="dropdown-item">Settings</a>
           <!-- <div class="dropdown-divider"></div> -->
 
@@ -166,7 +179,7 @@
       <div class="container-xl">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link" href="/">
+            <a class="nav-link" href="/dashboard">
               <span
                 class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from https://tabler-icons.io/i/dashboard -->
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-dashboard" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M12 13m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path> <path d="M13.45 11.55l2.05 -2.05"></path> <path d="M6.4 20a9 9 0 1 1 11.2 0z"></path> </svg>
@@ -246,17 +259,6 @@
               </span>
               <span class="nav-link-title">
                 Syslogs
-              </span>
-            </a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link" href="/portal">
-              <span
-                class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from https://tabler-icons.io/i/user -->
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-star" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z" /></svg>              </span>
-              <span class="nav-link-title">
-                Portal
               </span>
             </a>
           </li>

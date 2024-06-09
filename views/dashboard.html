@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
     <title>DweebUI - Dashboard</title>
-    <!-- CSS files -->
     <link href="/css/tabler.min.css" rel="stylesheet"/>
     <link href="/css/meters.css" rel="stylesheet"/>
     <script src="/js/htmx.min.js"></script>
@@ -24,13 +23,13 @@
   
   <div class="page">
 
-    <%- include('navbar.html') %>
+    <%- include('partials/navbar.html') %>
     
     <div class="page-wrapper">
 
       <div class="page-body">
         <div class="container-xl">
-          <div class="row row-deck row-cards" hx-ext="sse" sse-connect="/sse_event">
+          <div class="row row-deck row-cards" hx-ext="sse" sse-connect="/sse">
             
             <div class="col-12">
               <div class="row row-cards">
@@ -96,7 +95,7 @@
                         </div>
 
                         <!-- HTMX -->
-                        <div class="col" name="NET" id="purple">
+                        <div class="col" name="NET" id="purple" data-hx-get="/stats" data-hx-trigger="load, every 2s">
                           <div class="font-weight-medium">
                             <label id="net-text" class="net-text mb-1" for="network">Down: 0MB  Up: 0MB</label>
                           </div>
@@ -139,26 +138,27 @@
               </div>
             </div>
 
-
-            
-            <!-- HTMX -->
             <div class="col-12">
-              <div class="row row-cards" id="containerCards" data-hx-get="/containers" data-hx-trigger="load, sse:docker" data-hx-swap="innerHTML">
-
+              <div class="row row-cards" id="containers">
               </div>
             </div>
 
             <!-- HTMX -->
-            <!-- <div class="col-12">
-              <div class="row row-cards" data-hx-get="/installs" name="jellyfin" data-hx-trigger="load delay:2s, sse:install" data-hx-swap="beforeend" hx-target="#containerCards">
-
+            <div class="col-12">
+              <div class="row row-cards" data-hx-post="/dashboard/updates" data-hx-trigger="sse:update" data-hx-swap="afterbegin" hx-target="#containers">
               </div>
-            </div> -->
+            </div>
             
-            <!-- HTMX Target-->
+            <!-- HTMX Modal Target -->
             <div id="modals-here" class="modal modal-blur fade" style="display: none" aria-hidden="false" tabindex="-1">
-              <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+              <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollables">
                 <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title">Loading</h5>
+                  </div>
+                  <div class="modal-body text-center">
+                    <div class="spinner-border"></div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -172,14 +172,12 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
-                    
-                  <div class="card-body">
-                        <h4>Logs:</h4>
+                    <div class="card-body">
+                      <h4>Logs:</h4>
                         <div id="logView">
                           <pre>No logs available</pre>
                         </div>
-                  </div>
-        
+                    </div>
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
@@ -192,13 +190,11 @@
               </div>
             </div>
 
-            
-
           </div>
         </div>
       </div>
       
-    <%- include('footer.html') %>
+    <%- include('partials/footer.html') %>
       
     </div>
   </div>
@@ -222,7 +218,7 @@
           opacity: 1
         },
         stroke: {
-          width: [2, 1],
+          width: [3, 1],
           dashArray: [0, 3],
           lineCap: "round",
           curve: "smooth"
@@ -261,6 +257,8 @@
         }
     }
   </script>
+  
+  <!-- SelectAll for the permissions modal -->
   <script>
     function selectAll(group) {
       

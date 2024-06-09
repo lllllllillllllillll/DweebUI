@@ -10,7 +10,8 @@ export const Uninstall = async (req, res) => {
 
     if (confirm == 'Yes') {
 
-        var containerName = docker.getContainer(`${service_name}`);
+        let containerName = docker.getContainer(service_name);
+        console.log(`Stopping ${service_name}...`)
         try {
             await containerName.stop();
         } catch {
@@ -18,6 +19,7 @@ export const Uninstall = async (req, res) => {
         }
 
         try {
+            console.log(`Removing ${service_name}...`);
             containerName.remove();
             
             const syslog = await Syslog.create({
@@ -38,7 +40,10 @@ export const Uninstall = async (req, res) => {
                 ip: req.socket.remoteAddress
             });
         }
+    } else {
+        console.log(`Didn't confirm uninstallation of ${service_name}...`);
     }
+
     res.redirect('/');
 }
 

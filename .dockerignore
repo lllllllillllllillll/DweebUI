@@ -1,5 +1,8 @@
 **/db.sqlite
 **/node_modules
-**/appdata
-.gitignore
 **/screenshots
+.gitignore
+.github
+.git
+Dockerfile
+docker-compose.yaml

@@ -3,6 +3,16 @@ import { docker } from '../server.js';
 
 export const Networks = async function(req, res) {
 
+
+    let container_networks = [];
+    // List all containers
+    let containers = await docker.listContainers({ all: true });
+    for (let i = 0; i < containers.length; i++) {
+        let network_name = containers[i].HostConfig.NetworkMode;
+        try { container_networks.push(containers[i].NetworkSettings.Networks[network_name].NetworkID) } catch {}
+    }
+
+
     let networks = await docker.listNetworks({ all: true });
 
     let network_list = `
@@ -24,12 +34,17 @@ export const Networks = async function(req, res) {
         // let date = new Date(images[i].Created * 1000);
         // let created = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
         
+        let status = '';
+        if (container_networks.includes(networks[i].Id)) {
+            status = `In use`;
+        }
+
         let details = `
             <tr>
                 <td><input class="form-check-input m-0 align-middle" name="select" value="${networks[i].Id}" type="checkbox" aria-label="Select"></td>
                 <td class="sort-name">${networks[i].Name}</td>
                 <td class="sort-city">${networks[i].Id}</td>
-                <td class="sort-score text-green"> - </td>
+                <td class="sort-score text-green">${status}</td>
                 <td class="sort-date" data-date="1628122643">${networks[i].Created}</td>
                 <td class="text-end"><a class="btn" href="#">Details</a></td>
             </tr>`
@@ -41,9 +56,10 @@ export const Networks = async function(req, res) {
     res.render("networks", {
         name: req.session.user,
         role: req.session.role,
-        avatar: req.session.avatar,
+        avatar: req.session.user.charAt(0).toUpperCase(),
         network_list: network_list,
-        network_count: networks.length
+        network_count: networks.length,
+        alert: '',
     });
 }
 

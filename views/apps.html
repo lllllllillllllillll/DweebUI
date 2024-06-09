@@ -8,6 +8,7 @@
     <!-- CSS files -->
     <link href="/css/tabler.min.css" rel="stylesheet"/>
     <link href="/css/demo.min.css" rel="stylesheet"/>
+    <script src="/js/htmx.min.js"></script>
     <style>
 			@import url('/fonts/inter.css');
 			:root {
@@ -22,55 +23,119 @@
     <div class="page">
       <!-- Navbar -->
 
-      <%- include('navbar.html') %>
+      <%- include('partials/navbar.html') %>
 
       <div class="page-wrapper">
         <!-- Page header -->
-        <div class="page-header d-print-none">
+        <div class="mt-3">
           <div class="container-xl">
-            <div class="row g-2 align-items-center">
-              <div class="col">
-                <h2 class="page-title">
-                  Apps
-                </h2>
-                <div class="text-secondary mt-1"><%= list_start %> - <%= list_end %> of <%= app_count %> Apps.</div>
-              </div>
-              <!-- Page title actions -->
-              <div class="col-auto ms-auto d-print-none">
+            <div class="row row-cards">
 
-                <div class="d-flex">
-                  <form action="/apps" id="search" name="search" method="POST">
-                    <input type="search" class="form-control" name="search" placeholder="Search apps…">
-                  </form>
-                  <input type="submit" form="search" class="btn btn-outline-success h-50" value="search">
-
-                  <div class="card-actions btn-actions">
-                    <div class="card-actions btn-actions">
-                      <div class="dropdown">
-                        <a href="#" class="btn-action dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Change Templates">
-                          <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-settings" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z" /><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /></svg>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end">
-                          <a class="dropdown-item" href="#">Default Template</a>
-                          <a class="dropdown-item" href="#">Compose Files</a>
-                          <a class="dropdown-item" href="#">Custom Template</a>
-                        </div>
-                      </div>
+              <div class="col-md-6 col-lg-3">
+                <div class="card">
+                  <div class="card-body text-center">
+                    <div class="d-flex align-items-center">
+                      <div class="me-auto btn"><%= list_start %> - <%= list_end %> of <%= app_count %> Apps</div>
+                        <%- remove_button %>
                     </div>
                   </div>
-
                 </div>
               </div>
+
+              <div class="col-md-6 col-lg-3">
+                <div class="card">
+                  <div class="card-body text-center">
+                    <div class="d-flex align-items-center">
+                      <div class="btn me-2">
+                        Category:
+                      </div>
+                      <div class="dropdown">
+                        <button class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Everything</button>
+                        <form action="/apps" method="POST">
+                          <ul class="dropdown-menu">
+                            <li><input type="submit" class="dropdown-item" name="search" value="Other"></li>
+                            <li><input type="submit" class="dropdown-item" name="search" value="Productivity"></li>
+                            <li><input type="submit" class="dropdown-item" name="search" value="Tools"></li>
+                            <li><input type="submit" class="dropdown-item" name="search" value="Dashboard"></li>
+                            <li><input type="submit" class="dropdown-item" name="search" value="Communication"></li>
+                            <li><input type="submit" class="dropdown-item" name="search" value="Media"></li>
+                            <li><input type="submit" class="dropdown-item" name="search" value="CMS"></li>
+                            <li><input type="submit" class="dropdown-item" name="search" value="Monitoring"></li>
+                            <li><input type="submit" class="dropdown-item" name="search" value="LDAP"></li>
+                            <li><input type="submit" class="dropdown-item" name="search" value="Arr"></li>
+                            <li><input type="submit" class="dropdown-item" name="search" value="Paid"></li>
+                            <li><input type="submit" class="dropdown-item" name="search" value="Database"></li>
+                            <li><input type="submit" class="dropdown-item" name="search" value="Gaming"></li>
+                            <li><input type="submit" class="dropdown-item" name="search" value="Finance"></li>
+                            <li><input type="submit" class="dropdown-item" name="search" value="Networking"></li>
+                            <li><input type="submit" class="dropdown-item" name="search" value="Authentication"></li>
+                            <li><input type="submit" class="dropdown-item" name="search" value="Development"></li>
+                            <li><input type="submit" class="dropdown-item" name="search" value="Downloader"></li>
+                          </ul>
+                        </form>
+
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-lg-3">
+                <div class="card">
+                  <div class="card-body text-center">
+                    <div class="d-flex align-items-center">
+                      <dropdown class="me-2">
+                        <button class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Default Templates</button>
+                        <ul class="dropdown-menu">
+                          <li><a class="dropdown-item" href="/apps">Default Templates</a></li>
+                          <li><a class="dropdown-item" href="/apps/1/compose">Compose Files</a></li>
+                          <%- json_templates %>
+                        </ul>
+                      </dropdown>
+                      <button class="btn" name="Import" id="Import" data-hx-get="/import_modal" data-hx-target="#modals-here" hx-swap="innerHTML" data-hx-trigger="click" data-bs-toggle="modal" data-bs-target="#modals-here">Import</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+      
+              <div class="col-md-6 col-lg-3">
+                <div class="card">
+                  <div class="card-body text-center">
+                    <div class="text-secondary d-flex align-items-center">
+                      <form action="/apps" id="search" name="search" method="POST" class="d-flex">
+                        <input type="search" class="form-control me-2" name="search" placeholder="Search apps…" >
+                        <input type="submit" form="search" class="btn" value="Search">
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
 
             </div>
           </div>
         </div>
         <!-- Page body -->
-        <div class="page-body">
+        <div class="mt-3">
           <div class="container-xl">
             <div class="row row-cards">
 
               <%- apps_list %>
+
+            <!-- HTMX Target-->
+            <div id="modals-here" class="modal modal-blur fade" style="display: none" aria-hidden="false" tabindex="-1">
+              <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollables">
+                <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title">Loading</h5>
+                  </div>
+                  <div class="modal-body text-center">
+                    <div class="spinner-border"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
               
             </div>
             <div class="d-flex mt-4">
@@ -82,11 +147,9 @@
                     prev
                   </a>
                 </li>
-                <li class="page-item"><a class="page-link" href="/apps/1">1</a></li>
-                <li class="page-item"><a class="page-link" href="/apps/2">2</a></li>
-                <li class="page-item"><a class="page-link" href="/apps/3">3</a></li>
-                <li class="page-item"><a class="page-link" href="/apps/4">4</a></li>
-                <li class="page-item"><a class="page-link" href="/apps/5">5</a></li>
+
+                <%- pages %>
+                
                 <li class="page-item">
                   <a class="page-link" href="<%- next %>">
                     next <!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
@@ -98,52 +161,13 @@
           </div>
         </div>
         
-        <%- include('footer.html') %>
+        <%- include('partials/footer.html') %>
 
       </div>
     </div>
-    <!-- Libs JS -->
-    <!-- Tabler Core -->
+
     <script src="/js/tabler.min.js" defer></script>
     <script src="/js/demo.min.js" defer></script>
-    
-    <!-- <script>
-      async function sendData(form) {
-        const formData = new FormData(form);
-        const jsonData = {};
-
-        for (let [key, value] of formData.entries()) {
-          jsonData[key] = value;
-        }
-
-        try {
-          const response = await fetch("/install", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(jsonData),
-          });
-          console.log(await response.json());
-        } catch (e) {
-          console.error(e);
-        }
-      }
-
-      document.addEventListener("submit", (event) => {
-        event.preventDefault();
-
-        const buttonId = event.target.id;
-        console.log(buttonId);
-        const form = document.querySelector(`#${buttonId}`);
-
-        if (form) {
-          sendData(form);
-        } else {
-          console.error(`Form not found for button with ID: ${buttonId}`);
-        }
-      });
-    </script> -->
     
   </body>
 </html>

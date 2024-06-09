@@ -12,7 +12,8 @@ export const Account = async (req, res) => {
         id: user.id,
         email: user.email,
         role: user.role,
-        avatar: user.avatar,
+        avatar: req.session.user.charAt(0).toUpperCase(),
+        alert: '',
     });
 
 

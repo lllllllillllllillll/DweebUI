@@ -3359,7 +3359,7 @@
       "type": 1,
       "volumes": [
         {
-          "bind": "/portainer/Downloads",
+          "bind": "/home/docker/downloads",
           "container": "/data"
         },
         {
@@ -4299,7 +4299,7 @@
           "container": "/config"
         },
         {
-          "bind": "/portainer/Downloads",
+          "bind": "/home/docker/Downloads",
           "container": "/app/qBittorrent/downloads"
         }
       ]
@@ -4707,7 +4707,7 @@
           "container": "/etc/localtime"
         },
         {
-          "bind": "/portainer/Downloads",
+          "bind": "/home/docker/Downloads",
           "container": "/downloads"
         },
         {
@@ -4734,7 +4734,7 @@
           "container": "/app/configs"
         },
         {
-          "bind": "/portainer/Downloads",
+          "bind": "/home/docker/Downloads",
           "container": "/downloads"
         }
       ],
@@ -5125,11 +5125,11 @@
       "type": 1,
       "volumes": [
         {
-          "bind": "/portainer/Files/AppData/Adguard/Workdir",
+          "bind": "/home/docker/Files/AppData/Adguard/Workdir",
           "container": "/opt/adguardhome/work"
         },
         {
-          "bind": "/portainer/Files/AppData/Adguard/Conf",
+          "bind": "/home/docker/Files/AppData/Adguard/Conf",
           "container": "/opt/adguardhome/conf"
         }
       ]
@@ -5220,7 +5220,7 @@
       "note": "",
       "description": "Elasticsearch is a distributed, RESTful search and analytics engine capable of solving a growing number of use cases. It provides a distributed, multitenant-capable full-text search engine with an HTTP web interface and schema-free JSON documents. <a href='https://www.elastic.co/' target='_blank'>Website</a>. <a href='https://hub.docker.com/_/elasticsearch' target='_blank'>Docker Hub</a>",
       "logo": "https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/elasticsearch.png",
-      "image": "elasticsearch",
+      "image": "elasticsearch:8.13.4",
       "categories": [
         "Database"
       ],

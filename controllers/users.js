@@ -20,13 +20,14 @@ export const Users = async (req, res) => {
     let allUsers = await User.findAll();
     allUsers.forEach((account) => {
 
-        let active = '<span class="badge badge-outline text-green">Active</span>'
+        let active = '<span class="badge badge-outline text-green" title="User has logged-in within the last 30 days.">Active</span>'
         let lastLogin = new Date(account.lastLogin);
         let currentDate = new Date();
         let days = Math.floor((currentDate - lastLogin) / (1000 * 60 * 60 * 24));
+        let avatar = account.username.charAt(0);
 
         if (days > 30) {
-            active = '<span class="badge badge-outline text-grey">Inactive</span>';
+            active = '<span class="badge badge-outline text-grey" title="User has not logged-in within the last 30 days.">Inactive</span>';
         }
 
 
@@ -35,7 +36,7 @@ export const Users = async (req, res) => {
         <tr>
             <td><input class="form-check-input" type="checkbox"></td>
             <td>${account.id}</td>
-            <td><span class="avatar me-2">${account.avatar}</span></td>
+            <td><span class="avatar avatar-sm bg-green-lt">${avatar}</span></span>
             <td>${account.name}</td>
             <td>${account.username}</td>
             <td>${account.email}</td>
@@ -43,7 +44,7 @@ export const Users = async (req, res) => {
             <td>${account.role}</td>
             <td>${account.lastLogin}</td>
             <td>${active}</td>
-            <td><a href="#" class="btn">Edit</a></td>
+            <td><a href="#" class="btn">View</a></td>
         </tr>`
 
         user_list += info;
@@ -53,8 +54,9 @@ export const Users = async (req, res) => {
     res.render("users", {
         name: req.session.user,
         role: req.session.role,
-        avatar: req.session.avatar,
-        user_list: user_list
+        avatar: req.session.user.charAt(0).toUpperCase(),
+        user_list: user_list,
+        alert: ''
     });
 
 }

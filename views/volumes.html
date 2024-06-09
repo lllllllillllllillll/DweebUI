@@ -20,7 +20,7 @@
   <body >
     <div class="page">
       <!-- Navbar -->
-      <%- include('navbar.html') %>
+      <%- include('partials/navbar.html') %>
       <div class="page-wrapper">
         <!-- Page header -->
         
@@ -35,11 +35,11 @@
                     <div class="card-header">
                       <h3 class="card-title">Docker Volumes</h3>
                         <div class="card-options btn-list">                  
-                            <a href="#" class="btn">
+                            <!-- <a href="#" class="btn">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-refresh" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4"></path> <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"></path> </svg>
                               Refresh
-                            </a>
-                            <a href="#" class="btn" data-bs-toggle="modal" data-bs-target="#not_add-site">
+                            </a> -->
+                            <a href="#" class="btn" data-bs-toggle="modal" data-bs-target="#modals-here">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M12 5l0 14"></path> <path d="M5 12l14 0"></path> </svg>
                               New Volume
                             </a>
@@ -79,6 +79,39 @@
 
                     </div>
                   </form>
+
+
+                  <div id="modals-here" class="modal modal-blur fade" style="display: none" aria-hidden="false" tabindex="-1">
+                    <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollables">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">New Volume</h5>
+                        </div>
+
+                        <div class="modal-body text-center">
+                          <form method="post" action="/addVolume">
+
+                              <div class="row g-2 align-items-end">
+                                <div class="col-9">
+                                  <label class="form-label text-muted">Volume Name</label>
+                                  <input type="text" class="form-control" name="volume">
+                                </div>
+                                
+                                <div class="col-2">
+                                  <button type="submit" class="btn mt-2">Create</button>
+                                </div>
+                              </div>
+                                
+                                <label class="mt-3 text-muted"><label class="text-danger">*</label>Name cannot contain spaces or special characters.</label>
+                          </form>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+
+
+
                 </div>
               </div>
 
@@ -86,7 +119,7 @@
           </div>
         </div>
         
-        <%- include('footer.html') %>
+        <%- include('partials/footer.html') %>
         
       </div>
     </div>

@@ -2,30 +2,22 @@ import { User, Syslog } from '../database/models.js';
 import bcrypt from 'bcrypt';
 
 
-
 export const Login = function(req,res){
-    if(req.session.user){
-        res.redirect("/logout");
-    }else{
-        res.render("login",{
-            "error":"",
-        });
-    }
+    if (req.session.user) { res.redirect("/logout"); }
+    else { res.render("login",{ "error":"", }); }
 }
 
 export const submitLogin = async function(req,res){
-
     let { email, password } = req.body;
+    email = email.toLowerCase();
 
-    if(email && password){
-
+    if (email && password) {
         let existingUser = await User.findOne({ where: {email:email}});
-        if(existingUser){
+        if (existingUser) {
 
             let match = await bcrypt.compare(password,existingUser.password);
 
-            if(match){
-
+            if (match) {
                 let currentDate = new Date();
                 let newLogin = currentDate.toLocaleString();
                 await User.update({lastLogin: newLogin}, {where: {UUID:existingUser.UUID}});
@@ -42,14 +34,9 @@ export const submitLogin = async function(req,res){
                     message: "User logged in successfully",
                     ip: req.socket.remoteAddress
                 });
-
-                if (req.session.role == "admin") {
-                    res.redirect("/");
-                }
-                else {
-                    res.redirect("/portal");
-                }
-            }else{
+                
+                res.redirect("/dashboard");
+            } else {
 
                 const syslog = await Syslog.create({
                     user: null,
@@ -63,12 +50,12 @@ export const submitLogin = async function(req,res){
                     "error":"Invalid password",
                 });
             }
-        }else{
+        } else {
             res.render("login",{
                 "error":"User with that email does not exist.",
             });
         }
-    }else{
+    } else {
         res.status(400);
         res.render("login",{
             "error":"Please fill in all the fields.",

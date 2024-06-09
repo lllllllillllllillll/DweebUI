@@ -1,0 +1,22 @@
+<div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollables">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">PermissionsTitle Permissions</h5>
+        </div>
+        <div class="modal-body">
+            <div class="accordion" id="modal-accordion">
+                PermissionsList
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="row">
+                <div class="col">
+                    <form id="reset_permissions">
+                        <input type="hidden" name="container" value="PermissionsContainer">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal" name="reset_permissions" value="reset_permissions" id="submit" hx-post="/updatePermissions" hx-trigger="click" hx-confirm="Are you sure you want to reset permissions for this container?">Reset</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

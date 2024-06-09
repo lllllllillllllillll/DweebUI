@@ -1,0 +1,956 @@
+<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Details</h5>
+        </div>
+        <div class="modal-body">
+            
+            <form action="" id="details_modal" method="POST">
+            <div class="row mb-3 align-items-end">
+                <div class="col-lg-5">
+                    <label class="form-label">Container Name: </label>
+                    <input type="text" class="form-control" name="service_name" value="AppName" hidden/>
+                    <input type="text" class="form-control" name="name" value="AppName"/>
+                </div>
+                <div class="col-lg-4">
+                    <label class="form-label">Image: </label>
+                    <input type="text" class="form-control" name="image" value="AppImage"/>
+                </div>
+                <div class="col-lg-3">
+                    <label class="form-label">Restart Policy: </label>
+                    <select class="form-select" name="restart_policy" value="">
+                    <option value="1">unless-stopped</option>
+                    <option value="2">on-failure</option>
+                    <option value="3">never</option>
+                    <option value="4">always</option>
+                    </select>
+                </div>
+                </div>
+                <label class="form-label">Network Mode</label>
+                <div class="form-selectgroup-boxes row mb-3">
+                <div class="col">
+                    <label class="form-selectgroup-item">
+                        <input type="radio" name="report-type" value="1" class="form-selectgroup-input">
+                        <span class="form-selectgroup-label d-flex align-items-center p-3">
+                        <span class="me-3">
+                            <span class="form-selectgroup-check"></span>
+                        </span>
+                        <span class="form-selectgroup-label-content">
+                            <span class="form-selectgroup-title strong mb-1">Host Network</span>
+                            <span class="d-block text-secondary">Same as host. No isolation. ex.127.0.0.1</span>
+                        </span>
+                        </span>
+                    </label>
+                    </div>
+                    <div class="col">
+                    <label class="form-selectgroup-item">
+                        <input type="radio" name="report-type" class="form-selectgroup-input">
+                        <span class="form-selectgroup-label d-flex align-items-center p-3">
+                        <span class="me-3">
+                            <span class="form-selectgroup-check"></span>
+                        </span>
+                        <span class="form-selectgroup-label-content">
+                            <span class="form-selectgroup-title strong mb-1">Bridge Network</span>
+                            <span class="d-block text-secondary">Containers can communicate using names.</span>
+                        </span>
+                        </span>
+                    </label>
+                    </div>
+                    <div class="col">
+                    <label class="form-selectgroup-item">
+                    <input type="radio" name="report-type" class="form-selectgroup-input">
+                    <span class="form-selectgroup-label d-flex align-items-center p-3">
+                    <span class="me-3">
+                        <span class="form-selectgroup-check"></span>
+                    </span>
+                    <span class="form-selectgroup-label-content">
+                        <span class="form-selectgroup-title strong mb-1">Docker Network</span>
+                        <span class="d-block text-secondary">Isolated on the docker network. ex.172.0.34.2</span>
+                    </span>
+                    </span>
+                    </label>
+                </div>
+                </div>
+                
+                <div class="accordion" id="modal-accordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="heading-1">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-1" aria-expanded="false">
+                            Ports
+                            </button>
+                        </h2>
+                        <div id="collapse-1" class="accordion-collapse collapse" data-bs-parent="#modal-accordion">
+                            <div class="accordion-body pt-0">
+        
+                                <div class="row mb-1 align-items-end">
+                                    <div class="col-auto">
+                                    <input class="form-check-input" name="port_0_check" type="checkbox" Port0Check>
+                                    </div>
+                                    <div class="col">
+                                    <label class="form-label">External Port</label>
+                                    <input type="text" class="form-control" name="port_0_external" value="Port0External"/>
+                                    </div>
+                                    <div class="col">
+                                    <label class="form-label">Internal Port</label>
+                                    <input type="text" class="form-control" name="port_0_internal" value="Port0Internal"/>
+                                    </div>
+                                    <div class="col-lg-2">
+                                    <label class="form-label">Protocol</label>
+                                    <select class="form-select" name="port_0_protocol">
+                                        <option value="Port0Protocol" selected hidden>Port0Protocol</option>
+                                        <option value="tcp">tcp</option>
+                                        <option value="udp">udp</option>
+                                    </select>
+                                    </div>
+                                </div>
+            
+                                <div class="row mb-1 align-items-end">
+                                    <div class="col-auto">
+                                    <input class="form-check-input" name="port_1_check" type="checkbox" Port1Check>
+                                    </div>
+                                    <div class="col">
+                                    <input type="text" class="form-control" name="port_1_external" value="Port1External"/>
+                                    </div>
+                                    <div class="col">
+                                    <input type="text" class="form-control" name="port_1_internal" value="Port1Internal"/>
+                                    </div>
+                                    <div class="col-lg-2">
+                                    <select class="form-select" name="port_1_protocol">
+                                        <option value="Port1Protocol" selected hidden>Port1Protocol</option>
+                                        <option value="tcp">tcp</option>
+                                        <option value="udp">udp</option>
+                                    </select>
+                                    </div>
+                                </div>
+                
+                                <div class="row mb-1 align-items-end">
+                                    <div class="col-auto">
+                                    <input class="form-check-input" name="port_2_check" type="checkbox" Port2Check>
+                                    </div>
+                                    <div class="col">
+                                    <input type="text" class="form-control" name="port_2_external" value="Port2External"/>
+                                    </div>
+                                    <div class="col">
+                                    <input type="text" class="form-control" name="port_2_internal" value="Port2Internal"/>
+                                    </div>
+                                    <div class="col-lg-2">
+                                    <select class="form-select" name="port_2_protocol">
+                                        <option value="Port2Protocol" selected hidden>Port2Protocol</option>
+                                        <option value="tcp">tcp</option>
+                                        <option value="udp">udp</option>
+                                    </select>
+                                    </div>
+                                </div>
+
+                
+                                <div class="row mb-1 align-items-end">
+                                    <div class="col-auto">
+                                    <input class="form-check-input" name="port_3_check" type="checkbox" Port3Check>
+                                    </div>
+                                    <div class="col">
+                                    <input type="text" class="form-control" name="port_3_external" value="Port3External"/>
+                                    </div>
+                                    <div class="col">
+                                    <input type="text" class="form-control" name="port_3_internal" value="Port3Internal"/>
+                                    </div>
+                                    <div class="col-lg-2">
+                                    <select class="form-select" name="port_3_protocol">
+                                        <option value="Port3Protocol" selected hidden>Port3Protocol</option>
+                                        <option value="tcp">tcp</option>
+                                        <option value="udp">udp</option>
+                                    </select>
+                                    </div>
+                                </div>
+
+
+                                <div class="row mb-1 align-items-end">
+                                    <div class="col-auto">
+                                    <input class="form-check-input" name="port_4_check" type="checkbox" Port4Check>
+                                    </div>
+                                    <div class="col">
+                                    <input type="text" class="form-control" name="port_4_external" value="Port4External"/>
+                                    </div>
+                                    <div class="col">
+                                    <input type="text" class="form-control" name="port_4_internal" value="Port4Internal"/>
+                                    </div>
+                                    <div class="col-lg-2">
+                                    <select class="form-select" name="port_4_protocol">
+                                        <option value="Port4Protocol" selected hidden>Port4Protocol</option>
+                                        <option value="tcp">tcp</option>
+                                        <option value="udp">udp</option>
+                                    </select>
+                                    </div>
+                                </div>
+                
+                                <div class="row mb-1 align-items-end">
+                                    <div class="col-auto">
+                                    <input class="form-check-input" name="port_5_check" type="checkbox" Port5Check>
+                                    </div>
+                                    <div class="col">
+                                    <input type="text" class="form-control" name="port_5_external" value="Port5External"/>
+                                    </div>
+                                    <div class="col">
+                                    <input type="text" class="form-control" name="port_5_internal" value="Port5Internal"/>
+                                    </div>
+                                    <div class="col-lg-2">
+                                    <select class="form-select" name="port_5_protocol">
+                                        <option value="Port5Protocol" selected hidden>Port5Protocol</option>
+                                        <option value="tcp">tcp</option>
+                                        <option value="udp">udp</option>
+                                    </select>
+                                    </div>
+                                </div>
+            
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="heading-2">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-2" aria-expanded="false">
+                            Volumes
+                            </button>
+                        </h2>
+
+                        <div id="collapse-2" class="accordion-collapse collapse" data-bs-parent="#modal-accordion">
+
+                            <div class="accordion-body pt-0">
+                                <div class="row mb-1 align-items-end">
+                                    <div class="col-auto">
+                                        <input class="form-check-input" name="volume_0_check" type="checkbox" Vol0Check>
+                                    </div>
+                                    <div class="col">
+                                        <input type="text" class="form-control" name="volume_0_bind" value="Vol0Source"/>
+                                    </div>
+                                    <div class="col">
+                                        <input type="text" class="form-control" name="volume_0_container" value="Vol0Destination"/>
+                                    </div>
+                                    <div class="col-lg-2">
+                                    <select class="form-select" name="volume_0_readwrite">
+                                        <option value="Vol0RW" selected hidden>Vol0RW</option>
+                                        <option value="rw">rw</option>
+                                        <option value="ro">ro</option>
+                                    </select>
+                                    </div>
+                                </div>
+            
+                                <div class="row mb-1 align-items-end">
+                                    <div class="col-auto">
+                                    <input class="form-check-input" name="volume_1_check" type="checkbox" Vol1Check>
+                                    </div>
+                                    <div class="col">
+                                    <input type="text" class="form-control" name="volume_1_bind" value="Vol1Source"/>
+                                    </div>
+                                    <div class="col">
+                                    <input type="text" class="form-control" name="volume_1_container" value="Vol1Destination"/>
+                                    </div>
+                                    <div class="col-lg-2">
+                                    <select class="form-select" name="volume_1_readwrite">
+                                        <option value="Vol1RW" selected hidden>Vol1RW</option>
+                                        <option value="rw">rw</option>
+                                        <option value="ro">ro</option>
+                                    </select>
+                                    </div>
+                                </div>
+            
+                                <div class="row mb-1 align-items-end">
+                                    <div class="col-auto">
+                                    <input class="form-check-input" name="volume_2_check" type="checkbox" Vol2Check>
+                                    </div>
+                                    <div class="col">
+                                    <input type="text" class="form-control" name="volume_2_bind" value="Vol2Source"/>
+                                    </div>
+                                    <div class="col">
+                                    <input type="text" class="form-control" name="volume_2_container" value="Vol2Destination"/>
+                                    </div>
+                                    <div class="col-lg-2">
+                                    <select class="form-select" name="volume_2_readwrite">
+                                        <option value="Vol2RW" selected hidden>Vol2RW</option>
+                                        <option value="rw">rw</option>
+                                        <option value="ro">ro</option>
+                                    </select>
+                                    </div>
+                                </div>
+                    
+                                <div class="row mb-1 align-items-end">
+                                    <div class="col-auto">
+                                    <input class="form-check-input" name="volume_3_check" type="checkbox" Vol3Check>
+                                    </div>
+                                    <div class="col">
+                                    <input type="text" class="form-control" name="volume_3_bind" value="Vol3Source"/>
+                                    </div>
+                                    <div class="col">
+                                    <input type="text" class="form-control" name="volume_3_container" value="Vol3Destination"/>
+                                    </div>
+                                    <div class="col-lg-2">
+                                    <select class="form-select" name="volume_3_readwrite">
+                                        <option value="Vol3RW" selected hidden>Vol3RW</option>
+                                        <option value="rw">rw</option>
+                                        <option value="ro">ro</option>
+                                    </select>
+                                    </div>
+                                </div>
+                    
+                                <div class="row mb-1 align-items-end">
+                                    <div class="col-auto">
+                                    <input class="form-check-input" name="volume_4_check" type="checkbox" Vol4Check>
+                                    </div>
+                                    <div class="col">
+                                    <input type="text" class="form-control" name="volume_4_bind" value="Vol4Source"/>
+                                    </div>
+                                    <div class="col">
+                                    <input type="text" class="form-control" name="volume_4_container" value="Vol4Destination"/>
+                                    </div>
+                                    <div class="col-lg-2">
+                                    <select class="form-select" name="volume_4_readwrite">
+                                        <option value="Vol4RW" selected hidden>Vol4RW</option>
+                                        <option value="rw">rw</option>
+                                        <option value="ro">ro</option>
+                                    </select>
+                                    </div>
+                                </div>
+        
+                                <div class="row mb-1 align-items-end">
+                                    <div class="col-auto">
+                                        <input class="form-check-input" name="volume_5_check" type="checkbox" Vol5Check>
+                                    </div>
+                                    <div class="col">
+                                        <input type="text" class="form-control" name="volume_5_bind" value="Vol5Source"/>
+                                    </div>
+                                    <div class="col">
+                                        <input type="text" class="form-control" name="volume_5_container" value="Vol5Destination"/>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <select class="form-select" name="volume_5_readwrite">
+                                        <option value="Vol5RW" selected hidden>Vol5RW</option>
+                                        <option value="rw">rw</option>
+                                        <option value="ro">ro</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading-3">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-3" aria-expanded="false">
+                        Environment Variables
+                        </button>
+                    </h2>
+                    <div id="collapse-3" class="accordion-collapse collapse" data-bs-parent="#modal-accordion">
+                        <div class="accordion-body pt-0">
+    
+                            <div class="row mb-1 align-items-end">
+                                <div class="col-auto">
+                                    <input class="form-check-input" type="checkbox" name="env_0_check" Env0Check>
+                                </div>
+                                <div class="col">
+                                    <label class="form-label">Variable</label>
+                                    <input type="text" class="form-control" name="env_0_name" value="Env0Key"/>
+                                </div>
+                                <div class="col">
+                                    <label class="form-label">Value</label>
+                                    <input type="text" class="form-control" name="env_0_default" value="Env0Value"/>
+                                </div>
+                            </div>
+            
+                            <div class="row mb-1 align-items-end">
+                                <div class="col-auto">
+                                    <input class="form-check-input" type="checkbox" name="env_1_check" Env1Check>
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" name="env_1_name" value="Env1Key"/>
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" name="env_1_default" value="Env1Value"/>
+                                </div>
+                            </div>
+            
+                            <div class="row mb-1 align-items-end">
+                                <div class="col-auto">
+                                <input class="form-check-input" type="checkbox" name="env_2_check" Env2Check>
+                                </div>
+                                <div class="col">
+                                <input type="text" class="form-control" name="env_2_name" value="Env2Key"/>
+                                </div>
+                                <div class="col">
+                                <input type="text" class="form-control" name="env_2_default" value="Env2Value"/>
+                                </div>
+                            </div>
+            
+                            <div class="row mb-1 align-items-end">
+                                <div class="col-auto">
+                                <input class="form-check-input" type="checkbox" name="env_3_check" Env3Check>
+                                </div>
+                                <div class="col">
+                                <input type="text" class="form-control" name="env_3_name" value="Env3Key"/>
+                                </div>
+                                <div class="col">
+                                <input type="text" class="form-control" name="env_3_default" value="Env3Value"/>
+                                </div>
+                            </div>
+            
+                            <div class="row mb-1 align-items-end">
+                                <div class="col-auto">
+                                <input class="form-check-input" type="checkbox" name="env_4_check" Env4Check>
+                                </div>
+                                <div class="col">
+                                <input type="text" class="form-control" name="env_4_name" value="Env4Key"/>
+                                </div>
+                                <div class="col">
+                                <input type="text" class="form-control" name="env_4_default" value="Env4Value"/>
+                                </div>
+                            </div>
+            
+                            <div class="row mb-1 align-items-end">
+                                <div class="col-auto">
+                                <input class="form-check-input" type="checkbox" name="env_5_check" Env5Check>
+                                </div>
+                                <div class="col">
+                                <input type="text" class="form-control" name="env_5_name" value="Env5Key"/>
+                                </div>
+                                <div class="col">
+                                <input type="text" class="form-control" name="env_5_default" value="Env5Value"/>
+                                </div>
+                            </div>
+            
+                            <div class="row mb-1 align-items-end">
+                                <div class="col-auto">
+                                <input class="form-check-input" type="checkbox" name="env_6_check" Env6Check>
+                                </div>
+                                <div class="col">
+                                <input type="text" class="form-control" name="env_6_name" value="Env6Key"/>
+                                </div>
+                                <div class="col">
+                                <input type="text" class="form-control" name="env_6_default" value="Env6Value"/>
+                                </div>
+                            </div>
+            
+            
+                            <div class="row mb-1 align-items-end">
+                                <div class="col-auto">
+                                <input class="form-check-input" type="checkbox" name="env_7_check" Env7Check>
+                                </div>
+                                <div class="col">
+                                <input type="text" class="form-control" name="env_7_name" value="Env7Key"/>
+                                </div>
+                                <div class="col">
+                                <input type="text" class="form-control" name="env_7_default" value="Env7Value"/>
+                                </div>
+                            </div>
+            
+            
+                            <div class="row mb-1 align-items-end">
+                                <div class="col-auto">
+                                <input class="form-check-input" type="checkbox" name="env_8_check" Env8Check>
+                                </div>
+                                <div class="col">
+                                <input type="text" class="form-control" name="env_8_name" value="Env8Key"/>
+                                </div>
+                                <div class="col">
+                                <input type="text" class="form-control" name="env_8_default" value="Env8Value"/>
+                                </div>
+                            </div>
+            
+            
+                            <div class="row mb-1 align-items-end">
+                                <div class="col-auto">
+                                <input class="form-check-input" type="checkbox" name="env_9_check" Env9Check>
+                                </div>
+                                <div class="col">
+                                <input type="text" class="form-control" name="env_9_name" value="Env9Key"/>
+                                </div>
+                                <div class="col">
+                                <input type="text" class="form-control" name="env_9_default" value="Env9Value"/>
+                                </div>
+                            </div>
+            
+            
+                            <div class="row mb-1 align-items-end">
+                                <div class="col-auto">
+                                <input class="form-check-input" type="checkbox" name="env_10_check" Env10Check>
+                                </div>
+                                <div class="col">
+                                <input type="text" class="form-control" name="env_10_name" value="Env10Key"/>
+                                </div>
+                                <div class="col">
+                                <input type="text" class="form-control" name="env_10_default" value="Env10Value"/>
+                                </div>
+                            </div>
+            
+            
+                            <div class="row mb-1 align-items-end">
+                                <div class="col-auto">
+                                <input class="form-check-input" type="checkbox" name="env_11_check" Env11Check>
+                                </div>
+                                <div class="col">
+                                <input type="text" class="form-control" name="env_11_name" value="Env11Key"/>
+                                </div>
+                                <div class="col">
+                                <input type="text" class="form-control" name="env_11_default" value="Env11Value"/>
+                                </div>
+                            </div>
+
+                            <div class="row mb-1 align-items-end">
+                                <div class="col-auto">
+                                    <input class="form-check-input" type="checkbox" name="env_12_check" Env12Check>
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" name="env_12_name" value="Env12Key"/>
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" name="env_12_default" value="Env12Value"/>
+                                </div>
+                            </div>
+
+                            <div class="row mb-1 align-items-end">
+                                <div class="col-auto">
+                                    <input class="form-check-input" type="checkbox" name="env_12_check" Env13Check>
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" name="env_12_name" value="Env13Key"/>
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" name="env_12_default" value="Env13Value"/>
+                                </div>
+                            </div>
+
+                            <div class="row mb-1 align-items-end">
+                                <div class="col-auto">
+                                    <input class="form-check-input" type="checkbox" name="env_12_check" Env14Check>
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" name="env_12_name" value="Env14Key"/>
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" name="env_12_default" value="Env14Value"/>
+                                </div>
+                            </div>
+
+                            <div class="row mb-1 align-items-end">
+                                <div class="col-auto">
+                                    <input class="form-check-input" type="checkbox" name="env_12_check" Env15Check>
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" name="env_12_name" value="Env15Key"/>
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" name="env_12_default" value="Env15Value"/>
+                                </div>
+                            </div>
+
+
+                            
+
+    
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading-4">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-4" aria-expanded="false">
+                        Labels
+                        </button>
+                    </h2>
+                    <div id="collapse-4" class="accordion-collapse collapse" data-bs-parent="#modal-accordion">
+                        <div class="accordion-body pt-0">
+    
+                            <div class="row mb-1 align-items-end">
+                                <div class="col-auto">
+                                    <input class="form-check-input" type="checkbox" name="label_0_check" Label0Check>
+                                </div>
+                                <div class="col">
+                                    <label class="form-label">Variable</label>
+                                    <input type="text" class="form-control" name="label_0_name" value="Label0Key"/>
+                                </div>
+                                <div class="col">
+                                    <label class="form-label">Value</label>
+                                    <input type="text" class="form-control" name="label_0_value" value="Label0Value"/>
+                                </div>
+                            </div>
+            
+                            <div class="row mb-1 align-items-end">
+                            <div class="col-auto">
+                                <input class="form-check-input" type="checkbox" name="label_1_check" Label1Check>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" name="label_1_name" value="Label1Key"/>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" name="label_1_value" value="Label1Value"/>
+                            </div>
+                            </div>
+            
+                            
+                            <div class="row mb-1 align-items-end">
+                            <div class="col-auto">
+                                <input class="form-check-input" type="checkbox" name="label_2_check" Label2Check>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" name="label_2_name" value="Label2Key"/>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" name="label_2_value" value="Label2Value"/>
+                            </div>
+                            </div>
+            
+                            <div class="row mb-1 align-items-end">
+                            <div class="col-auto">
+                                <input class="form-check-input" type="checkbox" name="label_3_check" Label3Check>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" name="label_3_name" value="Label3Key"/>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" name="label_3_value" value="Label3Value"/>
+                            </div>
+                            </div>
+            
+                            <div class="row mb-1 align-items-end">
+                            <div class="col-auto">
+                                <input class="form-check-input" type="checkbox" name="label_4_check" Label4Check>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" name="label_4_name" value="Label4Key"/>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" name="label_4_value" value="Label4Value"/>
+                            </div>
+                            </div>
+
+                            <div class="row mb-1 align-items-end">
+                            <div class="col-auto">
+                                <input class="form-check-input" type="checkbox" name="label_5_check" Label5Check>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" name="label_5_name" value="Label5Key"/>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" name="label_5_value" value="Label5Value"/>
+                            </div>
+                            </div>
+
+                            <div class="row mb-1 align-items-end">
+                            <div class="col-auto">
+                                <input class="form-check-input" type="checkbox" name="label_6_check" Label6Check>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" name="label_6_name" value="Label6Key"/>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" name="label_6_value" value="Label6Value"/>
+                            </div>
+                            </div>
+
+                            <div class="row mb-1 align-items-end">
+                            <div class="col-auto">
+                                <input class="form-check-input" type="checkbox" name="label_7_check" Label7Check>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" name="label_7_name" value="Label7Key"/>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" name="label_7_value" value="Label7Value"/>
+                            </div>
+                            </div>
+
+                            <div class="row mb-1 align-items-end">
+                            <div class="col-auto">
+                                <input class="form-check-input" type="checkbox" name="label_8_check" Label8Check>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" name="label_8_name" value="Label8Key"/>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" name="label_8_value" value="Label8Value"/>
+                            </div>
+                            </div>
+
+                            <div class="row mb-1 align-items-end">
+                            <div class="col-auto">
+                                <input class="form-check-input" type="checkbox" name="label_9_check" Label9Check>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" name="label_9_name" value="Label9Key"/>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" name="label_9_value" value="Label9Value"/>
+                            </div>
+                            </div>
+
+                            <div class="row mb-1 align-items-end">
+                            <div class="col-auto">
+                                <input class="form-check-input" type="checkbox" name="label_10_check" Label10Check>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" name="label_10_name" value="Label10Key"/>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" name="label_10_value" value="Label10Value"/>
+                            </div>
+                            </div>
+
+                            <div class="row mb-1 align-items-end">
+                            <div class="col-auto">
+                                <input class="form-check-input" type="checkbox" name="label_11_check" Label11Check>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" name="label_11_name" value="Label11Key"/>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" name="label_11_value" value="Label11Value"/>
+                            </div>
+                            </div>
+
+                            <div class="row mb-1 align-items-end">
+                                <div class="col-auto">
+                                    <input class="form-check-input" type="checkbox" name="label_11_check" Label12Check>
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" name="label_11_name" value="Label12Key"/>
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" name="label_11_value" value="Label12Value"/>
+                                </div>
+                            </div>
+
+                            <div class="row mb-1 align-items-end">
+                                <div class="col-auto">
+                                    <input class="form-check-input" type="checkbox" name="label_11_check" Label13Check>
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" name="label_11_name" value="Label13Key"/>
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" name="label_11_value" value="Label13Value"/>
+                                </div>
+                            </div>
+
+                            <div class="row mb-1 align-items-end">
+                                <div class="col-auto">
+                                    <input class="form-check-input" type="checkbox" name="label_11_check" Label14Check>
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" name="label_11_name" value="Label14Key"/>
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" name="label_11_value" value="Label14Value"/>
+                                </div>
+                            </div>
+
+                            <div class="row mb-1 align-items-end">
+                                <div class="col-auto">
+                                    <input class="form-check-input" type="checkbox" name="label_11_check" Label15Check>
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" name="label_11_name" value="Label15Key"/>
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" name="label_11_value" value="Label15Value"/>
+                                </div>
+                            </div>
+
+                            <div class="row mb-1 align-items-end">
+                                <div class="col-auto">
+                                    <input class="form-check-input" type="checkbox" name="label_11_check" Label16Check>
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" name="label_11_name" value="Label16Key"/>
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" name="label_11_value" value="Label16Value"/>
+                                </div>
+                            </div>
+
+                            <div class="row mb-1 align-items-end">
+                                <div class="col-auto">
+                                    <input class="form-check-input" type="checkbox" name="label_11_check" Label17Check>
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" name="label_11_name" value="Label17Key"/>
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" name="label_11_value" value="Label17Value"/>
+                                </div>
+                            </div>
+
+                            <div class="row mb-1 align-items-end">
+                                <div class="col-auto">
+                                    <input class="form-check-input" type="checkbox" name="label_11_check" Label18Check>
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" name="label_11_name" value="Label18Key"/>
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" name="label_11_value" value="Label18Value"/>
+                                </div>
+                            </div>
+
+                            <div class="row mb-1 align-items-end">
+                                <div class="col-auto">
+                                    <input class="form-check-input" type="checkbox" name="label_11_check" Label19Check>
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" name="label_11_name" value="Label19Key"/>
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" name="label_11_value" value="Label19Value"/>
+                                </div>
+                            </div>
+            
+    
+                </div>
+            </div>
+        </div>
+
+
+                            <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading-5">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-5" aria-expanded="false">
+                                Extras
+                                </button>
+                            </h2>
+                            <div id="collapse-5" class="accordion-collapse collapse" data-bs-parent="#modal-accordion">
+                                <div class="accordion-body pt-0">
+                
+
+                                <!-- <div class="row mb-1 align-items-end">
+                                    <div class="col-auto">
+                                    <input class="form-check-input" name="port_0_check" type="checkbox" ${ports_data[0].check}>
+                                    </div>
+                                    <div class="col">
+                                    <label class="form-label">External Port</label>
+                                    <input type="text" class="form-control" name="port_0_external" value="${ports_data[0].external}"/>
+                                    </div>
+                                    <div class="col">
+                                    <label class="form-label">Internal Port</label>
+                                    <input type="text" class="form-control" name="port_0_internal" value="${ports_data[0].internal}"/>
+                                    </div>
+                                    <div class="col-lg-2">
+                                    <label class="form-label">Protocol</label>
+                                    <select class="form-select" name="port_0_protocol">
+                                        <option value="${ports_data[0].protocol}" selected hidden>${ports_data[0].protocol}</option>
+                                        <option value="tcp">tcp</option>
+                                        <option value="udp">udp</option>
+                                    </select>
+                                    </div>
+                                </div>
+                
+                                <div class="row mb-1 align-items-end">
+                                    <div class="col-auto">
+                                    <input class="form-check-input" name="port_1_check" type="checkbox" ${ports_data[1].check}>
+                                    </div>
+                                    <div class="col">
+                                    <input type="text" class="form-control" name="port_1_external" value="${ports_data[1].external}"/>
+                                    </div>
+                                    <div class="col">
+                                    <input type="text" class="form-control" name="port_1_internal" value="${ports_data[1].internal}"/>
+                                    </div>
+                                    <div class="col-lg-2">
+                                    <select class="form-select" name="port_1_protocol">
+                                        <option value="${ports_data[1].protocol}" selected hidden>${ports_data[1].protocol}</option>
+                                        <option value="tcp">tcp</option>
+                                        <option value="udp">udp</option>
+                                    </select>
+                                    </div>
+                                </div>
+                
+                                <div class="row mb-1 align-items-end">
+                                    <div class="col-auto">
+                                    <input class="form-check-input" name="port_2_check" type="checkbox" ${ports_data[2].check}>
+                                    </div>
+                                    <div class="col">
+                                    <input type="text" class="form-control" name="port_2_external" value="${ports_data[2].external}"/>
+                                    </div>
+                                    <div class="col">
+                                    <input type="text" class="form-control" name="port_2_internal" value="${ports_data[2].internal}"/>
+                                    </div>
+                                    <div class="col-lg-2">
+                                    <select class="form-select" name="port_2_protocol">
+                                        <option value="${ports_data[2].protocol}" selected hidden>${ports_data[2].protocol}</option>
+                                        <option value="tcp">tcp</option>
+                                        <option value="udp">udp</option>
+                                    </select>
+                                    </div>
+                                </div>
+                
+                                <div class="row mb-1 align-items-end">
+                                    <div class="col-auto">
+                                    <input class="form-check-input" name="port_3_check" type="checkbox" ${ports_data[3].check}>
+                                    </div>
+                                    <div class="col">
+                                    <input type="text" class="form-control" name="port_3_external" value="${ports_data[3].external}"/>
+                                    </div>
+                                    <div class="col">
+                                    <input type="text" class="form-control" name="port_3_internal" value="${ports_data[3].internal}"/>
+                                    </div>
+                                    <div class="col-lg-2">
+                                    <select class="form-select" name="port_3_protocol">
+                                        <option value="${ports_data[3].protocol}" selected hidden>${ports_data[3].protocol}</option>
+                                        <option value="tcp">tcp</option>
+                                        <option value="udp">udp</option>
+                                    </select>
+                                    </div>
+                                </div>
+                
+                                <div class="row mb-1 align-items-end">
+                                    <div class="col-auto">
+                                    <input class="form-check-input" name="port_4_check" type="checkbox" ${ports_data[4].check}>
+                                    </div>
+                                    <div class="col">
+                                    <input type="text" class="form-control" name="port_4_external" value="${ports_data[4].external}"/>
+                                    </div>
+                                    <div class="col">
+                                    <input type="text" class="form-control" name="port_4_internal" value="${ports_data[4].internal}"/>
+                                    </div>
+                                    <div class="col-lg-2">
+                                    <select class="form-select" name="port_4_protocol">
+                                        <option value="${ports_data[4].protocol}" selected hidden>${ports_data[4].protocol}</option>
+                                        <option value="tcp">tcp</option>
+                                        <option value="udp">udp</option>
+                                    </select>
+                                    </div>
+                                </div>
+                
+                                <div class="row mb-1 align-items-end">
+                                    <div class="col-auto">
+                                    <input class="form-check-input" name="" type="checkbox" >
+                                    </div>
+                                    <div class="col">
+                                    <label class="form-label">External Port</label>
+                                    <input type="text" class="form-control" name="" value=""/>
+                                    </div>
+                                    <div class="col">
+                                    <label class="form-label">Internal Port</label>
+                                    <input type="text" class="form-control" name="" value=""/>
+                                    </div>
+                                    <div class="col-lg-2">
+                                    <label class="form-label">Protocol</label>
+                                    <select class="form-select" name="">
+                                        <option value="" selected hidden></option>
+                                        <option value="tcp">tcp</option>
+                                        <option value="udp">udp</option>
+                                    </select>
+                                    </div>
+                                </div> -->
+                
+                
+                                </div>
+                            </div>
+                            </div>
+
+
+
+                        </div>
+                
+                
+                        
+                        </form>
+
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+    </div>
+  </div>

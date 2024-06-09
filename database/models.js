@@ -110,11 +110,9 @@ export const Permission = sequelize.define('Permission', {
   },
   containerName: {
     type: DataTypes.STRING,
-    allowNull: false
   },
   containerID: {
     type: DataTypes.STRING,
-    allowNull: false
   },
   user: {
     type: DataTypes.STRING,
@@ -126,39 +124,51 @@ export const Permission = sequelize.define('Permission', {
   },
   install: {
     type: DataTypes.STRING,
+    defaultValue: false
   },
   uninstall: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+    defaultValue: false
   },
   edit: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+    defaultValue: false
   },
   upgrade: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+    defaultValue: false
   },
   start: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+    defaultValue: false
   },
   stop: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+    defaultValue: false
   },
   restart: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+    defaultValue: false
   },
   pause: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+    defaultValue: false
   },
   logs: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+    defaultValue: false
   },
   hide: {
-    type: DataTypes.STRING
-  },
-  view: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+    defaultValue: false
   },
   reset_view: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+    defaultValue: false
+  },
+  view: {
+    type: DataTypes.STRING,
+    defaultValue: false
   },
 });
 
@@ -207,10 +217,40 @@ export const Notification = sequelize.define('Notification', {
   color: {
     type: DataTypes.STRING,
   },
+  read: {
+    type: DataTypes.STRING,
+  },
   createdAt : {
     type: DataTypes.STRING
   },
   createdBy : {
     type: DataTypes.STRING
   },
+});
+
+
+export const Settings = sequelize.define('Settings', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
+  },
+  key: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  value: {
+    type: DataTypes.STRING,
+    allowNull: false
+  }
+});
+
+
+export const Variables = sequelize.define('Variables', {
+  find: {
+    type: DataTypes.STRING,
+  },
+  replace: {
+    type: DataTypes.STRING,
+  }
 });

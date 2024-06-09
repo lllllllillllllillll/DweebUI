@@ -1,4 +1,4 @@
-import { User, Syslog } from '../database/models.js';
+import { User, Syslog, Permission } from '../database/models.js';
 import bcrypt from 'bcrypt';
 
 let SECRET = process.env.SECRET || "MrWiskers"
@@ -17,7 +17,8 @@ export const Register = function(req,res){
 
 export const submitRegister = async function(req,res){
 
-    let { name, username, email, password, confirmPassword, avatar, warning, secret } = req.body;
+    let { name, username, email, password, confirmPassword, secret } = req.body;
+    email = email.toLowerCase();
 
 
     if (secret != SECRET) {
@@ -30,7 +31,7 @@ export const submitRegister = async function(req,res){
         });
     }
 
-    if((name && email && password && confirmPassword && username && warning) && (secret == SECRET) && (password == confirmPassword)){
+    if((name && email && password && confirmPassword && username) && (secret == SECRET) && (password == confirmPassword)){
 
         async function userRole () {
             let userCount = await User.count();
@@ -55,7 +56,6 @@ export const submitRegister = async function(req,res){
                     password: bcrypt.hashSync(password,10),
                     role: await userRole(),
                     group: 'all',
-                    avatar: `<img src="/images/avatars/${avatar}">`,
                     lastLogin: newLogin,
                 });
 
@@ -67,7 +67,11 @@ export const submitRegister = async function(req,res){
                     req.session.user = newUser.username;
                     req.session.UUID = newUser.UUID;
                     req.session.role = newUser.role;
-                    req.session.avatar = newUser.avatar;
+
+                    const permission = await Permission.create({
+                        user: newUser.username,
+                        userID: newUser.UUID
+                    });
 
                     const syslog = await Syslog.create({
                         user: req.session.user,
@@ -77,7 +81,7 @@ export const submitRegister = async function(req,res){
                         ip: req.socket.remoteAddress
                     });
 
-                    res.redirect("/");
+                    res.redirect("/dashboard");
                 }
             } catch(err) {
                 res.render("register",{
@@ -94,7 +98,7 @@ export const submitRegister = async function(req,res){
     } else {
         // Redirect to the signup page.
         res.render("register",{
-            "error":"Please fill in all the fields and acknowledge security warning.",
+            "error":"Please fill in all the fields.",
         });
     }
 }

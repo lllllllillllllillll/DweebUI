@@ -1,0 +1,28 @@
+
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title">Install AppName</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            
+            <div class="modal-body">
+            
+                <pre class="text-secondary">AppNote</pre>
+                
+                <form action="/install" name="FormId_install" id="FormId_install" method="POST">
+                
+                <input type="hidden" name="name" value="AppName"/>
+                <textarea class="form-control" name="compose" rows="30" placeholder="Content..">COMPOSE_CONTENT</textarea>
+
+                </form>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
+                <input type="submit" form="FormId_install" class="btn btn-success" value="Install"/>
+            </div>
+        </div>
+    </div>

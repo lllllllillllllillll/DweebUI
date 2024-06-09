@@ -1,3 +1,31 @@
+## v0.60 (June 9th 2024) - Permissions system and import templates
+* Converted JS template literals into HTML.
+* Converted modals into HTML/HTMX.
+* Moved functions into dashboard controller.
+* New - Modal placeholder with loading spinner.
+* Container cards now update independently.
+* Container cards now display pending action (starting, stopping, pausing, restarting).
+* User avatars are now automatically generated.
+* Updated database models.
+* New - Multi-user permission system.
+* Refactored dashboard to support multiple users.
+* New - Banner alerts.
+* New - Template importing (*.yml, *.yaml, *.json).
+* Improved app search.
+* New - Search by category.
+* Updated dependencies.
+* Removed warning from the bottom of the registration page. Will be added back in a different location.
+* New - admin checks, session checks, and permission checks for router. 
+* Added titles to activity indicators.
+* Created Github Wiki.
+* Added image pull to images page.
+* Images and volumes display 'In use'.
+* Images display tag.
+* Image pull gets latest if not set.
+* Updated buttons to trigger from 'mousedown' (John Carmack + Theo told me to).
+* Volumes page displays type (Volume or Bind).
+* Volume button is now functional.
+
 ## v0.40 (Feb 26th 2024) - HTMX rewrite
 * Pages rewritten to use HTMX.
 * Removed Socket.io.

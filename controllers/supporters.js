@@ -2,8 +2,6 @@ import { User } from "../database/models.js";
 
 export const Supporters = async (req, res) => {
     
-    if (!req.session.UUID) return res.redirect("/login");
-
     let user = await User.findOne({ where: { UUID: req.session.UUID }});
     
 
@@ -14,7 +12,8 @@ export const Supporters = async (req, res) => {
         id: user.id,
         email: user.email,
         role: user.role,
-        avatar: user.avatar,
+        avatar: req.session.user.charAt(0).toUpperCase(),
+        alert: '',
     });
 
 
