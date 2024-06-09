@@ -1,4 +1,4 @@
-## v0.60 (dev)
+## v0.60 (June 9th 2024) - Permissions system and import templates
 * Converted JS template literals into HTML.
 * Converted modals into HTML/HTMX.
 * Moved functions into dashboard controller.
@@ -24,7 +24,7 @@
 * Image pull gets latest if not set.
 * Updated buttons to trigger from 'mousedown' (John Carmack + Theo told me to).
 * Volumes page displays type (Volume or Bind).
-* New Volume button is now functional.
+* Volume button is now functional.
 
 ## v0.40 (Feb 26th 2024) - HTMX rewrite
 * Pages rewritten to use HTMX.

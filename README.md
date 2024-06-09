@@ -69,6 +69,8 @@ networks:
     driver: bridge
 ```
 
+[Windows and MacOS Setup](https://github.com/lllllllillllllillll/DweebUI/wiki/Setup)
+
 Compose setup:
 
 * Paste the above content into a file named ```docker-compose.yml``` then place it in a folder named ```dweebui```.

@@ -3359,7 +3359,7 @@
       "type": 1,
       "volumes": [
         {
-          "bind": "/portainer/Downloads",
+          "bind": "/home/docker/downloads",
           "container": "/data"
         },
         {
@@ -4299,7 +4299,7 @@
           "container": "/config"
         },
         {
-          "bind": "/portainer/Downloads",
+          "bind": "/home/docker/Downloads",
           "container": "/app/qBittorrent/downloads"
         }
       ]
@@ -4707,7 +4707,7 @@
           "container": "/etc/localtime"
         },
         {
-          "bind": "/portainer/Downloads",
+          "bind": "/home/docker/Downloads",
           "container": "/downloads"
         },
         {
@@ -4734,7 +4734,7 @@
           "container": "/app/configs"
         },
         {
-          "bind": "/portainer/Downloads",
+          "bind": "/home/docker/Downloads",
           "container": "/downloads"
         }
       ],
@@ -5125,11 +5125,11 @@
       "type": 1,
       "volumes": [
         {
-          "bind": "/portainer/Files/AppData/Adguard/Workdir",
+          "bind": "/home/docker/Files/AppData/Adguard/Workdir",
           "container": "/opt/adguardhome/work"
         },
         {
-          "bind": "/portainer/Files/AppData/Adguard/Conf",
+          "bind": "/home/docker/Files/AppData/Adguard/Conf",
           "container": "/opt/adguardhome/conf"
         }
       ]
