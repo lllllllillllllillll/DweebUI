@@ -8,6 +8,13 @@
 */
 @charset "UTF-8";
 
+
+.form-label:focus,
+.form-control:focus {
+  outline: none;
+  box-shadow: none;
+}
+
 :root,
 [data-bs-theme=light] {
   --tblr-blue: #206bc4;
@@ -3187,13 +3194,7 @@ progress {
   cursor: pointer
 }
 
-.form-control:focus {
-  color: inherit;
-  background-color: var(--tblr-bg-forms);
-  border-color: #90b5e2;
-  outline: 0;
-  box-shadow: 0 0 transparent, 0 0 0 .25rem rgba(32, 107, 196, .25)
-}
+
 
 .form-control::-webkit-date-and-time-value {
   min-width: 85px;
@@ -3417,11 +3418,6 @@ textarea.form-control-lg {
   }
 }
 
-.form-select:focus {
-  border-color: #90b5e2;
-  outline: 0;
-  box-shadow: 0 0 transparent, 0 0 0 .25rem rgba(32, 107, 196, .25)
-}
 
 .form-select[multiple],
 .form-select[size]:not([size="1"]) {
@@ -3514,11 +3510,6 @@ textarea.form-control-lg {
   filter: brightness(90%)
 }
 
-.form-check-input:focus {
-  border-color: #90b5e2;
-  outline: 0;
-  box-shadow: 0 0 0 .25rem rgba(32, 107, 196, .25)
-}
 
 .form-check-input:checked {
   background-color: var(--tblr-primary);
@@ -3571,7 +3562,7 @@ textarea.form-control-lg {
   }
 }
 
-.form-switch .form-check-input:focus {
+.form-switch .form-check-input {
   --tblr-form-switch-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%2390b5e2'/%3e%3c/svg%3e")
 }
 
@@ -24270,10 +24261,7 @@ textarea[cols] {
   border-color: #90b5e2 !important
 }
 
-.input-group-flat .form-control:focus {
-  border-color: var(--tblr-border-color);
-  box-shadow: none
-}
+
 
 .input-group-flat .form-control:not(:last-child) {
   border-right: 0

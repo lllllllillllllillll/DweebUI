@@ -1,9 +1,8 @@
 import { Readable } from 'stream';
 import { Permission, User } from '../database/models.js';
 import { docker } from '../server.js';
-import { dockerContainerStats } from 'systeminformation';
 import { readFileSync } from 'fs';
-import { currentLoad, mem, networkStats, fsSize } from 'systeminformation';
+import { currentLoad, mem, networkStats, fsSize, dockerContainerStats } from 'systeminformation';
 import { Op } from 'sequelize';
 
 let hidden = '';

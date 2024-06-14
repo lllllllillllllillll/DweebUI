@@ -2,10 +2,10 @@ import express from 'express';
 import session from 'express-session';
 import memorystore from 'memorystore';
 import ejs from 'ejs';
-import Docker from 'dockerode';
 import { router } from './router/index.js';
 import { sequelize } from './database/models.js';
-export const docker = new Docker();
+import Docker from 'dockerode';
+export var docker = new Docker();
 
 // Session middleware
 const MemoryStore = memorystore(session);

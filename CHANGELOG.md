@@ -1,3 +1,6 @@
+## v0.70 (dev)
+* 
+
 ## v0.60 (June 9th 2024) - Permissions system and import templates
 * Converted JS template literals into HTML.
 * Converted modals into HTML/HTMX.
