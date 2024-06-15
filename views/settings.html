@@ -8,6 +8,7 @@
 		<!-- CSS files -->
 		<link href="/css/tabler.min.css" rel="stylesheet"/>
 		<link href="/css/demo.min.css" rel="stylesheet"/>
+		<script src="/js/htmx.min.js"></script>
 		<style>
 			@import url('/fonts/inter.css');
 			:root {
@@ -77,7 +78,7 @@
 							<div class="row align-items-center">
 								<div class="col-auto">
 									<label class="form-check form-switch form-switch-lg mt-2">
-										<input class="form-check-input" type="checkbox">
+										<input class="form-check-input" type="checkbox" id="registration" value="something" name="registration" hx-trigger="mousedown" hx-post="/settings/registration" hx-swap="none">
 										<span class="form-check-label form-check-label-on text-success">
 											Enabled
 										</span>
@@ -90,8 +91,6 @@
 									<input type="text" class="form-control" placeholder="Registration Secret">
 								</div>
 							</div>
-							
-							
 
 
 							</div>

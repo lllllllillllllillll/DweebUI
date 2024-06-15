@@ -13,7 +13,7 @@ import { Networks, removeNetwork } from "../controllers/networks.js";
 import { Volumes, addVolume, removeVolume } from "../controllers/volumes.js";
 import { Account } from "../controllers/account.js";
 import { Variables } from "../controllers/variables.js";
-import { Settings } from "../controllers/settings.js";
+import { Settings, settingsAction } from "../controllers/settings.js";
 import { Supporters, Thanks } from "../controllers/supporters.js";
 import { Syslogs } from "../controllers/syslogs.js";
 import { Install } from "../utils/install.js"
@@ -97,8 +97,9 @@ router.get("/users", adminOnly, Users);
 router.get("/syslogs", adminOnly, Syslogs);
 
 router.get("/variables", adminOnly, Variables);
-router.get("/settings", adminOnly, Settings);
 
+router.get("/settings", adminOnly, Settings);
+router.post("/settings/:action", adminOnly, settingsAction);
 
 router.get("/account", sessionCheck, Account);
 router.get("/supporters", sessionCheck, Supporters);

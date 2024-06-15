@@ -16,6 +16,7 @@
 
 * [x] A dynamically updating dashboard that displays server metrics along with container metrics and container controls.
 * [x] Multi-user support with permissions system.
+* [ ] Display and control docker containers from multiple remote hosts.
 * [x] Container actions: Start, Stop, Pause, Restart, View Details, View Logs.
 * [x] Windows, Linux, and MacOS compatable.
 * [x] Light/Dark Mode.
@@ -52,7 +53,7 @@ services:
     ports:
       - 8000:8000
     volumes:
-      - dweebui:/app
+      - dweebui:/app/config
       # Docker socket
       - /var/run/docker.sock:/var/run/docker.sock
       # Podman socket

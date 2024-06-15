@@ -8,3 +8,9 @@ export const Settings = (req, res) => {
         alert: '',
     });
 }
+
+
+export const settingsAction = (req, res) => {
+    let action = req.params.action;
+    res.send('ok');
+}
