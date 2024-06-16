@@ -16,7 +16,7 @@
 
 * [x] A dynamically updating dashboard that displays server metrics along with container metrics and container controls.
 * [x] Multi-user support with permissions system.
-* [ ] Display and control docker containers from multiple remote hosts.
+* [ ] Display and control docker containers from multiple remote hosts (planned).
 * [x] Container actions: Start, Stop, Pause, Restart, View Details, View Logs.
 * [x] Windows, Linux, and MacOS compatable.
 * [x] Light/Dark Mode.
@@ -44,7 +44,7 @@ version: "3.9"
 services:
   dweebui:
     container_name: dweebui
-    image: lllllllillllllillll/dweebui:v0.60
+    image: lllllllillllllillll/dweebui
     environment:
       PORT: 8000
       SECRET: MrWiskers

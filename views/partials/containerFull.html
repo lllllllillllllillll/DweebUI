@@ -39,7 +39,6 @@
                   </a>
                   <div class="dropdown-menu dropdown-menu-end">
                     <button class="dropdown-item text-secondary" data-hx-post="/dashboard/hide" data-hx-trigger="mousedown" data-hx-swap="none" name="AppName" id="hide" value="hide">Hide</button>
-                    <button class="dropdown-item text-secondary" data-hx-post="/dashboard/reset" data-hx-trigger="mousedown" data-hx-swap="none" name="AppName" id="reset" value="reset">Reset View</button>
                     <button class="dropdown-item text-secondary" data-hx-post="/dashboard/permissions" name="AppName" data-hx-target="#modals-here" hx-swap="innerHTML" data-hx-trigger="mousedown" data-bs-toggle="modal" data-bs-target="#modals-here">Permissions</button>
                   </div>
                 </div>
@@ -49,7 +48,7 @@
         </div>
         <div class="d-flex align-items-baseline">
           <div class="h1 me-2" title="AppName" style="margin-bottom: 0;">
-            <a href="http://AppLink:AppPort" target="_blank">
+            <a href="http://AppLink:ExternalPort" target="_blank">
               AppShortName
             </a>
           </div>

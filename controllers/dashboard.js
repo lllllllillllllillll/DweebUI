@@ -212,14 +212,6 @@ async function containerInfo (containerName) {
         internal = ports_list[0].internal;
     } catch {}
 
-    // console.log(ports_list);
-    // console.log(info.HostConfig.PortBindings);
-
-    // console.log(info.HostConfig.Binds);
-
-    // console.log(info.Config.Env);
-    // console.log(info.Config.Labels);
-
     let details = {
         name: containerName,
         image: image,
@@ -268,6 +260,7 @@ async function createCard (details) {
     card = card.replace(/AppIcon/g, details.service);
     card = card.replace(/AppState/g, state);
     card = card.replace(/StateColor/g, state_color);
+    card = card.replace(/AppLink/g, 'localhost');
     card = card.replace(/ExternalPort/g, details.external_port);
     card = card.replace(/InternalPort/g, details.internal_port);
     card = card.replace(/ChartName/g, details.name.replace(/-/g, ''));

@@ -27,7 +27,7 @@
     }
   }
 </script>
-<header class="navbar navbar-expand-md d-print-none py-0">
+<header class="navbar navbar-expand-md d-print-none">
   <div class="container-xl">
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu"
       aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
@@ -267,9 +267,22 @@
 
         <div class="my-2 my-md-0 flex-grow-1 flex-md-grow-0 order-first order-md-last">
 
-          <ul class="navbar-nav">
-            
-          </ul>
+          <div class="card-actions btn-actions">
+            <button class="btn-action" title="Grid View" data-hx-post="/dashboard/view" data-hx-trigger="mousedown" data-hx-target="#" name="grid" id="AppState">
+              <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="1.5"  stroke-linecap="round"  stroke-linejoin="round"  class="icon-tabler icons-tabler-outline icon-tabler-layout-grid"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" /><path d="M14 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" /><path d="M4 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" /><path d="M14 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" /></svg>
+            </button>
+            <button class="btn-action" title="List View" data-hx-post="/dashboard/view" data-hx-trigger="mousedown" data-hx-target="#" name="list" id="AppState">
+              <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="1.5"  stroke-linecap="round"  stroke-linejoin="round"  class="icon-tabler icons-tabler-outline icon-tabler-list"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l11 0" /><path d="M9 12l11 0" /><path d="M9 18l11 0" /><path d="M5 6l0 .01" /><path d="M5 12l0 .01" /><path d="M5 18l0 .01" /></svg>
+            </button>
+            <div class="dropdown">
+              <a href="#" class="btn-action dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <svg xmlns="http://www.w3.org/2000/svg" class="" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle><circle cx="12" cy="5" r="1"></circle></svg>
+              </a>
+              <div class="dropdown-menu dropdown-menu-end">
+                <button class="dropdown-item text-secondary" data-hx-post="/dashboard/reset" data-hx-trigger="mousedown" data-hx-swap="none" name="AppName" id="reset" value="reset">Reset View</button>
+              </div>
+            </div>
+          </div>
         </div>
 
       </div>

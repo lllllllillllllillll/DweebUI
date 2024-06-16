@@ -1,4 +1,11 @@
 ## v0.70 (dev)
+* Fixed installs having to be run twice.
+* Updated systeminformation.
+* Updated adm-zip.
+* Updated yaml.
+* Pushed new docker image with 'latest' tag.
+* Updated compose.yaml volume to /app/config.
+* Fixed container card links.
 * 
 
 ## v0.60 (June 9th 2024) - Permissions system and import templates

@@ -93,11 +93,11 @@ export const Container = sequelize.define('Container', {
         type: DataTypes.STRING
     },
     cpu: {
-        // store the last 15 values from dockerContainerStats
+        // stores the last 15 values from dockerContainerStats
         type: DataTypes.STRING
     },
     ram: {
-        // store the last 15 values from dockerContainerStats
+        // stores the last 15 values from dockerContainerStats
         type: DataTypes.STRING
     },
   });
@@ -172,7 +172,6 @@ export const Permission = sequelize.define('Permission', {
   },
 });
 
-
 export const Syslog = sequelize.define('Syslog', {
   id: {
     type: DataTypes.INTEGER,
@@ -197,7 +196,6 @@ export const Syslog = sequelize.define('Syslog', {
     type: DataTypes.STRING
   },
 });
-
 
 export const Notification = sequelize.define('Notification', {
   id: {
@@ -228,8 +226,7 @@ export const Notification = sequelize.define('Notification', {
   },
 });
 
-
-export const Settings = sequelize.define('Settings', {
+export const ServerSettings = sequelize.define('Settings', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -245,6 +242,25 @@ export const Settings = sequelize.define('Settings', {
   }
 });
 
+export const UserSettings = sequelize.define('Settings', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
+  },
+  uuid: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  key: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  value: {
+    type: DataTypes.STRING,
+    allowNull: false
+  }
+});
 
 export const Variables = sequelize.define('Variables', {
   find: {
