@@ -43,7 +43,7 @@ version: "3.9"
 services:
   dweebui:
     container_name: dweebui
-    image: lllllllillllllillll/dweebui:v0.60
+    image: lllllllillllllillll/dweebui
     environment:
       PORT: 8000
       SECRET: MrWiskers
