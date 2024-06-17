@@ -226,7 +226,7 @@ export const Notification = sequelize.define('Notification', {
   },
 });
 
-export const ServerSettings = sequelize.define('Settings', {
+export const ServerSettings = sequelize.define('ServerSettings', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -242,7 +242,7 @@ export const ServerSettings = sequelize.define('Settings', {
   }
 });
 
-export const UserSettings = sequelize.define('Settings', {
+export const UserSettings = sequelize.define('UserSettings', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,

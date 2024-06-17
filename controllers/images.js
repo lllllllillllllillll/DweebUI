@@ -77,9 +77,11 @@ export const Images = async function(req, res) {
         size = size.toFixed(2);
 
         let status = '';
-        if (container_images.includes(images[i].RepoTags[0])) {
-            status = 'In use';
-        }
+        try {
+            if (container_images.includes(images[i].RepoTags[0])) {
+                status = 'In use';
+            }
+        } catch {}
 
         let details = `
             <tr>

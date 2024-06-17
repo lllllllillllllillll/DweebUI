@@ -11,7 +11,7 @@ export const Settings = (req, res) => {
 }
 
 
-export const settingsAction = (req, res) => {
+export const settingsAction = async (req, res) => {
     let action = req.params.action;
     let name = req.header('hx-trigger-name');
     let value = req.header('hx-trigger');
@@ -21,9 +21,13 @@ export const settingsAction = (req, res) => {
     console.log(`value: ${value}`);
 
     if ((action == 'links') && (req.body.links == 'on')) {
-        console.log('links on');
+        let exists = await ServerSettings.findOne({ where: {key: 'links'}});
+        if (!exists) { const newSetting = await ServerSettings.create({ key: 'links', value: 'on'}); }
+        const setting = await ServerSettings.update({value: 'on'}, {where: {key: 'links'}});
     }   else if ((action == 'links') && (!req.body.links)) {
-        console.log('links off');
+        let exists = await ServerSettings.findOne({ where: {key: 'links'}});
+        if (!exists) { const newSetting = await ServerSettings.create({ key: 'links', value: 'off'}); }
+        const setting = await ServerSettings.update({value: 'off'}, {where: {key: 'links'}});
     }
 
 
