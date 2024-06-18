@@ -1,5 +1,5 @@
 import { Readable } from 'stream';
-import { Permission, User } from '../database/models.js';
+import { Permission, User, ServerSettings } from '../database/models.js';
 import { docker } from '../server.js';
 import { readFileSync } from 'fs';
 import { currentLoad, mem, networkStats, fsSize, dockerContainerStats } from 'systeminformation';
@@ -31,6 +31,7 @@ export const DashboardAction = async (req, res) => {
     let value = req.header('hx-trigger');
     let action = req.params.action;
     let modal = '';
+    let hostip = req.connection.remoteAddress;
 
     switch (action) {
         case 'permissions':

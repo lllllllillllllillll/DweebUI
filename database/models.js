@@ -238,7 +238,7 @@ export const ServerSettings = sequelize.define('ServerSettings', {
   },
   value: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true
   }
 });
 

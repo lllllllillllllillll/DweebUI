@@ -45,37 +45,42 @@
 					  
 							<div class="card-body">
 							<h2 class="">Settings</h2>
-							<p class="text-muted mb-4">Configure server below</p>
+							<!-- <p class="text-muted mb-4">Configure server below</p> -->
 							
-							<div class="row align-items-center">
+							<!-- <div class="row align-items-center">
 								<div class="col">
 									<a href="./QuickConnect.bat" class="btn" download="QuickConnect.bat">
 										<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-windows" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M17.8 20l-12 -1.5c-1 -.1 -1.8 -.9 -1.8 -1.9v-9.2c0 -1 .8 -1.8 1.8 -1.9l12 -1.5c1.2 -.1 2.2 .8 2.2 1.9v12.1c0 1.2 -1.1 2.1 -2.2 1.9z"></path> <path d="M12 5l0 14"></path> <path d="M4 12l16 0"></path> </svg>
 										Windows QuickConnect
 									</a>
 								</div>
-							</div>
+							</div> -->
 
 							
 
-							<h3 class="card-title mt-6">Container Links</h3>
-							<p class="card-subtitle"> Set the default behaviour for container links. </p>
-							<form id="container-links">
-								<div>
-									<label class="form-check form-switch form-switch-lg">
-										<input class="form-check-input" type="checkbox" id="submit" name="links" hx-trigger="click" hx-post="/settings/links" hx-swap="none">
-										<span class="form-check-label form-check-label-on">
-											Host IP
-										</span>
-										<span class="form-check-label form-check-label-off">
-											Localhost
-										</span>
-									</label>
+							<h3 class="mt-5">Container Links</h3>
+							<label class="text-muted mb-2">Choose the default behaviour for container links. Enter IP address or Domain before enabling.</label>
+							<form id="container_links">
+								<div class="row align-items-center">
+									<div class="col-auto">
+										<label class="form-check form-switch form-switch-lg">
+											<input class="form-check-input" type="checkbox" id="submit" name="links" hx-trigger="click" hx-post="/settings/links" hx-swap="none">
+											<span class="form-check-label form-check-label-on text-warning">
+												Custom
+											</span>
+											<span class="form-check-label form-check-label-off text-success">
+												Localhost
+											</span>
+										</label>
+									</div>
+									<div class="col-6">
+										<input type="text" class="form-control" name="ip" placeholder="IP Address or Domain">
+									</div>
 								</div>
 							</form>
 
 
-							<h3 class="mt-6">User Registration</h3>
+							<h3 class="mt-5">User Registration</h3>
 							<label class="text-muted mb-2">Allow other users to register.</label>
 							<form id="registration">
 								<div class="row align-items-center">
