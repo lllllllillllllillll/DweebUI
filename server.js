@@ -8,6 +8,7 @@ import Docker from 'dockerode';
 export var docker = new Docker();
 
 // Session middleware
+const secure = process.env.HTTPS || false;
 const MemoryStore = memorystore(session);
 const sessionMiddleware = session({
     store: new MemoryStore({ checkPeriod: 86400000 }), // Prune expired entries every 24h
@@ -15,8 +16,8 @@ const sessionMiddleware = session({
     resave: false, 
     saveUninitialized: false, 
     cookie:{
-        secure: false, 
-        httpOnly: false,
+        secure: secure, 
+        httpOnly: secure,
         maxAge: 3600000 * 8 // Session max age in milliseconds. 3600000 = 1 hour.
     }
 });
