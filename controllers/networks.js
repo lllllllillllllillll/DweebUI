@@ -3,15 +3,17 @@ import { docker } from '../server.js';
 
 export const Networks = async function(req, res) {
 
-
     let container_networks = [];
+    let network_name = '';
+
+
     // List all containers
     let containers = await docker.listContainers({ all: true });
     for (let i = 0; i < containers.length; i++) {
-        let network_name = containers[i].HostConfig.NetworkMode;
-        try { container_networks.push(containers[i].NetworkSettings.Networks[network_name].NetworkID) } catch {}
+        // try { network_name = Object.keys(containers[i].NetworkSettings.Networks)[0] }
+        try { network_name += containers[i].HostConfig.NetworkMode; } catch {}
+        try { container_networks.push(containers[i].NetworkSettings.Networks[network_name].NetworkID); } catch {}
     }
-
 
     let networks = await docker.listNetworks({ all: true });
 
@@ -35,9 +37,7 @@ export const Networks = async function(req, res) {
         // let created = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
         
         let status = '';
-        if (container_networks.includes(networks[i].Id)) {
-            status = `In use`;
-        }
+        try { if (container_networks.includes(networks[i].Id)) { status = `In use`; } } catch {}
 
         let details = `
             <tr>
