@@ -2,21 +2,19 @@ import { docker } from '../server.js';
 
 
 export const Networks = async function(req, res) {
-
     let container_networks = [];
     let network_name = '';
-
-
     // List all containers
     let containers = await docker.listContainers({ all: true });
+    // Loop through the containers to find out which networks are being used
     for (let i = 0; i < containers.length; i++) {
-        // try { network_name = Object.keys(containers[i].NetworkSettings.Networks)[0] }
+        console.log(Object.keys(containers[i].NetworkSettings.Networks)[0]);
         try { network_name += containers[i].HostConfig.NetworkMode; } catch {}
         try { container_networks.push(containers[i].NetworkSettings.Networks[network_name].NetworkID); } catch {}
     }
-
+    // List all networks
     let networks = await docker.listNetworks({ all: true });
-
+    // Uses template literals to build the networks table
     let network_list = `
         <thead>
             <tr>
@@ -30,15 +28,11 @@ export const Networks = async function(req, res) {
         </thead>
         <tbody class="table-tbody">`
 
-
     for (let i = 0; i < networks.length; i++) {
-
-        // let date = new Date(images[i].Created * 1000);
-        // let created = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-        
         let status = '';
+        // Check if the network is in use
         try { if (container_networks.includes(networks[i].Id)) { status = `In use`; } } catch {}
-
+        // Create the row for the network entry
         let details = `
             <tr>
                 <td><input class="form-check-input m-0 align-middle" name="select" value="${networks[i].Id}" type="checkbox" aria-label="Select"></td>
@@ -48,9 +42,9 @@ export const Networks = async function(req, res) {
                 <td class="sort-date" data-date="1628122643">${networks[i].Created}</td>
                 <td class="text-end"><a class="btn" href="#">Details</a></td>
             </tr>`
+            // Add the row to the network list
             network_list += details;
     }
-    
     network_list += `</tbody>`
 
     res.render("networks", {
@@ -63,24 +57,19 @@ export const Networks = async function(req, res) {
     });
 }
 
-
-
-
 export const removeNetwork = async function(req, res) {
+    // Grab the list of networks
     let networks = req.body.select;
-
-    if (typeof(networks) == 'string') {
-        networks = [networks];
-    }
-
+    // Make sure the value is an array
+    if (typeof(networks) == 'string') { networks = [networks]; }
+    // Loop through the array
     for (let i = 0; i < networks.length; i++) {
-        
         if (networks[i] != 'on') {
             try {
-                console.log(`Removing network: ${networks[i]}`);
                 let network = docker.getNetwork(networks[i]);
                 await network.remove();
-            } catch (error) {
+            } 
+            catch {
                 console.log(`Unable to remove network: ${networks[i]}`);
             }
         }
