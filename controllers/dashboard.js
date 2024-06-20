@@ -13,14 +13,13 @@ let [ports_data, volumes_data, env_data, label_data] = [[], [], [], []];
 // The page
 export const Dashboard = (req, res) => {
 
-    let name = req.session.user || 'Local';
-    let avatar = name.charAt(0).toUpperCase();
+    let name = req.session.user ;
     let role = req.session.role;
     alert = req.session.alert;
     
     res.render("dashboard", {
         name: name,
-        avatar: avatar,
+        avatar: name.charAt(0).toUpperCase(),
         role: role,
         alert: alert,
     });

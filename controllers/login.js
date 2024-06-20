@@ -1,6 +1,8 @@
 import { User, Syslog } from '../database/models.js';
 import bcrypt from 'bcrypt';
 
+const no_auth = process.env.NO_AUTH || false;
+
 
 export const Login = function(req,res){
     if (req.session.user) { res.redirect("/logout"); }
@@ -8,6 +10,15 @@ export const Login = function(req,res){
 }
 
 export const submitLogin = async function(req,res){
+
+    if (no_auth && req.hostname == 'localhost') { 
+        req.session.user = 'Localhost';
+        req.session.UUID = '';
+        req.session.role = 'admin';
+        res.redirect("/dashboard");
+        return;
+    }
+
     let { email, password } = req.body;
     email = email.toLowerCase();
 
