@@ -55,7 +55,7 @@ jobs:
 
       # Build image and only publish if not a Pull Request
       - name: Build and Publish Docker Image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         timeout-minutes: 30
         with:
           context: .
