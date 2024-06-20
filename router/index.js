@@ -23,19 +23,19 @@ import { Uninstall } from "../utils/uninstall.js"
 // Permission Middleware
 const adminOnly = async (req, res, next) => {
     if (req.session.role == 'admin') { next(); }
-    else if (no_auth && req.connection.remoteAddress == '::ffff:127.0.0.1') { next(); }
+    else if (no_auth && req.hostname == 'localhost') { next(); }
     else { res.redirect('/dashboard'); }
 }
 
 const sessionCheck = async (req, res, next) => {
     if (req.session.user) { next(); }
-    else if (no_auth && req.connection.remoteAddress == '::ffff:127.0.0.1') { next(); }
+    else if (no_auth && req.hostname == 'localhost') { next(); }
     else { res.redirect('/login'); }
 }
 
 const permissionCheck = async (req, res, next) => {
     if (req.session.role == 'admin') { next(); return; }
-    else if (no_auth && req.connection.remoteAddress == '::ffff:127.0.0.1') { next(); }
+    else if (no_auth && req.hostname == 'localhost') { next(); }
     let user = req.session.user;
     let action = req.path.split("/")[2];
     let trigger = req.header('hx-trigger-name');

@@ -8,7 +8,7 @@ export const Networks = async function(req, res) {
     let containers = await docker.listContainers({ all: true });
     // Loop through the containers to find out which networks are being used
     for (let i = 0; i < containers.length; i++) {
-        console.log(Object.keys(containers[i].NetworkSettings.Networks)[0]);
+        // console.log(Object.keys(containers[i].NetworkSettings.Networks)[0]);
         try { network_name += containers[i].HostConfig.NetworkMode; } catch {}
         try { container_networks.push(containers[i].NetworkSettings.Networks[network_name].NetworkID); } catch {}
     }
