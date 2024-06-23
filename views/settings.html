@@ -43,136 +43,18 @@
 							<div class="row g-0">
 								
 								<%- include('partials/sidebar.html') %>
+
+								<%- settings %>
 								
-								<div class="col d-flex flex-column">
-									<div class="card-body">
-										<h2 class="mb-4">Settings</h2>
-										
-										
-
-										<h3 class="mt-5">Container Links</h3>
-										<label class="text-muted mb-2">Choose the default behaviour for container links. Enter IP address or Domain before enabling.</label>
-										<div class="row align-items-center">
-											<div class="col-auto">
-												<label class="form-check form-switch form-switch-lg">
-													<input class="form-check-input" type="checkbox" id="submit" name="links" hx-trigger="click" hx-post="/settings/links" hx-swap="none" disabled>
-													<span class="form-check-label form-check-label-on text-warning">
-														Custom
-													</span>
-													<span class="form-check-label form-check-label-off text-success">
-														Localhost
-													</span>
-												</label>
-											</div>
-											<div class="col-6">
-												<input type="text" class="form-control" name="ip" placeholder="IP Address or Domain">
-											</div>
-										</div>
-
-										<h3 class="mt-5">User Registration</h3>
-										<label class="text-muted mb-2">Allow other users to register.</label>
-										<div class="row align-items-center">
-											<div class="col-auto">
-												<label class="form-check form-switch form-switch-lg">
-													<input class="form-check-input" type="checkbox" id="submit" name="registration" hx-trigger="click" hx-post="/settings/registration" hx-swap="none" disabled>
-													<span class="form-check-label form-check-label-on text-success">
-														Enabled
-													</span>
-													<span class="form-check-label form-check-label-off text-danger">
-														Disabled
-													</span>
-												</label>
-											</div>
-											<div class="col-6">
-												<input type="text" class="form-control" name="secret" placeholder="Registration Secret">
-											</div>
-										</div>
-
-
-										<h3 class="mt-5">Remote Hosts</h3>
-										<label class="text-muted mb-2">Host #2</label>
-										<div class="row align-items-center">
-											<div class="col-auto">
-												<label class="form-check form-switch form-switch-lg">
-													<input class="form-check-input" type="checkbox" id="submit" name="registration" hx-trigger="click" hx-post="/settings/registration" hx-swap="none" disabled>
-													<span class="form-check-label form-check-label-on text-success">
-														Enabled
-													</span>
-													<span class="form-check-label form-check-label-off text-danger">
-														Disabled
-													</span>
-												</label>
-											</div>
-											<div class="col-2">
-												<input type="text" class="form-control" name="secret" placeholder="Tag">
-											</div>
-											<div class="col-6">
-												<input type="text" class="form-control" name="secret" placeholder="Host IP">
-											</div>
-										</div>
-										
-										<label class="text-muted mb-2">Host #3</label>
-										<div class="row align-items-center">
-											<div class="col-auto">
-												<label class="form-check form-switch form-switch-lg">
-													<input class="form-check-input" type="checkbox" id="submit" name="registration" hx-trigger="click" hx-post="/settings/registration" hx-swap="none" disabled>
-													<span class="form-check-label form-check-label-on text-success">
-														Enabled
-													</span>
-													<span class="form-check-label form-check-label-off text-danger">
-														Disabled
-													</span>
-												</label>
-											</div>
-											<div class="col-2">
-												<input type="text" class="form-control" name="secret" placeholder="Tag">
-											</div>
-											<div class="col-6">
-												<input type="text" class="form-control" name="secret" placeholder="Host IP">
-											</div>
-										</div>
-
-										<label class="text-muted mb-2">Host #4</label>
-										<div class="row align-items-center">
-											<div class="col-auto">
-												<label class="form-check form-switch form-switch-lg">
-													<input class="form-check-input" type="checkbox" id="submit" name="registration" hx-trigger="click" hx-post="/settings/registration" hx-swap="none" disabled>
-													<span class="form-check-label form-check-label-on text-success">
-														Enabled
-													</span>
-													<span class="form-check-label form-check-label-off text-danger">
-														Disabled
-													</span>
-												</label>
-											</div>
-											<div class="col-2">
-												<input type="text" class="form-control" name="secret" placeholder="Tag">
-											</div>
-											<div class="col-6">
-												<input type="text" class="form-control" name="secret" placeholder="Host IP">
-											</div>
-										</div>
-
-									</div>
-									<div class="card-footer bg-transparent mt-auto">
-										<div class="btn-list justify-content-end">
-											<a href="#" class="btn">
-												Cancel
-											</a>
-											<a href="#" class="btn btn-primary">
-												Submit
-											</a>
-										</div>
-									</div>
-								</div>
+								
 							</div>
+
 						</div>
 					</div>
 				</div>
 				<%- include('partials/footer.html') %>
 			</div>
 		</div>
-		<!-- Libs JS -->
 		<!-- Tabler Core -->
 		<script src="/js/tabler.min.js" defer></script>
 		<script src="/js/demo.min.js" defer></script>

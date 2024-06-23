@@ -6,7 +6,12 @@
 * Pushed new docker image with 'latest' tag.
 * Updated compose.yaml volume to /app/config.
 * Fixed container card links.
-* 
+* Moved 'Reset view' button.
+* New - 'Grid view' and 'List view' button (non-functioning).
+* Added try blocks to volumes, images, and networks pages to address GitHub issues.
+* Fixed HTTPS env.
+* New - One-click sign-in if NO_AUTH env is set to 'true' and you're connecting from localhost.
+* New (again) - PM2 to keep the app running if it encounters an error.
 
 ## v0.60 (June 9th 2024) - Permissions system and import templates
 * Converted JS template literals into HTML.
