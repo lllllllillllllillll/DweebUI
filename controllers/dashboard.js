@@ -235,6 +235,9 @@ async function createCard (details) {
     let state = details.state;
     let card  = readFileSync('./views/partials/containerFull.html', 'utf8');
 
+    let links = await ServerSettings.findOne({ where: {key: 'links'}});
+    if (!links) { links = { value: 'localhost' }; }
+
     let state_color = '';
     switch (state) {
         case 'running':
@@ -261,7 +264,7 @@ async function createCard (details) {
     card = card.replace(/AppIcon/g, details.service);
     card = card.replace(/AppState/g, state);
     card = card.replace(/StateColor/g, state_color);
-    card = card.replace(/AppLink/g, 'localhost');
+    card = card.replace(/AppLink/g, links.value);
     card = card.replace(/ExternalPort/g, details.external_port);
     card = card.replace(/InternalPort/g, details.internal_port);
     card = card.replace(/ChartName/g, details.name.replace(/-/g, ''));
