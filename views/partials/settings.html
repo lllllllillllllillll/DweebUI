@@ -3,7 +3,24 @@
 	<div class="card-body">
 		<h2 class="mb-4">Settings</h2>
 
-			
+				<h3 class="mt-5">User Registration</h3>
+				<label class="text-muted mb-2">Allow other users to register.</label>
+				<div class="row align-items-center">
+					<div class="col-auto">
+						<label class="form-check form-switch form-switch-lg">
+							<input class="form-check-input" type="checkbox" name="user_registration" data-UserReg>
+							<span class="form-check-label form-check-label-on text-success">
+								Enabled
+							</span>
+							<span class="form-check-label form-check-label-off text-danger">
+								Disabled
+							</span>
+						</label>
+					</div>
+					<div class="col-5">
+						<input type="text" class="form-control" name="passphrase" placeholder="multiple-words-strong-passphrase" data-Passphrase>
+					</div>
+				</div>
 		
 				<h3 class="mt-5">Container Links</h3>
 				<label class="text-muted mb-2">Choose the default behaviour for container links. Enter IP address or Domain before enabling.</label>
@@ -23,26 +40,6 @@
 						<input type="text" class="form-control" name="link" placeholder="IP Address or Domain" data-LinkValue>
 					</div>
 				</div>
-
-				<h3 class="mt-5">User Registration</h3>
-				<label class="text-muted mb-2">Allow other users to register.</label>
-				<div class="row align-items-center">
-					<div class="col-auto">
-						<label class="form-check form-switch form-switch-lg">
-							<input class="form-check-input" type="checkbox" name="user_registration" data-UserReg>
-							<span class="form-check-label form-check-label-on text-success">
-								Enabled
-							</span>
-							<span class="form-check-label form-check-label-off text-danger">
-								Disabled
-							</span>
-						</label>
-					</div>
-					<div class="col-5">
-						<input type="text" class="form-control" name="passphrase" placeholder="multiple-words-strong-passphrase" data-Passphrase>
-					</div>
-				</div>
-
 
 				<h3 class="mt-5">Remote Hosts</h3>
 				<label class="text-muted mb-2">Host #2</label>

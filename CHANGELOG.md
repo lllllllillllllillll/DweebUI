@@ -12,6 +12,8 @@
 * Fixed HTTPS env.
 * New - One-click sign-in if NO_AUTH env is set to 'true' and you're connecting from localhost.
 * New (again) - PM2 to keep the app running if it encounters an error.
+* New - User registration enabled/disabled from Settings page.
+* Removed 'SECRET' environment variable.
 
 ## v0.60 (June 9th 2024) - Permissions system and import templates
 * Converted JS template literals into HTML.

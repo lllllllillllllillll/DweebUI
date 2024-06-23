@@ -1,4 +1,4 @@
-import { read, readFileSync } from 'fs';  
+import { readFileSync } from 'fs';  
 import { ServerSettings } from '../database/models.js';
 
 
@@ -7,22 +7,34 @@ export const Settings = async (req, res) => {
     let settings = readFileSync('views/partials/settings.html', 'utf8');
 
     let links = await ServerSettings.findOne({ where: {key: 'links'}});
-    if (links.value != 'localhost' && links.value != '') {
-        settings = settings.replaceAll('data-LinkMode', 'checked');
-        settings = settings.replaceAll('data-LinkValue', `value="${links.value}"`);
+    try {
+        if (links.value != 'localhost' && links.value != '') {
+            settings = settings.replaceAll('data-LinkMode', 'checked');
+            settings = settings.replaceAll('data-LinkValue', `value="${links.value}"`);
+        }
+    } catch {
+        console.log(`Container Links: No Value Set`)
     }
-
+        
     let registration = await ServerSettings.findOne({ where: {key: 'registration'}});
-    if (registration.value != 'off' && registration.value != '') {
-        settings = settings.replaceAll('data-UserReg', 'checked');
-        settings = settings.replaceAll('data-Passphrase', `value="${registration.value}"`);
+    try {
+        if (registration.value != 'off' && registration.value != '') {
+            settings = settings.replaceAll('data-UserReg', 'checked');
+            settings = settings.replaceAll('data-Passphrase', `value="${registration.value}"`);
+        }
+    } catch {
+        console.log(`User Registration: No Value Set`);
     }
 
     async function hostInfo(host) {
         let info = await ServerSettings.findOne({ where: {key: host}});
-        if (info.value != 'off' && info.value != '') {
-            let values = info.value.split(',');
-            return { tag: values[0], ip: values[1], port: values[2] };
+        try {
+            if (info.value != 'off' && info.value != '') {
+                let values = info.value.split(',');
+                return { tag: values[0], ip: values[1], port: values[2] };
+            }
+        } catch {
+            console.log(`${host}: No Value Set`);
         }
     }
     
