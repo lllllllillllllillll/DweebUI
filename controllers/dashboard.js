@@ -399,7 +399,7 @@ export const UpdatePermissions = async (req, res) => {
         await Permission.update({ uninstall: false, edit: false, upgrade: false, start: false, stop: false, pause: false, restart: false, logs: false, view: false }, { where: { containerName: container} });
         return;
     }
-    await Permission.update({ uninstall: false, edit: false, upgrade: false, start: false, stop: false, pause: false, restart: false, logs: false }, { where: { containerName: container, user: user } });
+    await Permission.update({ uninstall: false, edit: false, upgrade: false, start: false, stop: false, pause: false, restart: false, logs: false, view: false}, { where: { containerName: container, user: user } });
     Object.keys(req.body).forEach(async function(key) {
         if (key != 'user' && key != 'container') {
             let permissions = req.body[key];

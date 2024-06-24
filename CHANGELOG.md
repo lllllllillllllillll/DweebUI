@@ -14,6 +14,8 @@
 * New (again) - PM2 to keep the app running if it encounters an error.
 * New - User registration enabled/disabled from Settings page.
 * Removed 'SECRET' environment variable.
+* New - Custom container links.
+* Fixed issue updating view permission.
 
 ## v0.60 (June 9th 2024) - Permissions system and import templates
 * Converted JS template literals into HTML.
