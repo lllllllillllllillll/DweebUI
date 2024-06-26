@@ -56,7 +56,16 @@ export const Users = async (req, res) => {
         role: req.session.role,
         avatar: req.session.user.charAt(0).toUpperCase(),
         user_list: user_list,
-        alert: ''
+        alert: '',
+        link1: '',
+        link2: '',
+        link3: '',
+        link4: '',
+        link5: '',
+        link6: '',
+        link7: '',
+        link8: '',
+        link9: '',
     });
 
 }

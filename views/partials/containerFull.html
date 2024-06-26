@@ -6,8 +6,7 @@
         </div>
         <div class="d-flex align-items-center">
           <div class="subheader text-yellow">ExternalPort:InternalPort</div>
-          <div class="ms-auto lh-1">
-            <div class="card-actions btn-actions">
+            <div class="ms-auto lh-1">
               <div class="card-actions btn-actions">
                 <button class="btn-action" title="Start" data-hx-post="/dashboard/start" data-hx-trigger="mousedown" data-hx-target="#AppNameState" name="AppName" id="AppState" ${disable}>
                   <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-player-play" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M7 4v16l13 -8z"></path></svg>
@@ -41,7 +40,6 @@
                     <button class="dropdown-item text-secondary" data-hx-post="/dashboard/hide" data-hx-trigger="mousedown" data-hx-swap="none" name="AppName" id="hide" value="hide">Hide</button>
                     <button class="dropdown-item text-secondary" data-hx-post="/dashboard/permissions" name="AppName" data-hx-target="#modals-here" hx-swap="innerHTML" data-hx-trigger="mousedown" data-bs-toggle="modal" data-bs-target="#modals-here">Permissions</button>
                   </div>
-                </div>
               </div>
             </div>
           </div>

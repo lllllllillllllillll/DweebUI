@@ -54,6 +54,15 @@ export const Networks = async function(req, res) {
         network_list: network_list,
         network_count: networks.length,
         alert: '',
+        link1: '',
+        link2: '',
+        link3: '',
+        link4: '',
+        link5: '',
+        link6: '',
+        link7: '',
+        link8: '',
+        link9: '',
     });
 }
 

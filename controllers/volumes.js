@@ -73,6 +73,15 @@ export const Volumes = async function(req, res) {
         volume_list: volume_list,
         volume_count: volumes.length,
         alert: '',
+        link1: '',
+        link2: '',
+        link3: '',
+        link4: '',
+        link5: '',
+        link6: '',
+        link7: '',
+        link8: '',
+        link9: '',
     });
 
 }

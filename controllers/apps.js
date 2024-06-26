@@ -135,7 +135,16 @@ export const Apps = async (req, res) => {
     template_list: '',
     json_templates: json_templates,
     pages: pages,
-    remove_button: remove_button
+    remove_button: remove_button,
+    link1: '',
+    link2: '',
+    link3: '',
+    link4: '',
+    link5: '',
+    link6: '',
+    link7: '',
+    link8: '',
+    link9: '',
   });
   alert = '';
 }
@@ -243,7 +252,16 @@ export const appSearch = async (req, res) => {
       template_list: '',
       json_templates: json_templates,
       pages: pages,
-      remove_button: remove_button
+      remove_button: remove_button,
+      link1: '',
+      link2: '',
+      link3: '',
+      link4: '',
+      link5: '',
+      link6: '',
+      link7: '',
+      link8: '',
+      link9: '',
   });
 }
 

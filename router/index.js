@@ -12,7 +12,6 @@ import { Images } from "../controllers/images.js";
 import { Networks, removeNetwork } from "../controllers/networks.js";
 import { Volumes, addVolume, removeVolume } from "../controllers/volumes.js";
 import { Account } from "../controllers/account.js";
-import { Variables } from "../controllers/variables.js";
 import { Settings, updateSettings } from "../controllers/settings.js";
 import { Supporters, Thanks } from "../controllers/supporters.js";
 import { Syslogs } from "../controllers/syslogs.js";
@@ -95,8 +94,6 @@ router.post("/upload", adminOnly, Upload);
 
 router.get("/users", adminOnly, Users);
 router.get("/syslogs", adminOnly, Syslogs);
-
-router.get("/variables", adminOnly, Variables);
 
 router.get("/settings", adminOnly, Settings);
 router.post("/settings", adminOnly, updateSettings);

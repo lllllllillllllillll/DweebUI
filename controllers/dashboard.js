@@ -5,23 +5,54 @@ import { readFileSync } from 'fs';
 import { currentLoad, mem, networkStats, fsSize, dockerContainerStats } from 'systeminformation';
 import { Op } from 'sequelize';
 
-let hidden = '';
-let alert = '';
-let [ cardList, newCards, stats ] = [ '', '', {}];
-let [ports_data, volumes_data, env_data, label_data] = [[], [], [], []];
+let [ hidden, alert, newCards, stats ] = [ '', '', '', {} ];
 
 // The page
-export const Dashboard = (req, res) => {
+export const Dashboard = async (req, res) => {
 
     let name = req.session.user ;
     let role = req.session.role;
     alert = req.session.alert;
+
+    let link1 = `<a href="#" class="btn text-green">
+                    Host 1
+                </a>`
+
+    async function hostInfo(host) {
+        let info = await ServerSettings.findOne({ where: {key: host}});
+        try {
+            if (info.value != 'off' && info.value != '') {
+                let values = info.value.split(',');
+                return { tag: values[0], ip: values[1], port: values[2] };
+            }
+        } catch {
+            console.log(`${host}: No Value Set`);
+        }
+    }
+
+    let link2 = '';
+    let host2 = await hostInfo('host2');
+    if (host2) {
+        link2 = `<button class="btn text-green" hx-post="/dashboard/host2" hx-trigger="mousedown" hx-swap="none">
+                    ${host2.tag}
+                </button>`
+    }
+    
     
     res.render("dashboard", {
         name: name,
         avatar: name.charAt(0).toUpperCase(),
         role: role,
         alert: alert,
+        link1: '',
+        link2: link2,
+        link3: '',
+        link4: '',
+        link5: '',
+        link6: '',
+        link7: '',
+        link8: '',
+        link9: '',
     });
 }
 
@@ -31,7 +62,6 @@ export const DashboardAction = async (req, res) => {
     let value = req.header('hx-trigger');
     let action = req.params.action;
     let modal = '';
-    let hostip = req.connection.remoteAddress;
 
     switch (action) {
         case 'permissions':
