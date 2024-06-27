@@ -4,8 +4,10 @@ import { docker } from '../server.js';
 import { readFileSync } from 'fs';
 import { currentLoad, mem, networkStats, fsSize, dockerContainerStats } from 'systeminformation';
 import { Op } from 'sequelize';
+import Docker from 'dockerode';
 
 let [ hidden, alert, newCards, stats ] = [ '', '', '', {} ];
+let logString = '';
 
 // The page
 export const Dashboard = async (req, res) => {
@@ -62,7 +64,7 @@ export const DashboardAction = async (req, res) => {
     let value = req.header('hx-trigger');
     let action = req.params.action;
     let modal = '';
-
+    
     switch (action) {
         case 'permissions':
             let title = name.charAt(0).toUpperCase() + name.slice(1);
@@ -154,10 +156,11 @@ export const DashboardAction = async (req, res) => {
                 return;
             }
         case 'logs':
-            let logString = '';
-            let options = { follow: true, stdout: true, stderr: false, timestamps: false };
+            logString = '';
+            let options = { follow: false, stdout: true, stderr: false, timestamps: true };
+            console.log(`Getting logs for ${name}`);
             docker.getContainer(name).logs(options, function (err, stream) {
-                if (err) { console.log(err); return; }
+                if (err) { console.log(`some error getting logs`); return; }
                 const readableStream = Readable.from(stream);
                 readableStream.on('data', function (chunk) {
                     logString += chunk.toString('utf8');
