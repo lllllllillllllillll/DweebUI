@@ -26,8 +26,13 @@ router.post("/uninstall", adminOnly, Uninstall);
 
 // Search (testing)
 router.post("/search", function (req, res) {
-    console.log(req.body);
-    console.log(req.header('hx-current-url'));
+    let path = req.header('hx-current-url');
+    // http://localhost:8000/dashboard
+    let search_from = path.split("/").pop();
+    // dashboard
+    if (search_from == "dashboard") {
+        DashboardAction(req, res);
+    }
 });
 
 // Routes

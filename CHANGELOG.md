@@ -16,6 +16,8 @@
 * Removed 'SECRET' environment variable.
 * New - Custom container links.
 * Fixed issue updating view permission.
+* Fixed issue viewing container logs.
+* App icons are now determined by service label instead of image name.
 
 ## v0.60 (June 9th 2024) - Permissions system and import templates
 * Converted JS template literals into HTML.

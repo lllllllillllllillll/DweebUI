@@ -268,6 +268,8 @@ async function createCard (details) {
     let state = details.state;
     let card  = readFileSync('./views/partials/containerFull.html', 'utf8');
 
+    let app_icon = (details.labels['com.docker.compose.service']);
+
     let links = await ServerSettings.findOne({ where: {key: 'links'}});
     if (!links) { links = { value: 'localhost' }; }
 
@@ -294,7 +296,7 @@ async function createCard (details) {
 
     card = card.replace(/AppName/g, details.name);
     card = card.replace(/AppShortName/g, shortname);
-    card = card.replace(/AppIcon/g, details.service);
+    card = card.replace(/AppIcon/g, app_icon);
     card = card.replace(/AppState/g, state);
     card = card.replace(/StateColor/g, state_color);
     card = card.replace(/AppLink/g, links.value);
@@ -406,7 +408,7 @@ export const Stats = async (req, res) => {
             break;
     }
     let info = `<div class="font-weight-medium"> <label class="cpu-text mb-1">${name} ${value}%</label></div>
-                <div class="cpu-bar meter animate ${color}"> <span style="width:${value}%"><span></span></span> </div>`;
+                <div class="cpu-bar meter animate ${color}"><span style="width:${value}%"><span></span></span></div>`;
     res.send(info);
 }
 
@@ -421,7 +423,7 @@ export async function addAlert (session, type, message) {
                               ${message}
                             </div>
                         </div>
-                        <button class="btn-close" data-hx-post="/dashboard/alert" data-hx-trigger="click" data-hx-target="#alert" data-hx-swap="outerHTML" style="padding-top: 0.5rem;" ></button>
+                        <button class="btn-close" data-hx-post="/dashboard/alert" data-hx-trigger="click" data-hx-target="#alert" data-hx-swap="outerHTML" style="padding-top: 0.5rem;"></button>
                     </div>`;
 }
 
@@ -467,11 +469,7 @@ export const Chart = async (req, res) => {
     stats[name].ramArray = stats[name].ramArray.slice(-15);
     let chart = `
         <script>
-            ${name}chart.updateSeries([{
-                data: [${stats[name].cpuArray}]
-            }, {
-                data: [${stats[name].ramArray}]
-            }])
+            ${name}chart.updateSeries([{data: [${stats[name].cpuArray}]}, {data: [${stats[name].ramArray}]}])
         </script>`
     res.send(chart);
 }
