@@ -34,20 +34,8 @@ export const Install = async (req, res) => {
             }
         }
 
-        // async function composeInstall (compose) {
-        //     await compose.pull();
-        //     await compose.up();
-        // }
-
-        // (async () => {
-        //     await compose.pull().then(() => {
-        //         compose.up();
-        //     });
-        // })();
-
         async function composeInstall (name, compose, req) {
             try {
-                
                 await compose.pull().then(() => {
                     compose.up();
 
@@ -60,9 +48,7 @@ export const Install = async (req, res) => {
                     }); 
 
                 });
-
             } catch (err) {
-
                 await Syslog.create({
                     user: req.session.user,
                     email: null,
@@ -70,10 +56,8 @@ export const Install = async (req, res) => {
                     message: `${name} installation failed: ${err}`,
                     ip: req.socket.remoteAddress
                 });
-
             }
         }
-
 
         addAlert(req.session, 'success', `Installing ${name}. It should appear on the dashboard shortly.`);
 
