@@ -9,6 +9,19 @@ import Docker from 'dockerode';
 let [ hidden, alert, newCards, stats ] = [ '', '', '', {} ];
 let logString = '';
 
+async function hostInfo(host) {
+    let info = await ServerSettings.findOne({ where: {key: host}});
+    try {
+        if (info.value != 'off' && info.value != '') {
+            let values = info.value.split(',');
+            return { tag: values[0], ip: values[1], port: values[2] };
+        }
+    } catch {
+        console.log(`${host}: No Value Set`);
+    }
+}
+
+
 // The page
 export const Dashboard = async (req, res) => {
 
@@ -16,40 +29,48 @@ export const Dashboard = async (req, res) => {
     let role = req.session.role;
     alert = req.session.alert;
 
-    let link1 = `<a href="#" class="btn text-green">
-                    Host 1
-                </a>`
-
-    async function hostInfo(host) {
-        let info = await ServerSettings.findOne({ where: {key: host}});
-        try {
-            if (info.value != 'off' && info.value != '') {
-                let values = info.value.split(',');
-                return { tag: values[0], ip: values[1], port: values[2] };
-            }
-        } catch {
-            console.log(`${host}: No Value Set`);
-        }
-    }
-
+    let link1 = '';
     let link2 = '';
+    let link3 = '';
+    let link4 = '';
+
     let host2 = await hostInfo('host2');
     if (host2) {
-        link2 = `<button class="btn text-green" hx-post="/dashboard/host2" hx-trigger="mousedown" hx-swap="none">
+        link2 = `<button class="btn text-yellow" name="host2" hx-post="/dashboard/checkhost" hx-trigger="load delay:2s " hx-swap="outerHTML">
                     ${host2.tag}
-                </button>`
+                </button>`;
     }
     
+    let host3 = await hostInfo('host3');
+    if (host3) {
+        link3 = `<button class="btn text-yellow" name="host3" hx-post="/dashboard/checkhost" hx-trigger="load delay:2s " hx-swap="outerHTML">
+                    ${host3.tag}
+                </button>`;
+    }
+
+    let host4 = await hostInfo('host4');
+    if (host4) {
+        link4 = `<button class="btn text-yellow" name="host4" hx-post="/dashboard/checkhost" hx-trigger="load delay:2s " hx-swap="outerHTML">
+                    ${host4.tag}
+                </button>`;
+    }
+
+    if (host2 || host3 || host4) {
+        link1 = `<a href="#" class="btn text-green">
+                    Host 1
+                </a>`;
+    }
+
     
     res.render("dashboard", {
         name: name,
         avatar: name.charAt(0).toUpperCase(),
         role: role,
         alert: alert,
-        link1: '',
+        link1: link1,
         link2: link2,
-        link3: '',
-        link4: '',
+        link3: link3,
+        link4: link4,
         link5: '',
         link6: '',
         link7: '',
@@ -64,8 +85,35 @@ export const DashboardAction = async (req, res) => {
     let value = req.header('hx-trigger');
     let action = req.params.action;
     let modal = '';
+
+    console.log(`Action: ${action} Name: ${name} Value: ${value}`);
+
+    if (req.body.search) { 
+        console.log(req.body.search);
+        res.send('search');
+        return;
+    }
     
     switch (action) {
+        case 'checkhost':
+            let link = '';
+            console.log(`checking host`);
+            let host_info = await hostInfo(name);
+            try {
+                var docker2 = new Docker({ protocol: 'http', host: host_info.ip, port: host_info.port });
+                let containers = await docker2.listContainers({ all: true });
+                console.log(containers);
+                link = `<button class="btn text-green" name="host2">
+                            ${host_info.tag}
+                        </button>`;
+            } catch {
+                console.log(`Error connecting to ${name}`);
+                link = `<button class="btn text-red" name="host2">
+                            ${host_info.tag}
+                        </button>`;
+            }
+            res.send(link);
+        return;
         case 'permissions':
             let title = name.charAt(0).toUpperCase() + name.slice(1);
             let permissions_list = '';

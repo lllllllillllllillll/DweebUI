@@ -20,21 +20,6 @@ import { Syslogs } from "../controllers/syslogs.js";
 import { Install } from "../utils/install.js"
 import { Uninstall } from "../utils/uninstall.js"
 
-// Utils
-router.post("/install", adminOnly, Install);
-router.post("/uninstall", adminOnly, Uninstall);
-
-// Search (testing)
-router.post("/search", function (req, res) {
-    let path = req.header('hx-current-url');
-    // http://localhost:8000/dashboard
-    let search_from = path.split("/").pop();
-    // dashboard
-    if (search_from == "dashboard") {
-        DashboardAction(req, res);
-    }
-});
-
 // Routes
 router.get("/login", Login);
 router.post("/login", submitLogin);
@@ -54,10 +39,12 @@ router.get("/images", adminOnly, Images);
 router.post("/images/:action", adminOnly, Images);
 
 router.get("/volumes", adminOnly, Volumes);
+router.post("/volumes", adminOnly, Volumes);
 router.post("/addVolume", adminOnly, addVolume);
 router.post("/removeVolume", adminOnly, removeVolume);
 
 router.get("/networks", adminOnly, Networks);
+router.post("/networks", adminOnly, Networks);
 router.post("/removeNetwork", adminOnly, removeNetwork);
 
 router.get("/apps/:page?/:template?", adminOnly, Apps);
@@ -79,3 +66,32 @@ router.get("/account", sessionCheck, Account);
 router.get("/supporters", sessionCheck, Supporters);
 router.post("/thank", sessionCheck, Thanks);
 
+// Utils
+router.post("/install", adminOnly, Install);
+router.post("/uninstall", adminOnly, Uninstall);
+
+// Search
+router.post("/search", function (req, res) {
+    // Check which page your searching from
+    let page = (req.header('hx-current-url')).split("/").pop();
+    // Redirect to the controller
+    switch(page) {
+        case "dashboard":
+            DashboardAction(req, res);
+            break;
+        case "images":
+            Images(req, res);
+            break;
+        case "volumes":
+            Volumes(req, res);
+            break;
+        case "networks":
+            Networks(req, res);
+            break;
+        case "apps":
+            appSearch(req, res);
+            break;
+        default:
+            res.send("Invalid search");
+    }
+});
