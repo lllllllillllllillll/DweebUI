@@ -386,11 +386,16 @@ async function createCard (details) {
     card = card.replace(/AppState/g, state);
     card = card.replace(/StateColor/g, state_color);
     card = card.replace(/AppLink/g, links.value);
-    card = card.replace(/ExternalPort/g, details.external_port);
-    card = card.replace(/InternalPort/g, details.internal_port);
     card = card.replace(/ChartName/g, details.name.replace(/-/g, ''));
     card = card.replace(/AppNameState/g, `${details.name}State`);
     card = card.replace(/data-trigger=""/, trigger);
+
+    // Show nothing if there are no ports exposed
+    if ((details.external_port == 0) && (details.internal_port == 0)) {
+        card = card.replace(/AppPorts/g, '');
+    } else {
+        card = card.replace(/AppPorts/g, `${details.external_port}:${details.internal_port}`);
+    }
     return card;
 }
 
