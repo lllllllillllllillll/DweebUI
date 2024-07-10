@@ -16,6 +16,10 @@ export const User = sequelize.define('User', {
   name: {
     type: DataTypes.STRING
   },
+  userID: {
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+  },
   username: {
     type: DataTypes.STRING,
     allowNull: false
@@ -39,10 +43,6 @@ export const User = sequelize.define('User', {
   },
   lastLogin: {
     type: DataTypes.STRING
-  },
-  UUID: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
   }
 });
 
@@ -114,7 +114,7 @@ export const Permission = sequelize.define('Permission', {
   containerID: {
     type: DataTypes.STRING,
   },
-  user: {
+  username: {
     type: DataTypes.STRING,
     allowNull: false
   },
@@ -248,7 +248,7 @@ export const UserSettings = sequelize.define('UserSettings', {
     autoIncrement: true,
     primaryKey: true
   },
-  uuid: {
+  userID: {
     type: DataTypes.STRING,
     allowNull: false
   },

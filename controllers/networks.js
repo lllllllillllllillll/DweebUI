@@ -4,6 +4,9 @@ import { docker } from '../server.js';
 export const Networks = async function(req, res) {
     let container_networks = [];
     let network_name = '';
+
+    console.log(req.params.host);
+
     // List all containers
     let containers = await docker.listContainers({ all: true });
     // Loop through the containers to find out which networks are being used
@@ -48,9 +51,9 @@ export const Networks = async function(req, res) {
     network_list += `</tbody>`
 
     res.render("networks", {
-        name: req.session.user,
+        username: req.session.username,
         role: req.session.role,
-        avatar: req.session.user.charAt(0).toUpperCase(),
+        avatar: req.session.username.charAt(0).toUpperCase(),
         network_list: network_list,
         network_count: networks.length,
         alert: '',

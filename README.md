@@ -1,5 +1,5 @@
 <h3 align="center"><img width="150" src="https://raw.githubusercontent.com/lllllllillllllillll/DweebUI/main/public/img/logo.png"></h3>
-<h4 align="center">DweebUI Beta v0.70 ( :fire: Experimental :fire: )</h4>
+<h4 align="center">DweebUI v0.70 ( :fire: Experimental :fire: )</h4>
 <h3 align="center">Free and Open-Source WebUI For Managing Your Containers.</h3>
 <p align="center">
     <a href=""><img src="https://img.shields.io/github/stars/lllllllillllllillll/DweebUI?style=flat"/></a>
@@ -16,7 +16,7 @@
 
 * [x] A dynamically updating dashboard that displays server metrics along with container metrics and container controls.
 * [x] Multi-user support with permissions system.
-* [ ] Display and control docker containers from multiple remote hosts (planned).
+* [ ] Display and control docker containers from multiple remote hosts (in development).
 * [x] Container actions: Start, Stop, Pause, Restart, View Details, View Logs.
 * [x] Windows, Linux, and MacOS compatable.
 * [x] Light/Dark Mode.
@@ -53,7 +53,7 @@ services:
     ports:
       - 8000:8000
     volumes:
-      - dweebui:/app/config
+      - dweebui:/app
       # Docker socket
       - /var/run/docker.sock:/var/run/docker.sock
       # Podman socket
@@ -69,15 +69,14 @@ networks:
   dweebui_net:
     driver: bridge
 ```
-
-[Windows and MacOS Setup](https://github.com/lllllllillllllillll/DweebUI/wiki/Setup)
-
 Compose setup:
 
 * Paste the above content into a file named ```docker-compose.yml``` then place it in a folder named ```dweebui```.
 * Open a terminal in the ```dweebui``` folder, then enter ```docker compose up -d```.
 * You may need to use ```docker-compose up -d``` or execute the command as root with either ```sudo docker compose up -d``` or ```sudo docker-compose up -d```.
 
+[Windows and MacOS Setup](https://github.com/lllllllillllllillll/DweebUI/wiki/Setup)
+[Troubleshooting](https://github.com/lllllllillllllillll/DweebUI/wiki/Troubleshooting)
 
 
 ## Credits

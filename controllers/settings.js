@@ -64,9 +64,9 @@ export const Settings = async (req, res) => {
 
 
     res.render("settings", {
-        name: req.session.user,
+        username: req.session.username,
         role: req.session.role,
-        avatar: req.session.user.charAt(0).toUpperCase(),
+        avatar: req.session.username.charAt(0).toUpperCase(),
         alert: '',
         settings: settings,
         link1: '',

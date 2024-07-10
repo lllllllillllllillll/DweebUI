@@ -27,9 +27,9 @@ export const Syslogs = async function(req, res) {
     }
     
     res.render("syslogs", {
-        name: req.session.user || 'Dev',
+        username: req.session.username || 'Dev',
         role: req.session.role || 'Dev',
-        avatar: req.session.user.charAt(0).toUpperCase(),
+        avatar: req.session.username.charAt(0).toUpperCase(),
         logs: logs,
         alert: '',
         link1: '',

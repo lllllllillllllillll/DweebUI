@@ -1,13 +1,10 @@
 import express from "express";
 export const router = express.Router();
 
-// Permissions middleware
-import { adminOnly, sessionCheck, permissionCheck } from "../utils/permissions.js";
-
 // Controllers
 import { Login, submitLogin, Logout } from "../controllers/login.js";
 import { Register, submitRegister } from "../controllers/register.js";
-import { Dashboard, DashboardAction, Stats, Chart, SSE, UpdatePermissions } from "../controllers/dashboard.js";
+import { Dashboard, DashboardAction, Stats, Chart, SSE, UpdatePermissions, ContainerAction } from "../controllers/dashboard.js";
 import { Apps, appSearch, InstallModal, ImportModal, LearnMore, Upload, removeTemplate } from "../controllers/apps.js";
 import { Users } from "../controllers/users.js";
 import { Images } from "../controllers/images.js";
@@ -20,25 +17,38 @@ import { Syslogs } from "../controllers/syslogs.js";
 import { Install } from "../utils/install.js"
 import { Uninstall } from "../utils/uninstall.js"
 
+// Permissions middleware
+import { adminOnly, sessionCheck, permissionCheck } from "../utils/permissions.js";
+
 // Routes
 router.get("/login", Login);
 router.post("/login", submitLogin);
 router.get("/logout", Logout);
+
 router.get("/register", Register);
 router.post("/register", submitRegister);  
 
 router.get("/", sessionCheck, Dashboard);
 router.get("/dashboard", sessionCheck, Dashboard);
-router.post("/dashboard/:action", sessionCheck, permissionCheck, DashboardAction);
+
+router.get("/:host?/dashboard", adminOnly, Dashboard);
+router.post("/:host?/dashboard/:action", sessionCheck, permissionCheck, DashboardAction);
+
+router.post("/:host?/container/:action", sessionCheck, permissionCheck, ContainerAction);
+
+
 router.get("/sse", sessionCheck, SSE);
 router.post("/updatePermissions", adminOnly, UpdatePermissions);
 router.get("/stats", sessionCheck, Stats);
 router.get("/chart", sessionCheck, Chart);
 
 router.get("/images", adminOnly, Images);
+router.get("/:host?/images", adminOnly, Images);
 router.post("/images/:action", adminOnly, Images);
 
+
 router.get("/volumes", adminOnly, Volumes);
+router.get("/:host?/volumes", adminOnly, Volumes);
 router.post("/volumes", adminOnly, Volumes);
 router.post("/addVolume", adminOnly, addVolume);
 router.post("/removeVolume", adminOnly, removeVolume);

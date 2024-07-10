@@ -122,9 +122,9 @@ export const Apps = async (req, res) => {
 
 
   res.render("apps", {
-    name: req.session.user,
+    username: req.session.username,
     role: req.session.role,
-    avatar: req.session.user.charAt(0).toUpperCase(),
+    avatar: req.session.username.charAt(0).toUpperCase(),
     list_start: list_start + 1,
     list_end: list_end,
     app_count: app_count,
@@ -239,9 +239,9 @@ export const appSearch = async (req, res) => {
     apps_list += appCard;
   }
   res.render("apps", {
-      name: req.session.user,
+      username: req.session.username,
       role: req.session.role,
-      avatar: req.session.user.charAt(0).toUpperCase(),
+      avatar: req.session.username.charAt(0).toUpperCase(),
       list_start: list_start + 1,
       list_end: list_end,
       app_count: results.length,

@@ -1,77 +1,71 @@
 import { Readable } from 'stream';
-import { Permission, User, ServerSettings } from '../database/models.js';
-import { docker } from '../server.js';
 import { readFileSync } from 'fs';
 import { currentLoad, mem, networkStats, fsSize, dockerContainerStats } from 'systeminformation';
 import { Op } from 'sequelize';
+
 import Docker from 'dockerode';
+
+import { Permission, User, ServerSettings } from '../database/models.js';
+import { docker, docker2, docker3, docker4, host_list, host2_list, host3_list, host4_list } from '../server.js';
 
 let [ hidden, alert, newCards, stats ] = [ '', '', '', {} ];
 let logString = '';
 
-async function hostInfo(host) {
-    let info = await ServerSettings.findOne({ where: {key: host}});
-    try {
-        if (info.value != 'off' && info.value != '') {
-            let values = info.value.split(',');
-            return { tag: values[0], ip: values[1], port: values[2] };
-        }
-    } catch {
-        console.log(`${host}: No Value Set`);
-    }
-}
+// async function hostInfo(host) {
+//     let info = await ServerSettings.findOne({ where: {key: host}});
+//     try {
+//         if (info.value != 'off' && info.value != '') {
+//             let values = info.value.split(',');
+//             return { tag: values[0], ip: values[1], port: values[2] };
+//         }
+//     } catch {
+//         // console.log(`${host}: No Value Set`);
+//     }
+// }
 
 
-// The page
 export const Dashboard = async (req, res) => {
 
-    let name = req.session.user ;
-    let role = req.session.role;
-    alert = req.session.alert;
+    console.log(`Viewing Host: ${req.params.host}`);
 
-    let link1 = '';
-    let link2 = '';
-    let link3 = '';
-    let link4 = '';
+    let { link1, link2, link3, link4, link5, link6, link7, link8, link9 } = ['', '', '', '', '', '', '', '', ''];
 
-    let host2 = await hostInfo('host2');
-    if (host2) {
-        link2 = `<button class="btn text-yellow" name="host2" hx-post="/dashboard/checkhost" hx-trigger="load delay:2s " hx-swap="outerHTML">
-                    ${host2.tag}
-                </button>`;
-    }
-    
-    let host3 = await hostInfo('host3');
-    if (host3) {
-        link3 = `<button class="btn text-yellow" name="host3" hx-post="/dashboard/checkhost" hx-trigger="load delay:2s " hx-swap="outerHTML">
-                    ${host3.tag}
-                </button>`;
-    }
+    // let host2 = await hostInfo('host2');
+    // let host3 = await hostInfo('host3');
+    // let host4 = await hostInfo('host4');
 
-    let host4 = await hostInfo('host4');
-    if (host4) {
-        link4 = `<button class="btn text-yellow" name="host4" hx-post="/dashboard/checkhost" hx-trigger="load delay:2s " hx-swap="outerHTML">
-                    ${host4.tag}
-                </button>`;
-    }
-
-    if (host2 || host3 || host4) {
-        link1 = `<a href="#" class="btn text-green">
+    if (docker2 || docker3 || docker4) {
+        link1 = `<a href="/1/dashboard" class="btn text-green" name="host">
                     Host 1
+                </a>`;
+        link5 = `<a href="/0/dashboard" class="btn text-green" name="hosts">
+                    All
+                </a>`;
+    }
+    if (docker2) { link2 = `<a href="/2/dashboard" class="btn text-green" name="host2">
+                    Host2
+                </a>`;
+    }
+    if (docker3) { link3 = `<a href="/3/dashboard" class="btn text-green" name="host3">
+                    Host3
+                </a>`;
+    }
+    if (docker4) { link4 = `<a href="/4/dashboard" class="btn text-green" name="host4">
+                    Host4
                 </a>`;
     }
 
     
     res.render("dashboard", {
-        name: name,
-        avatar: name.charAt(0).toUpperCase(),
-        role: role,
-        alert: alert,
+        username: req.session.username,
+        avatar: req.session.username.charAt(0).toUpperCase(),
+        role: req.session.role,
+        alert: req.session.alert,
         link1: link1,
         link2: link2,
         link3: link3,
         link4: link4,
-        link5: '',
+        link5: link5,
         link6: '',
         link7: '',
         link8: '',
@@ -79,14 +73,73 @@ export const Dashboard = async (req, res) => {
     });
 }
 
-// The page actions
+
+export const ContainerAction = async (req, res) => {
+    // Assign values
+    let container_name = req.header('hx-trigger-name');
+    let container_id = req.header('hx-trigger');
+    let action = req.params.action;
+
+
+    if (container_id == 'reset') { 
+        console.log('Resetting view'); 
+        await Permission.update({ hide: false }, { where: { userID: req.session.userID } });
+        res.send('ok'); 
+        return;
+    }
+
+    // Inspect the container
+    let container = docker.getContainer(container_id);
+    let containerInfo = await container.inspect();
+    let state = containerInfo.State.Status;
+
+    console.log(`Container: ${container_name} ID: ${container_id} State: ${state} Action: ${action}`);
+
+    function status (state) {
+        return(`<span class="text-yellow align-items-center lh-1"><svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-point-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M12 7a5 5 0 1 1 -4.995 5.217l-.005 -.217l.005 -.217a5 5 0 0 1 4.995 -4.783z" stroke-width="0" fill="currentColor"></path></svg>
+                        ${state}
+                </span>`);
+    }
+
+    if ((action == 'start') && (state == 'exited')) {
+        await container.start();
+        res.send(status('starting'));
+    } else if ((action == 'start') && (state == 'paused')) {
+        await container.unpause();
+        res.send(status('starting'));
+    } else if ((action == 'stop') && (state != 'exited')) {
+        await container.stop();
+        res.send(status('stopping'));
+    } else if ((action == 'pause') && (state == 'paused')) {
+        await container.unpause();
+        res.send(status('starting'));
+    }   else if ((action == 'pause') && (state == 'running')) {
+        await container.pause();
+        res.send(status('pausing'));
+    } else if (action == 'restart') {
+        await container.restart();
+        res.send(status('restarting'));
+    } else if (action == 'hide') {
+        let exists = await Permission.findOne({ where: { containerID: container_id, userID: req.session.userID }});
+        if (!exists) { const newPermission = await Permission.create({ containerName: container_name, containerID: container_id, username: req.session.username, userID: req.session.userID, hide: true }); }
+        else { exists.update({ hide: true }); }
+        // Array of hidden containers
+        hidden = await Permission.findAll({ where: { userID: req.session.userID, hide: true}}, { attributes: ['containerID'] });
+        // Map the container IDs
+        hidden = hidden.map((container) => container.containerID);
+        console.log(hidden);
+        res.send("ok");
+    }
+    
+}
+
 export const DashboardAction = async (req, res) => {
     let name = req.header('hx-trigger-name');
     let value = req.header('hx-trigger');
     let action = req.params.action;
     let modal = '';
 
-    console.log(`Action: ${action} Name: ${name} Value: ${value}`);
+    // console.log(`Action: ${action} Name: ${name} Value: ${value}`);
 
     if (req.body.search) { 
         console.log(req.body.search);
@@ -95,37 +148,51 @@ export const DashboardAction = async (req, res) => {
     }
     
     switch (action) {
-        case 'checkhost':
-            let link = '';
-            console.log(`checking host`);
-            let host_info = await hostInfo(name);
-            try {
-                var docker2 = new Docker({ protocol: 'http', host: host_info.ip, port: host_info.port });
-                let containers = await docker2.listContainers({ all: true });
-                console.log(containers);
-                link = `<button class="btn text-green" name="host2">
-                            ${host_info.tag}
-                        </button>`;
-            } catch {
-                console.log(`Error connecting to ${name}`);
-                link = `<button class="btn text-red" name="host2">
-                            ${host_info.tag}
-                        </button>`;
-            }
-            res.send(link);
-        return;
-        case 'permissions':
+        // case 'checkhost':
+        //     let link = '';
+        //     let host_info = await hostInfo(name);
+        //     try {
+        //         var docker2 = new Docker({ protocol: 'http', host: host_info.ip, port: host_info.port });
+        //         let containers = await docker2.listContainers({ all: true });
+        //         link = `<button class="btn text-green" name="host2">
+        //                     ${host_info.tag}
+        //                 </button>`;
+        //     } catch {
+        //         console.log(`Error connecting to ${name}`);
+        //         link = `<button class="btn text-red" name="host2">
+        //                     ${host_info.tag}
+        //                 </button>`;
+        //     }
+        //     res.send(link);
+        // return;
+        case 'permissions': // (Action = Selecting 'Permissions' from the dropdown) Creates the permissions modal 
+            // To capitalize the title
             let title = name.charAt(0).toUpperCase() + name.slice(1);
+            // Empty the permissions list
             let permissions_list = '';
+            // Get the container ID
+            let container = docker.getContainer(name);
+            let containerInfo = await container.inspect();
+            let container_id = containerInfo.Id;
+            // Get the body of the permissions modal
             let permissions_modal = readFileSync('./views/modals/permissions.html', 'utf8');
+            // Replace the title and container name in the modal
             permissions_modal = permissions_modal.replace(/PermissionsTitle/g, title);
             permissions_modal = permissions_modal.replace(/PermissionsContainer/g, name);
-            let users = await User.findAll({ attributes: ['username', 'UUID']});
+            permissions_modal = permissions_modal.replace(/ContainerID/g, container_id);
+            // Get a list of all users
+            let users = await User.findAll({ attributes: ['username', 'userID']});
+            // Loop through each user to check what permissions they have
             for (let i = 0; i < users.length; i++) {
+                // Get the user_permissions form
                 let user_permissions = readFileSync('./views/partials/user_permissions.html', 'utf8');
-                let exists = await Permission.findOne({ where: {containerName: name, user: users[i].username}});
-                if (!exists) { const newPermission = await Permission.create({ containerName: name, user: users[i].username, userID: users[i].UUID}); }
-                let permissions = await Permission.findOne({ where: {containerName: name, user: users[i].username}});
+                // Check if the user has any permissions for the container
+                let exists = await Permission.findOne({ where: { containerID: container_id, userID: users[i].userID }});
+                // Create an entry if one doesn't exist
+                if (!exists) { const newPermission = await Permission.create({ containerName: name, containerID: container_id, username: users[i].username, userID: users[i].userID }); }
+                // Get the permissions for the user
+                let permissions = await Permission.findOne({ where: { containerID: container_id, userID: users[i].userID }});
+                // Fill in the form values
                 if (permissions.uninstall == true) { user_permissions = user_permissions.replace(/data-UninstallCheck/g, 'checked'); }
                 if (permissions.edit == true) { user_permissions = user_permissions.replace(/data-EditCheck/g, 'checked'); }
                 if (permissions.upgrade == true) { user_permissions = user_permissions.replace(/data-UpgradeCheck/g, 'checked'); }
@@ -144,9 +211,14 @@ export const DashboardAction = async (req, res) => {
                 user_permissions = user_permissions.replace(/PermissionsContainer/g, name);
                 user_permissions = user_permissions.replace(/PermissionsContainer/g, name);
                 user_permissions = user_permissions.replace(/PermissionsContainer/g, name);
+                user_permissions = user_permissions.replace(/PermissionsUserID/g, users[i].userID);
+                user_permissions = user_permissions.replace(/PermissionsID/g, container_id);
+                // Add the user entry to the permissions list
                 permissions_list += user_permissions;
             }
+            // Insert the user list into the permissions modal
             permissions_modal = permissions_modal.replace(/PermissionsList/g, permissions_list);
+            // Send the permissions modal
             res.send(permissions_modal);
             return;
         case 'uninstall':
@@ -193,12 +265,15 @@ export const DashboardAction = async (req, res) => {
             newCards = '';
             return;
         case 'card':
+            // Check which cards the user has permissions for
             await userCards(req.session);
+            // Remove the container if it isn't in the user's list
             if (!req.session.container_list.find(c => c.container === name)) {
                 res.send('');
                 return;
             } else {
-                let details = await containerInfo(name);
+                // Get the container information and send the updated card
+                let details = await containerInfo(value);
                 let card = await createCard(details);
                 res.send(card);
                 return;
@@ -218,58 +293,19 @@ export const DashboardAction = async (req, res) => {
                 });
             });
             return;
-        case 'hide':
-            let user = req.session.user;
-            let exists = await Permission.findOne({ where: {containerName: name, user: user}});
-            if (!exists) { const newPermission = await Permission.create({ containerName: name, user: user, hide: true, userID: req.session.UUID}); }
-            else { exists.update({ hide: true }); }
-            hidden = await Permission.findAll({ where: {user: user, hide: true}}, { attributes: ['containerName'] });
-            hidden = hidden.map((container) => container.containerName);
-            res.send("ok");
-            return;
-        case 'reset':
-            await Permission.update({ hide: false }, { where: { user: req.session.user } });
-            res.send("ok");
-            return;
         case 'alert':
             req.session.alert = '';
             res.send('');
             return;
     }
-
-    function status (state) {
-        return(`<span class="text-yellow align-items-center lh-1"><svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-point-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M12 7a5 5 0 1 1 -4.995 5.217l-.005 -.217l.005 -.217a5 5 0 0 1 4.995 -4.783z" stroke-width="0" fill="currentColor"></path></svg>
-                        ${state}
-                </span>`);
-    }
-
-    // Container actions
-    if ((action == 'start') && (value == 'stopped')) {
-        docker.getContainer(name).start();
-        res.send(status('starting'));
-    } else if ((action == 'start') && (value == 'paused')) {
-        docker.getContainer(name).unpause();
-        res.send(status('starting'));
-    } else if ((action == 'stop') && (value != 'stopped')) {
-        docker.getContainer(name).stop();
-        res.send(status('stopping'));
-    } else if ((action == 'pause') && (value == 'paused')) {
-        docker.getContainer(name).unpause();
-        res.send(status('starting'));
-    }   else if ((action == 'pause') && (value == 'running')) {
-        docker.getContainer(name).pause();
-        res.send(status('pausing'));
-    } else if (action == 'restart') {
-        docker.getContainer(name).restart();
-        res.send(status('restarting'));
-    } 
 }
 
-async function containerInfo (containerName) {
+async function containerInfo (containerID) {
     // get the container info
-    let container = docker.getContainer(containerName);
+    let container = docker.getContainer(containerID);
     let info = await container.inspect();
     let image = info.Config.Image;
+    let container_id = info.Id;
     // grab the service name from the end of the image name
     let service = image.split('/').pop();
     // remove the tag from the service name if it exists
@@ -295,9 +331,10 @@ async function containerInfo (containerName) {
     } catch {}
 
     let details = {
-        name: containerName,
+        name: info.Name.slice(1),
         image: image,
         service: service,
+        containerID: container_id,
         state: info.State.Status,
         external_port: external,
         internal_port: internal,
@@ -343,6 +380,7 @@ async function createCard (details) {
     // if (name.startsWith('dweebui')) { disable = 'disabled=""'; }
 
     card = card.replace(/AppName/g, details.name);
+    card = card.replace(/AppID/g, details.containerID);
     card = card.replace(/AppShortName/g, shortname);
     card = card.replace(/AppIcon/g, app_icon);
     card = card.replace(/AppState/g, state);
@@ -356,45 +394,51 @@ async function createCard (details) {
     return card;
 }
 
+// Creates a list of containers that the user should be able to see.
 async function userCards (session) {
+    // Create an empty container list.
     session.container_list = [];
-    // check what containers the user wants hidden
-    let hidden = await Permission.findAll({ where: {user: session.user, hide: true}}, { attributes: ['containerName'] });
-    hidden = hidden.map((container) => container.containerName);
-    // check what containers the user has permission to view
-    let visable = await Permission.findAll({ where: { user: session.user, [Op.or]: [{ uninstall: true }, { edit: true }, { upgrade: true }, { start: true }, { stop: true }, { pause: true }, { restart: true }, { logs: true }, { view: true }] } });
-    visable = visable.map((container) => container.containerName);
-    // get all containers
+    // Check what containers the user has hidden.
+    let hidden = await Permission.findAll({ where: { userID: session.userID, hide: true }, attributes: ['containerID'], raw: true });
+    // Check which containers the user has permissions for.
+    let visable = await Permission.findAll({ where: { userID: session.userID, [Op.or]: [{ uninstall: true }, { edit: true }, { upgrade: true }, { start: true }, { stop: true }, { pause: true }, { restart: true }, { logs: true }, { view: true }] }, attributes: ['containerID'], raw: true});
+    // Get a list of all the containers.
     let containers = await docker.listContainers({ all: true });
-    // loop through containers
+    // Loop through the list of containers.
     for (let i = 0; i < containers.length; i++) {
-        let container_name = containers[i].Names[0].replace('/', '');
-        // skip hidden containers
-        if (hidden.includes(container_name)) { continue; }
-        // admin can see all containers that they don't have hidden
-        if (session.role == 'admin') { session.container_list.push({ container: container_name, state: containers[i].State }); }
-        // user can see any containers that they have any permissions for
-        else if (visable.includes(container_name)){ session.container_list.push({ container: container_name, state: containers[i].State }); }
+        // Get the container ID.
+        let containerID = containers[i].Id;
+        // Skip the container if it's ID is in the hidden list.
+        if (hidden.includes(containerID)) { console.log('skipped hidden container'); continue; }
+        // If the user is admin and they don't have it hidden, add it to the list.
+        if (session.role == 'admin') { session.container_list.push({ container: containerID, state: containers[i].State }); }
+        // Add the container if it's ID is in the visable list.
+        else if (visable.includes(containerID)){ session.container_list.push({ container: containerID, state: containers[i].State }); }
     }
-    // create a sent list if it doesn't exist
+    // Create the lists if they don't exist.
     if (!session.sent_list) { session.sent_list = []; }
     if (!session.update_list) { session.update_list = []; }
     if (!session.new_cards) { session.new_cards = []; }
 }
 
 async function updateDashboard (session) {
+    // Get the list of containers and the list of containers that have been sent.
     let container_list = session.container_list;
     let sent_list = session.sent_list;
     session.new_cards = [];
     session.update_list = [];
-    // loop through the containers list
+    // Loop through the containers list
     container_list.forEach(info => {
+        // Get the containerID and state
         let { container, state } = info;
+        // Check if the container is in the sent list
         let sent = sent_list.find(c => c.container === container);
+        // If it's not in the sent list, add it to the new cards list.
         if (!sent) { session.new_cards.push(container);}
+        // If it is in the sent list, check if the state has changed.
         else if (sent.state !== state) { session.update_list.push(container); }
     });
-    // loop through the sent list to see if any containers have been removed
+    // Loop through the sent list to see if any containers have been removed
     sent_list.forEach(info => {
         let { container } = info;
         let exists = container_list.find(c => c.container === container);
@@ -404,9 +448,9 @@ async function updateDashboard (session) {
 
 // HTMX server-side events
 export const SSE = async (req, res) => {
-    // set the headers for server-sent events
+    // Set the headers
     res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive' });
-    // check for container changes every 500ms
+    // Check for container changes every 500ms
     let eventCheck = setInterval(async () => {
         await userCards(req.session);
         // check if the cards displayed are the same as what's in the session
@@ -476,25 +520,28 @@ export async function addAlert (session, type, message) {
 }
 
 export const UpdatePermissions = async (req, res) => {
-    let { user, container, reset_permissions } = req.body;
+    let { userID, container, containerID, reset_permissions } = req.body;
     let id = req.header('hx-trigger');
+
+    console.log(`User: ${userID} Container: ${container} ContainerID: ${containerID} Reset: ${reset_permissions}`);
+
     if (reset_permissions) {
-        await Permission.update({ uninstall: false, edit: false, upgrade: false, start: false, stop: false, pause: false, restart: false, logs: false, view: false }, { where: { containerName: container} });
+        await Permission.update({ uninstall: false, edit: false, upgrade: false, start: false, stop: false, pause: false, restart: false, logs: false, view: false }, { where: { containerID: containerID} });
         return;
     }
-    await Permission.update({ uninstall: false, edit: false, upgrade: false, start: false, stop: false, pause: false, restart: false, logs: false, view: false}, { where: { containerName: container, user: user } });
+    await Permission.update({ uninstall: false, edit: false, upgrade: false, start: false, stop: false, pause: false, restart: false, logs: false, view: false}, { where: { containerID: containerID, userID: userID } });
     Object.keys(req.body).forEach(async function(key) {
         if (key != 'user' && key != 'container') {
             let permissions = req.body[key];
-            if (permissions.includes('uninstall')) { await Permission.update({ uninstall: true }, { where: {containerName: container, user: user}}); }  
-            if (permissions.includes('edit')) { await Permission.update({ edit: true }, { where: {containerName: container, user: user}}); }   
-            if (permissions.includes('upgrade')) { await Permission.update({ upgrade: true }, { where: {containerName: container, user: user}}); }   
-            if (permissions.includes('start')) { await Permission.update({ start: true }, { where: {containerName: container, user: user}}); }   
-            if (permissions.includes('stop')) { await Permission.update({ stop: true }, { where: {containerName: container, user: user}}); }   
-            if (permissions.includes('pause')) { await Permission.update({ pause: true }, { where: {containerName: container, user: user}}); }   
-            if (permissions.includes('restart')) { await Permission.update({ restart: true }, { where: {containerName: container, user: user}}); }   
-            if (permissions.includes('logs')) { await Permission.update({ logs: true }, { where: {containerName: container, user: user}}); }
-            if (permissions.includes('view')) { await Permission.update({ view: true }, { where: {containerName: container, user: user}}); }
+            if (permissions.includes('uninstall')) { await Permission.update({ uninstall: true }, { where: { containerID: containerID, userID: userID}}); }  
+            if (permissions.includes('edit')) { await Permission.update({ edit: true }, { where: { containerID: containerID, userID: userID}}); }   
+            if (permissions.includes('upgrade')) { await Permission.update({ upgrade: true }, { where: { containerID: containerID, userID: userID}}); }   
+            if (permissions.includes('start')) { await Permission.update({ start: true }, { where: { containerID: containerID, userID: userID}}); }   
+            if (permissions.includes('stop')) { await Permission.update({ stop: true }, { where: { containerID: containerID, userID: userID}}); }   
+            if (permissions.includes('pause')) { await Permission.update({ pause: true }, { where: { containerID: containerID, userID: userID}}); }   
+            if (permissions.includes('restart')) { await Permission.update({ restart: true }, { where: { containerID: containerID, userID: userID}}); }   
+            if (permissions.includes('logs')) { await Permission.update({ logs: true }, { where: { containerID: containerID, userID: userID}}); }
+            if (permissions.includes('view')) { await Permission.update({ view: true }, { where: { containerID: containerID, userID: userID}}); }
         }  
     });
     if (id == 'submit') {

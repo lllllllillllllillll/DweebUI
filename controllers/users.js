@@ -52,9 +52,9 @@ export const Users = async (req, res) => {
 
 
     res.render("users", {
-        name: req.session.user,
+        username: req.session.username,
         role: req.session.role,
-        avatar: req.session.user.charAt(0).toUpperCase(),
+        avatar: req.session.username.charAt(0).toUpperCase(),
         user_list: user_list,
         alert: '',
         link1: '',

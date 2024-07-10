@@ -195,7 +195,7 @@
           <span class="avatar avatar-sm bg-green-lt"><%= avatar %></span></span>
           <div class="d-none d-xl-block ps-2">
             <div>
-              <%= name %>
+              <%= username %>
             </div>
             <div class="mt-1 small text-muted">
               <%= role %>
@@ -322,7 +322,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle><circle cx="12" cy="5" r="1"></circle></svg>
               </a>
               <div class="dropdown-menu dropdown-menu-end">
-                <button class="dropdown-item text-secondary" data-hx-post="/dashboard/reset" data-hx-trigger="mousedown" data-hx-swap="none" name="AppName" id="reset" value="reset">Reset View</button>
+                <button class="dropdown-item text-secondary" data-hx-post="/container/hide" data-hx-trigger="mousedown" data-hx-swap="none" name="reset" id="reset" value="reset">Reset View</button>
               </div>
             </div>
           </div>

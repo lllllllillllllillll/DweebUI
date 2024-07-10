@@ -1,77 +1,13 @@
-import { User, Syslog } from '../database/models.js';
 import bcrypt from 'bcrypt';
+import { User, Syslog } from '../database/models.js';
 
+// Environment variable to disable authentication.
 const no_auth = process.env.NO_AUTH || false;
 
 
 export const Login = function(req,res){
-    if (req.session.user) { res.redirect("/logout"); }
+    if (req.session.username) { res.redirect("/dashboard"); }
     else { res.render("login",{ "error":"", }); }
-}
-
-export const submitLogin = async function(req,res){
-
-    if (no_auth && req.hostname == 'localhost') { 
-        req.session.user = 'Localhost';
-        req.session.UUID = '';
-        req.session.role = 'admin';
-        res.redirect("/dashboard");
-        return;
-    }
-
-    let { email, password } = req.body;
-    email = email.toLowerCase();
-
-    if (email && password) {
-        let existingUser = await User.findOne({ where: {email:email}});
-        if (existingUser) {
-
-            let match = await bcrypt.compare(password,existingUser.password);
-
-            if (match) {
-                let currentDate = new Date();
-                let newLogin = currentDate.toLocaleString();
-                await User.update({lastLogin: newLogin}, {where: {UUID:existingUser.UUID}});
-
-                req.session.user = existingUser.username;
-                req.session.UUID = existingUser.UUID;
-                req.session.role = existingUser.role;
-                req.session.avatar = existingUser.avatar;
-
-                const syslog = await Syslog.create({
-                    user: req.session.user,
-                    email: email,
-                    event: "Successful Login",
-                    message: "User logged in successfully",
-                    ip: req.socket.remoteAddress
-                });
-                
-                res.redirect("/dashboard");
-            } else {
-
-                const syslog = await Syslog.create({
-                    user: null,
-                    email: email,
-                    event: "Bad Login",
-                    message: "Invalid password",
-                    ip: req.socket.remoteAddress
-                });
-
-                res.render("login",{
-                    "error":"Invalid password",
-                });
-            }
-        } else {
-            res.render("login",{
-                "error":"User with that email does not exist.",
-            });
-        }
-    } else {
-        res.status(400);
-        res.render("login",{
-            "error":"Please fill in all the fields.",
-        });
-    }
 }
 
 
@@ -80,3 +16,81 @@ export const Logout = function(req,res){
         res.redirect("/login");
     });
 }
+
+
+export const submitLogin = async function(req,res){
+
+    // Grab values from the form.
+    let { email, password } = req.body;
+
+    // Convert the email to lowercase.
+    email = email.toLowerCase();
+
+    // Create an admin session if NO_AUTH is enabled and the user is on localhost.
+    if (no_auth && req.hostname == 'localhost') { 
+        req.session.username = 'Localhost';
+        req.session.userID = '';
+        req.session.role = 'admin';
+        res.redirect("/dashboard");
+        return;
+    }
+
+    // Check that all fields are filled out.
+    if (!email || !password) {
+        res.render("login",{
+            "error":"Please fill in all fields.",
+        });
+        return;
+    }
+
+    // Check that the user exists.
+    let user = await User.findOne({ where: { email: email }});
+    if (!user) {
+        res.render("login",{
+            "error":"Invalid credentials.",
+        });
+        return;
+    }
+
+    // Check that the password is correct.
+    let password_check = await bcrypt.compare( password, user.password);
+
+    // If the password is incorrect, log the failed login attempt.
+    if (!password_check) {
+        res.render("login",{
+            "error":"Invalid credentials.",
+        });
+        const syslog = await Syslog.create({
+            user: null,
+            email: email,
+            event: "Bad Login",
+            message: "Invalid password",
+            ip: req.socket.remoteAddress
+        });
+        return;
+    }
+
+    // Successful login. Create the user session.
+    req.session.username = user.username;
+    req.session.userID = user.userID;
+    req.session.role = user.role;
+
+    // Update the last login time.
+    let date = new Date();
+    let new_login = date.toLocaleString();
+    await User.update({ lastLogin: new_login }, { where: { userID: user.userID}});
+
+    // Create a login entry.
+    const syslog = await Syslog.create({
+        user: req.session.username,
+        email: email,
+        event: "Successful Login",
+        message: "User logged in successfully",
+        ip: req.socket.remoteAddress
+    });
+    
+    // Redirect to the dashboard.
+    res.redirect("/dashboard");
+}
+
+

@@ -4,6 +4,8 @@ export const Volumes = async function(req, res) {
     let container_volumes = [];
     let volume_list = '';
 
+    console.log(req.params.host);
+
     // Table header
     volume_list = `<thead>
                         <tr>
@@ -67,9 +69,9 @@ export const Volumes = async function(req, res) {
 
     
     res.render("volumes", {
-        name: req.session.user,
+        username: req.session.username,
         role: req.session.role,
-        avatar: req.session.user.charAt(0).toUpperCase(),
+        avatar: req.session.username.charAt(0).toUpperCase(),
         volume_list: volume_list,
         volume_count: volumes.length,
         alert: '',
@@ -119,10 +121,3 @@ export const removeVolume = async function(req, res) {
 
     res.redirect("/volumes");
 }
-
-
-// docker.df(volume.Name).then((data) => {
-//     for (let key in data) {
-//         console.log(data[key]);
-//     }
-// });

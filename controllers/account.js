@@ -8,7 +8,7 @@ export const Account = async (req, res) => {
         res.render("account", {
             first_name: 'Localhost',
             last_name: 'Localhost',
-            name: 'Localhost',
+            username: 'Localhost',
             id: 0,
             email: 'admin@localhost',
             role: 'admin',
@@ -28,16 +28,16 @@ export const Account = async (req, res) => {
         return;
     }
     
-    let user = await User.findOne({ where: { UUID: req.session.UUID }});
+    let user = await User.findOne({ where: { userID: req.session.userID }});
 
     res.render("account", {
         first_name: user.name,
         last_name: user.name,
-        name: user.name,
+        username: req.session.username,
         id: user.id,
         email: user.email,
         role: user.role,
-        avatar: req.session.user.charAt(0).toUpperCase(),
+        avatar: req.session.username.charAt(0).toUpperCase(),
         alert: '',
         link1: '',
         link2: '',

@@ -5,6 +5,8 @@ export const Images = async function(req, res) {
 
     let action = req.params.action;
 
+    console.log(req.params.host);
+
     if (action == "remove") {
         let images = req.body.select;
 
@@ -101,9 +103,9 @@ export const Images = async function(req, res) {
 
     
     res.render("images", {
-        name: req.session.user,
+        username: req.session.username,
         role: req.session.role,
-        avatar: req.session.user.charAt(0).toUpperCase(),
+        avatar: req.session.username.charAt(0).toUpperCase(),
         image_list: image_list,
         image_count: images.length,
         alert: '',
