@@ -47,7 +47,6 @@ services:
     environment:
       PORT: 8000
       SECRET: MrWiskers
-      HTTPS: false
     restart: unless-stopped
     ports:
       - 8000:8000
@@ -77,7 +76,10 @@ Compose setup:
 * Open a terminal in the ```dweebui``` folder, then enter ```docker compose up -d```.
 * You may need to use ```docker-compose up -d``` or execute the command as root with either ```sudo docker compose up -d``` or ```sudo docker-compose up -d```.
 
+Configuration:
 
+* `PORT` - Specifies which port the service binds to on startup. Default is `8000`.
+* `SECRET` - A shared secret used by the registration page.
 
 ## Credits
 
