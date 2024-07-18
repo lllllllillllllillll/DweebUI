@@ -16,7 +16,7 @@
 
 * [x] A dynamically updating dashboard that displays server metrics along with container metrics and container controls.
 * [x] Multi-user support with permissions system.
-* [ ] Display and control docker containers from multiple remote hosts (in development).
+* [ ] Multiple hosts (in development).
 * [x] Container actions: Start, Stop, Pause, Restart, View Details, View Logs.
 * [x] Windows, Linux, and MacOS compatable.
 * [x] Light/Dark Mode.
@@ -24,6 +24,7 @@
 * [x] Manage your Docker networks, images, and volumes.
 * [x] Easy to install app templates.
 * [x] Docker Compose Support.
+* [ ] Available updates without image pull (in development).
 * [ ] Update containers (planned).
 * [x] Templates.json maintains compatability with Portainer, allowing you to use the template without needing to use DweebUI.
 * [ ] Preset variables (planned).

@@ -138,11 +138,6 @@
               </div>
             </div>
 
-
-            
-
-
-
             <div class="col-12">
               <div class="row row-cards" id="containers">
               </div>
@@ -150,7 +145,7 @@
 
             <!-- HTMX -->
             <div class="col-12">
-              <div class="row row-cards" data-hx-post="/dashboard/updates" data-hx-trigger="sse:update" data-hx-swap="afterbegin" hx-target="#containers">
+              <div class="row row-cards" data-hx-post="/dashboard/get_containers" name="sse:update" data-hx-trigger="sse:update" data-hx-swap="afterbegin" hx-target="#containers">
               </div>
             </div>
             

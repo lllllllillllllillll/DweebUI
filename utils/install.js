@@ -2,7 +2,7 @@ import { writeFileSync, mkdirSync, readFileSync, readdirSync, writeFile } from "
 import { execSync } from "child_process";
 import { Syslog } from "../database/models.js";
 import { addAlert } from "../controllers/dashboard.js";
-import { docker } from "../server.js";
+import { docker } from "../utils/docker.js";
 import DockerodeCompose from "dockerode-compose";
 import yaml from 'js-yaml';
 

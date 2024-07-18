@@ -1,4 +1,4 @@
-import { docker } from "../server.js";
+import { docker } from "../utils/docker.js";
 import { Syslog } from "../database/models.js";
 
 
