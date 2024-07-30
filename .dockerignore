@@ -1,4 +1,4 @@
-**/db.sqlite
+.sqlite
 **/node_modules
 **/screenshots
 .gitignore
