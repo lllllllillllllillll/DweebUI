@@ -1,4 +1,5 @@
-.sqlite
+sessions.sqlite
+settings.sqlite
 **/node_modules
 **/screenshots
 .gitignore

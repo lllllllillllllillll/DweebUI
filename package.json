@@ -1,6 +1,6 @@
 {
   "name": "dweebui",
-  "version": "0.70.401",
+  "version": "0.70.402",
   "main": "server.js",
   "type": "module",
   "scripts": {

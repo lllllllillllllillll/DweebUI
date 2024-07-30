@@ -54,7 +54,7 @@ router.get('/account', sessionCheck, Account);
 
 // Search
 router.post("/search", function (req, res) {
-    // Check which page your searching from
+    // Check which page you're searching from
     let page = (req.header('hx-current-url')).split("/").pop();
     // Redirect to the controller
     switch(page) {
@@ -62,16 +62,16 @@ router.post("/search", function (req, res) {
             submitDashboard(req, res);
             break;
         case "images":
-            Images(req, res);
+            submitImages(req, res);
             break;
         case "volumes":
-            Volumes(req, res);
+            submitsubmitVolumes(req, res);
             break;
         case "networks":
-            Networks(req, res);
+            submitNetworks(req, res);
             break;
         case "apps":
-            appSearch(req, res);
+            submitappSearch(req, res);
             break;
         default:
             res.send("Invalid search");

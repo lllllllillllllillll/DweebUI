@@ -1,5 +1,5 @@
-.sqlite
+sessions.sqlite
+settings.sqlite
 **/node_modules
-**/appdata
 .github
 .git
