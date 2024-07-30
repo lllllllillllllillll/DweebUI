@@ -1,15 +1,16 @@
 <!doctype html>
+<!--Tabler - version 1.0.0-beta20 - Copyright 2018-2023 The Tabler Authors - Copyright 2018-2023 codecalm.net Paweł Kuna - Licensed under MIT (https://github.com/tabler/tabler/blob/master/LICENSE)-->
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <title>DweebUI - Register</title>
+    <title>Register - DweebUI</title>
     <!-- CSS files -->
-    <link href="/css/tabler.min.css" rel="stylesheet"/>
-    <link href="/css/demo.min.css" rel="stylesheet"/>
+    <link href="/css/tabler.min.css?1692870487" rel="stylesheet"/>
+    <link href="/css/demo.min.css?1692870487" rel="stylesheet"/>
     <style>
-      @import url('/fonts/inter.css');
+      @import url('fonts/inter.css');
       :root {
         --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
       }
@@ -19,121 +20,84 @@
     </style>
   </head>
   <body class="d-flex flex-column">
-    <script src="/js/demo-theme.js"></script>
+    <script src="/js/demo-theme.min.js?1692870487"></script>
     <div class="page page-center">
-
-      
-      <form class="container container-tight py-4" action="/register" method="POST" novalidate>
-
-        
-        <div class="text-center">
-          <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
-              <img src="/img/logo.png" alt="DweebUI" title="DweebUI" height="100px">
-          </h1>
-        </div>
+      <div class="container container-tight py-4">
         <div class="text-center mb-4">
-          <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
-            <img src="/img/dweebui.svg" alt="DweebUI" title="DweebUI" class="navbar-brand-image">
-          </h1>
+          <a href="." class="navbar-brand navbar-brand-autodark">
+            <img src="/static/logo.png" height="100" alt="Dweeb">
+          </a>
         </div>
-
-        <div class="card">
-          
-          <div class="card-body text-center py-4">
-            <h1 class="mt-1">Welcome to DweebUI</h1>
-            <p class="text-muted">Account information is stored in a local sqlite database.</p>
-
-            <% if(error) { %>
-              <div class="alert alert-danger" role="alert">
-                  <%= error %>
-              </div>
-            <% } %>
-
-          </div>
+        <form class="card card-md" action="/register" method="post" autocomplete="off" novalidate>
           <div class="card-body">
-            
-
-            <div class="row row-cards">
-              <div class="col-sm-6 col-md-6">
-                <div class="mb-2">
-                  <label class="form-label">Full Name</label>
-                  <input type="text" class="form-control" name="name" placeholder="John Doe">
-                </div>
-              </div>
-              <div class="col-sm-6 col-md-6">
-                <div class="mb-2">
-                  <label class="form-label">User Name</label>
-                  <input type="text" class="form-control" name="username" placeholder="JDoe">
-                </div>
-              </div>
+            <h2 class="card-title text-center mb-4">Create new account</h2>
+            <div class="mb-3">
+              <label class="form-label">Name</label>
+              <input type="text" class="form-control" name="name">
             </div>
-            <div class="mb-2">
+            <div class="mb-3">
+              <label class="form-label">Username</label>
+              <input type="text" class="form-control" name="username">
+            </div>
+            <div class="mb-3">
               <label class="form-label">Email address</label>
-              <input type="email" class="form-control" id="email" name="email">
+              <input type="email" class="form-control" name="email">
             </div>
-            <div class="mb-2">
+
+            <div class="mb-3">
               <label class="form-label">Password</label>
               <div class="input-group input-group-flat">
-                <input type="password" class="form-control" name="password1"  autocomplete="off">
+                <input type="password" class="form-control" autocomplete="off" name="password">
               </div>
             </div>
-            <div class="mb-2">
+
+            <div class="mb-3">
               <label class="form-label">Confirm Password</label>
               <div class="input-group input-group-flat">
-                <input type="password" class="form-control" name="password2"  autocomplete="off">
+                <input type="password" class="form-control" autocomplete="off" name="confirm">
               </div>
             </div>
 
-            <div class="mb-2">
-              <label class="form-label" title="Enter registration passphrase.">Passphrase</label>
-              <input type="text" class="form-control" id="passphrase" name="passphrase">
-            </div>
 
-          
-            <!-- <div class="mb-2">
+            <% if(reg_secret) { %>
+              <%- reg_secret %>
+            <% } %>
+
+            <!-- <div class="mb-3">
               <label class="form-check">
-                <input type="checkbox" class="form-check-input" name="warning"/>
-                <span class="form-check-label">
-                  I understand that<a href="https://github.com/lllllllillllllillll/DweebUI/wiki/Exposing-DweebUI-to-the-Internet"> exposing DweebUI directly to the internet</a> is a bad idea.
-                </span>
+                <input type="checkbox" class="form-check-input"/>
+                <span class="form-check-label">Agree the <a href="./terms-of-service.html" tabindex="-1">terms and policy</a>.</span>
               </label>
             </div> -->
 
-          </div>
-        </div>
-        
-        
-        <div class="row align-items-center mt-2">
-          
-          <div class="col">
-            <a href="/login">Login</a>
-          </div>
-
-          <div class="col">
-            <div class="btn-list justify-content-end">
-
-              <div class="d-none d-md-flex">
-                
-                <a href="?theme=dark" class="nav-link px-0 hide-theme-dark" title="Enable dark mode" data-bs-toggle="tooltip" data-bs-placement="bottom">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" /></svg>
-                </a>
-                <a href="?theme=light" class="nav-link px-0 hide-theme-light" title="Enable light mode" data-bs-toggle="tooltip" data-bs-placement="bottom">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" /></svg>
-                </a>
-              </div>
-
-              <button type="submit" class="btn btn-primary">Register</button>
-              
+            <div class="form-footer">
+              <button type="submit" class="btn btn-primary w-100">Create new account</button>
             </div>
           </div>
+        </form>
+
+        <div class="d-flex justify-content-between align-items-center mt-3">
+          <div>
+            <button class="nav-link px-0 hide-theme-dark" title="Enable dark mode" data-bs-toggle="tooltip" data-bs-placement="bottom" value="dark-theme" onclick="toggleTheme(this)">
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none" /> <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" /> </svg>
+            </button>
+            <button class="nav-link px-0 hide-theme-light" title="Enable light mode" data-bs-toggle="tooltip" data-bs-placement="bottom" value="light-theme" onclick="toggleTheme(this)">
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none" /> <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /> <path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" /> </svg>
+            </button>
+          </div>
+          <div class="text-center text-secondary">
+            Already have an account? <a href="/login" tabindex="-1">Login</a>
+          </div>
         </div>
-
-
-      </form>
+        
+      </div>
     </div>
+
+    <script src="/js/dweebui.js" defer></script>
+
     <!-- Libs JS -->
     <!-- Tabler Core -->
-    <script src="/js/tabler.min.js" defer></script>
-    <script src="/js/demo.min.js" defer></script>
+    <script src="/js/tabler.min.js?1692870487" defer></script>
+    <script src="/js/demo.min.js?1692870487" defer></script>
   </body>
 </html>

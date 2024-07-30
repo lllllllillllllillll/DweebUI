@@ -1,0 +1,112 @@
+<!doctype html>
+<!--Tabler - version 1.0.0-beta20 - Copyright 2018-2023 The Tabler Authors - Copyright 2018-2023 codecalm.net Paweł Kuna - Licensed under MIT (https://github.com/tabler/tabler/blob/master/LICENSE)-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Preferences - DweebUI.</title>
+    <!-- CSS files -->
+    <link href="/css/tabler.min.css?1692870487" rel="stylesheet"/>
+    <link href="/css/demo.min.css?1692870487" rel="stylesheet"/>
+    <style>
+      @import url('/fonts/inter.css');
+      :root {
+        --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+      }
+      body {
+        font-feature-settings: "cv03", "cv04", "cv11";
+      }
+    </style>
+  </head>
+  <body >
+    <script src="/js/demo-theme.min.js?1692870487"></script>
+    <div class="page">
+
+      <!-- EJS -->
+      <%- navbar %>
+
+      <div class="page-wrapper">
+
+        <!-- Page body -->
+        <div class="page-body">
+          <div class="container-xl">
+            <div class="card">
+              <div class="row g-0">
+
+                <!-- EJS -->
+                <%- include('partials/sidebar.html') %>
+                
+                <div class="col-12 col-md-9 d-flex flex-column">
+                <div class="card-body">
+
+                  <!-- HTMX - Submits the form and replaces the target with the response. Replaces the submit button with "Updated" -->
+                  <form id="preferences" hx-post="/preferences" hx-target="#submit" hx-swap="outerHTML">
+
+                  <h2 class="">Preferences</h2>
+                  <label class="text-muted mb-3">User Preferences.</label>
+                  
+
+                    <h3 class="card-title mt-4">Profile Visibility</h3>
+                    <p class="card-subtitle">Hides your username from the dashboard.</p>
+                    <div>
+                      <label class="form-check form-switch form-switch-lg">
+                        <input class="form-check-input" type="checkbox" name="hidden_input" <%= hide_profile %>>
+                        <span class="form-check-label form-check-label-on">Hidden</span>
+                        <span class="form-check-label form-check-label-off"><%= username %></span>
+                      </label>
+                    </div>
+
+                    <h3 class="mt-5">Language</h3>
+                    <label class="text-muted mb-2">In early development.</label>
+                    <div class="row align-items-center">
+                      <div class="col-auto">
+                        <div class="mb-3">
+                          <select class="form-control form-select" name="language_input">
+
+                            <%- selected %>
+                            
+                            <option value="english">English</option>
+                            <option value="chinese">Chinese</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+
+
+
+                  
+                
+                  </div>
+                  <div class="card-footer bg-transparent mt-auto">
+                    <div class="btn-list justify-content-end">
+                      <a href="#" class="btn">
+                        Cancel
+                      </a>
+                      <button class="btn btn-primary" id="submit">
+                        Update
+                      </button>
+                    </div>
+                  </div>
+                  
+                </div>
+              </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- EJS -->
+        <%- include('partials/footer.html') %>
+
+      </div>
+    </div>
+
+    <script src="/js/dweebui.js" defer></script>
+    <script src="/js/htmx.min.js"></script>
+
+    <!-- Tabler Core -->
+    <script src="/js/tabler.min.js?1692870487" defer></script>
+    <script src="/js/demo.min.js?1692870487" defer></script>
+  </body>
+</html>

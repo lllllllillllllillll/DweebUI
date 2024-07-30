@@ -1,7 +1,8 @@
-import { User } from '../database/models.js';
+import { ServerSettings, User } from '../database/config.js';
+import { Alert, getLanguage, Navbar } from '../utils/system.js';
 
-export const Users = async (req, res) => {
-   
+export const Users = async function(req,res){
+
     let user_list = `
     <tr>
         <th><input class="form-check-input" type="checkbox"></th>
@@ -30,8 +31,6 @@ export const Users = async (req, res) => {
             active = '<span class="badge badge-outline text-grey" title="User has not logged-in within the last 30 days.">Inactive</span>';
         }
 
-
-
         let info = `
         <tr>
             <td><input class="form-check-input" type="checkbox"></td>
@@ -50,22 +49,41 @@ export const Users = async (req, res) => {
         user_list += info;
     });
 
-
-    res.render("users", {
+    res.render("users",{ 
+        alert: '',
         username: req.session.username,
         role: req.session.role,
-        avatar: req.session.username.charAt(0).toUpperCase(),
         user_list: user_list,
+        navbar: await Navbar(req),
+    });
+}
+
+
+
+export const submitUsers = async function(req,res){
+
+    // console.log(req.body);
+
+    let trigger_name = req.header('hx-trigger-name');
+    let trigger_id = req.header('hx-trigger');
+
+    console.log(`trigger_name: ${trigger_name} - trigger_id: ${trigger_id}`);
+
+
+    // [HTMX Triggered] Changes the update button.
+    if(trigger_id == 'settings'){
+        res.send(`<button class="btn btn-success" hx-post="/settings" hx-trigger="load delay:2s" hx-swap="outerHTML" id="submit" hx-target="#submit">Updated</button>`);
+        return;
+    } else if (trigger_id == 'submit'){
+        res.send(`<button class="btn btn-primary" id="submit" form="settings">Update</button>`);
+        return;
+    }
+
+    res.render("users",{
         alert: '',
-        link1: '',
-        link2: '',
-        link3: '',
-        link4: '',
-        link5: '',
-        link6: '',
-        link7: '',
-        link8: '',
-        link9: '',
+        username: req.session.username,
+        role: req.session.role,
+        navbar: await Navbar(req),
     });
 
 }

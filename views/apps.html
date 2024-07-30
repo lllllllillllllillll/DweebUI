@@ -6,9 +6,11 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
     <title>DweebUI - Apps</title>
     <!-- CSS files -->
-    <link href="/css/tabler.min.css" rel="stylesheet"/>
-    <link href="/css/demo.min.css" rel="stylesheet"/>
-    <script src="/js/htmx.min.js"></script>
+		<link href="/css/tabler.min.css?1692870487" rel="stylesheet"/>
+		<link href="/css/demo.min.css?1692870487" rel="stylesheet"/>
+
+		<link href="/css/dweebui.css" rel="stylesheet"/>
+
     <style>
 			@import url('/fonts/inter.css');
 			:root {
@@ -21,9 +23,9 @@
   </head>
   <body >
     <div class="page">
-      <!-- Navbar -->
-
-      <%- include('partials/navbar.html') %>
+      
+      <!-- EJS -->
+      <%- navbar %>
 
       <div class="page-wrapper">
         <!-- Page header -->
@@ -35,7 +37,7 @@
                 <div class="card">
                   <div class="card-body text-center">
                     <div class="d-flex align-items-center">
-                      <div class="me-auto btn"><%= list_start %> - <%= list_end %> of <%= app_count %> Apps</div>
+                      <div class="me-auto btn"><%= app_count %></div>
                         <%- remove_button %>
                     </div>
                   </div>
@@ -166,8 +168,12 @@
       </div>
     </div>
 
-    <script src="/js/tabler.min.js" defer></script>
-    <script src="/js/demo.min.js" defer></script>
+			<script src="/js/dweebui.js" defer></script>
+			<script src="/js/htmx.min.js"></script>
+
+			<!-- Tabler Core -->
+			<script src="/js/tabler.min.js?1692870487" defer></script>
+			<script src="/js/demo.min.js?1692870487" defer></script>
     
   </body>
 </html>

@@ -1,0 +1,249 @@
+import session from 'express-session';
+import SessionSequelize from 'connect-session-sequelize';
+import { Sequelize, DataTypes} from 'sequelize';
+import { readFileSync } from 'fs';
+
+const SECURE = process.env.HTTPS || false;
+
+// Session store
+const SequelizeStore = SessionSequelize(session.Store);
+const sessionData = new Sequelize('database', 'username', 'password', {
+    dialect: 'sqlite',
+    storage: 'database/sessions.sqlite',
+    logging: false,
+});
+const SessionStore = new SequelizeStore({ db: sessionData });
+
+export const sessionMiddleware = session({
+  secret: 'not keyboard cat',
+  store: SessionStore,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+      secure: SECURE,
+      httpOnly: SECURE,
+      maxAge: 3600000 * 8,
+  },
+});
+
+// Server settings
+const settings = new Sequelize('database', 'username', 'password', {
+    dialect: 'sqlite',
+    storage: 'database/settings.sqlite',
+    logging: false,
+});
+const SettingsDB = new SequelizeStore({ db: settings });
+
+// Display package information
+let package_info = readFileSync(`package.json`, 'utf8');
+package_info = JSON.parse(package_info);
+console.log('');
+console.log(`\x1b[33mDweebUI v${package_info.version}\x1b[0m`);
+console.log(`\x1b[33mAuthor: ${package_info.author}\x1b[0m`);
+console.log(`\x1b[33mLicense: ${package_info.license}\x1b[0m`);
+console.log(`\x1b[33mDescription: ${package_info.description}\x1b[0m`);
+console.log('');
+
+// Test database connection
+try {
+    await sessionData.authenticate();
+    await settings.authenticate();
+    sessionData.sync();
+    settings.sync();
+    console.log(`\x1b[32mDatabase connection established.\x1b[0m`);
+} catch (error) {
+    console.error('\x1b[31mDatabase connection failed:', error, '\x1b[0m');
+}
+
+// Models
+export const User = settings.define('User', {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true
+    },
+    name: {
+      type: DataTypes.STRING
+    },
+    userID: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+    },
+    username: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    role: {
+      type: DataTypes.STRING
+    },
+    group: {
+      type: DataTypes.STRING
+    },
+    avatar: {
+      type: DataTypes.STRING
+    },
+    lastLogin: {
+      type: DataTypes.STRING
+    },
+    preferences : {
+      type: DataTypes.STRING
+    },
+});
+  
+export const Permission = settings.define('Permission', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
+  },
+  containerName: {
+    type: DataTypes.STRING,
+  },
+  containerID: {
+    type: DataTypes.STRING,
+  },
+  username: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  userID: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  install: {
+    type: DataTypes.STRING,
+    defaultValue: false
+  },
+  uninstall: {
+    type: DataTypes.STRING,
+    defaultValue: false
+  },
+  edit: {
+    type: DataTypes.STRING,
+    defaultValue: false
+  },
+  upgrade: {
+    type: DataTypes.STRING,
+    defaultValue: false
+  },
+  start: {
+    type: DataTypes.STRING,
+    defaultValue: false
+  },
+  stop: {
+    type: DataTypes.STRING,
+    defaultValue: false
+  },
+  restart: {
+    type: DataTypes.STRING,
+    defaultValue: false
+  },
+  pause: {
+    type: DataTypes.STRING,
+    defaultValue: false
+  },
+  logs: {
+    type: DataTypes.STRING,
+    defaultValue: false
+  },
+  hide: {
+    type: DataTypes.STRING,
+    defaultValue: false
+  },
+  reset_view: {
+    type: DataTypes.STRING,
+    defaultValue: false
+  },
+  view: {
+    type: DataTypes.STRING,
+    defaultValue: false
+  },
+  options: {
+    type: DataTypes.STRING,
+    defaultValue: false
+  },
+});
+
+export const Syslog = settings.define('Syslog', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
+  },
+  username: {
+    type: DataTypes.STRING
+  },
+  email: {
+    type: DataTypes.STRING
+  },
+  event: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  message: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  ip : {
+    type: DataTypes.STRING
+  },
+  options : {
+    type: DataTypes.STRING
+  },
+});
+
+export const Notification = settings.define('Notification', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
+  },
+  title: {
+    type: DataTypes.STRING
+  },
+  message: {
+    type: DataTypes.STRING
+  },
+  icon: {
+    type: DataTypes.STRING,
+  },
+  color: {
+    type: DataTypes.STRING,
+  },
+  read: {
+    type: DataTypes.STRING,
+  },
+  createdAt : {
+    type: DataTypes.STRING
+  },
+  createdBy : {
+    type: DataTypes.STRING
+  },
+  options : {
+    type: DataTypes.STRING
+  },
+});
+
+export const ServerSettings = settings.define('ServerSettings', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
+  },
+  key: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  value: {
+    type: DataTypes.STRING,
+    allowNull: true
+  }
+});

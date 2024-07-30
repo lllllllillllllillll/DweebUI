@@ -1,15 +1,16 @@
 <!doctype html>
+<!--Tabler - version 1.0.0-beta20 - Copyright 2018-2023 The Tabler Authors - Copyright 2018-2023 codecalm.net Paweł Kuna - Licensed under MIT (https://github.com/tabler/tabler/blob/master/LICENSE)-->
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <title>DweebUI - Login</title>
+    <title>Login - DweebUI</title>
     <!-- CSS files -->
-    <link href="/css/tabler.min.css" rel="stylesheet"/>
-    <link href="/css/demo.min.css" rel="stylesheet"/>
+    <link href="/css/tabler.min.css?1692870487" rel="stylesheet"/>
+    <link href="/css/demo.min.css?1692870487" rel="stylesheet"/>
     <style>
-      @import url('/fonts/inter.css');
+      @import url('fonts/inter.css');
       :root {
         --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
       }
@@ -19,71 +20,107 @@
     </style>
   </head>
   <body  class=" d-flex flex-column">
-    <script src="/js/demo-theme.js"></script>
+    <script src="/js/demo-theme.min.js?1692870487"></script>
+
     <div class="page page-center">
       <div class="container container-tight py-4">
-        <div class="text-center">
-          <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
-              <img src="/img/logo.png" alt="DweebUI" title="DweebUI" height="100px">
-          </h1>
-        </div>
         <div class="text-center mb-4">
-          <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
-            <img src="/img/dweebui.svg" alt="DweebUI" title="DweebUI" class="navbar-brand-image">
-          </h1>
+          <a href="." class="navbar-brand navbar-brand-autodark">
+            <img src="/static/logo.png" height="100" alt="Dweeb">
+          </a>
         </div>
-
         <div class="card card-md">
           <div class="card-body">
             <h2 class="h2 text-center mb-4">Login to your account</h2>
-            <form action="/login" method="POST" novalidate>
 
-              <% if(error) { %>
-                <div class="alert alert-danger" role="alert">
-                    <%= error %>
-                </div>
-              <% } %>
+            <% if(error) { %>
+              <div class="alert alert-danger" role="alert">
+                  <%= error %>
+              </div>
+            <% } %>
 
-              <div class="mb-2">
+            <form action="/login" method="post" autocomplete="off" novalidate>
+              <div class="mb-3">
                 <label class="form-label">Email address</label>
-                <input type="email" class="form-control" id="email" name="email">
+                <input name="email" type="email" class="form-control" autocomplete="off">
               </div>
               <div class="mb-2">
                 <label class="form-label">
                   Password
-                </label>
-                <div class="input-group input-group-flat">
-                  <input type="password" class="form-control"  id="password" name="password" autocomplete="off">
-                </div>
-              </div>
-              <div class="mb-2 d-flex justify-content-between">
-                <label class="form-check">
-                  <input type="checkbox" class="form-check-input" checked=""/>
-                  <span class="form-check-label">
-                    Remember me
+                  <span class="form-label-description">
+                    <!-- <a href="./forgot-password.html">I forgot password</a> -->
                   </span>
                 </label>
-                <span>
-                  <a href="#">Forgot password</a>
-                </span>
+                <div class="input-group input-group-flat">
+                  <input type="password" name="password" class="form-control" autocomplete="off">
+
+                  <!-- <span class="input-group-text">
+                    <a href="#" class="link-secondary" title="Show password" data-bs-toggle="tooltip">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" /></svg>
+                    </a>
+                  </span> -->
+                  
+                </div>
               </div>
+
+              <!-- <div class="mb-2">
+                <label class="form-check">
+                  <input type="checkbox" class="form-check-input"/>
+                  <span class="form-check-label">Remember me on this device</span>
+                </label>
+              </div> -->
+
               <div class="form-footer">
-                <button type="submit" class="btn btn-primary w-100">Sign in</button>
+                <button type="submit" class="btn btn-primary w-100">Login</button>
               </div>
             </form>
           </div>
+          
+          
+          <!-- <div class="hr-text">or</div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col">
+                <a href="#" class="btn w-100 text-secondary" title="not available">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="icon text-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" /></svg>
+                  Login with Github
+                </a>
+              </div>
+              <div class="col">
+                <a href="#" class="btn w-100 text-secondary" title="not available">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="icon text-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c0 -.249 1.51 -2.772 1.818 -4.013z" /></svg>
+                  Login with Twitter
+                </a>
+              </div>
+            </div>
+          </div> -->
+
+          
         </div>
-        <div class="text-center text-muted mt-2">
-          Don't have account? <a href="/register" tabindex="-1">Register</a>
+
+        <div class="d-flex justify-content-between align-items-center mt-3">
+          <div>
+            <button class="nav-link hide-theme-dark" title="Enable dark mode" data-bs-toggle="tooltip" data-bs-placement="bottom" value="dark-theme" onclick="toggleTheme(this)">
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none" /> <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" /> </svg>
+            </button>
+            <button class="nav-link hide-theme-light" title="Enable light mode" data-bs-toggle="tooltip" data-bs-placement="bottom" value="light-theme" onclick="toggleTheme(this)">
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none" /> <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /> <path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" /> </svg>
+            </button>
+          </div>
+          <div class="text-center text-secondary">
+            Don't have an account? <a href="/register" tabindex="-1">Register</a>
+          </div>
         </div>
+
+
       </div>
     </div>
- 
+
+    <script src="/js/dweebui.js" defer></script>
+
     <!-- Libs JS -->
     <!-- Tabler Core -->
-    <script src="/js/tabler.min.js" defer></script>
-    <script src="/js/demo.min.js" defer></script>
-    
-
+    <script src="/js/tabler.min.js?1692870487" defer></script>
+    <script src="/js/demo.min.js?1692870487" defer></script>
   </body>
 </html>

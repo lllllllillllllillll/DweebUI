@@ -1,6 +1,6 @@
 /*!
-* Tabler v1.0.0-beta19 (https://tabler.io)
-* @version 1.0.0-beta19
+* Tabler v1.0.0-beta20 (https://tabler.io)
+* @version 1.0.0-beta20
 * @link https://tabler.io
 * Copyright 2018-2023 The Tabler Authors
 * Copyright 2018-2023 codecalm.net Paweł Kuna
@@ -12,7 +12,7 @@
 })((function () { 'use strict';
 
 	var themeStorageKey = "tablerTheme";
-	var defaultTheme = "dark";
+	var defaultTheme = "light";
 	var selectedTheme;
 	var params = new Proxy(new URLSearchParams(window.location.search), {
 	  get: function get(searchParams, prop) {

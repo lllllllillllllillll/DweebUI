@@ -1,68 +1,32 @@
-import { docker } from '../utils/docker.js';
-import { addAlert } from './dashboard.js';
+import { Alert, getLanguage, Navbar } from '../utils/system.js';
+import { containerList, imageList } from '../utils/docker.js';
 
-export const Images = async function(req, res) {
+export const Images = async function(req,res){
 
-    let action = req.params.action;
-
-    console.log(req.params.host);
-
-    if (action == "remove") {
-        let images = req.body.select;
-
-        if (typeof(images) == 'string') {
-            images = [images];
-        }
-
-        for (let i = 0; i < images.length; i++) {
-            if (images[i] != 'on') {
-                try {
-                    console.log(`Removing image: ${images[i]}`);
-                    let image = docker.getImage(images[i]);
-                    await image.remove();
-                } catch (error) {
-                    console.log(`Unable to remove image: ${images[i]}`);
-                }
-            }
-        }
-        res.redirect("/images");
-        return;
-    } else if (action == "add") {
-        let image = req.body.image;
-        let tag = req.body.tag || 'latest';
-
-        try {
-            console.log(`Pulling image: ${image}:${tag}`);
-            await docker.pull(`${image}:${tag}`);
-        } catch (error) {
-            console.log(`Unable to pull image: ${image}:${tag}`);
-        }
-        res.redirect("/images");
-        return;
-    }
-
-    let containers = await docker.listContainers({ all: true });
     let container_images = [];
+
+    let containers = await containerList();
     for (let i = 0; i < containers.length; i++) {
         container_images.push(containers[i].Image);
     }
 
-    let images = await docker.listImages({ all: true });
+    let images = await imageList();
 
+    // Top of the table
     let image_list = `
-    <thead>
-        <tr>
-            <th class="w-1"><input class="form-check-input m-0 align-middle" name="select" type="checkbox" aria-label="Select all" onclick="selectAll()"></th>
-            <th><label class="table-sort" data-sort="sort-name">Name</label></th>
-            <th><label class="table-sort" data-sort="sort-type">Tag</label></th>
-            <th><label class="table-sort" data-sort="sort-city">ID</label></th>
-            <th><label class="table-sort" data-sort="sort-score">Status</label></th>
-            <th><label class="table-sort" data-sort="sort-date">Created</label></th>
-            <th><label class="table-sort" data-sort="sort-quantity">Size</label></th>
-            <th><label class="table-sort" data-sort="sort-progress">Action</label></th>
-        </tr>
-    </thead>
-    <tbody class="table-tbody">`
+        <thead>
+            <tr>
+                <th class="w-1"><input class="form-check-input m-0 align-middle" name="select" type="checkbox" aria-label="Select all" onclick="selectAll()"></th>
+                <th><label class="table-sort" data-sort="sort-name">Name</label></th>
+                <th><label class="table-sort" data-sort="sort-type">Tag</label></th>
+                <th><label class="table-sort" data-sort="sort-city">ID</label></th>
+                <th><label class="table-sort" data-sort="sort-score">Status</label></th>
+                <th><label class="table-sort" data-sort="sort-date">Created</label></th>
+                <th><label class="table-sort" data-sort="sort-quantity">Size</label></th>
+                <th><label class="table-sort" data-sort="sort-progress">Action</label></th>
+            </tr>
+        </thead>
+        <tbody class="table-tbody">`
 
 
     for (let i = 0; i < images.length; i++) {
@@ -101,23 +65,33 @@ export const Images = async function(req, res) {
     
     image_list += `</tbody>`
 
-    
-    res.render("images", {
+    res.render("images",{ 
+        alert: '',
         username: req.session.username,
         role: req.session.role,
-        avatar: req.session.username.charAt(0).toUpperCase(),
+        image_count: '',
         image_list: image_list,
-        image_count: images.length,
+        navbar: await Navbar(req),
+    });
+}
+
+
+
+export const submitImages = async function(req,res){
+
+    // console.log(req.body);
+
+    let trigger_name = req.header('hx-trigger-name');
+    let trigger_id = req.header('hx-trigger');
+
+    console.log(`trigger_name: ${trigger_name} - trigger_id: ${trigger_id}`);
+
+
+    res.render("images",{
         alert: '',
-        link1: '',
-        link2: '',
-        link3: '',
-        link4: '',
-        link5: '',
-        link6: '',
-        link7: '',
-        link8: '',
-        link9: '',
+        username: req.session.username,
+        role: req.session.role,
+        navbar: await Navbar(req),
     });
 
 }

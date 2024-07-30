@@ -1,135 +1,83 @@
-import bcrypt from 'bcrypt';
-import { User, Syslog, Permission, ServerSettings } from '../database/models.js';
+import bcrypt from "bcrypt";
+import { Op } from "sequelize";
+import { User, ServerSettings } from "../database/config.js";
 
 
-export const Register = async function (req,res) {
+export const Register = async function(req,res){
 
     // Redirect to dashboard if user is already logged in.
-    if(req.session.user){ res.redirect("/dashboard"); return; } 
+    if (req.session.username) { res.redirect("/dashboard"); }
 
-    // Continue to registration page if no users have been created.
-    let users = await User.count();
-    if (users == 0) {
-        const disable_passphrase = await ServerSettings.create({ key: 'registration', value: ''});
-        res.render("register",{
-            "error": "Creating admin account. Leave passphrase blank.",
-        });
+    let secret_input = '';
+    let registration_secret = await ServerSettings.findOne({ where: { key: 'registration' }}).value;
+
+    // Input field for secret if one has been set.
+    if (registration_secret) {
+        secret_input = `<div class="mb-3"><label class="form-label">Secret</label>
+                                <div class="input-group input-group-flat">
+                                    <input type="text" class="form-control" autocomplete="off" name="secret">
+                                </div>
+                            </div>`}
+
+    // If there are no users, or a registration secret has not been set, display the registration page.
+    if ((await User.count() == 0) || (registration_secret == '')) {
+        res.render("register",{ 
+            "error": "",
+            "reg_secret": secret_input,
+        }); 
     } else {
-        // Check if registration is enabled.
-        let registration = await ServerSettings.findOne({ where: {key: 'registration'}});
-        if (registration.value == 'off') {
-            res.render("login",{
-                "error":"User registration is disabled.",
-            });
-        } else {
-            res.render("register",{
-                "error":"",
-            });
-        }
+        res.render("login", { 
+            "error": "User registration is disabled." 
+        });
     }
 }
 
+export const submitRegister = async function(req,res){
 
-export const submitRegister = async function (req,res) {
+    const { name, username, password, confirm, secret } = req.body;
+    let email = req.body.email.toLowerCase();
 
-    // Grab values from the form.
-    let { name, username, email, password1, password2, passphrase } = req.body;
+    let registration_secret = await ServerSettings.findOne({ where: { key: 'registration' }}).value;
 
-    // Convert the email to lowercase.
-    email = email.toLowerCase();
+    let error = '';
+    if (!name || !username || !email || !password || !confirm) { error = "All fields are required"; } 
+    else if (password !== confirm) { error = "Passwords do not match"; }
+    else if (registration_secret && secret !== registration_secret) { error = "Invalid secret"; }
+    else if (await User.findOne({ where: { [Op.or]: [{ username: username }, { email: email }] }})) { error = "Username or email already exists"; }
 
-    // Get the registration passphrase.
-    let registration_passphrase = await ServerSettings.findOne({ where: { key: 'registration' }});
-    registration_passphrase = registration_passphrase.value;
-
-    // Create a log entry if the form is submitted with an invalid passphrase.
-    if (passphrase != registration_passphrase) {
-        const syslog = await Syslog.create({
-            user: username,
-            email: email,
-            event: "Failed Registration",
-            message: "Invalid secret",
-            ip: req.socket.remoteAddress
-        });
-        res.render("register",{
-            "error":"Invalid passphrase",
-        });
+    if (error) {
+        res.render("register", { "error": error });
         return;
     }
 
-    // Check that all fields are filled out correctly.
-    if ((!name || !username || !email || !password1 || !password2) || (password1 != password2)) {
-        res.render("register",{
-            "error":"Missing field or password mismatch.",
-        });
-        return;
-    }
-
-    // Make sure the username and email are unique.
-    let existing_username = await User.findOne({ where: {username:username}});
-    let existing_email = await User.findOne({ where: {email:email}});
-    if (existing_username || existing_email) {
-        res.render("register",{
-            "error":"Username or email already exists.",
-        });
-        return;
-    }
-
-    // Make the user an admin and disable registration if there are no other users.
-    async function userRole () {
-        let userCount = await User.count();
-        if (userCount == 0) { 
-            await ServerSettings.update({ value: 'off' }, { where: { key: 'registration' }}); 
-            return "admin"; 
-        } else { 
-            return "user"; 
-        }
+    // Returns 'admin' if no users have been created.
+    async function Role() {
+        if (await User.count() == 0) { return "admin"; }
+        else { return "user"; }
     }
 
     // Create the user.
-    const user = await User.create({ 
+    await User.create({
         name: name,
         username: username,
         email: email,
-        password: bcrypt.hashSync(password1,10),
-        role: await userRole(),
-        group: 'all',
+        password: bcrypt.hashSync(password, 10),
+        role: await Role(),
+        preferences: JSON.stringify({ language: "english", hidden_profile: false }),
         lastLogin: new Date().toLocaleString(),
     });
 
-    // make sure the user was created and get the UUID.
-    let newUser = await User.findOne({ where: { email: email }});
-    let match = await bcrypt.compare( password1, newUser.password);
-
-    if (match) {  
-        // Create the user session.
-        req.session.username = newUser.username;
-        req.session.userID = newUser.userID;
-        req.session.role = newUser.role;
-
-        // Create an entry in the permissions table.
-        await Permission.create({ username: req.session.username, userID: req.session.userID });
-
-        // Create a log entry.
-        const syslog = await Syslog.create({
-            user: req.session.username,
-            email: email,
-            event: "Successful Registration",
-            message: "User registered successfully",
-            ip: req.socket.remoteAddress
-        });
+    // Make sure the user was created and get the UUID.
+    let user = await User.findOne({ where: { email: email }});
+    let match = await bcrypt.compare(password, user.password);
+    if (match) {
+        console.log(`User ${username} created`);
+        req.session.username = user.username;
+        req.session.userID = user.userID;
+        req.session.role = user.role;
         res.redirect("/dashboard");
     } else {
-        // Create a log entry.
-        const syslog = await Syslog.create({
-            user: req.session.username,
-            email: email,
-            event: "Failed Registration",
-            message: "User not created",
-            ip: req.socket.remoteAddress
-        });
-        res.render("register",{
-            "error":"User not created",
-        });
+        res.render("register", { "error": "Error. User not created" });
     }
 }
+

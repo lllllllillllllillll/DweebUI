@@ -1,7 +1,6 @@
 {
   "name": "dweebui",
-  "version": "0.60",
-  "description": "Free and Open-Source WebUI For Managing Your Containers.",
+  "version": "0.70.401",
   "main": "server.js",
   "type": "module",
   "scripts": {
@@ -11,19 +10,16 @@
   "keywords": [],
   "author": "lllllllillllllillll",
   "license": "MIT",
+  "description": "DweebUI is a WebUI for managing your containers. Simple setup, a dynamically updating dashboard, and a multi-user permission system.",
   "dependencies": {
-    "adm-zip": "^0.5.14",
     "bcrypt": "^5.1.1",
+    "connect-session-sequelize": "^7.1.7",
     "dockerode": "^4.0.2",
-    "dockerode-compose": "^1.4.0",
     "ejs": "^3.1.10",
     "express": "^4.19.2",
     "express-session": "^1.18.0",
-    "memorystore": "^1.6.7",
-    "multer": "^1.4.5-lts.1",
     "sequelize": "^6.37.3",
     "sqlite3": "^5.1.7",
-    "systeminformation": "^5.22.11",
-    "yaml": "^2.4.5"
+    "systeminformation": "^5.22.11"
   }
 }

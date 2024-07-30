@@ -1,62 +1,192 @@
-	<!doctype html>
-	<html lang="en">
-	<head>
-		<meta charset="utf-8"/>
-		<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-		<meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-		<title>DweebUI - Settings</title>
-		<!-- CSS files -->
-		<link href="/css/tabler.min.css" rel="stylesheet"/>
-		<script src="/js/htmx.min.js"></script>
+<!doctype html>
+<!--Tabler - version 1.0.0-beta20 - Copyright 2018-2023 The Tabler Authors - Copyright 2018-2023 codecalm.net Paweł Kuna - Licensed under MIT (https://github.com/tabler/tabler/blob/master/LICENSE)-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Settings - DweebUI.</title>
+    <!-- CSS files -->
+    <link href="/css/tabler.min.css?1692870487" rel="stylesheet"/>
+    <link href="/css/demo.min.css?1692870487" rel="stylesheet"/>
+    <style>
+      @import url('/fonts/inter.css');
+      :root {
+        --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+      }
+      body {
+        font-feature-settings: "cv03", "cv04", "cv11";
+      }
+    </style>
+  </head>
+  <body >
+    <script src="/js/demo-theme.min.js?1692870487"></script>
+    <div class="page">
 
-		<style>
-			@import url('/fonts/inter.css');
-			:root {
-			  --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
-			}
-			body {
-			  font-feature-settings: "cv03", "cv04", "cv11";
-			}
-		  </style>
-	</head>
-	<body >
-		<div class="page">
-			<!-- Navbar -->
-			<%- include('partials/navbar.html') %>
-			<div class="page-wrapper">
-				<!-- Page header -->
-				<div class="page-header d-print-none">
-					<div class="container-xl">
-						<div class="row g-2 align-items-center">
-						<div class="col">
-							<h2 class="page-title">
-							Settings
-							</h2>
-						</div>
-						</div>
-					</div>
-				</div>
-				<!-- Page body -->
-				<div class="page-body">
-					<div class="container-xl">
-						<div class="card">
-							<div class="row g-0">
-								
-								<%- include('partials/sidebar.html') %>
+      <!-- EJS -->
+      <%- navbar %>
 
-								<%- settings %>
-								
-								
-							</div>
+      <div class="page-wrapper">
 
-						</div>
-					</div>
-				</div>
-				<%- include('partials/footer.html') %>
-			</div>
-		</div>
-		<!-- Tabler Core -->
-		<script src="/js/tabler.min.js" defer></script>
-		<script src="/js/demo.min.js" defer></script>
-	</body>
+        <!-- Page body -->
+        <div class="page-body">
+          <div class="container-xl">
+            <div class="card">
+              <div class="row g-0">
+
+                <!-- EJS -->
+                <%- include('partials/sidebar.html') %>
+                
+                <div class="col-12 col-md-9 d-flex flex-column">
+                <div class="card-body">
+
+                  <!-- HTMX - Submits the form and replaces the target with the response. Replaces the submit button with "Updated" -->
+                  <form id="settings" hx-post="/settings" hx-target="#submit" hx-swap="outerHTML">
+
+                  <h2 class="">Settings</h2>
+                  <label class="text-muted mb-3">Configure server settings. Admin only.</label>
+                  
+
+                    <h3 class="mt-5">User Registration</h3>
+                    <label class="text-muted mb-2">Allow other users to register.</label>
+                    <div class="row align-items-center">
+                      <div class="col-auto">
+                        <label class="form-check form-switch form-switch-lg">
+                          <input class="form-check-input" type="checkbox" name="user_registration" <%= user_registration %>>
+                          <span class="form-check-label form-check-label-on text-success">
+                            Enabled
+                          </span>
+                          <span class="form-check-label form-check-label-off text-danger">
+                            Disabled
+                          </span>
+                        </label>
+                      </div>
+                      <div class="col-5">
+                        <input type="text" class="form-control" name="registration_secret" placeholder="multiple-words-strong-passphrase" value="<%= registration_secret %>">
+                      </div>
+                    </div>
+                
+                    <h3 class="mt-5">Container Links</h3>
+                    <label class="text-muted mb-2">Choose the default behaviour for container links.</label>
+                    <div class="row align-items-center">
+                      <div class="col-auto">
+                        <label class="form-check form-switch form-switch-lg">
+                          <input class="form-check-input" type="checkbox" name="link_mode" <%= container_links %>>
+                          <span class="form-check-label form-check-label-on text-warning">
+                            Custom
+                          </span>
+                          <span class="form-check-label form-check-label-off text-success">
+                            Localhost
+                          </span>
+                        </label>
+                      </div>
+                      <div class="col-5">
+                        <input type="text" class="form-control" name="link" placeholder="IP Address or Domain" value="<%= link_url %>">
+                      </div>
+                    </div>
+
+                    <h3 class="mt-5">Remote Hosts</h3>
+                    <label class="text-muted mb-2">Host #2</label>
+                    <div class="row align-items-center">
+                      <div class="col-auto">
+                        <label class="form-check form-switch form-switch-lg">
+                          <input class="form-check-input" type="checkbox" name="host2" data-Host2>
+                          <span class="form-check-label form-check-label-on text-success">
+                            Enabled
+                          </span>
+                          <span class="form-check-label form-check-label-off text-danger">
+                            Disabled
+                          </span>
+                        </label>
+                      </div>
+                      <div class="col-2">
+                        <input type="text" class="form-control" name="tag2" value="Host 2" placeholder="Tag" data-Tag2>
+                      </div>
+                      <div class="col-4">
+                        <input type="text" class="form-control" name="ip2" placeholder="Host IP" data-Ip2>
+                      </div>
+                      <div class="col-2">
+                        <input type="text" class="form-control" name="port2" placeholder="PORT" data-Port2>
+                      </div>
+                    </div>
+                    
+                    <label class="text-muted mb-2">Host #3</label>
+                    <div class="row align-items-center">
+                      <div class="col-auto">
+                        <label class="form-check form-switch form-switch-lg">
+                          <input class="form-check-input" type="checkbox" name="host3" data-Host3>
+                          <span class="form-check-label form-check-label-on text-success">
+                            Enabled
+                          </span>
+                          <span class="form-check-label form-check-label-off text-danger">
+                            Disabled
+                          </span>
+                        </label>
+                      </div>
+                      <div class="col-2">
+                        <input type="text" class="form-control" name="tag3" value="Host 3" placeholder="Tag" data-Tag3>
+                      </div>
+                      <div class="col-4">
+                        <input type="text" class="form-control" name="ip3" placeholder="Host IP" data-Ip3>
+                      </div>
+                      <div class="col-2">
+                        <input type="text" class="form-control" name="port3" placeholder="PORT" data-Port3>
+                      </div>
+                    </div>
+
+                    <label class="text-muted mb-2">Host #4</label>
+                    <div class="row align-items-center">
+                      <div class="col-auto">
+                        <label class="form-check form-switch form-switch-lg">
+                          <input class="form-check-input" type="checkbox" name="host4" data-Host4>
+                          <span class="form-check-label form-check-label-on text-success">
+                            Enabled
+                          </span>
+                          <span class="form-check-label form-check-label-off text-danger">
+                            Disabled
+                          </span>
+                        </label>
+                      </div>
+                      <div class="col-2">
+                        <input type="text" class="form-control" name="tag4" value="Host 4" placeholder="Tag" data-Tag4>
+                      </div>
+                      <div class="col-4">
+                        <input type="text" class="form-control" name="ip4" placeholder="Host IP" data-Ip4>
+                      </div>
+                      <div class="col-2">
+                        <input type="text" class="form-control" name="port4" placeholder="PORT" data-Port4>
+                      </div>
+                    </div>
+
+                  </div>
+                  <div class="card-footer bg-transparent mt-auto">
+                    <div class="btn-list justify-content-end">
+                      <a href="#" class="btn">
+                        Cancel
+                      </a>
+                      <button class="btn btn-primary" id="submit">
+                        Update
+                      </button>
+                    </div>
+                  </div>
+                  
+                </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <%- include('partials/footer.html') %>
+
+      </div>
+    </div>
+
+    <script src="/js/dweebui.js" defer></script>
+    <script src="/js/htmx.min.js"></script>
+
+    <!-- Tabler Core -->
+    <script src="/js/tabler.min.js?1692870487" defer></script>
+    <script src="/js/demo.min.js?1692870487" defer></script>
+  </body>
 </html>

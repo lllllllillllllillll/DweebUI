@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
     <title>DweebUI - Volumes</title>
-    <link href="/css/tabler.min.css" rel="stylesheet"/>
-    <link href="/css/demo.min.css" rel="stylesheet"/>
-    <script src="/js/htmx.min.js"></script>
+    <!-- CSS files -->
+		<link href="/css/tabler.min.css?1692870487" rel="stylesheet"/>
+		<link href="/css/demo.min.css?1692870487" rel="stylesheet"/>
+
+		<link href="/css/dweebui.css" rel="stylesheet"/>
     <style>
       @import url('/fonts/inter.css');
       :root {
@@ -20,8 +22,10 @@
   </head>
   <body >
     <div class="page">
-      <!-- Navbar -->
-      <%- include('partials/navbar.html') %>
+
+      <!-- EJS -->
+      <%- navbar %>
+
       <div class="page-wrapper">
         <!-- Page header -->
         
@@ -127,9 +131,13 @@
     
     <!-- Libs JS -->
     <script src="/libs/list.js/dist/list.min.js" defer></script>
+
+    <script src="/js/dweebui.js" defer></script>
+    <script src="/js/htmx.min.js"></script>
+
     <!-- Tabler Core -->
-    <script src="/js/tabler.min.js" defer></script>
-    <script src="/js/demo.min.js" defer></script>
+    <script src="/js/tabler.min.js?1692870487" defer></script>
+    <script src="/js/demo.min.js?1692870487" defer></script>
 
     <script>
       document.addEventListener("DOMContentLoaded", function() {
