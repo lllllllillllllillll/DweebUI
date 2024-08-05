@@ -23,7 +23,7 @@
     "multer": "^1.4.5-lts.1",
     "sequelize": "^6.37.3",
     "sqlite3": "^5.1.7",
-    "systeminformation": "^5.22.9",
+    "systeminformation": "^5.23.3",
     "yaml": "^2.4.2"
   }
 }
