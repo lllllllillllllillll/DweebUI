@@ -1,0 +1,180 @@
+<div class="accordion-user mb-3">
+    <h2 class="accordion-header" id="heading-1">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-1" aria-expanded="false">
+            <span class="avatar avatar-sm bg-green-lt col-3 text-start">JD</span>
+            <div class="col text-end" style="margin-right: 10px;">JohnDoe</div>
+        </button>
+    </h2>
+
+    <div id="collapse-1" class="accordion-collapse collapse" data-bs-parent="#accordion-example">
+        <div class="accordion-body pt-0">
+
+            <form id="updatePermissions0">
+                <div class="col">
+
+                    <input type="hidden" name="userID" value="c49673fc-9413-40ae-a500-0f1dd2688fe7">
+                    <input type="hidden" name="container" value="speedtest">
+                    <input type="hidden" name="containerID" value="b207a9eebba3e678697bc7c224fdcecf005b5ea733d9608a5a59dca15beaaf5b">
+
+                    <div class="row mb-3">
+                        <div class="col-9">
+                            <label class="row text-start">
+                                <span class="col">
+                                    All
+                                </span>
+                            </label>
+                        </div>
+                        <div class="col-3">
+                            <label class="form-check form-check-single form-switch text-end">
+                                <input class="form-check-input" type="checkbox" name="select0" onclick="selectAll('select0')">
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-9">
+                            <label class="row text-start">
+                                <span class="col">
+                                Uninstall
+                                </span>
+                            </label>
+                        </div>
+                        <div class="col-3">
+                            <label class="form-check form-check-single form-switch text-end">
+                                <input class="form-check-input" type="checkbox" name="select0" value="uninstall" data-uninstallcheck="">
+                            </label>
+                        </div>
+                    </div>
+
+
+                    <div class="row mb-2">
+                        <div class="col-9">
+                            <label class="row text-start">
+                                <span class="col">
+                                Edit
+                                </span>
+                            </label>
+                        </div>
+                        <div class="col-3">
+                            <label class="form-check form-check-single form-switch text-end">
+                                <input class="form-check-input" type="checkbox" name="select0" value="edit" data-editcheck="">
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-9">
+                            <label class="row text-start">
+                                <span class="col">
+                                Upgrade
+                                </span>
+                            </label>
+                        </div>
+                        <div class="col-3">
+                            <label class="form-check form-check-single form-switch text-end">
+                                <input class="form-check-input" type="checkbox" name="select0" value="upgrade" data-upgradecheck="">
+                            </label>
+                        </div>
+                    </div>
+    
+                    <div class="row mb-2">
+                        <div class="col-9">
+                            <label class="row text-start">
+                                <span class="col">
+                                Start
+                                </span>
+                            </label>
+                        </div>
+                        <div class="col-3">
+                            <label class="form-check form-check-single form-switch text-end">
+                                <input class="form-check-input" type="checkbox" name="select0" value="start" data-startcheck="">
+                            </label>
+                        </div>
+                    </div>
+        
+                    <div class="row mb-2">
+                        <div class="col-9">
+                            <label class="row text-start">
+                                <span class="col">
+                                Stop
+                                </span>
+                            </label>
+                        </div>
+                        <div class="col-3">
+                            <label class="form-check form-check-single form-switch text-end">
+                                <input class="form-check-input" type="checkbox" name="select0" value="stop" data-stopcheck="">
+                            </label>
+                        </div>
+                    </div>
+        
+                    <div class="row mb-2">
+                        <div class="col-9">
+                            <label class="row text-start">
+                                <span class="col">
+                                Pause
+                                </span>
+                            </label>
+                        </div>
+                        <div class="col-3">
+                            <label class="form-check form-check-single form-switch text-end">
+                                <input class="form-check-input" type="checkbox" name="select0" value="pause" data-pausecheck="">
+                            </label>
+                        </div>
+                    </div>
+        
+                    <div class="row mb-2">
+                        <div class="col-9">
+                        <label class="row text-start">
+                            <span class="col">
+                            Restart
+                            </span>
+                        </label>
+                        </div>
+                        <div class="col-3">
+                        <label class="form-check form-check-single form-switch text-end">
+                            <input class="form-check-input" type="checkbox" name="select0" value="restart" data-restartcheck="">
+                        </label>
+                        </div>
+                    </div>
+        
+        
+                    <div class="row mb-2">
+                        <div class="col-9">
+                        <label class="row text-start">
+                            <span class="col">
+                            Logs
+                            </span>
+                        </label>
+                        </div>
+                        <div class="col-3">
+                        <label class="form-check form-check-single form-switch text-end">
+                            <input class="form-check-input" type="checkbox" name="select0" value="logs" data-logscheck="">
+                        </label>
+                        </div>
+                    </div>
+        
+        
+                    <div class="row mb-4">
+                        <div class="col-9">
+                        <label class="row text-start">
+                            <span class="col">
+                            View
+                            </span>
+                        </label>
+                        </div>
+                        <div class="col-3">
+                        <label class="form-check form-check-single form-switch text-end">
+                            <input class="form-check-input" type="checkbox" name="select0" value="view" data-viewcheck="">
+                        </label>
+                        </div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <button class="btn" type="button" id="submit" hx-post="/updatePermissions" hx-vals="#updatePermissions0" hx-swap="outerHTML">Update&nbsp;&nbsp;</button>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -25,3 +25,19 @@ function toggleTheme(button) {
     localStorage.setItem(themeStorageKey, 'light');
   }
 }
+
+
+
+function selectAll(group) {
+  
+  let checkboxes = document.getElementsByName(group);
+  if (checkboxes[0].checked == true) {
+    for (var i = 0; i < checkboxes.length; i++) {
+      checkboxes[i].checked = true;
+    }
+  } else {
+    for (var i = 0; i < checkboxes.length; i++) {
+      checkboxes[i].checked = false;
+    }
+  }
+}

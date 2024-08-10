@@ -9,15 +9,7 @@
     <!-- CSS files -->
     <link href="/css/tabler.min.css?1692870487" rel="stylesheet"/>
     <link href="/css/demo.min.css?1692870487" rel="stylesheet"/>
-    <style>
-      @import url('/fonts/inter.css');
-      :root {
-        --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
-      }
-      body {
-        font-feature-settings: "cv03", "cv04", "cv11";
-      }
-    </style>
+    <link href="/css/dweebui.css" rel="stylesheet"/>
   </head>
   <body >
     <script src="/js/demo-theme.min.js?1692870487"></script>
@@ -48,7 +40,7 @@
                   
 
                     <h3 class="mt-5">User Registration</h3>
-                    <label class="text-muted mb-2">Allow other users to register.</label>
+                    <label class="text-muted mb-2">Enable registration and choose a secret.</label>
                     <div class="row align-items-center">
                       <div class="col-auto">
                         <label class="form-check form-switch form-switch-lg">
@@ -71,7 +63,7 @@
                     <div class="row align-items-center">
                       <div class="col-auto">
                         <label class="form-check form-switch form-switch-lg">
-                          <input class="form-check-input" type="checkbox" name="link_mode" <%= container_links %>>
+                          <input class="form-check-input" type="checkbox" name="custom_link" <%= custom_link %>>
                           <span class="form-check-label form-check-label-on text-warning">
                             Custom
                           </span>
@@ -81,11 +73,49 @@
                         </label>
                       </div>
                       <div class="col-5">
-                        <input type="text" class="form-control" name="link" placeholder="IP Address or Domain" value="<%= link_url %>">
+                        <input type="text" class="form-control" name="link_url" placeholder="IP Address or Domain" value="<%= link_url %>">
                       </div>
                     </div>
 
-                    <h3 class="mt-5">Remote Hosts</h3>
+                    <h3 class="mt-5">Authentication</h3>
+                    <label class="text-muted mb-2">Change authentication settings. Only the default, Username and Password, supports multiple users.</label>
+                    <div class="row align-items-center">
+                      <div class="col-auto">
+                        <select class="form-select" name="authentication">
+                          <option value="default">Username and Password - Default</option>
+                          <option value="localhost">Localhost</option>
+                          <option value="no_auth">Disabled - No Authentication</option>
+                        </select>
+                      
+                      </div>
+                    </div>
+
+                    <h3 class="mt-5">Hosts</h3>
+
+                    <label class="text-muted mb-2">Host #1</label>
+                    <div class="row align-items-center">
+                      <div class="col-auto">
+                        <label class="form-check form-switch form-switch-lg">
+                          <input class="form-check-input" type="checkbox" name="host1" checked disabled>
+                          <span class="form-check-label form-check-label-on text-success">
+                            Enabled
+                          </span>
+                          <span class="form-check-label form-check-label-off text-danger">
+                            Disabled
+                          </span>
+                        </label>
+                      </div>
+                      <div class="col-2">
+                        <input type="text" class="form-control" placeholder="Host 1" readonly>
+                      </div>
+                      <div class="col-4">
+                        <input type="text" class="form-control" placeholder="/var/run/docker.sock" readonly>
+                      </div>
+                      <div class="col-2">
+                        <input type="text" class="form-control" readonly>
+                      </div>
+                    </div>
+
                     <label class="text-muted mb-2">Host #2</label>
                     <div class="row align-items-center">
                       <div class="col-auto">

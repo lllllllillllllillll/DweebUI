@@ -3,19 +3,17 @@ export const router = express.Router();
 
 import { Login, submitLogin, Logout } from './controllers/login.js';
 import { Register, submitRegister } from './controllers/register.js';
-import { Dashboard, submitDashboard, ServerMetrics } from './controllers/dashboard.js';
-import { Settings, submitSettings } from './controllers/settings.js';
+import { Dashboard, submitDashboard, ContainerAction, ServerMetrics, CardList, SSE } from './controllers/dashboard.js';
+import { Settings, updateSettings } from './controllers/settings.js';
 import { Images, submitImages } from './controllers/images.js';
 import { Volumes, submitVolumes } from './controllers/volumes.js';
 import { Networks, submitNetworks } from './controllers/networks.js';
 import { Users, submitUsers } from './controllers/users.js';
 import { Apps, submitApps } from './controllers/apps.js';
 import { Account } from './controllers/account.js';
-import { containerAction } from './utils/docker.js';
 import { Preferences, submitPreferences } from './controllers/preferences.js';
 
-
-import { sessionCheck, adminOnly, permissionCheck } from './utils/permissions.js';
+import { sessionCheck, adminOnly, permissionCheck, permissionModal } from './utils/permissions.js';
 
 router.get('/login', Login);
 router.post('/login', submitLogin);
@@ -25,8 +23,13 @@ router.post('/register', submitRegister);
 
 router.get("/:host?/dashboard", sessionCheck, Dashboard);
 router.get("/server_metrics", sessionCheck, ServerMetrics);
+router.get("/permission_modal", adminOnly, permissionModal);
 
-router.post("/:host?/container/:action", permissionCheck, containerAction);
+
+router.get("/sse", sessionCheck, SSE);
+router.get("/card_list", sessionCheck, CardList);
+
+router.post("/:host?/container/:action/:containerid?", permissionCheck, ContainerAction);
 
 router.get('/images', adminOnly, Images);
 router.post('/images', adminOnly, submitImages);
@@ -38,7 +41,7 @@ router.get('/networks', adminOnly, Networks);
 router.post('/networks', adminOnly, submitNetworks);
 
 router.get('/settings', adminOnly, Settings);
-router.post('/settings', adminOnly, submitSettings);
+router.post('/settings', adminOnly, updateSettings);
 
 router.get("/apps/:page?/:template?", adminOnly, Apps);
 router.post('/apps', adminOnly, submitApps);

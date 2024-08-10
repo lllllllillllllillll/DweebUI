@@ -1,11 +1,11 @@
 import { Alert, getLanguage, Navbar } from '../utils/system.js';
-import { containerList, imageList } from '../utils/docker.js';
+import { imageList } from '../utils/docker.js';
 
 export const Images = async function(req,res){
 
     let container_images = [];
 
-    let containers = await containerList();
+    let containers = await containerList(req);
     for (let i = 0; i < containers.length; i++) {
         container_images.push(containers[i].Image);
     }

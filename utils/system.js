@@ -2,17 +2,20 @@ import { User } from '../database/config.js';
 import { readFileSync } from 'fs';
 
 
+
+
+// Navbar
 export async function Navbar (req) {
 
     let username = req.session.username;
 
-
     let language = await getLanguage(req);
 
-    let user = await User.findOne({ where: { userID: req.session.userID }});
-    let preferences = JSON.parse(user.preferences);
-    if (preferences.hide_profile == true) {
-        username = 'Anonymous';
+    // Check if the user wants to hide their profile name.
+    if (req.session.userID != '00000000-0000-0000-0000-000000000000') { 
+        let user = await User.findOne({ where: { userID: req.session.userID }});
+        let preferences = JSON.parse(user.preferences);
+        if (preferences.hide_profile == true) { username = 'Anon'; }
     }
 
     let navbar = readFileSync('./views/partials/navbar.html', 'utf8');
@@ -39,7 +42,7 @@ export async function Navbar (req) {
     }
 }
 
-
+// Header Alert
 export function Alert (type, message) {
     return `
     <div class="alert alert-${type} alert-dismissible" role="alert" style="margin-bottom: 0;">
@@ -55,10 +58,19 @@ export function Alert (type, message) {
     </div>`;
 }
 
+
 export async function getLanguage (req) {
-    let user = await User.findOne({ where: { userID: req.session.userID }});
-    let preferences = JSON.parse(user.preferences);
-    return preferences.language;
+
+    // No userID if authentication is disabled.
+    if (req.session.userID == '00000000-0000-0000-0000-000000000000') { 
+        let user = await User.findOne({ where: { role: 'admin' }});
+        let preferences = JSON.parse(user.preferences);
+        return preferences.language;
+    } else {
+        let user = await User.findOne({ where: { userID: req.session.userID }});
+        let preferences = JSON.parse(user.preferences);
+        return preferences.language;
+    }
 }
 
 export function Capitalize (string) {

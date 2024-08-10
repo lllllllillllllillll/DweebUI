@@ -6,21 +6,9 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 		<meta http-equiv="X-UA-Compatible" content="ie=edge"/>
 		<title>Dashboard - DweebUI.</title>
-		<!-- CSS files -->
 		<link href="/css/tabler.min.css?1692870487" rel="stylesheet"/>
 		<link href="/css/demo.min.css?1692870487" rel="stylesheet"/>
-
 		<link href="/css/dweebui.css" rel="stylesheet"/>
-
-		<style>
-		@import url('/fonts/inter.css');
-		:root {
-			--tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
-		}
-		body {
-			font-feature-settings: "cv03", "cv04", "cv11";
-		}
-		</style>
   	</head>
 	<body>
 		<script src="/js/demo-theme.min.js?1692870487"></script>
@@ -29,12 +17,10 @@
 				<!-- EJS -->
 				<%- navbar %>
 
-				<div class="page-wrapper">
+				<div class="page-wrapper" hx-ext="sse" sse-connect="/sse">
 					<div class="page-body">
 						<div class="container-xl">
 							<div class="row row-deck row-cards">
-
-
 								<div class="col-12">
 									<div class="row row-cards">
 
@@ -73,10 +59,10 @@
 														<!-- HTMX -->
 														<div class="col" name="RAM" id="blue" data-hx-get="/server_metrics" data-hx-trigger="load, every 2s" hx-swap="innerHTML">
 															<div class="font-weight-medium">
-															<label class="ram-text mb-1" for="ram">RAM 0%</label>
+																<label class="ram-text mb-1" for="ram">RAM 0%</label>
 															</div>
 															<div class="ram-bar meter animate blue">
-															<span style="width:20%"><span></span></span>
+																<span style="width:20%"><span></span></span>
 															</div>
 														</div>
 													</div>
@@ -129,10 +115,20 @@
 
 									</div>
 								</div>
-						
-								<% if(container_list) { %>
-									<%- container_list %>
-								<% } %>
+
+								
+								<div class="col-12">
+									<div class="row row-cards" id="containers">
+									</div>
+								</div>
+					  
+								<!-- HTMX -->
+								<div class="col-12">
+									<div class="row row-cards" hx-get="/card_list" data-hx-trigger="sse:update" data-hx-swap="afterbegin" hx-target="#containers">
+									</div>
+								</div>
+
+
 
 							</div>
 						</div>
@@ -143,226 +139,39 @@
 				</div>
 			</div>
 			
-
-
-			
-			<div id="modals-here" class="modal modal-blur fade" tabindex="-1" aria-hidden="true" role="dialog">
-				<div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollables">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title">Speedtest Permissions</h5>
-					</div>
-					<div class="modal-body">
-						<div class="accordion" id="modal-accordion">
-							<div class="accordion-item mb-3">
-				<h2 class="accordion-header" id="heading-0">
-				  <button class="accordion-button collapsed row" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-0" aria-expanded="false">
-					<span class="avatar avatar-sm bg-green-lt col-3 text-start">JD</span>
-					  <div class="col text-end" style="margin-right: 10px;">JohnDoe</div>
-				  </button>
-				</h2>
-				<div id="collapse-0" class="accordion-collapse collapse" data-bs-parent="#modal-accordion">
-				  <div class="accordion-body pt-0">
-			
-			
-					<div class="">
-					  <div class="">
-						<form id="updatePermissions0">
-						  <div class="row mb-3">
-							<div class="col-9">
-							  <label class="row text-start">
-								<span class="col">
-								  All
-								</span>
-							  </label>
-							</div>
-							<div class="col-3">
-							  <label class="form-check form-check-single form-switch text-end">
-								<input class="form-check-input" type="checkbox" name="select0" onclick="selectAll('select0')">
-							  </label>
-							</div>
-						  </div>
-			
-						  <input type="hidden" name="userID" value="c49673fc-9413-40ae-a500-0f1dd2688fe7">
-						  <input type="hidden" name="container" value="speedtest">
-						  <input type="hidden" name="containerID" value="b207a9eebba3e678697bc7c224fdcecf005b5ea733d9608a5a59dca15beaaf5b">
-			
-						  <div class="row mb-2">
-							<div class="col-9">
-							  <label class="row text-start">
-								<span class="col">
-								  Uninstall
-								</span>
-							  </label>
-							</div>
-							<div class="col-3">
-							  <label class="form-check form-check-single form-switch text-end">
-								<input class="form-check-input" type="checkbox" name="select0" value="uninstall" data-uninstallcheck="">
-							  </label>
-							</div>
-						  </div>
-			
-						  <div class="row mb-2">
-							<div class="col-9">
-							  <label class="row text-start">
-								<span class="col">
-								  Edit
-								</span>
-							  </label>
-							</div>
-							<div class="col-3">
-							  <label class="form-check form-check-single form-switch text-end">
-								<input class="form-check-input" type="checkbox" name="select0" value="edit" data-editcheck="">
-							  </label>
-							</div>
-						  </div>
-			
-						  <div class="row mb-2">
-							<div class="col-9">
-							  <label class="row text-start">
-								<span class="col">
-								  Upgrade
-								</span>
-							  </label>
-							</div>
-							<div class="col-3">
-							  <label class="form-check form-check-single form-switch text-end">
-								<input class="form-check-input" type="checkbox" name="select0" value="upgrade" data-upgradecheck="">
-							  </label>
-							</div>
-						  </div>
-			
-						  <div class="row mb-2">
-							<div class="col-9">
-							  <label class="row text-start">
-								<span class="col">
-								  Start
-								</span>
-							  </label>
-							</div>
-							<div class="col-3">
-							  <label class="form-check form-check-single form-switch text-end">
-								<input class="form-check-input" type="checkbox" name="select0" value="start" data-startcheck="">
-							  </label>
-							</div>
-						  </div>
-			
-						  <div class="row mb-2">
-							<div class="col-9">
-							  <label class="row text-start">
-								<span class="col">
-								  Stop
-								</span>
-							  </label>
-							</div>
-							<div class="col-3">
-							  <label class="form-check form-check-single form-switch text-end">
-								<input class="form-check-input" type="checkbox" name="select0" value="stop" data-stopcheck="">
-							  </label>
-							</div>
-						  </div>
-			
-						  <div class="row mb-2">
-							<div class="col-9">
-							  <label class="row text-start">
-								<span class="col">
-								  Pause
-								</span>
-							  </label>
-							</div>
-							<div class="col-3">
-							  <label class="form-check form-check-single form-switch text-end">
-								<input class="form-check-input" type="checkbox" name="select0" value="pause" data-pausecheck="">
-							  </label>
-							</div>
-						  </div>
-			
-						  <div class="row mb-2">
-							<div class="col-9">
-							  <label class="row text-start">
-								<span class="col">
-								  Restart
-								</span>
-							  </label>
-							</div>
-							<div class="col-3">
-							  <label class="form-check form-check-single form-switch text-end">
-								<input class="form-check-input" type="checkbox" name="select0" value="restart" data-restartcheck="">
-							  </label>
-							</div>
-						  </div>
-			
-			
-						  <div class="row mb-2">
-							<div class="col-9">
-							  <label class="row text-start">
-								<span class="col">
-								  Logs
-								</span>
-							  </label>
-							</div>
-							<div class="col-3">
-							  <label class="form-check form-check-single form-switch text-end">
-								<input class="form-check-input" type="checkbox" name="select0" value="logs" data-logscheck="">
-							  </label>
-							</div>
-						  </div>
-			
-			
-						  <div class="row mb-4">
-							<div class="col-9">
-							  <label class="row text-start">
-								<span class="col">
-								  View
-								</span>
-							  </label>
-							</div>
-							<div class="col-3">
-							  <label class="form-check form-check-single form-switch text-end">
-								<input class="form-check-input" type="checkbox" name="select0" value="view" data-viewcheck="">
-							  </label>
-							</div>
-						  </div>
-			
-						  
-			
-						  <div class="row mb-2">
-							<button class="btn" type="button" id="submit" hx-post="/updatePermissions" hx-vals="#updatePermissions0" hx-swap="outerHTML">Update&nbsp;&nbsp;</button>
-						  </div>
-			
-						</form>
-					  </div>
-					</div>
-			
-				  </div>
-				</div>
-			  </div>
+			<div class="modal modal-blur fade" id="permissions_modal" tabindex="-1" style="display: none;" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+				  	<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="permissions_title">Permissions</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 						</div>
-					</div>
-					<div class="modal-footer">
-						<div class="row">
-							<div class="col">
-								<form id="reset_permissions">
-									<input type="hidden" name="containerID" value="b207a9eebba3e678697bc7c224fdcecf005b5ea733d9608a5a59dca15beaaf5b">
-										<button type="button" class="btn btn-danger" data-bs-dismiss="modal" name="reset_permissions" value="reset_permissions" id="submit" hx-post="/updatePermissions" hx-trigger="click" hx-confirm="Are you sure you want to reset permissions for this container?">Reset</button>
-								</form>
+						<div class="modal-body">
+
+							<div class="accordion" id="user_permissions">
+
+								PermissionsList
+
 							</div>
+
 						</div>
-					</div>
+						<div class="modal-footer">
+							<button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
+							<form id="reset_permissions">
+								<input type="hidden" name="containerID" value="b207a9eebba3e678697bc7c224fdcecf005b5ea733d9608a5a59dca15beaaf5b" id="containerID">
+									<button type="button" class="btn btn-danger" data-bs-dismiss="modal" name="reset_permissions" value="reset_permissions" id="submit" hx-post="/updatePermissions" hx-trigger="click" hx-confirm="Are you sure you want to reset permissions for this container?">Reset</button>
+							</form>
+						</div>
+				  	</div>
 				</div>
 			</div>
-			</div>
 
-
-
-			<!-- Libs JS -->
 			<script src="/libs/apexcharts/dist/apexcharts.min.js?1692870487" defer></script>
 
 			<script src="/js/dweebui.js" defer></script>
 			<script src="/js/htmx.min.js"></script>
 			<script src="/js/htmx-sse.js"></script>
 
-			<!-- Tabler Core -->
 			<script src="/js/tabler.min.js?1692870487" defer></script>
 			<script src="/js/demo.min.js?1692870487" defer></script>
 			

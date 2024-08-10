@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import { Op } from "sequelize";
-import { User, ServerSettings } from "../database/config.js";
+import { User, ServerSettings, Permission } from "../database/config.js";
 
 
 export const Register = async function(req,res){
@@ -8,19 +8,21 @@ export const Register = async function(req,res){
     // Redirect to dashboard if user is already logged in.
     if (req.session.username) { res.redirect("/dashboard"); }
 
+
+    let user_registration = await ServerSettings.findOne({ where: { key: 'user_registration' }});
+
     let secret_input = '';
-    let registration_secret = await ServerSettings.findOne({ where: { key: 'registration' }}).value;
 
     // Input field for secret if one has been set.
-    if (registration_secret) {
+    if (user_registration) {
         secret_input = `<div class="mb-3"><label class="form-label">Secret</label>
                                 <div class="input-group input-group-flat">
-                                    <input type="text" class="form-control" autocomplete="off" name="secret">
+                                    <input type="text" class="form-control" autocomplete="off" name="registration_secret">
                                 </div>
                             </div>`}
 
-    // If there are no users, or a registration secret has not been set, display the registration page.
-    if ((await User.count() == 0) || (registration_secret == '')) {
+    // If there are no users, or registration has been enabled, display the registration page.
+    if ((await User.count() == 0) || (user_registration.value == true)) {
         res.render("register",{ 
             "error": "",
             "reg_secret": secret_input,
@@ -37,7 +39,7 @@ export const submitRegister = async function(req,res){
     const { name, username, password, confirm, secret } = req.body;
     let email = req.body.email.toLowerCase();
 
-    let registration_secret = await ServerSettings.findOne({ where: { key: 'registration' }}).value;
+    let registration_secret = await ServerSettings.findOne({ where: { key: 'registration_secret' }}).value;
 
     let error = '';
     if (!name || !username || !email || !password || !confirm) { error = "All fields are required"; } 
@@ -72,6 +74,7 @@ export const submitRegister = async function(req,res){
     let match = await bcrypt.compare(password, user.password);
     if (match) {
         console.log(`User ${username} created`);
+
         req.session.username = user.username;
         req.session.userID = user.userID;
         req.session.role = user.role;

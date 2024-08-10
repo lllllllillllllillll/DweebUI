@@ -4,7 +4,6 @@
 * Updated adm-zip.
 * Updated yaml.
 * Pushed new docker image with 'latest' tag.
-* Updated compose.yaml volume to /app/config.
 * Fixed container card links.
 * Moved 'Reset view' button.
 * New - 'Grid view' and 'List view' button (non-functioning).
@@ -18,6 +17,7 @@
 * Fixed issue updating view permission.
 * Fixed issue viewing container logs.
 * App icons are now determined by service label instead of image name.
+* App icons sourced from new repo with 1000+ icons.
 
 ## v0.60 (June 9th 2024) - Permissions system and import templates
 * Converted JS template literals into HTML.

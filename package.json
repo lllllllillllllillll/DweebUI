@@ -1,6 +1,6 @@
 {
   "name": "dweebui",
-  "version": "0.70.402",
+  "version": "0.70.417",
   "main": "server.js",
   "type": "module",
   "scripts": {
@@ -10,7 +10,7 @@
   "keywords": [],
   "author": "lllllllillllllillll",
   "license": "MIT",
-  "description": "DweebUI is a WebUI for managing your containers. Simple setup, a dynamically updating dashboard, and a multi-user permission system.",
+  "description": "DweebUI is a WebUI for managing your containers. https://dweebui.com",
   "dependencies": {
     "bcrypt": "^5.1.1",
     "connect-session-sequelize": "^7.1.7",
