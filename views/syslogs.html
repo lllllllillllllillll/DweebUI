@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
     <title>DweebUI - Syslogs</title>
-    <link href="/css/tabler.min.css" rel="stylesheet"/>
-    <link href="/css/demo.min.css" rel="stylesheet"/>
+		<link href="/css/tabler.min.css?1692870487" rel="stylesheet"/>
+		<link href="/css/demo.min.css?1692870487" rel="stylesheet"/>
     <link href="/css/dweebui.css" rel="stylesheet"/>
   </head>
   <body >
@@ -40,8 +40,8 @@
                   <table class="table">
                     <thead>
                       <tr>
-                        <th><button class="table-sort" data-sort="sort-id">id</button></th>
-                        <th><button class="table-sort" data-sort="sort-user">user</button></th>
+                        <th><button class="table-sort" data-sort="sort-id">ID #</button></th>
+                        <th><button class="table-sort" data-sort="sort-user">username</button></th>
                         <th><button class="table-sort" data-sort="sort-email">email</button></th>
                         <th><button class="table-sort" data-sort="sort-event">event</button></th>
                         <th><button class="table-sort" data-sort="sort-message">message</button></th>
@@ -67,12 +67,12 @@
     <!-- Libs JS -->
     <script src="/libs/list.js/dist/list.min.js" defer></script>
 
+    <script src="/js/dweebui.js" defer></script>
     <script src="/js/htmx.min.js"></script>
 
     <!-- Tabler Core -->
-    <script src="/js/tabler.min.js" defer></script>
-    <script src="/js/demo.min.js" defer></script>
-
+    <script src="/js/tabler.min.js?1692870487" defer></script>
+    <script src="/js/demo.min.js?1692870487" defer></script>
     <script>
       document.addEventListener("DOMContentLoaded", function() {
       const list = new List('table-default', {

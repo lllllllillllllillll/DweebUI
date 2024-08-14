@@ -158,10 +158,6 @@ export const Permission = settings.define('Permission', {
     type: DataTypes.STRING,
     defaultValue: false
   },
-  reset_view: {
-    type: DataTypes.STRING,
-    defaultValue: false
-  },
   view: {
     type: DataTypes.STRING,
     defaultValue: false

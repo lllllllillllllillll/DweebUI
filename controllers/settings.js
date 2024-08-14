@@ -3,26 +3,25 @@ import { Alert, getLanguage, Navbar } from '../utils/system.js';
 
 export const Settings = async function(req,res){
 
-    let custom_link = await ServerSettings.findOne({ where: {key: 'custom_link'}});
-    let link_url = await ServerSettings.findOne({ where: {key: 'link_url'}});
-
     let user_registration = await ServerSettings.findOne({ where: {key: 'user_registration'}});
     let registration_secret = await ServerSettings.findOne({ where: {key: 'registration_secret'}});
 
     let authentication = await ServerSettings.findOne({ where: {key: 'authentication'}});
-    
-    let custom_link_enabled = '';
-    try { if (custom_link.value == true) { custom_link_enabled = 'checked'; } } catch { console.log('Custom Link: No Value Set'); }
 
     let user_registration_enabled = '';
     try { if (user_registration.value == true) { user_registration_enabled = 'checked'; } } catch { console.log('User Registration: No Value Set'); }
 
-    let link_url_value = '';
-    try { link_url_value = link_url.value; } catch { console.log('Link URL: No Value Set'); }
-
     let registration_secret_value = '';
     try { registration_secret_value = registration_secret.value; } catch { console.log('Registration Secret: No Value Set'); }
 
+    let custom_link = await ServerSettings.findOne({ where: {key: 'custom_link'}});
+    let link_url = await ServerSettings.findOne({ where: {key: 'link_url'}});
+
+    let custom_link_enabled = '';
+    try { if (custom_link.value == true) { custom_link_enabled = 'checked'; } } catch { console.log('Custom Link: No Value Set'); }
+
+    let link_url_value = '';
+    try { link_url_value = link_url.value; } catch { console.log('Link URL: No Value Set'); }
 
     res.render("settings",{ 
         alert: '',
@@ -75,8 +74,8 @@ export const updateSettings = async function (req, res) {
         else { await ServerSettings.create({ key: 'custom_link', value: false}); }
 
         let exists2 = await ServerSettings.findOne({ where: {key: 'link_url'}});
-        if (exists2) { await ServerSettings.update({value: ''}, {where: {key: 'link_url'}}); }
-        else { await ServerSettings.create({ key: 'link_url', value: ''}); }
+        if (exists2) { await ServerSettings.update({value: 'localhost'}, {where: {key: 'link_url'}}); }
+        else { await ServerSettings.create({ key: 'link_url', value: 'localhost'}); }
 
         console.log('Custom links off');
     }

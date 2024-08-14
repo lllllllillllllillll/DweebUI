@@ -19,6 +19,7 @@
 
 
           <div class="navbar-nav flex-row order-md-last">
+
             <!-- <div class="nav-item d-none d-md-flex me-3">
 
               <div class="btn-list">
@@ -33,6 +34,7 @@
               </div>
 
             </div> -->
+
             <div class="d-none d-md-flex">
               <button class="nav-link px-0 hide-theme-dark" title="Enable dark mode" data-bs-toggle="tooltip" data-bs-placement="bottom" value="dark-theme" onclick="toggleTheme(this)">
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none" /> <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" /> </svg>
@@ -41,7 +43,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none" /> <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /> <path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" /> </svg>
               </button>
               <div class="nav-item dropdown d-none d-md-flex me-3">
-                <a href="#" class="nav-link px-0" data-bs-toggle="dropdown" tabindex="-1" aria-label="Show notifications">
+                <a href="#" class="nav-link px-0 text-muted" data-bs-toggle="dropdown" tabindex="-1" aria-label="Show notifications" disabled>
                   <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" /><path d="M9 17v1a3 3 0 0 0 6 0v-1" /></svg>
                   <!-- <span class="badge bg-red"></span> -->
                 </a>
@@ -135,7 +137,7 @@
               </a>
               <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                 <a href="/account" class="dropdown-item">Account</a>
-                <a href="/notifications" class="dropdown-item">Notifications</a>
+                <a href="#" class="dropdown-item">Notifications</a>
                 <!-- <div class="dropdown-divider"></div> -->
                 <a href="/preferences" class="dropdown-item">Preferences</a>
                 <a href="/settings" class="dropdown-item">Settings</a>
@@ -241,24 +243,30 @@
 
               <div class="my-2 my-md-0 flex-grow-1 flex-md-grow-0 order-first order-md-last">
                 <div class="card-actions btn-actions">
+
                   <input type="search" class="form-control mx-2" placeholder="Search..." aria-label="search" name="search" hx-post="/search" hx-trigger="input changed delay:500ms, search" hx-swap="none">
-                  <button class="btn-action mx-1" title="Grid View" data-hx-post="/dashboard/view" data-hx-trigger="mousedown" data-hx-target="#" name="grid" id="AppState">
+
+                  <button class="btn-action mx-1 text-muted" title="Grid View" data-hx-post="/dashboard/view" data-hx-trigger="mousedown" data-hx-target="#" name="grid" id="AppState" disabled>
                     <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="1.5"  stroke-linecap="round"  stroke-linejoin="round"  class="icon-tabler icons-tabler-outline icon-tabler-layout-grid"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" /><path d="M14 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" /><path d="M4 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" /><path d="M14 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" /></svg>
                   </button>
-                  <button class="btn-action mx-1" title="List View" data-hx-post="/dashboard/view" data-hx-trigger="mousedown" data-hx-target="#" name="list" id="AppState">
+
+                  <button class="btn-action mx-1 text-muted" title="List View" data-hx-post="/dashboard/view" data-hx-trigger="mousedown" data-hx-target="#" name="list" id="AppState" disabled>
                     <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="1.5"  stroke-linecap="round"  stroke-linejoin="round"  class="icon-tabler icons-tabler-outline icon-tabler-layout-grid"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l11 0" /><path d="M9 12l11 0" /><path d="M9 18l11 0" /><path d="M5 6l0 .01" /><path d="M5 12l0 .01" /><path d="M5 18l0 .01" /></svg>
                   </button>
+
                   <div class="dropdown">
                     <a href="#" class="btn-action dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       <svg xmlns="http://www.w3.org/2000/svg" class="" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle><circle cx="12" cy="5" r="1"></circle></svg>
                     </a>
+                    
                     <div class="dropdown-menu dropdown-menu-end">
-                      <!-- <button class="dropdown-item text-secondary" data-hx-post="/container/reset/000" data-hx-trigger="mousedown" data-hx-swap="none" name="reset" id="reset" value="reset">Reset View</button> -->
-                       <form action="/container/reset/000" method="post">
+                      <form action="/container/reset/000" method="post">
                         <button class="dropdown-item text-secondary" name="reset" id="reset" value="reset">Reset View</button>
                       </form>
                     </div>
+                    
                   </div>
+
                 </div>
               </div>
 

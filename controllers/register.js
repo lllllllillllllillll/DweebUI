@@ -1,19 +1,14 @@
 import bcrypt from "bcrypt";
 import { Op } from "sequelize";
-import { User, ServerSettings, Permission } from "../database/config.js";
+import { User, ServerSettings, Permission, Syslog } from "../database/config.js";
 
 
 export const Register = async function(req,res){
 
-    // Redirect to dashboard if user is already logged in.
     if (req.session.username) { res.redirect("/dashboard"); }
 
-
-    let user_registration = await ServerSettings.findOne({ where: { key: 'user_registration' }});
-
     let secret_input = '';
-
-    // Input field for secret if one has been set.
+    let user_registration = await ServerSettings.findOne({ where: { key: 'user_registration' }});
     if (user_registration) {
         secret_input = `<div class="mb-3"><label class="form-label">Secret</label>
                                 <div class="input-group input-group-flat">
@@ -44,13 +39,18 @@ export const submitRegister = async function(req,res){
     let error = '';
     if (!name || !username || !email || !password || !confirm) { error = "All fields are required"; } 
     else if (password !== confirm) { error = "Passwords do not match"; }
-    else if (registration_secret && secret !== registration_secret) { error = "Invalid secret"; }
-    else if (await User.findOne({ where: { [Op.or]: [{ username: username }, { email: email }] }})) { error = "Username or email already exists"; }
 
-    if (error) {
-        res.render("register", { "error": error });
-        return;
+    else if (registration_secret && secret !== registration_secret) { 
+        error = "Invalid secret";
+        await Syslog.create({ username: user.username, email: email, event: "Failed Registration", message: "Invalid Secret", ip: req.socket.remoteAddress });
     }
+
+    else if (await User.findOne({ where: { [Op.or]: [{ username: username }, { email: email }] }})) { 
+        error = "Username or email already exists"; 
+        await Syslog.create({ username: user.username, email: email, event: "Failed Registration", message: "Username or email already exists", ip: req.socket.remoteAddress });
+    }
+
+    if (error) { res.render("register", { "error": error }); return; }
 
     // Returns 'admin' if no users have been created.
     async function Role() {
@@ -68,6 +68,8 @@ export const submitRegister = async function(req,res){
         preferences: JSON.stringify({ language: "english", hidden_profile: false }),
         lastLogin: new Date().toLocaleString(),
     });
+
+    await Syslog.create({ username: user.username, email: email, event: "Registration", message: "User created", ip: req.socket.remoteAddress });
 
     // Make sure the user was created and get the UUID.
     let user = await User.findOne({ where: { email: email }});

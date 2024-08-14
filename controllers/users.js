@@ -11,7 +11,7 @@ export const Users = async function(req,res){
         <th>Name</th>
         <th>Username</th>
         <th>Email</th>
-        <th>UUID</th>
+        <th>UserID</th>
         <th>Role</th>
         <th>Last Login</th>
         <th>Status</th>
@@ -39,7 +39,7 @@ export const Users = async function(req,res){
             <td>${account.name}</td>
             <td>${account.username}</td>
             <td>${account.email}</td>
-            <td>${account.UUID}</td>
+            <td>${account.userID}</td>
             <td>${account.role}</td>
             <td>${account.lastLogin}</td>
             <td>${active}</td>

@@ -139,32 +139,31 @@
 				</div>
 			</div>
 			
-			<div class="modal modal-blur fade" id="permissions_modal" tabindex="-1" style="display: none;" aria-hidden="true">
+
+			<!-- [HTMX] The element with the id 'modal_content' gets its content from utils/permissions.js -->
+			<div class="modal modal-blur fade" id="scrolling_modal" tabindex="-1" style="display: none;" aria-hidden="true">
 				<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
-				  	<div class="modal-content">
+				  	<div class="modal-content" id="modal_content">
+
 						<div class="modal-header">
-							<h5 class="modal-title" id="permissions_title">Permissions</h5>
+							<h5 class="modal-title">Permissions</h5>
 							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 						</div>
-						<div class="modal-body">
 
-							<div class="accordion" id="user_permissions">
 
-								PermissionsList
-
-							</div>
-
-						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
 							<form id="reset_permissions">
-								<input type="hidden" name="containerID" value="b207a9eebba3e678697bc7c224fdcecf005b5ea733d9608a5a59dca15beaaf5b" id="containerID">
-									<button type="button" class="btn btn-danger" data-bs-dismiss="modal" name="reset_permissions" value="reset_permissions" id="submit" hx-post="/updatePermissions" hx-trigger="click" hx-confirm="Are you sure you want to reset permissions for this container?">Reset</button>
+								<input type="hidden" name="containerID" value="b207a9eebba3e678697bc7c224fdcecf005b5ea733d9608a5a59dca15beaaf5b">
+									<button type="button" class="btn btn-danger" data-bs-dismiss="modal" name="reset_permissions" value="reset_permissions" id="submit" hx-post="/update_permissions" hx-trigger="click" hx-confirm="Are you sure you want to reset permissions for this container?">Reset</button>
 							</form>
 						</div>
+
 				  	</div>
 				</div>
 			</div>
+
+
 
 			<script src="/libs/apexcharts/dist/apexcharts.min.js?1692870487" defer></script>
 

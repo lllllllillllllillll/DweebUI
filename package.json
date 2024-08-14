@@ -1,6 +1,6 @@
 {
   "name": "dweebui",
-  "version": "0.70.417",
+  "version": "0.70.422",
   "main": "server.js",
   "type": "module",
   "scripts": {
@@ -20,6 +20,6 @@
     "express-session": "^1.18.0",
     "sequelize": "^6.37.3",
     "sqlite3": "^5.1.7",
-    "systeminformation": "^5.22.11"
+    "systeminformation": "^5.23.4"
   }
 }

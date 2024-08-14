@@ -1,20 +1,22 @@
-<div class="accordion-user mb-3">
-    <h2 class="accordion-header" id="heading-1">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-1" aria-expanded="false">
-            <span class="avatar avatar-sm bg-green-lt col-3 text-start">JD</span>
-            <div class="col text-end" style="margin-right: 10px;">JohnDoe</div>
-        </button>
-    </h2>
 
-    <div id="collapse-1" class="accordion-collapse collapse" data-bs-parent="#accordion-example">
-        <div class="accordion-body pt-0">
+        <div class="accordion-user mb-3">
+          <h2 class="accordion-header" id="heading-Entry">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-Entry" aria-expanded="false">
+              <span class="avatar avatar-sm bg-green-lt col-3 text-start">JD</span>
+              <div class="col text-end" style="margin-right: 10px;">Username</div>
+            </button>
+          </h2>
+          <div id="collapse-Entry" class="accordion-collapse collapse" data-bs-parent="#accordion-example">
+            <div class="accordion-body pt-0">
 
-            <form id="updatePermissions0">
+              <form id="updatePermissionsEntry">
                 <div class="col">
 
-                    <input type="hidden" name="userID" value="c49673fc-9413-40ae-a500-0f1dd2688fe7">
-                    <input type="hidden" name="container" value="speedtest">
-                    <input type="hidden" name="containerID" value="b207a9eebba3e678697bc7c224fdcecf005b5ea733d9608a5a59dca15beaaf5b">
+                    <input type="hidden" name="containerName" value="container_name">
+                    <input type="hidden" name="containerID" value="container_id">
+                    <input type="hidden" name="userID" value="user_id">
+                    <input type="hidden" name="username" value="Username">
+                    <input type="hidden" name="select" value="selectEntry">
 
                     <div class="row mb-3">
                         <div class="col-9">
@@ -26,7 +28,7 @@
                         </div>
                         <div class="col-3">
                             <label class="form-check form-check-single form-switch text-end">
-                                <input class="form-check-input" type="checkbox" name="select0" onclick="selectAll('select0')">
+                                <input class="form-check-input" type="checkbox" name="selectEntry" onclick="selectAll('selectEntry')" data-AllCheck>
                             </label>
                         </div>
                     </div>
@@ -41,7 +43,7 @@
                         </div>
                         <div class="col-3">
                             <label class="form-check form-check-single form-switch text-end">
-                                <input class="form-check-input" type="checkbox" name="select0" value="uninstall" data-uninstallcheck="">
+                                <input class="form-check-input" type="checkbox" name="selectEntry" value="uninstall" data-UninstallCheck>
                             </label>
                         </div>
                     </div>
@@ -57,7 +59,7 @@
                         </div>
                         <div class="col-3">
                             <label class="form-check form-check-single form-switch text-end">
-                                <input class="form-check-input" type="checkbox" name="select0" value="edit" data-editcheck="">
+                                <input class="form-check-input" type="checkbox" name="selectEntry" value="edit" data-EditCheck>
                             </label>
                         </div>
                     </div>
@@ -72,7 +74,7 @@
                         </div>
                         <div class="col-3">
                             <label class="form-check form-check-single form-switch text-end">
-                                <input class="form-check-input" type="checkbox" name="select0" value="upgrade" data-upgradecheck="">
+                                <input class="form-check-input" type="checkbox" name="selectEntry" value="upgrade" data-UpgradeCheck>
                             </label>
                         </div>
                     </div>
@@ -87,7 +89,7 @@
                         </div>
                         <div class="col-3">
                             <label class="form-check form-check-single form-switch text-end">
-                                <input class="form-check-input" type="checkbox" name="select0" value="start" data-startcheck="">
+                                <input class="form-check-input" type="checkbox" name="selectEntry" value="start" data-StartCheck>
                             </label>
                         </div>
                     </div>
@@ -102,7 +104,7 @@
                         </div>
                         <div class="col-3">
                             <label class="form-check form-check-single form-switch text-end">
-                                <input class="form-check-input" type="checkbox" name="select0" value="stop" data-stopcheck="">
+                                <input class="form-check-input" type="checkbox" name="selectEntry" value="stop" data-StopCheck>
                             </label>
                         </div>
                     </div>
@@ -117,7 +119,7 @@
                         </div>
                         <div class="col-3">
                             <label class="form-check form-check-single form-switch text-end">
-                                <input class="form-check-input" type="checkbox" name="select0" value="pause" data-pausecheck="">
+                                <input class="form-check-input" type="checkbox" name="selectEntry" value="pause" data-PauseCheck>
                             </label>
                         </div>
                     </div>
@@ -132,7 +134,7 @@
                         </div>
                         <div class="col-3">
                         <label class="form-check form-check-single form-switch text-end">
-                            <input class="form-check-input" type="checkbox" name="select0" value="restart" data-restartcheck="">
+                            <input class="form-check-input" type="checkbox" name="selectEntry" value="restart" data-RestartCheck>
                         </label>
                         </div>
                     </div>
@@ -148,7 +150,7 @@
                         </div>
                         <div class="col-3">
                         <label class="form-check form-check-single form-switch text-end">
-                            <input class="form-check-input" type="checkbox" name="select0" value="logs" data-logscheck="">
+                            <input class="form-check-input" type="checkbox" name="selectEntry" value="logs" data-LogsCheck>
                         </label>
                         </div>
                     </div>
@@ -164,17 +166,18 @@
                         </div>
                         <div class="col-3">
                         <label class="form-check form-check-single form-switch text-end">
-                            <input class="form-check-input" type="checkbox" name="select0" value="view" data-viewcheck="">
+                            <input class="form-check-input" type="checkbox" name="selectEntry" value="view" data-ViewCheck>
                         </label>
                         </div>
                     </div>
 
                     <div class="row mb-2">
-                        <button class="btn" type="button" id="submit" hx-post="/updatePermissions" hx-vals="#updatePermissions0" hx-swap="outerHTML">Update&nbsp;&nbsp;</button>
+                        <button class="btn" type="button" id="submit" hx-post="/update_permissions" hx-swap="outerHTML">Update&nbsp;&nbsp;</button>
                     </div>
 
                 </div>
-            </form>
+              </form>
+
+            </div>
+          </div>
         </div>
-    </div>
-</div>

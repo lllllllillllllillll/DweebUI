@@ -1,15 +1,19 @@
 import { currentLoad, mem, networkStats, fsSize } from 'systeminformation';
-import { docker, getContainer, containerInspect } from '../utils/docker.js';
+import { docker, getContainer, containerInspect, containerLogs } from '../utils/docker.js';
 import { readFileSync } from 'fs';
-import { User, Permission } from '../database/config.js';
+import { User, Permission, ServerSettings } from '../database/config.js';
 import { Alert, Navbar, Capitalize } from '../utils/system.js';
 import { Op } from 'sequelize';
 
 let [ hidden, alert, newCards, stats ] = [ '', '', '', {} ];
-let logString = '';
+let container_link = '';
 
 // Dashboard
 export const Dashboard = async function (req, res) {
+
+    let link_url = await ServerSettings.findOne({ where: {key: 'link_url'}});
+
+    container_link = link_url.value;
 
     res.render("dashboard",{ 
         alert: '',
@@ -21,7 +25,6 @@ export const Dashboard = async function (req, res) {
 
 // Dashboard search
 export const submitDashboard = async function (req, res) {
-    console.log('[SubmitDashboard]');
     console.log(req.body);
     res.send('ok');
     return;
@@ -29,7 +32,6 @@ export const submitDashboard = async function (req, res) {
 
 
 export const CardList = async function (req, res) {
-
     res.send(newCards);
     newCards = '';
     return;
@@ -134,13 +136,10 @@ async function updateDashboard (session) {
 // Container actions (start, stop, pause, restart, hide)
 export const ContainerAction = async (req, res) => {
 
-    // let trigger_id = req.header('hx-trigger');
     let container_name = req.header('hx-trigger-name');
     let containerID = req.params.containerid;
     let action = req.params.action;
     
-    console.log(`Container: ${container_name} ID: ${containerID} Action: ${action}`);
-
     // Reset the view
     if (action == 'reset') { 
         console.log('Resetting view'); 
@@ -161,6 +160,28 @@ export const ContainerAction = async (req, res) => {
             return;
         }
     }
+
+
+    if (action == 'logs') {
+        let logs = await containerLogs(containerID);
+        let modal = `<div class="modal-content" id="modal_content">
+						<div class="modal-header">
+							<h5 class="modal-title">Logs</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+
+                        <pre class="modal-body">${logs}</pre>
+
+						<div class="modal-footer">
+							<button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" name="refresh" id="submit" hx-post="/update_permissions" hx-trigger="click" hx-confirm="Are you sure you want to reset permissions for this container?">Reset</button>
+						</div>
+				  	</div>`;
+        res.send(modal);
+        return;
+    }
+
+
 
     // Inspect the container
     let info = docker.getContainer(containerID);
@@ -188,7 +209,7 @@ export const ContainerAction = async (req, res) => {
     } else if ((action == 'pause') && (containerState == 'paused')) {
         info.unpause();
         res.send(status('starting'));
-    }   else if ((action == 'pause') && (containerState == 'running')) {
+    } else if ((action == 'pause') && (containerState == 'running')) {
         info.pause();
         res.send(status('pausing'));
     } else if (action == 'restart') {
@@ -204,12 +225,12 @@ export const ContainerAction = async (req, res) => {
 
 
 async function createCard (details) {
-    // let shortname = details.name.slice(0, 10) + '...';
+
     // let trigger = 'data-hx-trigger="load, every 3s"';
 
-    // Capitalize the container name and shorten it if it's too long
-    let containerName = Capitalize(details.containerName);
+    let containerName = details.containerName;
     if (containerName.length > 17) { containerName = containerName.substring(0, 17) + '...'; }
+    let containerTitle = Capitalize(containerName);
 
     let containerID = details.containerID;
     let containerState = details.containerState;
@@ -223,12 +244,10 @@ async function createCard (details) {
 
     let container_card = readFileSync('./views/partials/container_card.html', 'utf8');
 
-    // let links = await ServerSettings.findOne({ where: {key: 'links'}});
-    // if (!links) { links = { value: 'localhost' }; }
-
     container_card = container_card.replace(/ContainerID/g, containerID);
     container_card = container_card.replace(/AltID/g, 'a' + containerID);
     container_card = container_card.replace(/AppName/g, containerName);
+    container_card = container_card.replace(/AppTitle/g, containerTitle);
     container_card = container_card.replace(/AppService/g, containerService);
     container_card = container_card.replace(/AppState/g, containerState);
     container_card = container_card.replace(/StateColor/g, containerStateColor);
@@ -236,13 +255,10 @@ async function createCard (details) {
     if (details.external_port == 0 && details.internal_port == 0) {
         container_card = container_card.replace(/AppPorts/g, ``);
     } else {
-        container_card = container_card.replace(/AppPorts/g, `${details.external_port}:${details.internal_port}`);
+        container_card = container_card.replace(/AppPorts/g, `<a href="${container_link}:${details.external_port}" target="_blank" style="color: inherit; text-decoration: none;"> ${details.external_port}:${details.internal_port}</a>`);
     }
-    // card = card.replace(/data-trigger=""/, trigger);
     return container_card;
 }
-
-
 
 
 // Server metrics (CPU, RAM, TX, RX, DISK)
@@ -273,51 +289,32 @@ export const ServerMetrics = async (req, res) => {
     res.send(info);
 }
 
-
+// HTMX - Server-side events
 export const SSE = async (req, res) => {
-
-    // Set the response headers
     res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive' });
-
     async function eventCheck () {
         await userCards(req.session);
         await updateDashboard(req.session);
-
-        if (JSON.stringify(req.session.sent_list) === JSON.stringify(req.session.container_list)) { console.log('Event - No Change'); return; }
-
-        console.log('Event - Change Detected');
-
+        if (JSON.stringify(req.session.sent_list) === JSON.stringify(req.session.container_list)) { return; }
         for (let i = 0; i < req.session.new_cards.length; i++) {
             let details = await containerInfo(req.session.new_cards[i]);
             let card = await createCard(details);
             newCards += card;
         }
-
         for (let i = 0; i < req.session.update_list.length; i++) {
             res.write(`event: ${req.session.update_list[i]}\n`);
             res.write(`data: 'update cards'\n\n`);
         }
         res.write(`event: update\n`);
         res.write(`data: 'update cards'\n\n`);
-
         req.session.sent_list = req.session.container_list.slice();
     }
-
     await eventCheck();
-
-    // Listens for docker events. Only triggers every other event.
     docker.getEvents({}, function (err, data) {
-        let count = 0;
         data.on('data', async function () {
-            count++;
-            if (count % 2 === 0) {
-                await eventCheck();
-            }
+            await eventCheck();
         });
     });
-
-
     req.on('close', () => {
     });
-
 }

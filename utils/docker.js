@@ -1,11 +1,26 @@
 import Docker from 'dockerode';
+import { Readable } from 'stream';
 
 export var docker = new Docker();
 
+export async function containerList() {
+    let containers = await docker.listContainers({ all: true });
+    return containers;
+}
 
 export async function imageList() {
     let images = await docker.listImages({ all: true });
     return images;
+}
+
+export async function volumeList() {
+    let volumes = await docker.listVolumes();
+    return volumes;
+}
+
+export async function networkList() {
+    let networks = await docker.listNetworks();
+    return networks;
 }
 
 export async function getContainer(containerID) {
@@ -58,3 +73,28 @@ export async function containerInspect (containerID) {
     }
     return details;
 }
+
+export async function containerLogs(containerID) {
+
+    let logString = '';
+    let options = { follow: false, stdout: true, stderr: false, timestamps: true };
+
+    let container = docker.getContainer(containerID);
+    let logs = await container.logs(options);
+
+    let readable = new Readable();
+    readable._read = () => {};
+    readable.push(logs);
+    readable.push(null);
+
+    readable.on('data', (chunk) => {
+        logString += chunk.toString();
+    });
+
+    return new Promise((resolve, reject) => {
+        readable.on('end', () => {
+            resolve(logString);
+        });
+    });
+}
+
