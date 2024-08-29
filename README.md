@@ -51,7 +51,7 @@ services:
     ports:
       - 8000:8000
     volumes:
-      - dweebui:/app/config
+      - dweebui:/app
       # Docker socket
       - /var/run/docker.sock:/var/run/docker.sock
       # Podman socket
