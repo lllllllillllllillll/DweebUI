@@ -1,0 +1,89 @@
+<!doctype html>
+<!--Tabler - version 1.0.0-beta20 - Copyright 2018-2023 The Tabler Authors - Copyright 2018-2023 codecalm.net Paweł Kuna - Licensed under MIT (https://github.com/tabler/tabler/blob/master/LICENSE)-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Credits - DweebUI.</title>
+    <!-- CSS files -->
+    <link href="/css/tabler.min.css?1692870487" rel="stylesheet"/>
+    <link href="/css/demo.min.css?1692870487" rel="stylesheet"/>
+    <link href="/css/dweebui.css" rel="stylesheet"/>
+  </head>
+  <body >
+    <div class="page">
+
+      <!-- EJS -->
+      <%- navbar %>
+
+      <div class="page-wrapper">
+
+        <!-- Page body -->
+        <div class="page-body">
+          <div class="container-xl">
+            <div class="card">
+              <div class="row g-0">
+
+                <!-- EJS -->
+                <%- sidebar %>
+                
+                <div class="col-12 col-md-9 d-flex flex-column">
+                  <div class="card-body">
+
+                    <!-- HTMX - Submits the form and replaces the target with the response. Replaces the submit button with "Updated" -->
+                    <form id="preferences" hx-post="/preferences" hx-target="#submit" hx-swap="outerHTML">
+
+                    <h1 class="">Credits</h1>
+                    <label class="text-muted">DweebUI wouldn't be possible without:</label>
+                    
+
+                    <div class="table-group-divider mt-3"></div>
+
+
+                    <ul>
+                      <li class="m-2">Dockerode and Dockerode-Compose by Apocas </li>
+                      <li class="m-2">Tabler</li>
+                      <li class="m-2">Walkxcode</li>
+                    </ul>
+
+
+
+                  </div>
+
+
+
+                  <!-- <div class="card-footer bg-transparent mt-auto">
+                    <div class="btn-list justify-content-end">
+                      <a href="#" class="btn">
+                        Cancel
+                      </a>
+                      <button class="btn btn-primary" id="submit">
+                        Update
+                      </button>
+                    </div>
+                  </div> -->
+
+
+                  
+                </div>
+              </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- EJS -->
+        <%- footer %>
+
+      </div>
+    </div>
+
+    <script src="/js/dweebui.js" defer></script>
+    <script src="/js/htmx.min.js"></script>
+
+    <!-- Tabler Core -->
+    <script src="/js/tabler.min.js?1692870487" defer></script>
+    <script src="/js/demo.min.js?1692870487" defer></script>
+  </body>
+</html>

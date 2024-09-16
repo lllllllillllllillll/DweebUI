@@ -1,7 +1,7 @@
-<div class="col-sm-6 col-lg-3" hx-post="/container/update/ContainerID" hx-trigger="sse:ContainerID" id="AltID" hx-swap="outerHTML" hx-target="#AltID" name="AppName">
+<div class="col-sm-6 col-lg-3" hx-get="/update_card/ContainerID" hx-trigger="sse:ContainerID" id="AltID" hx-swap="outerHTML" hx-target="#AltID" name="AppName">
     <div class="card p-2">
         <div class="container-stamp">
-            <img width="110px" src="https://raw.githubusercontent.com/lllllllillllllillll/Dashboard-Icons/main/png/AppService.png" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/docker.png';"></img>
+            <img class="rounded-4 pt-1 px-1" width="95px" src="https://raw.githubusercontent.com/lllllllillllllillll/Dashboard-Icons/main/png/AppService.png" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/docker.png';"></img>
         </div>
         <div class="d-flex align-items-center">
             <label style="font-size: smaller; font-weight: bold;" class="text-yellow">AppPorts</label>
@@ -23,11 +23,11 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle><circle cx="12" cy="5" r="1"></circle></svg>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end">
-                    <button class="dropdown-item text-secondary" name="AppName" id="details" data-hx-post="/container/details/" hx-swap="innerHTML" data-hx-trigger="mousedown" data-hx-target="#modals-here" data-bs-toggle="modal" data-bs-target="#modals-here">Details</button>
-                    <button class="dropdown-item text-secondary" name="AppName" id="logs" data-hx-post="/container/logs" hx-swap="innerHTML" hx-trigger="mousedown" data-hx-target="#logView" data-bs-toggle="modal" data-bs-target="#log_view">Logs</button>
-                    <button class="dropdown-item text-secondary" name="AppName" id="edit">Edit</button>
+                    <button class="dropdown-item text-secondary" name="details" data-hx-post="/container/details/ContainerID" hx-swap="innerHTML" data-hx-trigger="mousedown" hx-target="#medium_modal_content" data-bs-toggle="modal" data-bs-target="#medium_modal">Details</button>
+                    <button class="dropdown-item text-secondary" name="AppName" data-hx-post="/container/logs/ContainerID" data-hx-trigger="mousedown" hx-target="#wide_modal_content"  hx-swap="innerHTML"  data-bs-toggle="modal" data-bs-target="#wide_modal">Logs</button>
+                    <button class="dropdown-item text-secondary" name="edit" data-hx-post="/container/details/ContainerID" data-hx-trigger="mousedown" hx-target="#wide_modal_content" hx-swap="innerHTML" data-bs-toggle="modal" data-bs-target="#wide_modal">Edit</button>
                     <button class="dropdown-item text-primary" name="AppName" id="update" disabled="">Update</button>
-                    <button class="dropdown-item text-danger" name="AppName" id="uninstall" hx-trigger="mousedown" data-hx-post="/container/uninstall" hx-swap="innerHTML" data-bs-toggle="modal" data-hx-target="#modals-here" data-bs-target="#modals-here">Uninstall</button>
+                    <button class="dropdown-item text-danger" name="AppTitle" hx-trigger="mousedown" data-hx-post="/container/uninstall/ContainerID" hx-swap="innerHTML" data-hx-target="#modal_content"  data-bs-toggle="modal" data-bs-target="#scrolling_modal">Uninstall</button>
                 </div>
                 
                 <a href="#" class="container-action dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -35,22 +35,89 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-end">
                     <button class="dropdown-item text-secondary" data-hx-post="/container/hide/ContainerID" data-hx-trigger="mousedown" data-hx-swap="delete" data-hx-target="#AltID" name="AppName">Hide</button>
-                    <button class="dropdown-item text-secondary" data-hx-get="/permission_modal" name="AppName" hx-target="#user_permissions"  hx-swap="innerHTML" data-bs-toggle="modal" data-bs-target="#permissions_modal">Permissions</button>
+                    <button class="dropdown-item text-secondary" name="AppTitle" hx-trigger="mousedown" data-hx-post="/container/link_modal/ContainerID" hx-swap="innerHTML" data-hx-target="#modal_content"  data-bs-toggle="modal" data-bs-target="#scrolling_modal">Edit Link</button>
+                    <button class="dropdown-item text-secondary" data-hx-get="/permission_modal" name="AppName" id="ContainerID" hx-target="#modal_content"  hx-swap="innerHTML" data-bs-toggle="modal" data-bs-target="#scrolling_modal">Permissions</button>
                 </div>
                 
             </div>
         </div>
 
         <div class="d-flex align-items-center">
-            <label style="font-size: x-large; font-weight: bold;">AppName</label>
+            <label style="font-size: x-large; font-weight: bold; line-height: 1;">TitleLink</label>
 
-            <div class="text-StateColor d-inline-flex align-items-center lh-1 ms-auto" id="AltIDState">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-point-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M12 7a5 5 0 1 1 -4.995 5.217l-.005 -.217l.005 -.217a5 5 0 0 1 4.995 -4.783z" stroke-width="0" fill="currentColor"></path></svg>
+            <div class="text-StateColor d-inline-flex align-items-center ms-auto" id="AltIDState">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-point-filled" width="20" height="24" viewBox="0 0 20 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M12 7a5 5 0 1 1 -4.995 5.217l-.005 -.217l.005 -.217a5 5 0 0 1 4.995 -4.783z" stroke-width="0" fill="currentColor"></path></svg>
                 <strong>AppState</strong>
             </div>
 
         </div>
 
-        <div id="chart-new-clients" class="chart-sm"></div>
+        <div id="chart-AltID" class="chart-sm"></div>
+
+        <script>
+            var options = {
+                chart: {
+                    type: "line",
+                    fontFamily: 'inherit',
+                    height: 40.0,
+                    sparkline: {
+                        enabled: true
+                    },
+                    animations: {
+                        enabled: false
+                    },
+                },
+                fill: {
+                    opacity: 1,
+                },
+                stroke: {
+                    width: [3, 1],
+                    dashArray: [0, 3],
+                    lineCap: "round",
+                    curve: "smooth",
+                },
+                series: [{
+                    name: "CPU",
+                    data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                },{
+                    name: "RAM",
+                    data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                }],
+                tooltip: {
+                    enabled: false,
+                    theme: 'dark'
+                },
+                grid: {
+                    strokeDashArray: 4,
+                },
+                xaxis: {
+                    labels: {
+                        padding: 0,
+                    },
+                    tooltip: {
+                        enabled: false
+                    },
+                    type: 'datetime',
+                },
+                yaxis: {
+                    labels: {
+                        padding: 4
+                    },
+                },
+                labels: [
+                    '2020-06-20', '2020-06-21', '2020-06-22', '2020-06-23', '2020-06-24', '2020-06-25', '2020-06-26', '2020-06-27', '2020-06-28', '2020-06-29'
+                ],
+                colors: [tabler.getColor("primary"), tabler.getColor("gray-600")],
+                legend: {
+                    show: false,
+                },
+            };
+
+            var chart = new ApexCharts(document.querySelector("#chart-AltID"), options);
+
+            chart.render();
+
+        </script>
+
     </div>
 </div>

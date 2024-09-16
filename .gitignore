@@ -1,5 +1,6 @@
 sessions.sqlite
 settings.sqlite
 **/node_modules
+**/*.yaml
 .github
 .git

@@ -1,5 +1,4 @@
-sessions.sqlite
-settings.sqlite
+**/*.sqlite
 **/node_modules
 **/screenshots
 .gitignore
@@ -7,3 +6,4 @@ settings.sqlite
 .git
 Dockerfile
 docker-compose.yaml
+**/*.yaml

@@ -1,35 +1,20 @@
-import { Alert, getLanguage, Navbar } from '../utils/system.js';
-import { imageList } from '../utils/docker.js';
+import { Alert, getLanguage, Navbar, Footer } from '../utils/system.js';
+import { imageList, GetContainerLists } from '../utils/docker.js';
 
 export const Images = async function(req,res){
 
     let container_images = [];
-
-    let containers = await containerList(req);
+    let image_list = '';
+    
+    let containers = await GetContainerLists();
     for (let i = 0; i < containers.length; i++) {
         container_images.push(containers[i].Image);
     }
 
     let images = await imageList();
 
-    // Top of the table
-    let image_list = `
-        <thead>
-            <tr>
-                <th class="w-1"><input class="form-check-input m-0 align-middle" name="select" type="checkbox" aria-label="Select all" onclick="selectAll()"></th>
-                <th><label class="table-sort" data-sort="sort-name">Name</label></th>
-                <th><label class="table-sort" data-sort="sort-type">Tag</label></th>
-                <th><label class="table-sort" data-sort="sort-city">ID</label></th>
-                <th><label class="table-sort" data-sort="sort-score">Status</label></th>
-                <th><label class="table-sort" data-sort="sort-date">Created</label></th>
-                <th><label class="table-sort" data-sort="sort-quantity">Size</label></th>
-                <th><label class="table-sort" data-sort="sort-progress">Action</label></th>
-            </tr>
-        </thead>
-        <tbody class="table-tbody">`
-
-
     for (let i = 0; i < images.length; i++) {
+
 
         let name = '';
         let tag = ''; 
@@ -62,8 +47,6 @@ export const Images = async function(req,res){
             </tr>`
         image_list += details;
     }
-    
-    image_list += `</tbody>`
 
     res.render("images",{ 
         alert: '',
@@ -72,9 +55,15 @@ export const Images = async function(req,res){
         image_count: '',
         image_list: image_list,
         navbar: await Navbar(req),
+        footer: await Footer(req),
     });
 }
 
+export const searchImages = async function (req, res) {
+    console.log(`[Search] ${req.body.search}`);
+    res.send('ok');
+    return;
+}
 
 
 export const submitImages = async function(req,res){
@@ -92,6 +81,7 @@ export const submitImages = async function(req,res){
         username: req.session.username,
         role: req.session.role,
         navbar: await Navbar(req),
+        footer: await Footer(req),
     });
 
 }

@@ -37,12 +37,16 @@ const SettingsDB = new SequelizeStore({ db: settings });
 // Display package information
 let package_info = readFileSync(`package.json`, 'utf8');
 package_info = JSON.parse(package_info);
-console.log('');
+console.log('\n');
 console.log(`\x1b[33mDweebUI v${package_info.version}\x1b[0m`);
 console.log(`\x1b[33mAuthor: ${package_info.author}\x1b[0m`);
 console.log(`\x1b[33mLicense: ${package_info.license}\x1b[0m`);
 console.log(`\x1b[33mDescription: ${package_info.description}\x1b[0m`);
 console.log('');
+
+// console.log in red
+console.log('\x1b[31m * Only Docker volumes are supported. No bind mounts.\n \x1b[0m');
+console.log('\x1b[31m * Breaking changes may require you to remove the DweebUI volume and start fresh. \n \x1b[0m');
 
 // Test database connection
 try {
@@ -158,10 +162,6 @@ export const Permission = settings.define('Permission', {
     type: DataTypes.STRING,
     defaultValue: false
   },
-  reset_view: {
-    type: DataTypes.STRING,
-    defaultValue: false
-  },
   view: {
     type: DataTypes.STRING,
     defaultValue: false
@@ -181,7 +181,7 @@ export const Syslog = settings.define('Syslog', {
   username: {
     type: DataTypes.STRING
   },
-  email: {
+  uniqueID: {
     type: DataTypes.STRING
   },
   event: {
@@ -246,4 +246,128 @@ export const ServerSettings = settings.define('ServerSettings', {
     type: DataTypes.STRING,
     allowNull: true
   }
+});
+
+
+export const Container = settings.define('Container', {
+  id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true
+  },
+  containerName: {
+      type: DataTypes.STRING,
+      allowNull: false
+  },
+  containerID: {
+      type: DataTypes.STRING,
+      allowNull: false
+  },
+  service: {
+      type: DataTypes.STRING
+  },
+  state: {
+      type: DataTypes.STRING
+  },
+  image: {
+      type: DataTypes.STRING
+  },
+  external_port: {
+      type: DataTypes.STRING
+  },
+  internal_port: {
+      type: DataTypes.STRING
+  },
+  ports: {
+      type: DataTypes.STRING
+  },
+  volumes: {
+      type: DataTypes.STRING
+  },
+  environment_variables: {
+      type: DataTypes.STRING
+  },
+  labels: {
+      type: DataTypes.STRING
+  },
+  IPv4: {
+      type: DataTypes.STRING
+  },
+  style: {
+      type: DataTypes.STRING
+  },
+  cpu: {
+      type: DataTypes.STRING
+  },
+  ram: {
+      type: DataTypes.STRING
+  },
+  link: {
+      type: DataTypes.STRING
+  },
+  update: {
+      type: DataTypes.STRING
+  },
+  group: {
+      type: DataTypes.STRING
+  },
+  options: {
+      type: DataTypes.STRING
+  },
+  host: {
+      type: DataTypes.STRING
+  },
+});
+
+export const Variables = settings.define('Variables', {
+id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
+},
+key: {
+    type: DataTypes.STRING
+},
+value: {
+    type: DataTypes.STRING
+}, 
+options: {
+    type: DataTypes.STRING
+}
+});
+
+
+export const ContainerLists = settings.define('ContainerLists', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
+  },
+  username: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  userID: {
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+    allowNull: false
+  },
+  containers: {
+    type: DataTypes.STRING,
+  },
+  hidden: {
+    type: DataTypes.STRING,
+  },
+  visable: {
+    type: DataTypes.STRING,
+  },
+  new: {
+    type: DataTypes.STRING,
+  },
+  updates: {
+    type: DataTypes.STRING,
+  },
+  sent: {
+    type: DataTypes.STRING,
+  },
 });

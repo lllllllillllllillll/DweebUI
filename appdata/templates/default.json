@@ -40,6 +40,24 @@
           "label": "TZ",
           "default": "America/Los_Angeles"
         }
+      ],
+      "labels": [
+        {
+          "name": "traefik.enable",
+          "value": "true"
+        },
+        {
+          "name": "traefik.http.services.heimdall.loadbalancer.server.port",
+          "value": "80"
+        },
+        {
+          "name": "traefik.http.routers.heimdall.entrypoints",
+          "value": "websecure"
+        },
+        {
+          "name": "traefik.http.routers.heimdall.tls.certresolver",
+          "value": "mydnschallenge"
+        }
       ]
     },
     {
@@ -1934,7 +1952,7 @@
       "title": "Fail2ban",
       "name": "fail2ban",
       "note": "",
-      "description": "Fail2ban is a daemon to ban hosts that cause multiple authentication errors.",
+      "description": "Fail2Ban is an intrusion prevention software framework, designed to prevent brute-force attacks. It is able to run on POSIX systems that have an interface to a packet-control system or firewall installed locally, such as iptables or TCP Wrapper.",
       "platform": "linux",
       "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/fail2ban.png",
       "image": "linuxserver/fail2ban:latest",
@@ -3123,7 +3141,7 @@
         "Networking",
         "Tools"
       ],
-      "description": "A clientless remote desktop gateway.",
+      "description": "Guacamole is a clientless remote desktop gateway. It supports standard protocols like VNC and RDP. It is called clientless because no plugins or client software are required.",
       "image": "oznu/guacamole:latest",
       "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/guacamole.png",
       "name": "guacamole",
@@ -5022,67 +5040,6 @@
       "privileged": true
     },
     {
-      "name": "nocodb",
-      "title": "NocoDB",
-      "note": "",
-      "description": "NocoDB is a free, open-source, self-hosted, no-code platform to make database driven application. <a href='https://www.nocodb.com/' target='_blank'>Website</a>. <a href='https://hub.docker.com/r/nocodb/nocodb' target='_blank'>Docker Hub</a>",
-      "logo": "https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/nocodb.png",
-      "image": "nocodb/nocodb",
-      "categories": [
-        "Database"
-      ],
-      "volumes": [
-        {
-          "bind": "/home/docker/nocodb",
-          "container": "/var/lib/nocodb",
-          "mode": "rw"
-        }
-      ],
-      "ports" : [
-        {
-          "host": "8080",
-          "container": "8080"
-        }
-      ],
-      "env": [
-        {
-          "name": "NOCODB_DB_HOST",
-          "label": "Database Host",
-          "description": "Database host",
-          "type": "text",
-          "default": "mysql"
-        },
-        {
-          "name": "NOCODB_DB_PORT",
-          "label": "Database Port",
-          "description": "Database port",
-          "type": "text",
-          "default": "3306"
-        },
-        {
-          "name": "NOCODB_DB_USER",
-          "label": "Database User",
-          "description": "Database user",
-          "type": "text",
-          "default": "root"
-        },
-        {
-          "name": "NOCODB_DB_PASSWORD",
-          "label": "Database Password",
-          "description": "Database password",
-          "type": "password",
-          "default": "password"
-        },
-        {
-          "name": "NOCODB_DB_NAME",
-          "label": "Database Name",
-          "description": "Database name",
-          "type": "text",
-          "default": "nocodb"
-        }
-      ]
-    },
-    {
       "categories": [
         "Tools"
       ],
@@ -5106,7 +5063,7 @@
       ],
       "note": "DNS-over-HTTPS: [80:80/TCP] [443:443/TCP] [443:443/UDP] [3000:3000/TCP] [DEFAULT]. DNS: [53:53/TCP] [53:53/UDP]. Admin Panel: [3000:3000/TCP]. DHCP: [67:67/UDP] [68:68/TCP] [68:68/UDP]. DNS-over-TLS: [853:853/TCP]. DNS-over-QUIC: [784:784/UDP] [853:853/UDP] [8853:8853/UDP]. DNSCrypt: [5443:5443/TCP] [5443:5443/UDP]",
       "image": "adguard/adguardhome:latest",
-      "logo": "https://raw.githubusercontent.com/Qballjos/portainer_templates/master/Images/adguard.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/Dashboard-Icons/main/png/adguard.png",
       "name": "adguard",
       "platform": "linux",
       "ports": [
@@ -5357,7 +5314,7 @@
         "CMS"
       ],
       "platform": "linux",
-      "logo": "https://portainer-io-assets.sfo2.digitaloceanspaces.com/logos/drupal.png",
+      "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/drupal.png",
       "image": "drupal:latest",
       "ports": [
         "80/tcp"
@@ -5519,7 +5476,7 @@
     {
       "type": 1,
       "name": "nvidia-hwa-test",
-      "title": "NVIDIA HWA Test",
+      "title": "NVIDIA-HWA-Test",
       "note": "",
       "description": "Nvidia HWA Test is a test container for NVIDIA hardware acceleration. Start the container then check the logs to confirm your output matches the example from this page: <a href='https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/sample-workload.html'>Running a Sample Workload</a>. <a href='https://www.nvidia.com/' target='_blank'>Website</a>. <a href='https://hub.docker.com/r/nvidia/cuda' target='_blank'>Docker Hub</a>",
       "platform": "linux",

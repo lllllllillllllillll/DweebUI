@@ -11,7 +11,6 @@
     <link href="/css/dweebui.css" rel="stylesheet"/>
   </head>
   <body >
-    <script src="/js/demo-theme.min.js?1692870487"></script>
     <div class="page">
 
       <!-- EJS -->
@@ -26,11 +25,11 @@
               <div class="row g-0">
 
                 <!-- EJS -->
-                <%- include('partials/sidebar.html') %>
+                <%- sidebar %>
 
                 <div class="col-12 col-md-9 d-flex flex-column">
                   <div class="card-body">
-                    <h2 class="mb-4">My Account</h2>
+                    <h1 class="mb-4">My Account</h1>
                     <h3 class="card-title">Profile Details</h3>
                     <div class="row align-items-center">
                       <div class="col-auto"><span class="avatar avatar-xl bg-green-lt">A</span>
@@ -93,7 +92,10 @@
             </div>
           </div>
         </div>
-        <%- include('partials/footer.html') %>
+
+        <!-- EJS -->
+        <%- footer %>
+        
       </div>
     </div>
     <script src="/js/dweebui.js" defer></script>

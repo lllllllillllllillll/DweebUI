@@ -1,5 +1,6 @@
 import { ServerSettings, User } from '../database/config.js';
-import { Alert, getLanguage, Navbar, Capitalize } from '../utils/system.js';
+import { Alert, getLanguage, Navbar, Sidebar, Footer, Capitalize } from '../utils/system.js';
+import { readdirSync, readFileSync } from 'fs';
 
 export const Preferences = async function(req,res){
 
@@ -14,11 +15,15 @@ export const Preferences = async function(req,res){
     let checked = '';
     if (hide_profile == true) { checked = 'checked'; }
 
+
+
     res.render("preferences",{ 
         alert: '',
         username: req.session.username,
         role: req.session.role,
         navbar: await Navbar(req),
+        sidebar: await Sidebar(req),
+        footer: await Footer(req),
         selected: selected,
         hide_profile: checked,
 
@@ -29,12 +34,13 @@ export const Preferences = async function(req,res){
 
 export const submitPreferences = async function(req,res){
 
-    let { language_input, hidden_input } = req.body;
+    let { language_input, hidden_input, check_languages } = req.body;
 
     let trigger_name = req.header('hx-trigger-name');
     let trigger_id = req.header('hx-trigger');
 
     // console.log(`trigger_name: ${trigger_name} - trigger_id: ${trigger_id}`);
+    // console.log(req.body);
 
     if (hidden_input == 'on') { hidden_input = true; } else { hidden_input = false; }
 
@@ -65,7 +71,17 @@ export const submitPreferences = async function(req,res){
         username: req.session.username,
         role: req.session.role,
         navbar: await Navbar(req),
+        sidebar: await Sidebar(req),
+        footer: await Footer(req),
         selected: selected,
     });
 
+}
+
+
+
+export const searchPreferences = async function (req, res) {
+    console.log(`[Search] ${req.body.search}`);
+    res.send('ok');
+    return;
 }

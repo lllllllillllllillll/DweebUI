@@ -1,5 +1,5 @@
 import { User, ServerSettings } from '../database/config.js';
-import { Alert, getLanguage, Navbar } from '../utils/system.js';
+import { Alert, getLanguage, Navbar, Sidebar, Footer } from '../utils/system.js';
 
 export const Account = async function(req,res){
 
@@ -17,9 +17,17 @@ export const Account = async function(req,res){
         avatar: user.avatar,
         role: req.session.role,
         navbar: await Navbar(req),
+        sidebar: await Sidebar(req),
+        footer: await Footer(req),
     });
 }
 
+
+export const searchAccount = async function (req, res) {
+    console.log(`[Search] ${req.body.search}`);
+    res.send('ok');
+    return;
+}
 
 
 export const submitAccount = async function(req,res){
@@ -31,6 +39,8 @@ export const submitAccount = async function(req,res){
         username: req.session.username,
         role: req.session.role,
         navbar: await Navbar(req),
+        sidebar: await Sidebar(req),
+        footer: await Footer(req),
     });
 
 }

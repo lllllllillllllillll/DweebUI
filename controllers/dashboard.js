@@ -1,245 +1,59 @@
 import { currentLoad, mem, networkStats, fsSize } from 'systeminformation';
-import { docker, getContainer, containerInspect } from '../utils/docker.js';
+import { docker, containerInfo, containerLogs, containerStats, GetContainerLists } from '../utils/docker.js';
 import { readFileSync } from 'fs';
-import { User, Permission } from '../database/config.js';
-import { Alert, Navbar, Capitalize } from '../utils/system.js';
+import { User, Permission, ServerSettings, ContainerLists, Container } from '../database/config.js';
+import { Alert, Navbar, Footer, Capitalize } from '../utils/system.js';
 import { Op } from 'sequelize';
 
-let [ hidden, alert, newCards, stats ] = [ '', '', '', {} ];
-let logString = '';
+let [ hidden, alert, stats ] = [ '', '', '', {} ];
+let container_link = 'http://localhost';
+
+
 
 // Dashboard
 export const Dashboard = async function (req, res) {
+
+    let host = req.params.host;
+    req.session.host = host;
+
+
+    // if (host != 1) {
+    //     let test = await GetContainerLists(host);
+    //     console.log(test);
+    // }
+
+    // Create the lists needed for the dashboard
+    const [list, created] = await ContainerLists.findOrCreate({
+        where: { userID: req.session.userID },
+        defaults: {
+            userID: req.session.userID,
+            username: req.session.username,
+            containers: '[]',
+            new: '[]',
+            updates: '[]',
+            sent: '[]',
+        },
+    });
+    if (created) { console.log(`New entry created in ContainerLists for ${req.session.username}`); }
+
 
     res.render("dashboard",{ 
         alert: '',
         username: req.session.username,
         role: req.session.role,
         navbar: await Navbar(req),
+        footer: await Footer(req),
     }); 
 }
 
+
+
+
 // Dashboard search
-export const submitDashboard = async function (req, res) {
-    console.log('[SubmitDashboard]');
-    console.log(req.body);
+export const searchDashboard = async function (req, res) {
+    console.log(`[Search] ${req.body.search}`);
     res.send('ok');
     return;
-}
-
-
-export const CardList = async function (req, res) {
-
-    res.send(newCards);
-    newCards = '';
-    return;
-}
-
-
-async function containerInfo (containerID) {
-
-    // get the container info
-    let info = docker.getContainer(containerID);
-    let container = await info.inspect();
-
-    let container_name = container.Name.slice(1);
-    let container_image = container.Config.Image;
-    let container_service = container.Config.Labels['com.docker.compose.service'];
-
-    let ports_list = [];
-    let external = 0;
-    let internal = 0;
-    
-    try {
-        for (const [key, value] of Object.entries(container.HostConfig.PortBindings)) {
-            let ports = {
-                check: 'checked',
-                external: value[0].HostPort,
-                internal: key.split('/')[0],
-                protocol: key.split('/')[1]
-            }
-            ports_list.push(ports);
-        }
-    } catch {}
-
-    try { external = ports_list[0].external; internal = ports_list[0].internal; } catch { }
-
-    let container_info = {
-        containerName: container_name,
-        containerID: containerID,
-        containerImage: container_image,
-        containerService: container_service,
-        containerState: container.State.Status,
-        external_port: external,
-        internal_port: internal,
-        ports: ports_list,
-        volumes: container.Mounts,
-        env: container.Config.Env,
-        labels: container.Config.Labels,
-        link: 'localhost',
-    }
-
-    return container_info;
-}
-
-
-async function userCards (session) {
-    session.container_list = [];
-    // check what containers the user wants hidden
-    let hidden = await Permission.findAll({ where: {userID: session.userID, hide: true}}, { attributes: ['containerID'] });
-    hidden = hidden.map((container) => container.containerID);
-    // check what containers the user has permission to view
-    let visable = await Permission.findAll({ where: { userID: session.userID, [Op.or]: [{ uninstall: true }, { edit: true }, { upgrade: true }, { start: true }, { stop: true }, { pause: true }, { restart: true }, { logs: true }, { view: true }] }, attributes: ['containerID'] });
-    visable = visable.map((container) => container.containerID);
-    // get all containers
-    let containers = await docker.listContainers({ all: true });
-    // loop through containers
-    for (let i = 0; i < containers.length; i++) {
-        let container_name = containers[i].Names[0].split('/').pop();
-        // skip hidden containers
-        if (hidden.includes(containers[i].Id)) { continue; }
-        // admin can see all containers that they don't have hidden
-        if (session.role == 'admin') { session.container_list.push({ containerName: container_name, containerID: containers[i].Id, containerState: containers[i].State }); }
-        // user can see any containers that they have any permissions for
-        else if (visable.includes(containers[i].Id)){ session.container_list.push({ containerName: container_name, containerID: containers[i].Id, containerState: containers[i].State }); }
-    }
-    // Create the lists if they don't exist
-    if (!session.sent_list) { session.sent_list = []; }
-    if (!session.update_list) { session.update_list = []; }
-    if (!session.new_cards) { session.new_cards = []; }
-}
-
-
-async function updateDashboard (session) {
-    let container_list = session.container_list;
-    let sent_list = session.sent_list;
-    session.new_cards = [];
-    session.update_list = [];
-    // loop through the containers list
-    container_list.forEach(container => {
-        let { containerName, containerID, containerState } = container;
-        let sent = sent_list.find(c => c.containerID === containerID);
-        if (!sent) { session.new_cards.push(containerID);}
-        else if (sent.containerState !== containerState) { session.update_list.push(containerID); }
-    });
-    // loop through the sent list to see if any containers have been removed
-    sent_list.forEach(container => {
-        let { containerName, containerID, containerState } = container;
-        let exists = container_list.find(c => c.containerID === containerID);
-        if (!exists) { session.update_list.push(containerID); }
-    });
-}
-
-
-// Container actions (start, stop, pause, restart, hide)
-export const ContainerAction = async (req, res) => {
-
-    // let trigger_id = req.header('hx-trigger');
-    let container_name = req.header('hx-trigger-name');
-    let containerID = req.params.containerid;
-    let action = req.params.action;
-    
-    console.log(`Container: ${container_name} ID: ${containerID} Action: ${action}`);
-
-    // Reset the view
-    if (action == 'reset') { 
-        console.log('Resetting view'); 
-        await Permission.update({ hide: false }, { where: { userID: req.session.userID } });
-        res.redirect('/dashboard');
-        return;
-    }
-
-    if (action == 'update') {
-        await userCards(req.session);
-        if (!req.session.container_list.find(c => c.containerID === containerID)) {
-            res.send('');
-            return;
-        } else {
-            let details = await containerInfo(containerID);
-            let card = await createCard(details);
-            res.send(card);
-            return;
-        }
-    }
-
-    // Inspect the container
-    let info = docker.getContainer(containerID);
-    let container = await info.inspect();
-    let containerState = container.State.Status;
-    
-    // Displays container state (starting, stopping, restarting, pausing)
-    function status (state) {
-        return(`<div class="text-yellow d-inline-flex align-items-center lh-1 ms-auto" id="AltIDState">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-point-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M12 7a5 5 0 1 1 -4.995 5.217l-.005 -.217l.005 -.217a5 5 0 0 1 4.995 -4.783z" stroke-width="0" fill="currentColor"></path></svg>
-                <strong>${state}</strong>
-                </div>`);
-    }
-
-    // Perform the action
-    if ((action == 'start') && (containerState == 'exited')) {
-        info.start();
-        res.send(status('starting'));
-    } else if ((action == 'start') && (containerState == 'paused')) {
-        info.unpause();
-        res.send(status('starting'));
-    } else if ((action == 'stop') && (containerState != 'exited')) {
-        info.stop();
-        res.send(status('stopping'));
-    } else if ((action == 'pause') && (containerState == 'paused')) {
-        info.unpause();
-        res.send(status('starting'));
-    }   else if ((action == 'pause') && (containerState == 'running')) {
-        info.pause();
-        res.send(status('pausing'));
-    } else if (action == 'restart') {
-        info.restart();
-        res.send(status('restarting'));
-    } else if (action == 'hide') {
-        let exists = await Permission.findOne({ where: { containerID: containerID, userID: req.session.userID }});
-        if (!exists) { const newPermission = await Permission.create({ containerName: container_name, containerID: containerID, username: req.session.username, userID: req.session.userID, hide: true }); }
-        else { exists.update({ hide: true }); }
-        res.send('ok'); 
-    }
-}
-
-
-async function createCard (details) {
-    // let shortname = details.name.slice(0, 10) + '...';
-    // let trigger = 'data-hx-trigger="load, every 3s"';
-
-    // Capitalize the container name and shorten it if it's too long
-    let containerName = Capitalize(details.containerName);
-    if (containerName.length > 17) { containerName = containerName.substring(0, 17) + '...'; }
-
-    let containerID = details.containerID;
-    let containerState = details.containerState;
-    let containerService = details.containerService;
-    let containerStateColor = '';
-
-    if (containerState == 'running') { containerStateColor = 'green'; }
-    else if (containerState == 'exited') { containerStateColor = 'red'; containerState = 'stopped'; }
-    else if (containerState == 'paused') { containerStateColor = 'orange'; }
-    else { containerStateColor = 'blue'; }
-
-    let container_card = readFileSync('./views/partials/container_card.html', 'utf8');
-
-    // let links = await ServerSettings.findOne({ where: {key: 'links'}});
-    // if (!links) { links = { value: 'localhost' }; }
-
-    container_card = container_card.replace(/ContainerID/g, containerID);
-    container_card = container_card.replace(/AltID/g, 'a' + containerID);
-    container_card = container_card.replace(/AppName/g, containerName);
-    container_card = container_card.replace(/AppService/g, containerService);
-    container_card = container_card.replace(/AppState/g, containerState);
-    container_card = container_card.replace(/StateColor/g, containerStateColor);
-
-    if (details.external_port == 0 && details.internal_port == 0) {
-        container_card = container_card.replace(/AppPorts/g, ``);
-    } else {
-        container_card = container_card.replace(/AppPorts/g, `${details.external_port}:${details.internal_port}`);
-    }
-    // card = card.replace(/data-trigger=""/, trigger);
-    return container_card;
 }
 
 
@@ -274,50 +88,292 @@ export const ServerMetrics = async (req, res) => {
 }
 
 
-export const SSE = async (req, res) => {
+async function userCards (req) {
+    
+    let container_list = [];
+    // Check what containers the user has hidden.
+    let hidden = await Permission.findAll({ where: {userID: req.session.userID, hide: true}}, { attributes: ['containerID'] });
+    hidden = hidden.map((container) => container.containerID);
 
-    // Set the response headers
-    res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive' });
+    // Check what containers the user has permission for.
+    let visable = await Permission.findAll({ where: { userID: req.session.userID, [Op.or]: [{ uninstall: true }, { edit: true }, { upgrade: true }, { start: true }, { stop: true }, { pause: true }, { restart: true }, { logs: true }, { view: true }] }, attributes: ['containerID'] });
+    visable = visable.map((container) => container.containerID);
 
-    async function eventCheck () {
-        await userCards(req.session);
-        await updateDashboard(req.session);
+    let containers = await GetContainerLists(req.session.host);
 
-        if (JSON.stringify(req.session.sent_list) === JSON.stringify(req.session.container_list)) { console.log('Event - No Change'); return; }
+    for (let i = 0; i < containers.length; i++) {
+        let container_name = containers[i].Names[0].split('/').pop();
+        // Skip if the ID is found in the hidden list.
+        if (hidden.includes(containers[i].Id)) { continue; }
+        // Skip if the state is 'created'. 
+        if (containers[i].State == 'created') { continue; }
+        // Admin can see all containers that they don't have hidden.
+        if (req.session.role == 'admin') { container_list.push({ containerName: container_name, containerID: containers[i].Id, containerState: containers[i].State }); }
+        // User can see any containers that they have any permissions for.
+        else if (visable.includes(containers[i].Id)){ container_list.push({ containerName: container_name, containerID: containers[i].Id, containerState: containers[i].State }); }
+    }
+    return container_list;
+}
 
-        console.log('Event - Change Detected');
+// Container actions (start, stop, pause, restart, hide)
+export const ContainerAction = async (req, res) => {
 
-        for (let i = 0; i < req.session.new_cards.length; i++) {
-            let details = await containerInfo(req.session.new_cards[i]);
-            let card = await createCard(details);
-            newCards += card;
-        }
+    let container_name = req.header('hx-trigger-name');
+    let containerID = req.params.containerid;
+    let action = req.params.action;
+    
+    console.log(`[Action] ${action} ${container_name} ${containerID}`);
 
-        for (let i = 0; i < req.session.update_list.length; i++) {
-            res.write(`event: ${req.session.update_list[i]}\n`);
-            res.write(`data: 'update cards'\n\n`);
-        }
-        res.write(`event: update\n`);
-        res.write(`data: 'update cards'\n\n`);
+    if (action == 'reset') { 
+        console.log('Resetting view'); 
+        await Permission.update({ hide: false }, { where: { userID: req.session.userID } });
+        res.redirect('/dashboard');
+        return;
+    }
+    else if (action == 'logs') {
+        let logs = await containerLogs(containerID);
+        let modal = readFileSync('./views/partials/logs.html', 'utf8');
+        modal = modal.replace(/AppName/g, container_name);
+        modal = modal.replace(/ContainerID/g, containerID);
+        modal = modal.replace(/ContainerLogs/g, logs);
 
-        req.session.sent_list = req.session.container_list.slice();
+        res.send(modal);
+        return;
+    }
+    else if (action == 'details') {
+        let container = await containerInfo(containerID);
+        let modal = readFileSync('./views/partials/details.html', 'utf8');
+        modal = modal.replace(/AppName/g, container.containerName);
+        modal = modal.replace(/AppImage/g, container.containerImage);
+        res.send(modal);
+        return;
+    }
+    else if (action == 'uninstall') {
+        let modal = readFileSync('./views/partials/uninstall.html', 'utf8');
+        modal = modal.replace(/AppName/g, container_name);
+        modal = modal.replace(/ContainerID/g, containerID);
+        res.send(modal);
+        return;
+    }
+    else if (action == 'link_modal') {
+        const [container, created] = await Container.findOrCreate({ where: { containerID: containerID }, defaults: { containerName: container_name, containerID: containerID, link: '' } });
+        let modal = readFileSync('./views/partials/link.html', 'utf8');
+        modal = modal.replace(/AppName/g, container_name);
+        modal = modal.replace(/ContainerID/g, containerID);
+        modal = modal.replace(/AppLink/g, container.link);
+        res.send(modal);
+        return;
+    } else if (action == 'update_link') {
+        let url = req.body.url;
+        console.log(url);
+        // find the container entry with the containerID and userID
+        let container = await Container.findOne({ where: { containerID: containerID } });
+        container.update({ link: url });
+        res.send('ok');
+        return;
     }
 
-    await eventCheck();
+    // Inspect the container
+    let info = docker.getContainer(containerID);
+    let container = await info.inspect();
+    let containerState = container.State.Status;
+    
+    // Displays container state (starting, stopping, restarting, pausing)
+    function status (state) {
+        return(`<div class="text-yellow d-inline-flex align-items-center lh-1 ms-auto" id="AltIDState">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-point-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M12 7a5 5 0 1 1 -4.995 5.217l-.005 -.217l.005 -.217a5 5 0 0 1 4.995 -4.783z" stroke-width="0" fill="currentColor"></path></svg>
+                <strong>${state}</strong>
+                </div>`);
+    }
 
-    // Listens for docker events. Only triggers every other event.
-    docker.getEvents({}, function (err, data) {
-        let count = 0;
+    // Perform the action
+    if ((action == 'start') && (containerState == 'exited')) {
+        info.start();
+        res.send(status('starting'));
+    } else if ((action == 'start') && (containerState == 'paused')) {
+        info.unpause();
+        res.send(status('starting'));
+    } else if ((action == 'stop') && (containerState != 'exited')) {
+        info.stop();
+        res.send(status('stopping'));
+    } else if ((action == 'pause') && (containerState == 'paused')) {
+        info.unpause();
+        res.send(status('starting'));
+    } else if ((action == 'pause') && (containerState == 'running')) {
+        info.pause();
+        res.send(status('pausing'));
+    } else if (action == 'restart') {
+        info.restart();
+        res.send(status('restarting'));
+    } else if (action == 'hide') {
+        let exists = await Permission.findOne({ where: { containerID: containerID, userID: req.session.userID }});
+        if (!exists) { const newPermission = await Permission.create({ containerName: container_name, containerID: containerID, username: req.session.username, userID: req.session.userID, hide: true }); }
+        else { exists.update({ hide: true }); }
+        res.send('ok'); 
+    }
+}
+
+
+
+
+async function createCard (details) {
+
+    // let trigger = 'data-hx-trigger="load, every 3s"';
+
+    let containerName = details.containerName;
+    if (containerName.length > 13) { containerName = containerName.substring(0, 13) + '...'; }
+    let containerTitle = Capitalize(containerName);
+
+    let container_link = '';
+    let container = await Container.findOne({ where: { containerID: details.containerID } });
+    container_link = container.link || '#';
+
+    let titleLink = `<a href="${container_link}" class="nav-link" target="_blank">${containerTitle}</a>`;
+
+    let containerID = details.containerID;
+    let containerState = details.containerState;
+    let containerService = details.containerService;
+    let containerStateColor = '';
+
+    if (containerState == 'running') { containerStateColor = 'green'; }
+    else if (containerState == 'exited') { containerStateColor = 'red'; containerState = 'stopped'; }
+    else if (containerState == 'paused') { containerStateColor = 'orange'; }
+    else { containerStateColor = 'blue'; }
+
+    let container_card = readFileSync('./views/partials/container_card.html', 'utf8');
+
+    container_card = container_card.replace(/ContainerID/g, containerID);
+    container_card = container_card.replace(/AltID/g, 'a' + containerID);
+    container_card = container_card.replace(/TitleLink/g, titleLink);
+    container_card = container_card.replace(/AppName/g, containerName);
+    container_card = container_card.replace(/AppTitle/g, containerTitle);
+    container_card = container_card.replace(/AppService/g, containerService);
+    container_card = container_card.replace(/AppState/g, containerState);
+    container_card = container_card.replace(/StateColor/g, containerStateColor);
+
+
+    let update_status = `<div class="text-yellow">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-point-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M12 7a5 5 0 1 1 -4.995 5.217l-.005 -.217l.005 -.217a5 5 0 0 1 4.995 -4.783z" stroke-width="0" fill="currentColor"></path></svg>
+                        </div>`;
+    
+
+    if (details.external_port == 0 && details.internal_port == 0) {
+        container_card = container_card.replace(/AppPorts/g, ``);
+    } else {
+        container_card = container_card.replace(/AppPorts/g, `<a href="${container_link}:${details.external_port}" target="_blank" style="color: inherit; text-decoration: none;"> ${details.external_port}:${details.internal_port}</a>`);
+    }
+    return container_card;
+}
+
+
+
+export const UpdateCard = async function (req, res) {
+
+        let containerID = req.params.containerid;
+
+        let lists = await ContainerLists.findOne({ where: { userID: req.session.userID }, attributes: ['containers'] });
+        let container_list = JSON.parse(lists.containers);
+
+        let found = container_list.find(c => c.containerID === containerID);
+        if (!found) { res.send(''); return; }
+        let details = await containerInfo(containerID);
+        let card = await createCard(details);
+        res.send(card);
+}
+
+
+
+export const CardList = async function (req, res) {
+    let cards_list = '';
+    // Check if there are any new cards in queue.
+    let new_cards = await ContainerLists.findOne({ where: { userID: req.session.userID }, attributes: ['new'] });
+    let new_list = JSON.parse(new_cards.new);
+    // Check what containers the user should see.
+    let containers = await userCards(req);
+    // Create the cards.
+    if (new_list.length > 0) {
+        for (let i = 0; i < new_list.length; i++) {
+            let details = await containerInfo(new_list[i]);
+            let card = await createCard(details);
+            cards_list += card;
+        }
+    } else {
+        for (let i = 0; i < containers.length; i++) {
+            let details = await containerInfo(containers[i].containerID);
+            let card = await createCard(details);
+            cards_list += card;
+        }
+    }
+    // Update lists, clear the queue, and send the cards.
+    await ContainerLists.update({ containers: JSON.stringify(containers), sent: JSON.stringify(containers), new: '[]' }, { where: { userID: req.session.userID } });
+    res.send(cards_list);
+}
+
+
+// HTMX - Server-side events
+export const SSE = async (req, res) => {
+    
+    res.writeHead(200, {
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        'Connection': 'keep-alive' 
+    });
+    
+    async function eventCheck () {
+
+
+        let list = await ContainerLists.findOne({ where: { userID: req.session.userID }, attributes: ['sent'] });
+        let container_list = await userCards(req);
+
+        let new_cards = [];
+        let update_list = [];
+        let sent_cards = [];
+        sent_cards = JSON.parse(list.sent);
+
+        if (JSON.stringify(container_list) == list.sent) { return; }
+        console.log(`Update for ${req.session.username}`);
+
+        // loop through the containers list to see if any new containers have been added or changed
+        container_list.forEach(container => {
+            let { containerName, containerID, containerState } = container;
+            if (list.sent) { sent_cards = JSON.parse(list.sent); }
+            
+            let found = sent_cards.find(c => c.containerID === containerID);
+            if (!found) { new_cards.push(containerID); }
+            else if (found.containerState !== containerState) { update_list.push(containerID); }
+        });
+
+        // loop through the sent list to see if any containers have been removed
+        sent_cards.forEach(container => {
+            let { containerName, containerID, containerState } = container;
+            let found = container_list.find(c => c.containerID === containerID);
+            if (!found) { update_list.push(containerID); }
+        });
+
+        await ContainerLists.update({ new: JSON.stringify(new_cards), sent: JSON.stringify(container_list), containers: JSON.stringify(container_list) }, { where: { userID: req.session.userID } });
+        
+        if (update_list.length > 0 ) {
+            for (let i = 0; i < update_list.length; i++) {
+                res.write(`event: ${update_list[i]}\n`);
+                res.write(`data: 'update cards'\n\n`);
+            }    
+        }
+
+        if (new_cards.length > 0) {
+            res.write(`event: update\n`);
+            res.write(`data: 'card updates'\n\n`);
+        }
+
+    }
+    
+    docker.getEvents({}, async function (err, data) {
         data.on('data', async function () {
-            count++;
-            if (count % 2 === 0) {
-                await eventCheck();
-            }
+            console.log(`[Docker Event]`);
+            await eventCheck();
         });
     });
 
-
-    req.on('close', () => {
+    req.on('close', async () => {
+        // Nothing
     });
-
 }

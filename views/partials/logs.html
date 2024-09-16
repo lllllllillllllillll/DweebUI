@@ -1,0 +1,49 @@
+
+        <div class="modal-header">
+            <h5 class="modal-title">Logs</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+            
+            <form action="/install" id="install" method="POST">
+
+            <div class="row mb-3 align-items-end">
+                <div class="col-lg-5">
+                    <label class="form-label mb-1">Container Name: </label>
+                    <input type="text" class="form-control" name="service_name" value="AppName" hidden/>
+                    <input type="text" class="form-control" name="name" value="AppName"/>
+                </div>
+
+                <!-- <div class="col-lg-4">
+                    <label class="form-label mb-1">Image: </label>
+                    <input type="text" class="form-control" name="image" value="AppImage"/>
+                </div> -->
+
+                <div class="col-lg-3">
+                    <label class="form-label mb-1">Filter: </label>
+                    <select class="form-select" name="restart_policy">
+                        <option value="RestartPolicy" selected hidden>24 Hours</option>
+                        <option value="unless-stopped">unless-stopped</option>
+                        <option value="on-failure">on-failure</option>
+                        <option value="no">never</option>
+                        <option value="always">always</option>
+                    </select>
+                </div>
+            </div>
+
+
+
+            <div class="row mb-1 align-items-end">
+                <div class="col-12">
+                    <textarea class="form-control" style="height: 65vh; resize: none;" readonly>ContainerLogs</textarea>
+                </div>
+            </div>
+                        
+            </form>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-success" name="AppName" data-hx-post="/container/logs/ContainerID" data-hx-trigger="mousedown" hx-target="#wide_modal_content"  hx-swap="innerHTML"  data-bs-toggle="modal" data-bs-target="#wide_modal">Refresh</button>
+        </div>

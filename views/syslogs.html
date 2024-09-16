@@ -5,10 +5,10 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <title>DweebUI - Syslogs</title>
-    <link href="/css/tabler.min.css" rel="stylesheet"/>
-    <link href="/css/demo.min.css" rel="stylesheet"/>
-    <link href="/css/dweebui.css" rel="stylesheet"/>
+    <title>Syslogs - DweebUI</title>
+		<link href="/css/tabler.min.css?1692870487" rel="stylesheet"/>
+		<link href="/css/demo.min.css?1692870487" rel="stylesheet"/>
+		<link href="/css/dweebui.css" rel="stylesheet"/>
   </head>
   <body >
     <div class="page">
@@ -17,73 +17,143 @@
       <%- navbar %>
 
       <div class="page-wrapper">
-
-        <div class="page-header d-print-none">
+        <!-- Page header -->
+        
+        <!-- Page body -->
+        <div class="page-body" style="margin-top: 16px;">
           <div class="container-xl">
-            <div class="row g-2 align-items-center">
-              <div class="col">
-                <h2 class="page-title">
-                  Syslogs
-                </h2>
-              </div>
-            </div>
-          </div>
-        </div>
 
-
-        <div class="page-body">
-          <div class="container-xl">
             
-            <div class="card">
-              <div class="card-body">
-                <div id="table-default" class="table-responsive">
-                  <table class="table">
-                    <thead>
-                      <tr>
-                        <th><button class="table-sort" data-sort="sort-id">id</button></th>
-                        <th><button class="table-sort" data-sort="sort-user">user</button></th>
-                        <th><button class="table-sort" data-sort="sort-email">email</button></th>
-                        <th><button class="table-sort" data-sort="sort-event">event</button></th>
-                        <th><button class="table-sort" data-sort="sort-message">message</button></th>
-                        <th><button class="table-sort" data-sort="sort-ip">ip</button></th>
-                        <th><button class="table-sort" data-sort="sort-datetime">date/time</button></th>
-                      </tr>
-                    </thead>
-                    <tbody class="table-tbody">
-                      
-                      <%- logs %>
+            <div class="row row-deck row-cards">
 
-                    </tbody>
-                  </table>
+              <div class="col-12 mt-12">
+                <div class="card">
+                  <form method="post">
+                    <div class="card-header">
+                      <h3 class="card-title">Syslogs</h3>
+                        <div class="card-options btn-list">                  
+                            <!-- <a href="#" class="btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-refresh" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4"></path> <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"></path> </svg>
+                              Refresh
+                            </a> -->
+                            <a href="#" class="btn" data-bs-toggle="modal" data-bs-target="#modals-here">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M12 5l0 14"></path> <path d="M5 12l14 0"></path> </svg>
+                              
+                            </a>
+                        </div>
+                    </div>
+                  
+
+                    <div id="table-default" class="table-responsive">
+                      <table class="table">
+                        <thead>
+                          <tr>
+                              <th class="w-1"><input class="form-check-input m-0 align-middle" name="select" type="checkbox" aria-label="Select all" onclick="selectAll('select')"></th>
+                              <th><label class="table-sort" data-sort="sort-id">ID</label></th>
+                              <th><label class="table-sort" data-sort="sort-username">Username</label></th>
+                              <th><label class="table-sort" data-sort="sort-uniqueid">Unique ID</label></th>
+                              <th><label class="table-sort" data-sort="sort-event">Event</label></th>
+                              <th><label class="table-sort" data-sort="sort-message">Message</label></th>
+                              <th><label class="table-sort" data-sort="sort-ip">IP</label></th>
+                              <th><label class="table-sort" data-sort="sort-timestamp">Timestamp</label></th>
+                              <th><label class="table-sort" data-sort="sort-action">Action</label></th>
+                          </tr>
+                        </thead>
+                        <tbody class="table-tbody">
+                          
+                          <%- logs %>
+
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <div class="card-footer d-flex align-items-center">
+
+                        <button class="btn" type="submit" formaction="/removeVolume">Remove</button>
+
+                      <!-- <span class="dropdown">
+                        <button class="btn dropdown-toggle align-text-top" data-bs-toggle="dropdown">Actions</button>
+                        <div class="dropdown-menu dropdown-menu-end">
+                          <button class="dropdown-item" type="submit" formaction="/submitVolumes">
+                            Enable
+                          </button>
+                          <button class="dropdown-item" type="submit" formaction="/submitVolumes">
+                            Disable
+                          </button>
+                          <button class="dropdown-item" type="submit" formaction="/submitVolumes">
+                            Delete
+                          </button>
+                        </div>
+                      </span> -->
+
+                                                        
+                      <p class="m-0 text-muted ms-auto">Events</p>
+
+                    </div>
+                  </form>
+
+
+                  <div id="modals-here" class="modal modal-blur fade" style="display: none" aria-hidden="false" tabindex="-1">
+                    <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollables">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">New Volume</h5>
+                        </div>
+
+                        <div class="modal-body text-center">
+                          <form method="post" action="/addVolume">
+
+                              <div class="row g-2 align-items-end">
+                                <div class="col-9">
+                                  <label class="form-label text-muted">Volume Name</label>
+                                  <input type="text" class="form-control" name="volume">
+                                </div>
+                                
+                                <div class="col-2">
+                                  <button type="submit" class="btn mt-2">Create</button>
+                                </div>
+                              </div>
+                                
+                                <label class="mt-3 text-muted"><label class="text-danger">*</label>Name cannot contain spaces or special characters.</label>
+                          </form>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+
+
+
                 </div>
               </div>
-            </div>
 
+            </div>
           </div>
         </div>
-        <%- include('partials/footer.html') %>
+        
+        <!-- EJS -->
+        <%- footer %>
+        
       </div>
     </div>
+    
     <!-- Libs JS -->
     <script src="/libs/list.js/dist/list.min.js" defer></script>
 
+    <script src="/js/dweebui.js" ></script>
     <script src="/js/htmx.min.js"></script>
 
     <!-- Tabler Core -->
-    <script src="/js/tabler.min.js" defer></script>
-    <script src="/js/demo.min.js" defer></script>
+    <script src="/js/tabler.min.js?1692870487" defer></script>
+    <script src="/js/demo.min.js?1692870487" defer></script>
 
     <script>
       document.addEventListener("DOMContentLoaded", function() {
-      const list = new List('table-default', {
-      	sortClass: 'table-sort',
-      	listClass: 'table-tbody',
-      	valueNames: [ 'sort-id', 'sort-email', 'sort-user', 'sort-event',
-      		{ attr: 'data-date', name: 'sort-message' },
-      		{ attr: 'data-progress', name: 'sort-datetime' },
-      		'sort-ip'
-      	]
-      });
+        const list = new List('table-default', {
+          sortClass: 'table-sort',
+          listClass: 'table-tbody',
+          valueNames: [ 'sort-id', 'sort-username', 'sort-uniqueid', 'sort-event', 'sort-message', 'sort-ip', { attr: 'data-date', name: 'sort-timestamp' }, 'sort-quantity' ]
+        });
       })
     </script>
     

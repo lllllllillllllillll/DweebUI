@@ -12,7 +12,6 @@
     <link href="/css/dweebui.css" rel="stylesheet"/>
   </head>
   <body >
-    <script src="/js/demo-theme.min.js?1692870487"></script>
     <div class="page">
 
       <!-- EJS -->
@@ -27,7 +26,7 @@
               <div class="row g-0">
 
                 <!-- EJS -->
-                <%- include('partials/sidebar.html') %>
+                <%- sidebar %>
                 
                 <div class="col-12 col-md-9 d-flex flex-column">
                 <div class="card-body">
@@ -35,12 +34,14 @@
                   <!-- HTMX - Submits the form and replaces the target with the response. Replaces the submit button with "Updated" -->
                   <form id="settings" hx-post="/settings" hx-target="#submit" hx-swap="outerHTML">
 
-                  <h2 class="">Settings</h2>
+                  <h1 class="">Settings</h1>
                   <label class="text-muted mb-3">Configure server settings. Admin only.</label>
-                  
 
-                    <h3 class="mt-5">User Registration</h3>
-                    <label class="text-muted mb-2">Enable registration and choose a secret.</label>
+                    <div class="table-group-divider mt-6"></div>
+
+
+                    <h3 class="card-title mt-4">User Registration</h3>
+                    <p class="card-subtitle mb-3">Enable registration and choose a secret.</p>
                     <div class="row align-items-center">
                       <div class="col-auto">
                         <label class="form-check form-switch form-switch-lg">
@@ -57,9 +58,11 @@
                         <input type="text" class="form-control" name="registration_secret" placeholder="multiple-words-strong-passphrase" value="<%= registration_secret %>">
                       </div>
                     </div>
-                
-                    <h3 class="mt-5">Container Links</h3>
-                    <label class="text-muted mb-2">Choose the default behaviour for container links.</label>
+
+                    <div class="table-group-divider mt-3"></div>
+
+                    <h3 class="card-title mt-4">Container Port Links</h3>
+                    <p class="card-subtitle mb-3">Choose the base URL for the container card port links. Link can include 'http://' or 'https://'.</p>
                     <div class="row align-items-center">
                       <div class="col-auto">
                         <label class="form-check form-switch form-switch-lg">
@@ -77,8 +80,10 @@
                       </div>
                     </div>
 
-                    <h3 class="mt-5">Authentication</h3>
-                    <label class="text-muted mb-2">Change authentication settings. Only the default, Username and Password, supports multiple users.</label>
+                    <div class="table-group-divider mt-3"></div>
+
+                    <h3 class="card-title mt-4">Authentication</h3>
+                    <p class="card-subtitle mb-3">Change authentication settings. Only the default, Username and Password, supports multiple users.</p>
                     <div class="row align-items-center">
                       <div class="col-auto">
                         <select class="form-select" name="authentication">
@@ -90,7 +95,63 @@
                       </div>
                     </div>
 
-                    <h3 class="mt-5">Hosts</h3>
+                    <div class="table-group-divider mt-3"></div>
+
+                    <h3 class="card-title mt-4">Default Language</h3>
+                    <p class="card-subtitle">Default language for the server.</p>
+                    <div class="row g-2">
+                      <div class="col-3">
+                        <select class="form-control form-select" name="language_input">
+                          <option value="english" selected="" hidden="">English</option>
+                          <%- selected %>
+                          <option value="english">English</option>
+                          <option value="chinese">Chinese</option>
+                        </select>
+                      </div>
+                      <div class="col-auto">
+                        <button class="btn" aria-label="button" name="check_languages" id="check_languages" value="true" hx-post="/update_languages" hx-swap="outerHTML" hx-target="#check_languages">Update Language Files</button>
+                      </div>
+                    </div>
+
+
+                    <!-- <div class="table-group-divider mt-3"></div>
+
+                    <h3 class="card-title mt-4">HTTP / HTTPS</h3>
+                    <p class="card-subtitle">Requires restarting DweebUI.</p>
+                    <div class="row g-2">
+                      <div class="col-3">
+                        <select class="form-control form-select" name="language_input">
+                          <option value="HTTP" selected="" hidden="">HTTP</option>
+                          <option value="HTTP">HTTP</option>
+                          <option value="HTTPS">HTTPS</option>
+                        </select>
+                      </div>
+                      <div class="col-auto">
+                        <button class="btn" aria-label="button">Restart DweebUI</button>
+                      </div>
+                    </div>
+
+
+                    <div class="table-group-divider mt-3"></div>
+
+                    <h3 class="card-title mt-4">Port</h3>
+                    <p class="card-subtitle">Requires restarting DweebUI.</p>
+                    <div class="row g-2">
+                      <div class="col-3">
+                        <input type="text" class="form-control" name="port" placeholder="Port" value="8000">
+                      </div>
+                      <div class="col-auto">
+                        <button class="btn" aria-label="button">Restart DweebUI</button>
+                      </div>
+                    </div> -->
+
+
+
+                    <div class="table-group-divider mt-4"></div>
+
+
+                    <h3 class="mt-4">Hosts</h3>
+
 
                     <label class="text-muted mb-2">Host #1</label>
                     <div class="row align-items-center">
@@ -116,11 +177,13 @@
                       </div>
                     </div>
 
+
+
                     <label class="text-muted mb-2">Host #2</label>
                     <div class="row align-items-center">
                       <div class="col-auto">
                         <label class="form-check form-switch form-switch-lg">
-                          <input class="form-check-input" type="checkbox" name="host2" data-Host2>
+                          <input class="form-check-input" type="checkbox" name="host2" <%= host2_toggle %> >
                           <span class="form-check-label form-check-label-on text-success">
                             Enabled
                           </span>
@@ -130,21 +193,23 @@
                         </label>
                       </div>
                       <div class="col-2">
-                        <input type="text" class="form-control" name="tag2" value="Host 2" placeholder="Tag" data-Tag2>
+                        <input type="text" class="form-control" name="tag2" value="<%= host2_tag %>" placeholder="Tag">
                       </div>
                       <div class="col-4">
-                        <input type="text" class="form-control" name="ip2" placeholder="Host IP" data-Ip2>
+                        <input type="text" class="form-control" name="ip2" value="<%= host2_ip %>" placeholder="Host IP">
                       </div>
                       <div class="col-2">
-                        <input type="text" class="form-control" name="port2" placeholder="PORT" data-Port2>
+                        <input type="text" class="form-control" name="port2" value="<%= host2_port %>" placeholder="PORT">
                       </div>
                     </div>
                     
+
+
                     <label class="text-muted mb-2">Host #3</label>
                     <div class="row align-items-center">
                       <div class="col-auto">
                         <label class="form-check form-switch form-switch-lg">
-                          <input class="form-check-input" type="checkbox" name="host3" data-Host3>
+                          <input class="form-check-input" type="checkbox" name="host3" <%= host3_toggle %> >
                           <span class="form-check-label form-check-label-on text-success">
                             Enabled
                           </span>
@@ -154,21 +219,23 @@
                         </label>
                       </div>
                       <div class="col-2">
-                        <input type="text" class="form-control" name="tag3" value="Host 3" placeholder="Tag" data-Tag3>
+                        <input type="text" class="form-control" name="tag3" value="<%= host3_tag %>" placeholder="Tag">
                       </div>
                       <div class="col-4">
-                        <input type="text" class="form-control" name="ip3" placeholder="Host IP" data-Ip3>
+                        <input type="text" class="form-control" name="ip3" value="<%= host3_ip %>" placeholder="Host IP">
                       </div>
                       <div class="col-2">
-                        <input type="text" class="form-control" name="port3" placeholder="PORT" data-Port3>
+                        <input type="text" class="form-control" name="port3" value="<%= host3_port %>" placeholder="PORT">
                       </div>
                     </div>
+
+
 
                     <label class="text-muted mb-2">Host #4</label>
                     <div class="row align-items-center">
                       <div class="col-auto">
                         <label class="form-check form-switch form-switch-lg">
-                          <input class="form-check-input" type="checkbox" name="host4" data-Host4>
+                          <input class="form-check-input" type="checkbox" name="host4" <%= host4_toggle %> >
                           <span class="form-check-label form-check-label-on text-success">
                             Enabled
                           </span>
@@ -178,15 +245,17 @@
                         </label>
                       </div>
                       <div class="col-2">
-                        <input type="text" class="form-control" name="tag4" value="Host 4" placeholder="Tag" data-Tag4>
+                        <input type="text" class="form-control" name="tag4" value="<%= host4_tag %>" placeholder="Tag">
                       </div>
                       <div class="col-4">
-                        <input type="text" class="form-control" name="ip4" placeholder="Host IP" data-Ip4>
+                        <input type="text" class="form-control" name="ip4" value="<%= host4_ip %>" placeholder="Host IP">
                       </div>
                       <div class="col-2">
-                        <input type="text" class="form-control" name="port4" placeholder="PORT" data-Port4>
+                        <input type="text" class="form-control" name="port4" value="<%= host4_port %>" placeholder="PORT">
                       </div>
                     </div>
+
+
 
                   </div>
                   <div class="card-footer bg-transparent mt-auto">
@@ -207,7 +276,8 @@
           </div>
         </div>
         
-        <%- include('partials/footer.html') %>
+        <!-- EJS -->
+        <%- footer %>
 
       </div>
     </div>

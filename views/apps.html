@@ -5,7 +5,7 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <title>DweebUI - Apps</title>
+    <title>Apps - DweebUI</title>
     <!-- CSS files -->
 		<link href="/css/tabler.min.css?1692870487" rel="stylesheet"/>
 		<link href="/css/demo.min.css?1692870487" rel="stylesheet"/>
@@ -85,7 +85,7 @@
                           <%- json_templates %>
                         </ul>
                       </dropdown>
-                      <button class="btn" name="Import" id="Import" data-hx-get="/import_modal" data-hx-target="#modals-here" hx-swap="innerHTML" data-hx-trigger="click" data-bs-toggle="modal" data-bs-target="#modals-here">Import</button>
+                      <button class="btn" name="import" data-bs-toggle="modal" data-bs-target="#import_modal">Import</button>
                     </div>
                   </div>
                 </div>
@@ -113,28 +113,59 @@
           <div class="container-xl">
             <div class="row row-cards">
 
+              
               <%- apps_list %>
 
-            <!-- HTMX Target-->
-            <div id="modals-here" class="modal modal-blur fade" style="display: none" aria-hidden="false" tabindex="-1">
-              <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollables">
-                <div class="modal-content">
-                  <div class="modal-header">
-                      <h5 class="modal-title">Loading</h5>
-                  </div>
-                  <div class="modal-body text-center">
-                    <div class="spinner-border"></div>
+
+              <div id="import_modal" class="modal modal-blur fade" style="display: none" aria-hidden="false" tabindex="-1">
+                <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-body">
+                          <div class="modal-title">Import Template(s)</div>
+                          <div class="text-muted mb-2">Individual template(s) can be *.json, *.yml, or *.yaml.</div>
+                          <div class="text-muted mb-3">Multiple compose files can be imported from a zip file. Each folder should contain a single compose.yaml.</div>
+                          <img src = "/img/add to zip.jpg" alt = "Add to zip" class = "img-fluid" />
+                          <div class="mt-3">
+                              <form method="post" action="/upload" enctype="multipart/form-data" id="upload">
+                                  <input class="form-control" type="file" name="files" multiple />
+                              </form>
+                          </div>
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-link link-secondary me-auto" data-bs-dismiss="modal">Cancel</button>
+                          <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" form="upload">Upload</button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+
+
+              <div class="modal medium-modal modal-blur fade" id="wide_modal" tabindex="-1" style="display: none;" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+                    <div class="modal-content" id="wide_modal_content">
+                    <!-- modal content inserted with htmx -->
+                    </div>
+                </div>
+              </div>
+        
+
+
+              <div class="modal slim-modal modal-blur fade" id="info_modal" tabindex="-1" style="display: none;" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+                  <div class="modal-content" id="info_modal_content">
+                    <!-- modal content inserted with htmx -->
+                  </div>
+                </div>
+              </div>
+
+
+
               
             </div>
             <div class="d-flex mt-4">
               <ul class="pagination ms-auto">
                 <li class="page-item">
                   <a class="page-link" href="<%- prev %>" tabindex="-1" aria-disabled="true">
-                    <!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>
                     prev
                   </a>
@@ -144,7 +175,7 @@
                 
                 <li class="page-item">
                   <a class="page-link" href="<%- next %>">
-                    next <!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
+                    next
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>
                   </a>
                 </li>
@@ -153,7 +184,8 @@
           </div>
         </div>
         
-        <%- include('partials/footer.html') %>
+        <!-- EJS -->
+        <%- footer %>
 
       </div>
     </div>

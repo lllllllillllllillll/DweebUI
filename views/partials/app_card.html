@@ -1,20 +1,43 @@
 <div class="col-md-6 col-lg-3">
-    <div class="card">
-      <div class="card-body p-4 text-center">
-        <span class="avatar avatar-xl mb-3 rounded" style="background-image: url(AppIcon)"></span>
-        <h3 class="m-0 mb-1"><a href="#">AppShortName</a></h3>
-        <div class="text-secondary">UI Designer</div>
-        <div class="mt-3">
-          <span class="badge bg-purple-lt">Owner</span>
+  <div class="card">
+    <div class="card-body py-2">
+      <div class="row">
+        
+        <h1 class="m-0 p-0">AppTitle</h1>
+        
+        <div class="col-auto p-0">
+          <span class="avatar avatar-xl mt-1" style="background-image: url(AppIcon)"></span>
         </div>
-      </div>
-      <div class="d-flex">
-        <a href="#" class="card-btn"><!-- Download SVG icon from http://tabler-icons.io/i/mail -->
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon me-2 text-muted"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z"></path><path d="M3 7l9 6l9 -6"></path></svg>
-          Info</a>
-        <a href="#" class="card-btn"><!-- Download SVG icon from http://tabler-icons.io/i/phone -->
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon me-2 text-muted"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2"></path></svg>
-          Install</a>
+        <div class="col">
+          <div class="card-subtitle description m-1">AppDescription</div>
+        </div>
+
+        <div class="py-1 mb-1">
+          <div class="row align-items-center">
+            <div class="col-auto m-0 p-0">
+              AppCategories
+            </div>
+          </div>
+        </div>
+
+        <div class="px-0">
+          <div class="row align-items-center">
+            <div class="col-auto">
+              <a href="#" class="btn" name="AppName" id="AppType" hx-post="/apps/info" hx-swap="innerHTML" data-hx-trigger="mousedown" hx-target="#wide_modal_content" data-bs-toggle="modal" data-bs-target="#wide_modal">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-article mx-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M3 4m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z"></path> <path d="M7 8h10"></path> <path d="M7 12h10"></path> <path d="M7 16h10"></path></svg>
+                  More Info
+              </a>
+            </div>
+            <div class="col-auto ms-auto">
+              <a href="" class="btn" name="AppName" id="AppType" hx-post="/apps/view_install" hx-swap="innerHTML" data-hx-trigger="mousedown" hx-target="#wide_modal_content" data-bs-toggle="modal" data-bs-target="#wide_modal">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-bar-to-down mx-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M4 20l16 0"></path> <path d="M12 14l0 -10"></path> <path d="M12 14l4 -4"></path> <path d="M12 14l-4 -4"></path></svg>
+                 Install  
+              </a>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
+</div>

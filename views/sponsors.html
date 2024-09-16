@@ -5,7 +5,7 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <title>Preferences - DweebUI.</title>
+    <title>Sponsors - DweebUI.</title>
     <!-- CSS files -->
     <link href="/css/tabler.min.css?1692870487" rel="stylesheet"/>
     <link href="/css/demo.min.css?1692870487" rel="stylesheet"/>
@@ -34,41 +34,24 @@
                   <!-- HTMX - Submits the form and replaces the target with the response. Replaces the submit button with "Updated" -->
                   <form id="preferences" hx-post="/preferences" hx-target="#submit" hx-swap="outerHTML">
 
-                  <h1 class="">Preferences</h1>
-                  <label class="text-muted mb-3">User Preferences.</label>
+                  <h1 class="">Sponsors</h1>
+                  <label class="text-muted mb-3">Some awesome people who have donated to DweebUI.</label>
                   
-                  <div class="table-group-divider mt-6"></div>
+                  <div class="table-group-divider mb-3"></div>
 
-                    <h3 class="card-title mt-4">Profile Visibility</h3>
-                    <p class="card-subtitle">Hide your username from the dashboard.</p>
-                    <div>
-                      <label class="form-check form-switch form-switch-lg">
-                        <input class="form-check-input" type="checkbox" name="hidden_input" <%= hide_profile %>>
-                        <span class="form-check-label form-check-label-on">Hidden</span>
-                        <span class="form-check-label form-check-label-off"><%= username %></span>
-                      </label>
-                    </div>
 
-                    <div class="table-group-divider mt-4"></div>
+                  <span type="button" class="btn avatar avatar-xl bg-green-lt" hx-trigger="load, click" hx-post="/thank" hx-target="#count" name="MM"  title="MM" style="margin-right: 5px;">MM</span>
 
-                    <h3 class="card-title mt-4">Language</h3>
-                    <p class="card-subtitle">In early development.</p>
-                    <div class="row g-2">
-                      <div class="col-3">
-                        <select class="form-control form-select" name="language_input">
-                          <option value="english" selected="" hidden="">English</option>
-                          <%- selected %>
-                          <option value="english">English</option>
-                          <option value="chinese">Chinese</option>
-                        </select>
-                      </div>
+                  <span type="button" class="btn avatar avatar-xl bg-azure-lt" hx-trigger="click" hx-post="/thank" hx-target="#count" name="PD" title="PD" style="margin-right: 5px;">PD</span>
 
-                    </div>
+                  <span type="button" class="btn avatar avatar-xl bg-teal-lt" hx-trigger="click" hx-post="/thank" hx-target="#count" name="C" title="C" style="margin-right: 5px;">C</span>
 
+                  <span type="button" class="btn avatar avatar-xl bg-indigo-lt" hx-trigger="click" hx-post="/thank" hx-target="#count" name="AD" title="AD" style="margin-right: 5px;">AD</span>
 
 
                   </div>
-                  <div class="card-footer bg-transparent mt-auto">
+
+                  <!-- <div class="card-footer bg-transparent mt-auto">
                     <div class="btn-list justify-content-end">
                       <a href="#" class="btn">
                         Cancel
@@ -77,7 +60,9 @@
                         Update
                       </button>
                     </div>
-                  </div>
+                  </div> -->
+
+
                   
                 </div>
               </form>

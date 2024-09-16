@@ -1,22 +1,9 @@
 import { ServerSettings, User } from '../database/config.js';
-import { Alert, getLanguage, Navbar } from '../utils/system.js';
+import { Alert, getLanguage, Navbar, Footer } from '../utils/system.js';
 
 export const Users = async function(req,res){
 
-    let user_list = `
-    <tr>
-        <th><input class="form-check-input" type="checkbox"></th>
-        <th>ID</th>
-        <th>Avatar</th>
-        <th>Name</th>
-        <th>Username</th>
-        <th>Email</th>
-        <th>UUID</th>
-        <th>Role</th>
-        <th>Last Login</th>
-        <th>Status</th>
-        <th>Actions</th>
-    </tr>`
+    let user_list = '';
 
     let allUsers = await User.findAll();
     allUsers.forEach((account) => {
@@ -33,17 +20,18 @@ export const Users = async function(req,res){
 
         let info = `
         <tr>
-            <td><input class="form-check-input" type="checkbox"></td>
-            <td>${account.id}</td>
-            <td><span class="avatar avatar-sm bg-green-lt">${avatar}</span></span>
-            <td>${account.name}</td>
-            <td>${account.username}</td>
-            <td>${account.email}</td>
-            <td>${account.UUID}</td>
-            <td>${account.role}</td>
-            <td>${account.lastLogin}</td>
-            <td>${active}</td>
-            <td><a href="#" class="btn">View</a></td>
+            <td><input class="form-check-input" type="checkbox" name="select"></td>
+            
+            <td class="sort-id">${account.id}</td>
+            <td class="sort-avatar"><span class="avatar avatar-sm bg-green-lt">${avatar}</span></span>
+            <td class="sort-name">${account.name}</td>
+            <td class="sort-username">${account.username}</td>
+            <td class="sort-email">${account.email}</td>
+            <td class="sort-userid">${account.userID}</td>
+            <td class="sort-role">${account.role}</td>
+            <td class="sort-lastlogin">${account.lastLogin}</td>
+            <td class="sort-active">${active}</td>
+            <td class="sort-action"><a href="#" class="btn">View</a></td>
         </tr>`
 
         user_list += info;
@@ -55,6 +43,7 @@ export const Users = async function(req,res){
         role: req.session.role,
         user_list: user_list,
         navbar: await Navbar(req),
+        footer: await Footer(req),
     });
 }
 
@@ -84,6 +73,16 @@ export const submitUsers = async function(req,res){
         username: req.session.username,
         role: req.session.role,
         navbar: await Navbar(req),
+        footer: await Footer(req),
     });
 
+}
+
+
+
+
+export const searchUsers = async function (req, res) {
+    console.log(`[Search] ${req.body.search}`);
+    res.send('ok');
+    return;
 }

@@ -20,8 +20,10 @@
         <!-- Page header -->
         
         <!-- Page body -->
-        <div class="page-body">
+        <div class="page-body" style="margin-top: 16px;">
           <div class="container-xl">
+
+            
             <div class="row row-deck row-cards">
 
               <div class="col-12 mt-12">
@@ -44,9 +46,23 @@
 
                     <div id="table-default" class="table-responsive">
                       <table class="table">
+                        <thead>
+                          <tr>
+                              <th class="w-1"><input class="form-check-input m-0 align-middle" name="select" type="checkbox" aria-label="Select all" onclick="selectAll('select')"></th>
+                              <th><label class="table-sort" data-sort="sort-type">Type</label></th>
+                              <th><label class="table-sort" data-sort="sort-name">Name</label></th>
+                              <th><label class="table-sort" data-sort="sort-city">Mount point</label></th>
+                              <th><label class="table-sort" data-sort="sort-score">Status</label></th>
+                              <th><label class="table-sort" data-sort="sort-date">Created</label></th>
+                              <th><label class="table-sort" data-sort="sort-quantity">Size</label></th>
+                              <th><label class="table-sort" data-sort="sort-progress">Action</label></th>
+                          </tr>
+                        </thead>
+                        <tbody class="table-tbody">
                         
                         <%- volume_list %>
-
+                        
+                        </tbody>
                       </table>
                     </div>
 
@@ -114,7 +130,8 @@
           </div>
         </div>
         
-        <%- include('partials/footer.html') %>
+        <!-- EJS -->
+        <%- footer %>
         
       </div>
     </div>
@@ -143,20 +160,6 @@
       })
     </script>
 
-    <script>
-      function selectAll() {
-        let checkboxes = document.getElementsByName('select');
-        if (checkboxes[0].checked == true) {
-          for (var i = 0; i < checkboxes.length; i++) {
-            checkboxes[i].checked = true;
-          }
-        } else {
-          for (var i = 0; i < checkboxes.length; i++) {
-            checkboxes[i].checked = false;
-          }
-        }
-      }
-    </script>
-    
+
   </body>
 </html>

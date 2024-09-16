@@ -161,3 +161,32 @@ body {
 .accordion-user {
   border: 1px solid grey;
 }
+
+.slim-modal {
+  --tblr-modal-width: 450px;
+}
+
+.medium-modal {
+  --tblr-modal-width: 850px;
+}
+
+
+.wide-modal {
+  --tblr-modal-width: 1450px;
+}
+
+
+.avatar-3xl {
+  --tblr-avatar-size: 9rem;
+  --tblr-avatar-status-size: 1rem;
+  --tblr-avatar-font-size: 3rem;
+  --tblr-avatar-icon-size: 5rem;
+}
+
+
+.description {
+  max-height: 6em; /* Adjust based on font size and line height */
+  overflow: hidden;
+  text-overflow: ellipsis " [..]";
+  line-height: 1.5em; /* Adjust based on font size */
+}
