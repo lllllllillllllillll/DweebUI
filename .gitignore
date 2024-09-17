@@ -4,3 +4,4 @@ settings.sqlite
 **/*.yaml
 .github
 .git
+package-lock.json
