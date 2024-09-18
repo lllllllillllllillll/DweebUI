@@ -13,14 +13,8 @@ let container_link = 'http://localhost';
 // Dashboard
 export const Dashboard = async function (req, res) {
 
-    let host = req.params.host;
-    req.session.host = host;
-
-
-    // if (host != 1) {
-    //     let test = await GetContainerLists(host);
-    //     console.log(test);
-    // }
+    let host = req.params.host || 1;
+    req.session.host = `${host}`;
 
     // Create the lists needed for the dashboard
     const [list, created] = await ContainerLists.findOrCreate({
@@ -35,7 +29,6 @@ export const Dashboard = async function (req, res) {
         },
     });
     if (created) { console.log(`New entry created in ContainerLists for ${req.session.username}`); }
-
 
     res.render("dashboard",{ 
         alert: '',
@@ -250,11 +243,6 @@ async function createCard (details) {
     container_card = container_card.replace(/AppService/g, containerService);
     container_card = container_card.replace(/AppState/g, containerState);
     container_card = container_card.replace(/StateColor/g, containerStateColor);
-
-
-    let update_status = `<div class="text-yellow">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-point-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M12 7a5 5 0 1 1 -4.995 5.217l-.005 -.217l.005 -.217a5 5 0 0 1 4.995 -4.783z" stroke-width="0" fill="currentColor"></path></svg>
-                        </div>`;
     
 
     if (details.external_port == 0 && details.internal_port == 0) {

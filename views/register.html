@@ -22,6 +22,13 @@
         <form class="card card-md" action="/register" method="post" autocomplete="off" novalidate>
           <div class="card-body">
             <h2 class="card-title text-center mb-4">Create new account</h2>
+
+            <% if(error) { %>
+              <div class="alert alert-danger" role="alert">
+                  <%= error %>
+              </div>
+            <% } %>
+
             <div class="mb-3">
               <label class="form-label">Name</label>
               <input type="text" class="form-control" name="name">
@@ -50,9 +57,9 @@
             </div>
 
 
-            <% if(reg_secret) { %>
-              <%- reg_secret %>
-            <% } %>
+
+            <%- reg_secret %>
+
 
             <!-- <div class="mb-3">
               <label class="form-check">

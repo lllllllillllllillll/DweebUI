@@ -8,6 +8,8 @@ export async function Navbar (req) {
 
     let username = req.session.username;
 
+    let host = '' + req.session.host;
+
     let language = await getLanguage(req);
 
     // Check if the user wants to hide their profile name.
@@ -20,9 +22,11 @@ export async function Navbar (req) {
     let sponsored = await ServerSettings.findOne({ where: { key: 'sponsored' }});
     if (sponsored) { username = `<label class="text-yellow">${username}</label>`; }
 
-    let [host2_toggle, host2_tag, host2_ip, host2_port] = ['', '', '', ''];
-    let [host3_toggle, host3_tag, host3_ip, host3_port] = ['', '', '', ''];
-    let [host4_toggle, host4_tag, host4_ip, host4_port] = ['', '', '', ''];
+    let [host0_active, host0_toggle, host0_tag, host0_ip, host0_port] = ['', '', '', '', ''];
+    let [host1_active, host1_toggle, host1_tag, host1_ip, host1_port] = ['', '', '', '', ''];
+    let [host2_active, host2_toggle, host2_tag, host2_ip, host2_port] = ['', '', '', '', ''];
+    let [host3_active, host3_toggle, host3_tag, host3_ip, host3_port] = ['', '', '', '', ''];
+    let [host4_active, host4_toggle, host4_tag, host4_ip, host4_port] = ['', '', '', '', ''];
 
     const [host2, created2] = await ServerSettings.findOrCreate({ where: { key: 'host2' }, defaults: { key: 'host2', value: '' }});
     const [host3, created3] = await ServerSettings.findOrCreate({ where: { key: 'host3' }, defaults: { key: 'host3', value: '' }});
@@ -34,10 +38,17 @@ export async function Navbar (req) {
     if (host4.value) { host4_toggle = 'checked'; [host4_tag, host4_ip, host4_port] = host4.value.split(','); }
     
     let host_buttons = '';
-    if (host2_toggle || host3_toggle || host4_toggle) { host_buttons += '<a href="/0/dashboard" class="btn" title="All">All</a>  <a href="/1/dashboard" class="btn" title="Host 1">Host 1</a>'; }
-    if (host2_toggle) { host_buttons += `<a href="/2/dashboard" class="btn" title="${host2_tag}">${host2_tag}</a>`; }
-    if (host3_toggle) { host_buttons += `<a href="/3/dashboard" class="btn" title="${host3_tag}">${host3_tag}</a>`; }
-    if (host4_toggle) { host_buttons += `<a href="/4/dashboard" class="btn" title="${host4_tag}">${host4_tag}</a>`; }
+
+    if (host == '0') { host0_active = 'text-yellow'; }
+    if (host == '1') { host1_active = 'text-yellow'; }
+    if (host == '2') { host2_active = 'text-yellow'; }
+    if (host == '3') { host3_active = 'text-yellow'; }
+    if (host == '4') { host4_active = 'text-yellow'; }
+
+    if (host2_toggle || host3_toggle || host4_toggle) { host_buttons += `<a href="/0/dashboard" class="btn ${host0_active}" title="All">All</a>  <a href="/1/dashboard" class="btn ${host1_active}" title="Host 1">Host 1</a>`; }
+    if (host2_toggle) { host_buttons += `<a href="/2/dashboard" class="btn ${host2_active}" title="${host2_tag}">${host2_tag}</a>`; }
+    if (host3_toggle) { host_buttons += `<a href="/3/dashboard" class="btn ${host3_active}" title="${host3_tag}">${host3_tag}</a>`; }
+    if (host4_toggle) { host_buttons += `<a href="/4/dashboard" class="btn ${host4_active}" title="${host4_tag}">${host4_tag}</a>`; }
 
     let navbar = readFileSync('./views/partials/navbar.html', 'utf8');
 
@@ -68,6 +79,7 @@ export async function Navbar (req) {
 
         navbar = navbar.replace(/Username/g, username);
         navbar = navbar.replace(/Userrole/g, req.session.role);
+        navbar = navbar.replace(/HostButtons/g, host_buttons);
         return navbar;
     }
 }

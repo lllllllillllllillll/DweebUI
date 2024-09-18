@@ -9,15 +9,38 @@
 * New - 'Grid view' and 'List view' button (non-functioning).
 * Added try blocks to volumes, images, and networks pages to address GitHub issues.
 * Fixed HTTPS env.
-* New - One-click sign-in if NO_AUTH env is set to 'true' and you're connecting from localhost.
+* New - Authentication can be reduced or disabled.
 * New (again) - PM2 to keep the app running if it encounters an error.
 * New - User registration enabled/disabled from Settings page.
 * Removed 'SECRET' environment variable.
-* New - Custom container links.
+* New - Custom container_card ports links.
+* New - Custom container_card title links.
 * Fixed issue updating view permission.
 * Fixed issue viewing container logs.
 * App icons are now determined by service label instead of image name.
 * App icons sourced from new repo with 1000+ icons.
+* Rewrote most of the app to use containerIDs and UUIDs universally.
+* Dashboard updates now triggered by Docker events instead of constantly polling the API.
+* Sessions now stored in sqlite database instead of memory.
+* Updated tabler from 1.0.0-beta16 to 1.0.0-beta20.
+* Updated htmx (2.0.1) and sse plugin (2.2.1).
+* Seperated css and js customizations into dweebui.css and dweebui.js.
+* New - Preferences page for individual user settings, like language choice.
+* New - Hide username from dashboard.
+* New - Footer displays version with build number.
+* Updated hide container_card to be **instant**.
+* Improved console.log and syslog messages.
+* Fixed modal close buttons.
+* Reduced amount of html being stored in js files.
+* CSS and pages tweaks to make the style more consistent.
+* Improved container cards to be more compact.
+* Improved sponsors and credits pages.
+* New - Secret supporter code.
+* Fixed installs not appearing or appearing multiple times.
+* Improved log view and fixed refresh button.
+* Made app cards more compact.
+
+
 
 ## v0.60 (June 9th 2024) - Permissions system and import templates
 * Converted JS template literals into HTML.

@@ -14,7 +14,7 @@ export async function GetContainerLists(hostid) {
 
     let host = hostid || 1;
 
-    if (host == 1) {
+    if (host == 1 || host == 0) {
         let containers = await docker.listContainers({ all: true });
         return containers;
     }

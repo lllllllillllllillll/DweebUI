@@ -1,6 +1,6 @@
 {
   "name": "dweebui",
-  "version": "0.70.453",
+  "version": "0.70.457",
   "main": "server.js",
   "type": "module",
   "scripts": {
@@ -12,18 +12,18 @@
   "license": "MIT",
   "description": "DweebUI is a WebUI for managing your containers. https://dweebui.com",
   "dependencies": {
-    "adm-zip": "^0.5.15",
+    "adm-zip": "^0.5.16",
     "bcrypt": "^5.1.1",
     "connect-session-sequelize": "^7.1.7",
     "dockerode": "^4.0.2",
     "dockerode-compose": "^1.4.0",
     "ejs": "^3.1.10",
-    "express": "^4.19.2",
+    "express": "^4.21.0",
     "express-session": "^1.18.0",
     "multer": "^1.4.5-lts.1",
     "sequelize": "^6.37.3",
     "sqlite3": "^5.1.7",
     "systeminformation": "^5.23.5",
-    "yaml": "^2.5.0"
+    "yaml": "^2.5.1"
   }
 }

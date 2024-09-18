@@ -50,10 +50,30 @@ export const submitRegister = async function(req,res){
 
     else if (await User.findOne({ where: { [Op.or]: [{ username: username }, { email: email }] }})) { 
         error = "Username or email already exists"; 
-        await Syslog.create({ username: user.username, uniqueID: email, event: "Failed Registration", message: "Username or email already exists", ip: req.socket.remoteAddress });
+        await Syslog.create({ username: username, uniqueID: email, event: "Failed Registration", message: "Username or email already exists", ip: req.socket.remoteAddress });
     }
 
-    if (error) { res.render("register", { "error": error }); return; }
+    if (error != '') { 
+        
+        let secret_input = '';
+        let user_registration = await ServerSettings.findOne({ where: { key: 'user_registration' }});
+        if (user_registration == null ) { user_registration = false; }
+        else { user_registration = user_registration.value; }
+        
+        if (user_registration) {
+            secret_input = `<div class="mb-3"><label class="form-label">Secret</label>
+                                    <div class="input-group input-group-flat">
+                                        <input type="text" class="form-control" autocomplete="off" name="registration_secret">
+                                    </div>
+                                </div>`}    
+
+        res.render("register", { 
+            "error": error,
+            "reg_secret": secret_input,
+        }); 
+        return; 
+    }
+
 
     // Returns 'admin' if no users have been created.
     async function Role() {

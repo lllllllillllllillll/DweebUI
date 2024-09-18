@@ -15,20 +15,20 @@
 ## Features
 
 * [x] A dynamically updating dashboard that displays server metrics along with container metrics and container controls.
-* [x] Multi-user support with permissions system.
-* [ ] Multiple hosts (in development).
 * [x] Container actions: Start, Stop, Pause, Restart, View Details, View Logs.
+* [x] Multi-user support with permissions system.
+* [x] Support for multiple hosts.
+* [x] View and manage images, volumes, and networks.
 * [x] Windows, Linux, and MacOS compatable.
 * [x] Light/Dark Mode.
 * [x] Mobile Friendly.
-* [x] Manage your Docker networks, images, and volumes.
-* [x] Easy to install app templates.
-* [x] Docker Compose Support.
+* [x] Easy to install app templates (Compatible with Portainer).
+* [x] Docker Compose.
 * [ ] Available updates without image pull (in development).
 * [ ] Update containers (planned).
-* [x] Templates.json maintains compatability with Portainer, allowing you to use the template without needing to use DweebUI.
 * [ ] Preset variables (planned).
 * [ ] Themes (planned).
+* [*] International language support (Languages still being updated).
 
 ## About
 
@@ -39,7 +39,13 @@
 
 ## Setup
 
-Docker Compose: 
+
+### Docker Run:
+```
+docker run -d --name=DweebUI -p 8000:8000 -v dweebui:/app/database -v /var/run/docker.sock:/var/run/docker.sock lllllllillllllillll/dweebui:v0.7X-dev
+```
+
+### Docker Compose: 
 ```
 version: "3.9"
 services:

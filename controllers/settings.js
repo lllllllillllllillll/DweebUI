@@ -1,6 +1,6 @@
 import { ServerSettings } from '../database/config.js';
 import { Alert, getLanguage, Navbar, Sidebar, Footer } from '../utils/system.js';
-import { read, readdirSync, readFileSync } from 'fs';
+import { read, readdirSync, readFileSync, writeFileSync } from 'fs';
 
 export const Settings = async function(req,res){
 
@@ -216,15 +216,16 @@ export const updateLanguages = async function(req,res){
             
             if (language_dev != language_local) {
                 console.log(`\x1b[31mLanguage: ${languages[i].language} is out of date.\x1b[0m`);
+                console.log(`\x1b[31mUpdating ${languages[i].language}...\x1b[0m`);
+                writeFileSync(`./languages/${languages[i].language}`, language_dev);
+                console.log(`\x1b[32mLanguage: ${languages[i].language} has been updated.\x1b[0m`);
             } else {
                 console.log(`\x1b[32mLanguage: ${languages[i].language} is up to date.\x1b[0m`);
             }
         }
 
-        setTimeout(() => {
-            inProgress = false;
-            console.log('Languages Updated');
-        }, 2000);
+        inProgress = false;
+        console.log('Language update complete');
 
         return;
     } else {
