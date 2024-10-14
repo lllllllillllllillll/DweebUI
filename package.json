@@ -18,7 +18,7 @@
     "dockerode-compose": "^1.4.0",
     "ejs": "^3.1.10",
     "express": "^4.19.2",
-    "express-session": "^1.18.0",
+    "express-session": "^1.18.1",
     "memorystore": "^1.6.7",
     "multer": "^1.4.5-lts.1",
     "sequelize": "^6.37.3",
