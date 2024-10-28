@@ -1,12 +1,13 @@
 import express from 'express';
 import ejs from 'ejs';
 import { router } from './router.js';
-import { sessionMiddleware } from './database/config.js';
+import { sessionMiddleware } from './db/config.js';
 
 const app = express();
 const PORT = process.env.PORT || 8000;
 
 app.set('view engine', 'html');
+app.set('trust proxy', true);
 app.engine('html', ejs.renderFile);
 app.use([
     express.static('public'),

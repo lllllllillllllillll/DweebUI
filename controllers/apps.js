@@ -1,4 +1,4 @@
-import { Alert, getLanguage, Navbar, Footer } from '../utils/system.js';
+import { Alert, getLanguage, Navbar, Footer, Capitalize } from '../utils/system.js';
 import { readFileSync, readdirSync, renameSync, mkdirSync, unlinkSync, existsSync } from 'fs';
 import { parse } from 'yaml';
 import multer from 'multer';
@@ -26,6 +26,8 @@ export const searchApps = async function (req, res) {
 
 export const Apps = async function(req,res){
 
+  req.session.host = `${req.params.host || 1}`;
+  
   let [apps_list, app_count] = ['', ''];
   let page = Number(req.params.page) || 1;
   let template = req.params.template || 'default';
@@ -154,14 +156,68 @@ export const Apps = async function(req,res){
 
 export const submitApps = async function (req, res) {
 
-    let app_name = req.header('hx-trigger-name');
-    let app_type = req.header('hx-trigger');
-    let action = req.params.action;
+    
+}
 
-    // console.log(`[submitApps] app_name: ${app_name} app_type: ${app_type} action: ${action}`);
+
+
+
+function CatagoryColor(category) {
+  switch (category) {
+    case 'Other':
+      return '<span class="badge bg-blue-lt">Other</span> ';
+    case 'Productivity':
+      return '<span class="badge bg-blue-lt">Productivity</span> ';
+    case 'Tools':
+      return '<span class="badge bg-blue-lt">Tools</span> ';
+    case 'Dashboard':
+      return '<span class="badge bg-blue-lt">Dashboard</span> ';
+    case 'Communication':
+      return '<span class="badge bg-azure-lt">Communication</span> ';
+    case 'Media':
+      return '<span class="badge bg-azure-lt">Media</span> ';
+    case 'CMS':
+      return '<span class="badge bg-azure-lt">CMS</span> ';
+    case 'Monitoring':
+      return '<span class="badge bg-indigo-lt">Monitoring</span> ';
+    case 'LDAP':
+      return '<span class="badge bg-purple-lt">LDAP</span> ';
+    case 'Arr':
+      return '<span class="badge bg-purple-lt">Arr</span> ';
+    case 'Database':
+      return '<span class="badge bg-red-lt">Database</span> ';
+    case 'Paid':
+      return '<span class="badge bg-red-lt" title="This is a paid product or contains paid features.">Paid</span> ';
+    case 'Gaming':
+      return '<span class="badge bg-pink-lt">Gaming</span> ';
+    case 'Finance':
+      return '<span class="badge bg-orange-lt">Finance</span> ';
+    case 'Networking':
+      return '<span class="badge bg-yellow-lt">Networking</span> ';
+    case 'Authentication':
+      return '<span class="badge bg-lime-lt">Authentication</span> ';
+    case 'Development':
+      return '<span class="badge bg-green-lt">Development</span> ';
+    case 'Media Server':
+      return '<span class="badge bg-teal-lt">Media Server</span> ';
+    case 'Downloaders':
+      return '<span class="badge bg-cyan-lt">Downloaders</span> ';
+    default:
+      return ''; // default to other if the category is not recognized
+  }
+}
+
+
+
+export const appsModals = async function (req, res) {
+  let app_name = req.header('hx-trigger-name');
+    let app_type = req.header('hx-trigger');
+    let modal = req.params.modal;
+
+    // console.log(`[submitApps] app_name: ${app_name} app_type: ${app_type} modal: ${modal}`);
 
     // Modal for compose files
-    if (action == 'view_install' && app_type == 'compose') {
+    if (modal == 'view_install' && app_type == 'compose') {
       let compose = readFileSync(`appdata/compose/${app_name}/compose.yaml`, 'utf8');
       let modal = readFileSync('views/partials/compose.html', 'utf8');
       modal = modal.replace(/AppName/g, app_name);
@@ -170,8 +226,28 @@ export const submitApps = async function (req, res) {
       return;
     } 
 
+    // More Info modal
+    if (modal == 'info' && app_type == 'json') {
+
+      let modal = readFileSync('views/partials/info.html', 'utf8');
+
+      let app_title = Capitalize(app_name);
+      modal = modal.replace(/AppTitle/g, app_title);
+
+      let result = templates_global.find(t => t.name == app_name);
+  
+      modal = modal.replace(/AppDescription/g, result.description);
+
+      res.send(modal);
+      return;
+    } 
+
+
+
     // Modal for json templates
-    if (action == 'view_install' && app_type == 'json') {
+    if (modal == 'view_install' && app_type == 'json') {
+
+
       let result = templates_global.find(t => t.name == app_name);
       let name = result.name || result.title.toLowerCase();
       let short_name = name.slice(0, 25) + "...";
@@ -317,7 +393,7 @@ export const submitApps = async function (req, res) {
   
       }
       
-      let modal = readFileSync('views/partials/details.html', 'utf8');
+      let modal = readFileSync('views/partials/install.html', 'utf8');
       modal = modal.replace(/AppName/g, name);
       modal = modal.replace(/AppNote/g, note);
       modal = modal.replace(/AppImage/g, image);
@@ -357,53 +433,5 @@ export const submitApps = async function (req, res) {
       }
 
     res.send(modal);
-  }
-}
-
-
-
-
-function CatagoryColor(category) {
-  switch (category) {
-    case 'Other':
-      return '<span class="badge bg-blue-lt">Other</span> ';
-    case 'Productivity':
-      return '<span class="badge bg-blue-lt">Productivity</span> ';
-    case 'Tools':
-      return '<span class="badge bg-blue-lt">Tools</span> ';
-    case 'Dashboard':
-      return '<span class="badge bg-blue-lt">Dashboard</span> ';
-    case 'Communication':
-      return '<span class="badge bg-azure-lt">Communication</span> ';
-    case 'Media':
-      return '<span class="badge bg-azure-lt">Media</span> ';
-    case 'CMS':
-      return '<span class="badge bg-azure-lt">CMS</span> ';
-    case 'Monitoring':
-      return '<span class="badge bg-indigo-lt">Monitoring</span> ';
-    case 'LDAP':
-      return '<span class="badge bg-purple-lt">LDAP</span> ';
-    case 'Arr':
-      return '<span class="badge bg-purple-lt">Arr</span> ';
-    case 'Database':
-      return '<span class="badge bg-red-lt">Database</span> ';
-    case 'Paid':
-      return '<span class="badge bg-red-lt" title="This is a paid product or contains paid features.">Paid</span> ';
-    case 'Gaming':
-      return '<span class="badge bg-pink-lt">Gaming</span> ';
-    case 'Finance':
-      return '<span class="badge bg-orange-lt">Finance</span> ';
-    case 'Networking':
-      return '<span class="badge bg-yellow-lt">Networking</span> ';
-    case 'Authentication':
-      return '<span class="badge bg-lime-lt">Authentication</span> ';
-    case 'Development':
-      return '<span class="badge bg-green-lt">Development</span> ';
-    case 'Media Server':
-      return '<span class="badge bg-teal-lt">Media Server</span> ';
-    case 'Downloaders':
-      return '<span class="badge bg-cyan-lt">Downloaders</span> ';
-    default:
-      return ''; // default to other if the category is not recognized
   }
 }

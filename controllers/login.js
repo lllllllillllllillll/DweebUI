@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { User, Syslog, ServerSettings } from '../database/config.js';
+import { User, Syslog, ServerSettings } from '../db/config.js';
 
 
 export const Login = async function (req, res) {
@@ -16,14 +16,14 @@ export const Login = async function (req, res) {
         req.session.username = 'Localhost';
         req.session.userID = '00000000-0000-0000-0000-000000000000';
         req.session.role = 'admin';
-        await Syslog.create({ username: 'Localhost', uniqueID: 'localhost', event: "Login", message: "User logged in", ip: req.socket.remoteAddress });
+        await Syslog.create({ username: 'Localhost', uniqueID: 'localhost', event: "Login", message: "User logged in", ip: req.ip });
         res.redirect("/dashboard");
         return;
     } else if (authentication.value == 'no_auth') {
         req.session.username = 'No Auth';
         req.session.userID = '00000000-0000-0000-0000-000000000000';
         req.session.role = 'admin';
-        await Syslog.create({ username: 'No Auth', uniqueID: 'no_auth', event: "Login", message: "User logged in", ip: req.socket.remoteAddress });
+        await Syslog.create({ username: 'No Auth', uniqueID: 'no_auth', event: "Login", message: "User logged in", ip: req.ip });
         res.redirect("/dashboard");
         return;
     }
@@ -45,7 +45,7 @@ export const submitLogin = async function (req, res) {
 
     // If there is no users with that email or the password is incorrect.
     if (!user || !await bcrypt.compare(password, user.password)) { 
-        await Syslog.create({ username: '', uniqueID: email, event: "Login Attempt", message: "User login failed", ip: req.socket.remoteAddress });
+        await Syslog.create({ username: '', uniqueID: email, event: "Login Attempt", message: "User login failed", ip: req.ip });
         res.render("login",{ "error": "Invalid credentials." });
         return;
     }
@@ -59,7 +59,7 @@ export const submitLogin = async function (req, res) {
 
         console.log(`${req.session.username} logged in`);
 
-        await Syslog.create({ username: user.username, uniqueID: email, event: "Login", message: "User logged in", ip: req.socket.remoteAddress });
+        await Syslog.create({ username: user.username, uniqueID: email, event: "Login", message: "User logged in", ip: req.ip });
         res.redirect("/dashboard");
         return;
     }
@@ -68,7 +68,7 @@ export const submitLogin = async function (req, res) {
 
 export const Logout = async function(req,res){
     console.log(`User ${req.session.username} logged out \n`);
-    await Syslog.create({ username: req.session.username, uniqueID: req.session.userID, event: "Logout", message: "User logged out", ip: req.socket.remoteAddress });
+    await Syslog.create({ username: req.session.username, uniqueID: req.session.userID, event: "Logout", message: "User logged out", ip: req.ip });
     req.session.destroy(() => {
         res.redirect("/login");
     });

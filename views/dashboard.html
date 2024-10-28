@@ -123,7 +123,9 @@
 					
 							<!-- HTMX -->
 							<div class="col-12">
-								<div class="row row-cards" hx-get="/card_list" data-hx-trigger="load, sse:update" data-hx-swap="afterbegin" hx-target="#containers"></div>
+
+								<div class="row row-cards" name="card_list" hx-get="/dashboard/view/card_list" data-hx-trigger="load, sse:update" data-hx-swap="afterbegin" hx-target="#containers"></div>
+								 
 							</div>
 
 						</div>
@@ -145,6 +147,7 @@
 				</div>
 			</div>
 		</div>
+
 		
 		<div class="modal medium-modal modal-blur fade" id="medium_modal" tabindex="-1" style="display: none;" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
@@ -163,9 +166,17 @@
 		</div>
 
 
-		<script src="/libs/apexcharts/dist/apexcharts.min.js?1692870487" defer></script>
 
-		<script src="/js/dweebui.js" defer></script>
+		<script defer>
+			var modalScrollable = document.getElementById('wide_modal');
+			modalScrollable.addEventListener('shown.bs.modal', function () {
+			  modalScrollable.querySelector('.modal-body').scrollTop = modalScrollable.querySelector('.modal-body').scrollHeight;
+			});
+		</script>
+
+		<script src="/libs/apexcharts/dist/apexcharts.min.js?1692870487"></script>
+
+		<script src="/js/dweebui.js"></script>
 		<script src="/js/htmx.min.js"></script>
 		<script src="/js/htmx-sse.js"></script>
 

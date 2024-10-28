@@ -1,14 +1,14 @@
 
         <div class="modal-content" id="modal_content">
 
-            <form hx-post="/container/update_link/ContainerID" hx-swap="none">
+            <form action="/container/update_link/ContainerID" method="post">
 
                 <input type="hidden" name="service_id" value="ContainerID">
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
                 <div class="modal-body text-center py-3">
                     <h3 class="mb-3">AppName Link</h3>
-                    <div class="text-muted mb-2">Enter URL</div>
+                    <div class="text-muted mb-2">URL needs to start with http:// or https://</div>
                     <input type="text" class="form-control mb-2" name="url" value="AppLink">
                 </div>
 
@@ -21,7 +21,7 @@
                                 </a>
                             </div>
                             <div class="col">
-                                <button class="btn btn-primary w-100" type="submit">Update&nbsp;&nbsp;</button>
+                                <input type="submit" value="Update" class="btn btn-primary w-100">
                             </div>
                         </div>
                     </div>

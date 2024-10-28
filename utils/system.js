@@ -1,4 +1,4 @@
-import { User, ServerSettings } from '../database/config.js';
+import { User, ServerSettings } from '../db/config.js';
 import { readFileSync } from 'fs';
 
 
@@ -6,15 +6,16 @@ import { readFileSync } from 'fs';
 // Navbar
 export async function Navbar (req) {
 
+    let userID = req.session.userID;
     let username = req.session.username;
+    let role = req.session.role;
+    let host = req.session.host;
 
-    let host = '' + req.session.host;
-
-    let language = await getLanguage(req);
+    let language = await getLanguage(userID);
 
     // Check if the user wants to hide their profile name.
-    if (req.session.userID != '00000000-0000-0000-0000-000000000000') { 
-        let user = await User.findOne({ where: { userID: req.session.userID }});
+    if (userID != '00000000-0000-0000-0000-000000000000') { 
+        let user = await User.findOne({ where: { userID: userID }});
         let preferences = JSON.parse(user.preferences);
         if (preferences.hide_profile == true) { username = 'Anon'; }
     }
@@ -32,30 +33,33 @@ export async function Navbar (req) {
     const [host3, created3] = await ServerSettings.findOrCreate({ where: { key: 'host3' }, defaults: { key: 'host3', value: '' }});
     const [host4, created4] = await ServerSettings.findOrCreate({ where: { key: 'host4' }, defaults: { key: 'host4', value: '' }});
 
-
     if (host2.value) { host2_toggle = 'checked'; [host2_tag, host2_ip, host2_port] = host2.value.split(','); }
     if (host3.value) { host3_toggle = 'checked'; [host3_tag, host3_ip, host3_port] = host3.value.split(','); }
     if (host4.value) { host4_toggle = 'checked'; [host4_tag, host4_ip, host4_port] = host4.value.split(','); }
     
-    let host_buttons = '';
+    let host_buttons = '<form action="/dashboard/action/switch_host/hostid" method="post">';
+    let nav_link = '';
 
-    if (host == '0') { host0_active = 'text-yellow'; }
+    if (host == '0') { host0_active = 'text-yellow'; nav_link = '/0'; }
     if (host == '1') { host1_active = 'text-yellow'; }
-    if (host == '2') { host2_active = 'text-yellow'; }
-    if (host == '3') { host3_active = 'text-yellow'; }
-    if (host == '4') { host4_active = 'text-yellow'; }
+    if (host == '2') { host2_active = 'text-yellow'; nav_link = '/2'; }
+    if (host == '3') { host3_active = 'text-yellow'; nav_link = '/3'; }
+    if (host == '4') { host4_active = 'text-yellow'; nav_link = '/4'; }
 
-    if (host2_toggle || host3_toggle || host4_toggle) { host_buttons += `<a href="/0/dashboard" class="btn ${host0_active}" title="All">All</a>  <a href="/1/dashboard" class="btn ${host1_active}" title="Host 1">Host 1</a>`; }
-    if (host2_toggle) { host_buttons += `<a href="/2/dashboard" class="btn ${host2_active}" title="${host2_tag}">${host2_tag}</a>`; }
-    if (host3_toggle) { host_buttons += `<a href="/3/dashboard" class="btn ${host3_active}" title="${host3_tag}">${host3_tag}</a>`; }
-    if (host4_toggle) { host_buttons += `<a href="/4/dashboard" class="btn ${host4_active}" title="${host4_tag}">${host4_tag}</a>`; }
+    if (host2_toggle || host3_toggle || host4_toggle) { host_buttons += `<button type="submit" name="host" value="0" class="btn ${host0_active}" title="All">All</button>  <button type="submit" name="host" value="1" hx-swap="none" class="btn ${host1_active}" title="Host 1">Host 1</button>`; }
+    if (host2_toggle) { host_buttons += `<button type="submit" name="host" value="2" class="btn ${host2_active}" title="${host2_tag}">${host2_tag}</button>`; }
+    if (host3_toggle) { host_buttons += `<button type="submit" name="host" value="3" hx-swap="none" class="btn ${host3_active}" title="${host3_tag}">${host3_tag}</button>`; }
+    if (host4_toggle) { host_buttons += `<button type="submit" name="host" value="4" hx-swap="none" class="btn ${host4_active}" title="${host4_tag}">${host4_tag}</button>`; }
+
+    host_buttons += '</form>';
 
     let navbar = readFileSync('./views/partials/navbar.html', 'utf8');
 
     if (language == 'english') {
         navbar = navbar.replace(/Username/g, username);
-        navbar = navbar.replace(/Userrole/g, req.session.role);
+        navbar = navbar.replace(/Userrole/g, role);
         navbar = navbar.replace(/HostButtons/g, host_buttons);
+        navbar = navbar.replace(/HOSTID/g, nav_link);
         return navbar;
     } else {
         let lang = readFileSync(`./languages/${language}.json`, 'utf8');
@@ -68,6 +72,7 @@ export async function Navbar (req) {
         navbar = navbar.replace(/Apps/g, lang.Apps);
         navbar = navbar.replace(/Users/g, lang.Users);
         navbar = navbar.replace(/Syslogs/g, lang.Syslogs);
+        navbar = navbar.replace(/HOSTID/g, nav_link);
 
         navbar = navbar.replace(/Search/g, lang.Search);
         navbar = navbar.replace(/Account/g, lang.Account);
@@ -76,9 +81,8 @@ export async function Navbar (req) {
         navbar = navbar.replace(/Settings/g, lang.Settings);
         navbar = navbar.replace(/Logout/g, lang.Logout);
 
-
         navbar = navbar.replace(/Username/g, username);
-        navbar = navbar.replace(/Userrole/g, req.session.role);
+        navbar = navbar.replace(/Userrole/g, role);
         navbar = navbar.replace(/HostButtons/g, host_buttons);
         return navbar;
     }
@@ -88,7 +92,7 @@ export async function Navbar (req) {
 // Sidebar
 export async function Sidebar (req) {
 
-    let language = await getLanguage(req);
+    let language = await getLanguage(req.session.userID);
 
     let sidebar = readFileSync('./views/partials/sidebar.html', 'utf8');
 
@@ -112,7 +116,7 @@ export async function Sidebar (req) {
 // Footer
 export async function Footer (req) {
 
-    let language = await getLanguage(req);
+    let language = await getLanguage(req.session.userID);
 
     let footer = readFileSync('./views/partials/footer.html', 'utf8');
 
@@ -152,17 +156,15 @@ export function Alert (type, message) {
 }
 
 
-export async function getLanguage (req) {
+export async function getLanguage (userID) {
 
-    // No userID if authentication is disabled.
-    if (req.session.userID == '00000000-0000-0000-0000-000000000000') { 
+    // Use the admin's language if authentication is disabled.
+    if (userID == '00000000-0000-0000-0000-000000000000') { 
         let user = await User.findOne({ where: { role: 'admin' }});
-        let preferences = JSON.parse(user.preferences);
-        return preferences.language;
+        return user.language;
     } else {
-        let user = await User.findOne({ where: { userID: req.session.userID }});
-        let preferences = JSON.parse(user.preferences);
-        return preferences.language;
+        let user = await User.findOne({ where: { userID: userID }});
+        return user.language;
     }
 }
 

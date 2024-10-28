@@ -1,5 +1,5 @@
 import { docker } from "../utils/docker.js";
-import { Syslog } from "../database/config.js";
+import { Syslog } from "../db/config.js";
 
 
 export const Uninstall = async (req, res) => {

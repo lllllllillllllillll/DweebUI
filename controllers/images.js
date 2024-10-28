@@ -3,9 +3,11 @@ import { imageList, GetContainerLists } from '../utils/docker.js';
 
 export const Images = async function(req,res){
 
+    req.session.host = `${req.params.host || 1}`;
+
     let container_images = [];
     let image_list = '';
-    
+
     let containers = await GetContainerLists();
     for (let i = 0; i < containers.length; i++) {
         container_images.push(containers[i].Image);
@@ -20,6 +22,9 @@ export const Images = async function(req,res){
         let tag = ''; 
         try { name = images[i].RepoTags[0].split(':')[0]; } catch {}
         try { tag = images[i].RepoTags[0].split(':')[1]; } catch {}
+
+        // let image_id = images[i].Id.split(':')[1].substring(0, 12);
+        let image_id = images[i].Id.split(':')[1];
 
         let date = new Date(images[i].Created * 1000);
         let created = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
@@ -39,11 +44,11 @@ export const Images = async function(req,res){
                 <td><input class="form-check-input m-0 align-middle" name="select" value="${images[i].Id}" type="checkbox" aria-label="Select"></td>
                 <td class="sort-name">${name}</td>
                 <td class="sort-type">${tag}</td>
-                <td class="sort-city">${images[i].Id}</td>
+                <td class="sort-city">${image_id}</td>
                 <td class="sort-score text-green">${status}</td>
-                <td class="sort-date" data-date="1628122643">${created}</td>
                 <td class="sort-quantity">${size} MB</td>
-                <td class="text-end"><a class="btn" href="#"><svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-player-play" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M7 4v16l13 -8z"></path></svg></a></td>
+                <td class="sort-date" data-date="1628122643">${created}</td>
+                <td class=""><a class="container-action" href="#"><svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-player-play" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M7 4v16l13 -8z"></path></svg></a></td>
             </tr>`
         image_list += details;
     }

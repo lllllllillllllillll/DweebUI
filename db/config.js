@@ -2,6 +2,7 @@ import session from 'express-session';
 import SessionSequelize from 'connect-session-sequelize';
 import { Sequelize, DataTypes} from 'sequelize';
 import { readFileSync } from 'fs';
+import { check_configured_hosts } from '../utils/docker.js';
 
 const SECURE = process.env.HTTPS || false;
 
@@ -9,7 +10,7 @@ const SECURE = process.env.HTTPS || false;
 const SequelizeStore = SessionSequelize(session.Store);
 const sessionData = new Sequelize('database', 'username', 'password', {
     dialect: 'sqlite',
-    storage: 'database/sessions.sqlite',
+    storage: 'data/sessions.sqlite',
     logging: false,
 });
 const SessionStore = new SequelizeStore({ db: sessionData });
@@ -29,7 +30,7 @@ export const sessionMiddleware = session({
 // Server settings
 const settings = new Sequelize('database', 'username', 'password', {
     dialect: 'sqlite',
-    storage: 'database/settings.sqlite',
+    storage: 'data/settings.sqlite',
     logging: false,
 });
 const SettingsDB = new SequelizeStore({ db: settings });
@@ -43,7 +44,6 @@ console.log(`\x1b[33mAuthor: ${package_info.author}\x1b[0m`);
 console.log(`\x1b[33mLicense: ${package_info.license}\x1b[0m`);
 console.log(`\x1b[33mDescription: ${package_info.description}\x1b[0m`);
 console.log('');
-
 // console.log in red
 console.log('\x1b[31m * Only Docker volumes are supported. No bind mounts.\n \x1b[0m');
 console.log('\x1b[31m * Breaking changes may require you to remove the DweebUI volume and start fresh. \n \x1b[0m');
@@ -53,7 +53,9 @@ try {
     await sessionData.authenticate();
     await settings.authenticate();
     sessionData.sync();
-    settings.sync();
+    settings.sync().then(() => {
+      check_configured_hosts();
+    });
     console.log(`\x1b[32mDatabase connection established.\x1b[0m`);
 } catch (error) {
     console.error('\x1b[31mDatabase connection failed:', error, '\x1b[0m');
@@ -85,6 +87,9 @@ export const User = settings.define('User', {
       type: DataTypes.STRING,
       allowNull: false
     },
+    status: {
+      type: DataTypes.STRING
+    },
     role: {
       type: DataTypes.STRING
     },
@@ -96,6 +101,10 @@ export const User = settings.define('User', {
     },
     lastLogin: {
       type: DataTypes.STRING
+    },
+    language: {
+      type: DataTypes.STRING,
+      defaultValue: 'english'
     },
     preferences : {
       type: DataTypes.STRING

@@ -1,0 +1,84 @@
+
+    <form action="/users/action/change/USERID" method="post">
+
+        <div class="modal-header">
+            <h5 class="modal-title px-2">Username</h5>
+            <div class="me-auto badge badge-outline text-green">Active</div>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        
+        <div class="modal-body py-2">
+
+            <div class="row mb-3 align-items-end">
+              <div class="col-auto">
+                <!-- <a href="#" class="avatar avatar-upload rounded">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 5l0 14"></path><path d="M5 12l14 0"></path></svg>
+                  <span class="avatar-upload-text">Add</span>
+                </a> -->
+                <span class="avatar avatar-upload rounded bg-green-lt">J</span>
+              </div>
+              <div class="col">
+                <label class="form-label">Full Name</label>
+                <input type="text" class="form-control" name="name" value="FullName">
+              </div>
+            </div>
+
+            <div class="col-12 mb-3">
+                <label class="mb-1">Email: </label>
+                <input type="text" class="form-control" name="email" value="EmailAddress"/>
+            </div>
+
+            <div class="col-12 mb-3">
+                <label class="mb-1">UserID: </label>
+                <input type="text" class="form-control text-secondary" name="userID" value="USERID" readonly/>
+            </div>        
+            
+            <div class="row mb-3">
+                <div class="col-lg-6">
+                    <label class="mb-1">Last Login: </label>
+                    <input type="text" class="form-control" name="last_login" value="LastLogin"/>
+                </div> 
+
+                <div class="col-lg-6">
+                    <label class="mb-1">Created: </label>
+                    <input type="text" class="form-control" name="created" value="CreatedAt"/>
+                </div> 
+            </div>
+
+
+            <div class="col mb-2">
+                <a href="#" class="btn w-100" data-bs-dismiss="modal">
+                    Reset Permissions
+                </a>
+            </div>
+
+        </div>
+
+
+        <div class="modal-footer">
+            <div class="w-100">
+                <div class="row">
+
+                    <div class="col">
+                        <a href="#" class="btn w-100" data-bs-dismiss="modal">
+                            Close
+                        </a>
+                    </div>
+
+                    <div class="col">
+                        <button type="submit" name="change" value="remove" class="btn btn-danger w-100" hx-confirm="Are you sure you want to remove this account?">Remove</button>
+                    </div>
+
+                    <div class="col">
+                        <button type="submit" name="change" value="disable" class="btn btn-secondary w-100" hx-confirm="Are you sure you want to disable this account?">Disable</button>
+                    </div>
+
+                    <div class="col">
+                        <button type="submit" name="change" value="update" class="btn btn-primary w-100" hx-confirm="Update account?">Update</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </form>

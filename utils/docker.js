@@ -1,55 +1,102 @@
 import Docker from 'dockerode';
 import { dockerContainerStats } from 'systeminformation';
-import { Container, ServerSettings } from '../database/config.js'
+import { Container, ServerSettings } from '../db/config.js'
+import stream from 'stream';
 
-// export var docker1 = new Docker();
-export var docker = new Docker();
+export var docker;
 var docker2;
 var docker3;
 var docker4;
 
-export async function GetContainerLists(hostid) {
+if (process.env.DOCKER_HOST && process.env.DOCKER_PORT) {
+    console.log('Connecting to Docker with environment variables.');
+    docker = new Docker({ host: process.env.DOCKER_HOST, port: process.env.DOCKER_PORT });
+    console.log('Docker host connected.');
+} else {
+    console.log('Connecting to default Docker host.');
+    docker = new Docker();
+    console.log('Docker host connected.');
+}
 
-    // key: host, value: `${tag3},${ip3},${port3}`
+export async function GetContainerLists(hostid) {
 
     let host = hostid || 1;
 
-    if (host == 1 || host == 0) {
-        let containers = await docker.listContainers({ all: true });
-        return containers;
+    let containers; 
+
+    if (host == 0) {
+        containers = await docker.listContainers({ all: true });
     }
 
-    if (host == 2 && !docker2) { 
-        let settings = await ServerSettings.findOne({ where: { key: 'host2' } });
-        let ip = settings.value.split(',')[1];
-        let port = settings.value.split(',')[2];
+    if ((host == 0) && docker2) {
+        let containers2 = await docker2.listContainers({ all: true });
+        containers = containers.concat(containers2);
+    }
+
+    if ((host == 0) && docker3) {
+        let containers3 = await docker3.listContainers({ all: true });
+        containers = containers.concat(containers3);
+    }
+
+    if ((host == 0) && docker4) {
+        let containers4 = await docker4.listContainers({ all: true });
+        containers = containers.concat(containers4);
+    }
+
+    if (host == 1) {
+        containers = await docker.listContainers({ all: true });
+    }
+    
+    if (host == 2 && docker2) {
+        containers = await docker2.listContainers({ all: true });
+    }
+
+    if (host == 3 && docker3) {
+        containers = await docker3.listContainers({ all: true });
+    }
+
+    if (host == 4 && docker4) {
+        containers = await docker4.listContainers({ all: true });
+    }
+
+    return containers;
+}
+
+
+
+export async function configureHost(hostid, ip, port) {
+
+    if (hostid == 2) {
         docker2 = new Docker({ host: ip, port: port });
-    } else if (host == 2 && docker2) { 
-        let containers = await docker2.listContainers({ all: true });
-        return containers;
-    }
-
-    if (host == 3 && !docker3) {
-        let settings = await ServerSettings.findOne({ where: { key: 'host3' } });
-        let ip = settings.value.split(',')[1];
-        let port = settings.value.split(',')[2];
+        try {
+            let containers = await docker2.listContainers({ all: true });
+            console.log(`Host 2 connected. ${containers.length} containers found.`);
+        }
+        catch {
+            console.log('Host 2 connection failed.');
+            docker2;
+        }
+    } else if (hostid == 3) {
         docker3 = new Docker({ host: ip, port: port });
-    } else if (host == 3 && docker3) {
-        let containers = await docker3.listContainers({ all: true });
-        return containers;
-    }
-
-    if (host == 4 && !docker4) {
-        let settings = await ServerSettings.findOne({ where: { key: 'host4' } });
-        let ip = settings.value.split(',')[1];
-        let port = settings.value.split(',')[2];
+        try {
+            let containers = await docker3.listContainers({ all: true });
+            console.log(`Host 3 connected. ${containers.length} containers found.`);
+        }
+        catch {
+            console.log('Host 3 connection failed.');
+            docker3;
+        }
+    } else if (hostid == 4) {
         docker4 = new Docker({ host: ip, port: port });
-    } else if (host == 4 && docker4) {
-        let containers = await docker4.listContainers({ all: true });
-        return containers;
+        try {
+            let containers = await docker4.listContainers({ all: true });
+            console.log(`Host 4 connected. ${containers.length} containers found.`);
+        }
+        catch {
+            console.log('Host 4 connection failed.');
+            docker4;
+        }
     }
-
-
 }
 
 export async function imageList() {
@@ -118,43 +165,31 @@ export async function containerInfo (containerID) {
     return container_info;
 }
 
+
 export async function containerLogs(containerID) {
-
     let container = docker.getContainer(containerID);
-
-    // Fetch logs from the container
-    const logs = await container.logs({
-        stdout: true,
-        stderr: true,
-        tail: 'all', // or specify a number for the number of lines
-    });
-    
+    const logs = await container.logs({ stdout: true, stderr: true, tail: 'all', });
     const logsString = logs.toString('utf8');
-
     return logsString;
 }
 
 
+let available_versions = '';
 async function version_check () {
-	// Fetch the data.
 	const resp = await fetch('https://registry.hub.docker.com/v2/namespaces/lllllllillllllillll/repositories/dweebui/tags/?page_size=10000');
-    // Parse the JSON.
     let hub = await resp.json();
-    console.log('Checking available versions...');
-    // Loop through the results.
     for (let i = 0; i < hub.results.length; i++) {
-        // Skip version tag if it includes a dash.
-        if (hub.results[i].name.includes('-')) { continue; }
-        console.log(hub.results[i].name);
+        available_versions += '| ' + hub.results[i].name + ' ';
     }
+    console.log('Available versions:');
+    console.log(available_versions);
 }
 version_check();
 
 
+// Creates then destroys a docker volume to trigger a docker event.
 export async function trigger_docker_event () {
-    // Create then destroy a docker volume.
-    let volume = await docker.createVolume({ Name: 'test_volume' });
-    console.log('Manually triggered docker event.');
+    let volume = await docker.createVolume({ Name: 'dweebui_test_volume' });
     setTimeout(async() => {
         await volume.remove();
     }, 200);
@@ -162,17 +197,16 @@ export async function trigger_docker_event () {
 
 
 export async function containerStats (containerID) {
-
     const stats = await dockerContainerStats(containerID);
-
     let info = {
         containerID: containerID,
         cpu: Math.round(stats[0].cpuPercent),
         ram: Math.round(stats[0].memPercent)
     }
-
     return info;
 }
+
+
 
 export async function removeNetwork(networkID) {
     let network = docker.getNetwork(networkID);
@@ -182,35 +216,26 @@ export async function removeNetwork(networkID) {
 
 
 
+export async function check_configured_hosts () {
 
-// Loop that runs every 5 seconds to update the container stats.
-export async function containerStatsLoop () {
+    let [host2, created] = await ServerSettings.findOrCreate({ where: {key: 'host2'}, defaults: { key: 'host2', value: '' } });
+    if (host2.value != '') {
+        let [tag2, ip2, port2] = host2.value.split(',');
+        configureHost(2, ip2, port2);
+        console.log('Host 2 configured.');
+    }
 
-    let containers = await GetContainerLists(1);
+    let [host3, created3] = await ServerSettings.findOrCreate({ where: {key: 'host3'}, defaults: { key: 'host3', value: '' } });
+    if (host3.value != '') {
+        let [tag3, ip3, port3] = host3.value.split(',');
+        configureHost(3, ip3, port3);
+        console.log('Host 3 configured.');
+    }
 
-    for (let i = 0; i < containers.length; i++) {
-        let containerID = containers[i].Id;
-        let stats = await containerStats(containerID);
-
-        let container = await Container.findOne({ where: { containerID: containerID } });
-        if (!container) {
-            container = await Container.create({
-                containerName: containers[i].Names[0].slice(1),
-                containerID: containerID,
-                cpu: JSON.stringify([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
-                ram: JSON.stringify([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-            });
-        }
-        else {
-            let cpu = JSON.parse(container.cpu);
-            cpu.shift();
-            cpu.push(stats.cpu);
-            let ram = JSON.parse(container.ram);
-            ram.shift();
-            ram.push(stats.ram);
-            container.update({ cpu: JSON.stringify(cpu), ram: JSON.stringify(ram) });
-        }
+    let [host4, created4] = await ServerSettings.findOrCreate({ where: {key: 'host4'}, defaults: { key: 'host4', value: '' } });
+    if (host4.value != '') {
+        let [tag4, ip4, port4] = host4.value.split(',');
+        configureHost(4, ip4, port4);
+        console.log('Host 4 configured.');
     }
 }
-setInterval(containerStatsLoop, 5000);
-

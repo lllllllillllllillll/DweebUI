@@ -28,22 +28,21 @@
 
               <div class="col-12 mt-12">
                 <div class="card">
-                  <form method="post">
-                    <div class="card-header">
+
+                  <div class="card-header">
                       <h3 class="card-title">Users</h3>
                         <div class="card-options btn-list">                  
                             <!-- <a href="#" class="btn">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-refresh" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4"></path> <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"></path> </svg>
                               Refresh
                             </a> -->
+
                             <a href="#" class="btn" data-bs-toggle="modal" data-bs-target="#modals-here">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M12 5l0 14"></path> <path d="M5 12l14 0"></path> </svg>
-                              
+                              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> <path d="M12 5l0 14"></path> <path d="M5 12l14 0"></path> </svg>
                             </a>
                         </div>
                     </div>
     
-
                     <div id="table-default" class="table-responsive">
                       <table class="table">
                         <thead>
@@ -63,6 +62,7 @@
                         </thead>
                         <tbody class="table-tbody">
                           
+                          
                           <%- user_list %>
 
                         </tbody>
@@ -71,7 +71,7 @@
 
                     <div class="card-footer d-flex align-items-center">
 
-                        <button class="btn" type="submit" formaction="/removeVolume">Remove</button>
+                        <button class="btn" type="submit" formaction="/">Remove</button>
 
                       <!-- <span class="dropdown">
                         <button class="btn dropdown-toggle align-text-top" data-bs-toggle="dropdown">Actions</button>
@@ -89,43 +89,44 @@
                       </span> -->
 
                                                         
-                      <p class="m-0 text-muted ms-auto">Events</p>
+                      <p class="m-0 text-muted ms-auto">Users</p>
 
                     </div>
-                  </form>
 
 
-                  <div id="modals-here" class="modal modal-blur fade" style="display: none" aria-hidden="false" tabindex="-1">
+                  <!-- New User Modal -->
+                  <!-- <div id="modals-here" class="modal modal-blur fade" style="display: none" aria-hidden="false" tabindex="-1">
                     <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollables">
                       <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">New Volume</h5>
+                            <h5 class="modal-title">New User</h5>
                         </div>
-
                         <div class="modal-body text-center">
-                          <form method="post" action="/addVolume">
-
-                              <div class="row g-2 align-items-end">
-                                <div class="col-9">
-                                  <label class="form-label text-muted">Volume Name</label>
-                                  <input type="text" class="form-control" name="volume">
-                                </div>
-                                
-                                <div class="col-2">
-                                  <button type="submit" class="btn mt-2">Create</button>
-                                </div>
-                              </div>
-                                
-                                <label class="mt-3 text-muted"><label class="text-danger">*</label>Name cannot contain spaces or special characters.</label>
-                          </form>
+                          <div class="row g-2 align-items-end">
+                            <div class="col-9">
+                              <label class="form-label text-muted">User Name</label>
+                              <input type="text" class="form-control" name="name">
+                            </div>
+                            <div class="col-2">
+                              <button type="submit" class="btn mt-2">Create</button>
+                            </div>
+                          </div>
+                          <label class="mt-3 text-muted"><label class="text-danger">*</label>Name cannot contain spaces or special characters.</label>
                         </div>
+                      </div>
+                    </div>
+                  </div> -->
 
+
+                  <div class="modal slim-modal modal-blur fade" id="scrolling_modal" tabindex="-1" style="display: none;" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+                      <div class="modal-content" id="modal_content">
+                        <!-- modal content inserted with htmx -->
                       </div>
                     </div>
                   </div>
 
-
-
+                  
                 </div>
               </div>
 
@@ -140,9 +141,9 @@
     </div>
     
     <!-- Libs JS -->
-    <script src="/libs/list.js/dist/list.min.js" defer></script>
+    <script src="/libs/list.js/dist/list.min.js"></script>
 
-    <script src="/js/dweebui.js" ></script>
+    <script src="/js/dweebui.js"></script>
     <script src="/js/htmx.min.js"></script>
 
     <!-- Tabler Core -->
@@ -154,7 +155,7 @@
         const list = new List('table-default', {
           sortClass: 'table-sort',
           listClass: 'table-tbody',
-          valueNames: [ 'sort-id', 'sort-avatar', 'sort-name', 'sort-username', 'sort-email', 'sort-userid', 'sort-role', 'sort-lastlogin', 'sort-status', 'sort-action' ]
+          valueNames: [ 'sort-id', 'sort-avatar', 'sort-name', 'sort-username', 'sort-email', 'sort-userid', 'sort-role', 'sort-lastlogin', 'sort-status']
         });
       })
     </script>

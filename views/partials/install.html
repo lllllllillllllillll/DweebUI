@@ -9,7 +9,7 @@
 
         <div class="modal-body">
             
-            <form id="details">
+            <form id="install_info" hx-post="/install" hx-swap="innerHTML" hx-target="#alert">
 
             
                 <div class="row mb-3 align-items-end">
@@ -836,7 +836,7 @@
         
         <div class="modal-footer">
             <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary" form="install_info">Install</button>
+            <button type="submit" class="btn btn-primary" form="install_info" data-bs-dismiss="modal" onclick="topScroll()">Install</button>
         </div>
 
         

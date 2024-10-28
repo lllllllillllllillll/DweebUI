@@ -1,8 +1,10 @@
-import { Syslog } from '../database/config.js';
+import { Syslog } from '../db/config.js';
 import { Alert, getLanguage, Navbar, Footer } from '../utils/system.js';
 
 export const Syslogs = async function(req, res) {
 
+    req.session.host = `${req.params.host || 1}`;
+    
     let logs = '';
 
     const syslogs = await Syslog.findAll({
@@ -38,7 +40,7 @@ export const Syslogs = async function(req, res) {
                     <td class="sort-message">${message}</td>
                     <td class="sort-ip">${log.ip}</td>
                     <td class="sort-timestamp">${datetime}</td>
-                    <td class="text-end"><a class="" href="#"><svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-player-play" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M7 4v16l13 -8z"></path></svg></a></td>
+                    <td class=""><a class="" href="#"><svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-player-play" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M7 4v16l13 -8z"></path></svg></a></td>
 
                 </tr>`
     }

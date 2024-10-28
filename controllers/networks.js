@@ -3,6 +3,8 @@ import { networkList, GetContainerLists, removeNetwork } from '../utils/docker.j
 
 export const Networks = async function(req, res) {
 
+    req.session.host = `${req.params.host || 1}`;
+    
     let container_networks = [];
     let network_name = '';
 
@@ -30,7 +32,7 @@ export const Networks = async function(req, res) {
                 <td class="sort-city">${networks[i].Id}</td>
                 <td class="sort-score text-green">${status}</td>
                 <td class="sort-date" data-date="1628122643">${networks[i].Created}</td>
-                <td class="text-end"><a class="btn" href="#">Details</a></td>
+                <td class=""><button class="badge badge-outline text-grey" id="" data-hx-get="/users/usersModals/user/" hx-target="#modal_content"  hx-swap="innerHTML" data-bs-toggle="modal" data-bs-target="#scrolling_modal">Details</button></td>
             </tr>`
             // Add the row to the network list
             network_list += details;

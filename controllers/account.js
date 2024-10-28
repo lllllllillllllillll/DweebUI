@@ -1,11 +1,12 @@
-import { User, ServerSettings } from '../database/config.js';
+import { User, ServerSettings } from '../db/config.js';
 import { Alert, getLanguage, Navbar, Sidebar, Footer } from '../utils/system.js';
 
 export const Account = async function(req,res){
 
+    req.session.host = `${req.params.host || 1}`;
+
     let container_links = await ServerSettings.findOne({ where: {key: 'container_links'}});
     let user_registration = await ServerSettings.findOne({ where: {key: 'user_registration'}});
-
 
     let user = await User.findOne({ where: {userID: req.session.userID}});
 

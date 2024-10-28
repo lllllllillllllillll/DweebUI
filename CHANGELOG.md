@@ -35,11 +35,11 @@
 * CSS and pages tweaks to make the style more consistent.
 * Improved container cards to be more compact.
 * Improved sponsors and credits pages.
-* New - Secret supporter code.
+* New - Secret code for sponsors.
 * Fixed installs not appearing or appearing multiple times.
 * Improved log view and fixed refresh button.
 * Made app cards more compact.
-
+* Updated container_card to only show exposed ports.
 
 
 ## v0.60 (June 9th 2024) - Permissions system and import templates

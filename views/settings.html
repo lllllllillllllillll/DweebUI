@@ -32,7 +32,7 @@
                 <div class="card-body">
 
                   <!-- HTMX - Submits the form and replaces the target with the response. Replaces the submit button with "Updated" -->
-                  <form id="settings" hx-post="/settings" hx-target="#submit" hx-swap="outerHTML">
+                  <form id="settings" hx-post="/settings/action/update" hx-target="#submit" hx-swap="outerHTML">
 
                   <h1 class="">Settings</h1>
                   <label class="text-muted mb-3">Configure server settings. Admin only.</label>

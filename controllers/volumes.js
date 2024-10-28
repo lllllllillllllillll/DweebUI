@@ -2,6 +2,9 @@ import { Alert, getLanguage, Navbar, Footer } from '../utils/system.js';
 import { volumeList, GetContainerLists } from '../utils/docker.js';
 
 export const Volumes = async function(req, res) {
+
+    req.session.host = `${req.params.host || 1}`;
+    
     let container_volumes = [];
     let volume_list = '';
 
@@ -43,7 +46,7 @@ export const Volumes = async function(req, res) {
             <td class="sort-score text-green">${status}</td>
             <td class="sort-date" data-date="1628122643">${volume.CreatedAt}</td>
             <td class="sort-quantity">MB</td>
-            <td class="text-end"><a class="btn" href="#">Details</a></td>
+            <td class=""><button class="badge badge-outline text-grey" id="" data-hx-get="/users/usersModals/user/" hx-target="#modal_content"  hx-swap="innerHTML" data-bs-toggle="modal" data-bs-target="#scrolling_modal">Details</button></td>
         </tr>`
     
         volume_list += row;    

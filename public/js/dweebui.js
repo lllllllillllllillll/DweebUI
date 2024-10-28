@@ -41,3 +41,13 @@ function selectAll(group) {
     }
   }
 }
+
+
+function topScroll() {
+  window.scrollTo(0, 0);
+}
+
+
+function bottomScroll() {
+  window.scrollTo(0, document.body.scrollHeight);
+}

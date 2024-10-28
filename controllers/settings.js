@@ -1,8 +1,11 @@
-import { ServerSettings } from '../database/config.js';
-import { Alert, getLanguage, Navbar, Sidebar, Footer } from '../utils/system.js';
-import { read, readdirSync, readFileSync, writeFileSync } from 'fs';
+import { ServerSettings } from '../db/config.js';
+import { configureHost } from '../utils/docker.js';
+import { Alert, Navbar, Sidebar, Footer } from '../utils/system.js';
+import { readFileSync, writeFileSync } from 'fs';
 
 export const Settings = async function(req,res){
+
+    req.session.host = `${req.params.host || 1}`;
 
     let user_registration = await ServerSettings.findOne({ where: {key: 'user_registration'}});
     let registration_secret = await ServerSettings.findOne({ where: {key: 'registration_secret'}});
@@ -68,7 +71,10 @@ export const Settings = async function(req,res){
 
 
 
-export const updateSettings = async function (req, res) {
+export const SettingsAction = async function (req, res) {
+
+    let action = req.params.action;
+    let id = req.params.id;
 
     let { user_registration, registration_secret, custom_link, link_url, authentication } = req.body;
     let { host2, tag2, ip2, port2 } = req.body;
@@ -144,12 +150,12 @@ export const updateSettings = async function (req, res) {
     }
 
 
-
     // Host 2
     if (host2) {
         let exists = await ServerSettings.findOne({ where: {key: 'host2'}});
         if (exists) { await ServerSettings.update({value: `${tag2},${ip2},${port2}`}, {where: {key: 'host2'}}); }
-        else { await ServerSettings.create({ key: 'host2', value: `${tag2},${ip2},${port2}`}); }   
+        else { await ServerSettings.create({ key: 'host2', value: `${tag2},${ip2},${port2}`}); }
+        configureHost(2, ip2, port2);
     } else if (!host2) {
         let exists = await ServerSettings.findOne({ where: {key: 'host2'}});
         if (exists) { await ServerSettings.update({value: ''}, {where: {key: 'host2'}}); }
@@ -161,6 +167,7 @@ export const updateSettings = async function (req, res) {
         let exists = await ServerSettings.findOne({ where: {key: 'host3'}});
         if (exists) { await ServerSettings.update({value: `${tag3},${ip3},${port3}`}, {where: {key: 'host3'}}); }
         else { await ServerSettings.create({ key: 'host3', value: `${tag3},${ip3},${port3}`}); }
+        configureHost(3, ip3, port3);
     } else if (!host3) {
         let exists = await ServerSettings.findOne({ where: {key: 'host3'}});
         if (exists) { await ServerSettings.update({value: ''}, {where: {key: 'host3'}}); }
@@ -172,15 +179,15 @@ export const updateSettings = async function (req, res) {
         let exists = await ServerSettings.findOne({ where: {key: 'host4'}});
         if (exists) { await ServerSettings.update({value: `${tag4},${ip4},${port4}`}, {where: {key: 'host4'}}); }
         else { await ServerSettings.create({ key: 'host4', value: `${tag4},${ip4},${port4}`}); }
+        configureHost(4, ip4, port4);
     } else if (!host4) {
         let exists = await ServerSettings.findOne({ where: {key: 'host4'}});
         if (exists) { await ServerSettings.update({value: ''}, {where: {key: 'host4'}}); }
         else { await ServerSettings.create({ key: 'host4', value: ''}); }
     }
 
-
     console.log('Settings updated');
-    res.send(`<button class="btn btn-success" hx-post="/settings" hx-trigger="load delay:2s" hx-swap="outerHTML" id="submit" hx-target="#submit">Updated</button>`);
+    res.send(`<button class="btn btn-success" hx-post="/settings/action/update_settings/0" hx-trigger="load delay:2s" hx-swap="outerHTML" id="submit" hx-target="#submit">Updated</button>`);
 }
 
 

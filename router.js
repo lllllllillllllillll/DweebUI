@@ -3,25 +3,26 @@ export const router = express.Router();
 
 import { Login, submitLogin, Logout } from './controllers/login.js';
 import { Register, submitRegister } from './controllers/register.js';
-import { Dashboard, searchDashboard, ContainerAction, ServerMetrics, SSE, CardList, UpdateCard } from './controllers/dashboard.js';
+import { Dashboard, searchDashboard, ServerMetrics, SSE, DashboardView, DashboardAction } from './controllers/dashboard.js';
 import { Images, submitImages, searchImages } from './controllers/images.js';
 import { Volumes, submitVolumes, searchVolumes } from './controllers/volumes.js';
 import { Networks, NetworkAction, searchNetworks } from './controllers/networks.js';
-import { Apps, submitApps, searchApps } from './controllers/apps.js';
-import { Users, submitUsers, searchUsers } from './controllers/users.js';
+import { Apps, submitApps, searchApps, appsModals, } from './controllers/apps.js';
+import { Users, submitUsers, searchUsers, UsersView, UsersAction } from './controllers/users.js';
 import { Syslogs, searchSyslogs } from './controllers/syslogs.js';
 import { Account, searchAccount } from './controllers/account.js';
 import { Preferences, submitPreferences, searchPreferences } from './controllers/preferences.js';
-import { Settings, updateSettings, updateLanguages, searchSettings } from './controllers/settings.js';
+import { Settings, SettingsAction, updateLanguages, searchSettings } from './controllers/settings.js';
+import { Sponsors, searchSponsors } from './controllers/sponsors.js';
+import { Credits } from './controllers/credits.js';
 
 import { Install } from './utils/install.js';
 import { Uninstall } from './utils/uninstall.js';
 
-import { Sponsors, searchSponsors } from './controllers/sponsors.js';
+import { sessionCheck, adminOnly, permissionCheck } from './utils/permissions.js';
 
-import { Credits } from './controllers/credits.js';
-
-import { sessionCheck, adminOnly, permissionCheck, permissionModal, updatePermissions } from './utils/permissions.js';
+// router.get('*', (req, res, next) => { console.log(`[GET] ${req.url}`); next(); });
+// router.post('*', (req, res, next) => { console.log(`[POST] ${req.url}`); next(); });
 
 router.get('/login', Login);
 router.post('/login', submitLogin);
@@ -30,40 +31,33 @@ router.get('/register', Register);
 router.post('/register', submitRegister);
 
 router.get("/", sessionCheck, Dashboard);
-router.get("/:host?/dashboard", sessionCheck, Dashboard);
+
+router.get("/dashboard", sessionCheck, Dashboard);
+router.get("/dashboard/view/:view/:id?", sessionCheck, DashboardView);
+router.post("/dashboard/action/:action/:id?", sessionCheck, DashboardAction);
 router.get("/server_metrics", sessionCheck, ServerMetrics);
-
-router.get("/permission_modal", adminOnly, permissionModal);
-router.post("/update_permissions", adminOnly, updatePermissions);
-
 router.get("/sse", permissionCheck, SSE);
-router.get("/card_list", permissionCheck, CardList);
-router.get("/update_card/:containerid", permissionCheck, UpdateCard);
 
-router.post("/:host?/container/:action/:containerid?", permissionCheck, ContainerAction);
-
-router.get('/images', adminOnly, Images);
+router.get("/images", adminOnly, Images);
 router.post('/images', adminOnly, submitImages);
 
-router.get('/volumes', adminOnly, Volumes);
+router.get("/volumes", adminOnly, Volumes);
 router.post('/volumes', adminOnly, submitVolumes);
 
-router.get('/networks', adminOnly, Networks);
-router.post('/:host?/network/:action/:containerid?', adminOnly, NetworkAction);
+router.get("/networks", adminOnly, Networks);
+router.post('/network/:action/:containerid?', adminOnly, NetworkAction);
 
 router.get("/apps/:page?/:template?", adminOnly, Apps);
 router.post("/apps/:action?", adminOnly, submitApps);
-router.post("/install", adminOnly, Install);
-router.post("/uninstall", adminOnly, Uninstall);
 
-router.get('/users', adminOnly, Users);
-router.post('/users', adminOnly, submitUsers);
+router.get("/users", adminOnly, Users);
+router.get("/users/view/:view/:id?", adminOnly, UsersView);
+router.post("/users/action/:action/:id?", adminOnly, UsersAction);
 
 router.get('/syslogs', adminOnly, Syslogs);
 
 router.get('/settings', adminOnly, Settings);
-router.post('/settings', adminOnly, updateSettings);
-router.post('/update_languages', adminOnly, updateLanguages);
+router.post('/settings/action/:action?/:id?', adminOnly, SettingsAction);
 
 router.get('/preferences', sessionCheck, Preferences);
 router.post('/preferences', sessionCheck, submitPreferences);
@@ -76,6 +70,13 @@ router.get('/credits', sessionCheck, Credits);
 
 
 
+
+router.get("/appsModals/:modal?", adminOnly, appsModals);
+
+router.post("/install", adminOnly, Install);
+router.post("/uninstall", adminOnly, Uninstall);
+
+router.post('/update_languages', adminOnly, updateLanguages);
 
 
 router.post("/search", function (req, res) {
@@ -119,10 +120,3 @@ router.post("/search", function (req, res) {
             res.send('ok');
     }
 });
-
-
-
-// router.get('*', (req, res) => {
-//     res.redirect('/dashboard');
-// });
-

@@ -32,7 +32,7 @@
                 <div class="card-body">
 
                   <!-- HTMX - Submits the form and replaces the target with the response. Replaces the submit button with "Updated" -->
-                  <form id="preferences" hx-post="/preferences" hx-target="#submit" hx-swap="outerHTML">
+                  <form id="preferences" action="/preferences" method="POST">
 
                   <h1 class="">Preferences</h1>
                   <label class="text-muted mb-3">User Preferences.</label>
@@ -73,7 +73,7 @@
                       <a href="#" class="btn">
                         Cancel
                       </a>
-                      <button class="btn btn-primary" id="submit">
+                      <button class="btn btn-primary" id="submit" type="submit">
                         Update
                       </button>
                     </div>

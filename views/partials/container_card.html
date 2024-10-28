@@ -1,4 +1,4 @@
-<div class="col-sm-6 col-lg-3" hx-get="/update_card/ContainerID" hx-trigger="sse:ContainerID" id="AltID" hx-swap="outerHTML" hx-target="#AltID" name="AppName">
+<div class="col-sm-6 col-lg-3" hx-get="/dashboard/view/update_card/ContainerID" hx-trigger="sse:ContainerID" id="AltID" hx-swap="outerHTML" hx-target="#AltID" name="AppName">
     <div class="card p-2">
         <div class="container-stamp">
             <img class="rounded-4 pt-1 px-1" width="95px" src="https://raw.githubusercontent.com/lllllllillllllillll/Dashboard-Icons/main/png/AppService.png" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/docker.png';"></img>
@@ -6,16 +6,16 @@
         <div class="d-flex align-items-center">
             <label style="font-size: smaller; font-weight: bold;" class="text-yellow">AppPorts</label>
             <div class="ms-auto lh-1">
-                <button class="container-action" title="Start" data-hx-post="/container/start/ContainerID" data-hx-trigger="mousedown" data-hx-target="#AltIDState" name="Start" hx-swap="outerHTML">
+                <button class="container-action" title="Start" data-hx-post="/dashboard/action/start/ContainerID" data-hx-trigger="mousedown" data-hx-target="#AltIDState" name="Start" id="AppName" hx-swap="outerHTML">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler-player-play" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M7 4v16l13 -8z"></path></svg>
                 </button>
-                <button class="container-action" title="Stop" data-hx-post="/container/stop/ContainerID" data-hx-trigger="mousedown" data-hx-target="#AltIDState" name="Stop" hx-swap="outerHTML">
+                <button class="container-action" title="Stop" data-hx-post="/dashboard/action/stop/ContainerID" data-hx-trigger="mousedown" data-hx-target="#AltIDState" name="Stop" id="AppName" hx-swap="outerHTML">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-player-stop" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M5 5m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z"></path></svg>
                 </button>
-                <button class="container-action" title="Pause" data-hx-post="/container/pause/ContainerID" data-hx-trigger="mousedown" data-hx-target="#AltIDState" name="Pause" hx-swap="outerHTML">
+                <button class="container-action" title="Pause" data-hx-post="/dashboard/action/pause/ContainerID" data-hx-trigger="mousedown" data-hx-target="#AltIDState" name="Pause" id="AppName" hx-swap="outerHTML">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-player-pause" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M6 5m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v12a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z"></path><path d="M14 5m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v12a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z"></path></svg>
                 </button>
-                <button class="container-action" title="Restart" data-hx-post="/container/restart/ContainerID" data-hx-trigger="mousedown" data-hx-target="#AltIDState" name="Restart" hx-swap="outerHTML">
+                <button class="container-action" title="Restart" data-hx-post="/dashboard/action/restart/ContainerID" data-hx-trigger="mousedown" data-hx-target="#AltIDState" name="Restart" id="AppName" hx-swap="outerHTML">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-reload" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M19.933 13.041a8 8 0 1 1 -9.925 -8.788c3.899 -1 7.935 1.007 9.425 4.747"></path><path d="M20 4v5h-5"></path></svg>                          
                 </button>
 
@@ -23,20 +23,20 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle><circle cx="12" cy="5" r="1"></circle></svg>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end">
-                    <button class="dropdown-item text-secondary" name="details" data-hx-post="/container/details/ContainerID" hx-swap="innerHTML" data-hx-trigger="mousedown" hx-target="#medium_modal_content" data-bs-toggle="modal" data-bs-target="#medium_modal">Details</button>
-                    <button class="dropdown-item text-secondary" name="AppName" data-hx-post="/container/logs/ContainerID" data-hx-trigger="mousedown" hx-target="#wide_modal_content"  hx-swap="innerHTML"  data-bs-toggle="modal" data-bs-target="#wide_modal">Logs</button>
-                    <button class="dropdown-item text-secondary" name="edit" data-hx-post="/container/details/ContainerID" data-hx-trigger="mousedown" hx-target="#wide_modal_content" hx-swap="innerHTML" data-bs-toggle="modal" data-bs-target="#wide_modal">Edit</button>
+                    <button class="dropdown-item text-secondary" name="AppName" data-hx-get="/dashboard/view/details/ContainerID" data-hx-trigger="mousedown" hx-target="#medium_modal_content" hx-swap="innerHTML" data-bs-toggle="modal" data-bs-target="#medium_modal">Details</button>
+                    <button class="dropdown-item text-secondary" name="AppName" data-hx-get="/dashboard/view/logs/ContainerID" data-hx-trigger="mousedown" hx-target="#wide_modal_content"  hx-swap="innerHTML"  data-bs-toggle="modal" data-bs-target="#wide_modal">Logs</button>
+                    <button class="dropdown-item text-secondary" name="AppName" data-hx-get="/dashboard/view/edit/ContainerID" data-hx-trigger="mousedown" hx-target="#wide_modal_content" hx-swap="innerHTML" data-bs-toggle="modal" data-bs-target="#wide_modal">Edit</button>
                     <button class="dropdown-item text-primary" name="AppName" id="update" disabled="">Update</button>
-                    <button class="dropdown-item text-danger" name="AppTitle" hx-trigger="mousedown" data-hx-post="/container/uninstall/ContainerID" hx-swap="innerHTML" data-hx-target="#modal_content"  data-bs-toggle="modal" data-bs-target="#scrolling_modal">Uninstall</button>
+                    <button class="dropdown-item text-danger" name="AppName" hx-trigger="mousedown" data-hx-get="/dashboard/view/uninstall/ContainerID" hx-swap="innerHTML" data-hx-target="#modal_content"  data-bs-toggle="modal" data-bs-target="#scrolling_modal">Uninstall</button>
                 </div>
                 
                 <a href="#" class="container-action dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-eye" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"/> <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /> <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" /> </svg>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end">
-                    <button class="dropdown-item text-secondary" data-hx-post="/container/hide/ContainerID" data-hx-trigger="mousedown" data-hx-swap="delete" data-hx-target="#AltID" name="AppName">Hide</button>
-                    <button class="dropdown-item text-secondary" name="AppTitle" hx-trigger="mousedown" data-hx-post="/container/link_modal/ContainerID" hx-swap="innerHTML" data-hx-target="#modal_content"  data-bs-toggle="modal" data-bs-target="#scrolling_modal">Edit Link</button>
-                    <button class="dropdown-item text-secondary" data-hx-get="/permission_modal" name="AppName" id="ContainerID" hx-target="#modal_content"  hx-swap="innerHTML" data-bs-toggle="modal" data-bs-target="#scrolling_modal">Permissions</button>
+                    <button class="dropdown-item text-secondary" name="AppName" data-hx-post="/dashboard/action/hide/ContainerID" data-hx-trigger="mousedown" data-hx-swap="delete" data-hx-target="#AltID">Hide</button>
+                    <button class="dropdown-item text-secondary" name="AppName" data-hx-get="/dashboard/view/link_modal/ContainerID" hx-trigger="mousedown" hx-swap="innerHTML" data-hx-target="#modal_content"  data-bs-toggle="modal" data-bs-target="#scrolling_modal">Edit Link</button>
+                    <button class="dropdown-item text-secondary" name="AppName" data-hx-get="/dashboard/view/permissions/ContainerID" hx-target="#modal_content"  hx-swap="innerHTML" data-bs-toggle="modal" data-bs-target="#scrolling_modal">Permissions</button>
                 </div>
                 
             </div>
@@ -52,7 +52,7 @@
 
         </div>
 
-        <div id="chart-AltID" class="chart-sm"></div>
+        <div id="AltIDchart" class="chart-sm"></div>
 
         <script>
             var options = {
@@ -100,8 +100,10 @@
                     type: 'datetime',
                 },
                 yaxis: {
+                    min: 0,
+                    max: 100,
                     labels: {
-                        padding: 4
+                        padding: 0,
                     },
                 },
                 labels: [
@@ -113,11 +115,13 @@
                 },
             };
 
-            var chart = new ApexCharts(document.querySelector("#chart-AltID"), options);
 
-            chart.render();
+            var AltIDchart = new ApexCharts(document.querySelector("#AltIDchart"), options);
+            AltIDchart.render();
 
         </script>
+
+        ChartTrigger
 
     </div>
 </div>
