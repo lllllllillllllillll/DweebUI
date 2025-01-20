@@ -14,7 +14,7 @@
   "dependencies": {
     "adm-zip": "^0.5.12",
     "bcrypt": "^5.1.1",
-    "dockerode": "^4.0.2",
+    "dockerode": "^4.0.4",
     "dockerode-compose": "^1.4.0",
     "ejs": "^3.1.10",
     "express": "^4.19.2",
