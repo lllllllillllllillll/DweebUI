@@ -1,21 +1,42 @@
-import { Permission, User, Syslog } from "../db/config.js";
-import { readFileSync } from 'fs';
-import { Capitalize } from '../utils/system.js';
+import { Permission, User, Syslog, ServerSettings } from "../db/config.js";
 
 
 export const adminOnly = async (req, res, next) => {
     let path = req.path;
     // console.log(`\x1b[90m ${req.session.username} ${path} \x1b[0m`);
     if (req.session.role == 'admin') { next(); return; }
-    console.log(`User ${req.session.username} does not have permission to access ${path}`);
+    // console.log(`User ${req.session.username} does not have permission to access ${path}`);
     res.redirect('/dashboard');
     return;
 }
 
 
 export const sessionCheck = async (req, res, next) => {
-    if (req.session.userID) { next(); }
-    else { res.redirect('/login'); }
+
+
+    let [authentication, created] = await ServerSettings.findOrCreate({ where: {key: 'authentication'}, defaults: { key: 'authentication', value: 'default' } });
+    // if (created) { console.log(`\x1b[33mCreated key for authentication\x1b[0m`); }
+
+    if (authentication.value == 'no_auth' || (authentication.value == 'localhost' && req.hostname == 'localhost')) { next(); return; }
+
+    // Check if session exists first
+    if (!req.session.userID) {
+        // console.log(`\x1b[31mNo session found for user\x1b[0m`);
+        res.redirect('/login');
+        return;
+    }
+
+    // Then refresh session
+    let user = await User.findOne({ where: { userID: req.session.userID } });
+    if ((!user) || (user.status == 'disabled')) {
+        console.log(`\x1b[31mDestroying session for user: \x1b[0m${req.session.username}`);
+        req.session.destroy();
+        req.session = null;
+        res.redirect('/login');
+        return;
+    }
+
+    next();
 }
 
 

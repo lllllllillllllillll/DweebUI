@@ -3,17 +3,18 @@ export const router = express.Router();
 
 import { Login, submitLogin, Logout } from './controllers/login.js';
 import { Register, submitRegister } from './controllers/register.js';
+
 import { Dashboard, searchDashboard, ServerMetrics, SSE, DashboardView, DashboardAction } from './controllers/dashboard.js';
-import { Images, submitImages, searchImages } from './controllers/images.js';
-import { Volumes, submitVolumes, searchVolumes } from './controllers/volumes.js';
-import { Networks, NetworkAction, searchNetworks } from './controllers/networks.js';
-import { Apps, submitApps, searchApps, appsModals, } from './controllers/apps.js';
-import { Users, submitUsers, searchUsers, UsersView, UsersAction } from './controllers/users.js';
+import { Images, ImagesView, ImagesAction } from './controllers/images.js';
+import { Volumes, VolumesAction, searchVolumes } from './controllers/volumes.js';
+import { Networks, NetworksAction, searchNetworks } from './controllers/networks.js';
+import { Apps, AppsView, AppsAction, searchApps } from './controllers/apps.js';
+import { Users, UsersView, UsersAction, searchUsers } from './controllers/users.js';
 import { Syslogs, searchSyslogs } from './controllers/syslogs.js';
 import { Account, searchAccount } from './controllers/account.js';
 import { Preferences, submitPreferences, searchPreferences } from './controllers/preferences.js';
-import { Settings, SettingsAction, updateLanguages, searchSettings } from './controllers/settings.js';
-import { Sponsors, searchSponsors } from './controllers/sponsors.js';
+import { Settings, SettingsAction, SettingsView, updateLanguages, searchSettings } from './controllers/settings.js';
+import { Sponsors, searchSponsors, SponsorsAction, SponsorsView } from './controllers/sponsors.js';
 import { Credits } from './controllers/credits.js';
 
 import { Install } from './utils/install.js';
@@ -21,6 +22,7 @@ import { Uninstall } from './utils/uninstall.js';
 
 import { sessionCheck, adminOnly, permissionCheck } from './utils/permissions.js';
 
+// DEBUGGING
 // router.get('*', (req, res, next) => { console.log(`[GET] ${req.url}`); next(); });
 // router.post('*', (req, res, next) => { console.log(`[POST] ${req.url}`); next(); });
 
@@ -39,16 +41,18 @@ router.get("/server_metrics", sessionCheck, ServerMetrics);
 router.get("/sse", permissionCheck, SSE);
 
 router.get("/images", adminOnly, Images);
-router.post('/images', adminOnly, submitImages);
+router.get("/images/view/:view/:id?", adminOnly, ImagesView);
+router.post("/images/action/:action/:id?", adminOnly, ImagesAction);
 
 router.get("/volumes", adminOnly, Volumes);
-router.post('/volumes', adminOnly, submitVolumes);
+router.post("/volumes/action/:action/:id?", adminOnly, VolumesAction);
 
 router.get("/networks", adminOnly, Networks);
-router.post('/network/:action/:containerid?', adminOnly, NetworkAction);
+router.post('/networks/action/:action/:containerid?', adminOnly, NetworksAction);
 
-router.get("/apps/:page?/:template?", adminOnly, Apps);
-router.post("/apps/:action?", adminOnly, submitApps);
+router.get("/apps", adminOnly, Apps);
+router.get("/apps/view/:view/:id?", adminOnly, AppsView);
+router.post("/apps/action/:action/:id?", adminOnly, AppsAction);
 
 router.get("/users", adminOnly, Users);
 router.get("/users/view/:view/:id?", adminOnly, UsersView);
@@ -57,7 +61,9 @@ router.post("/users/action/:action/:id?", adminOnly, UsersAction);
 router.get('/syslogs', adminOnly, Syslogs);
 
 router.get('/settings', adminOnly, Settings);
+router.get('/settings/view/:view/:id?', adminOnly, SettingsView);
 router.post('/settings/action/:action?/:id?', adminOnly, SettingsAction);
+
 
 router.get('/preferences', sessionCheck, Preferences);
 router.post('/preferences', sessionCheck, submitPreferences);
@@ -65,13 +71,11 @@ router.post('/preferences', sessionCheck, submitPreferences);
 router.get('/account', sessionCheck, Account);
 
 router.get('/sponsors', sessionCheck, Sponsors);
+router.get('/sponsors/view/:view/:id?', sessionCheck, SponsorsView);
+router.post('/sponsors/action/:action/:id?', sessionCheck, SponsorsAction);
 
 router.get('/credits', sessionCheck, Credits);
 
-
-
-
-router.get("/appsModals/:modal?", adminOnly, appsModals);
 
 router.post("/install", adminOnly, Install);
 router.post("/uninstall", adminOnly, Uninstall);

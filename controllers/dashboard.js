@@ -1,7 +1,7 @@
 import { currentLoad, mem, networkStats, fsSize } from 'systeminformation';
-import { docker, containerInfo, containerLogs, GetContainerLists, containerStats, trigger_docker_event } from '../utils/docker.js';
+import { docker, docker2, docker3, docker4, docker5, docker6, docker7, docker8, containerInfo, containerLogs, GetContainerLists, containerStats, trigger_docker_event } from '../utils/docker.js';
 import { readFileSync } from 'fs';
-import { User, Permission, ServerSettings, ContainerLists, Container } from '../db/config.js';
+import { User, Permission, ServerSettings, ContainerLists, Container, Hosts } from '../db/config.js';
 import { Alert, Navbar, Footer, Capitalize } from '../utils/system.js';
 import { Op } from 'sequelize';
 
@@ -9,12 +9,9 @@ import { Op } from 'sequelize';
 // Dashboard
 export const Dashboard = async function (req, res) {
 
-    console.log(`[Dashboard] ${req.session.username}`);
-
     let username = req.session.username;
     let userID = req.session.userID;
     let role = req.session.role;
-    let host = req.session.host;
     
     // Create the lists needed for the dashboard
     const [list, created] = await ContainerLists.findOrCreate({
@@ -22,9 +19,7 @@ export const Dashboard = async function (req, res) {
         defaults: { userID: userID, username: username, containers: '[]', new: '[]', updates: '[]', sent: '[]', },
     });
 
-
     res.render("dashboard",{ 
-        alert: '',
         username: username,
         role: role,
         navbar: await Navbar(req),
@@ -48,26 +43,51 @@ export const ServerMetrics = async (req, res) => {
     let value = 0;
     switch (name) {
         case 'CPU': 
-            await currentLoad().then(data => { value = Math.round(data.currentLoad); });
+            value = cpu;
             break;
         case 'RAM': 
-            await mem().then(data => { value = Math.round((data.active / data.total) * 100); });
+            value = ram;
             break;
         case 'NET':
-            let [down, up, percent] = [0, 0, 0];
-            await networkStats().then(data => { down = Math.round(data[0].rx_bytes / (1024 * 1024)); up = Math.round(data[0].tx_bytes / (1024 * 1024)); percent = Math.round((down / 1000) * 100); });
             let net = `<div class="font-weight-medium"><label class="cpu-text mb-1">Down:${down}MB  Up:${up}MB</label></div>
                         <div class="cpu-bar meter animate ${color}"><span style="width:20%"><span></span></span></div>`;           
             res.send(net);
             return;
         case 'DISK':
-            await fsSize().then(data => { value = data[0].use; });
+            value = disk;
             break;
     }
     let info = `<div class="font-weight-medium"> <label class="cpu-text mb-1">${name} ${value}%</label></div>
                 <div class="cpu-bar meter animate ${color}"><span style="width:${value}%"><span></span></span></div>`;
     res.send(info);
 }
+
+
+let [cpu, ram, down, up, percent, disk] = [0, 0, 0, 0, 0, 0];
+export async function getMetrics () {
+    ( async () => {
+        await currentLoad().then(data => { cpu = Math.round(data.currentLoad); });
+    })();
+
+    ( async () => {
+        await mem().then(data => { ram = Math.round((data.active / data.total) * 100); });
+    })();
+
+    ( async () => {
+        await networkStats().then(data => { down = Math.round(data[0].rx_bytes / (1024 * 1024)); up = Math.round(data[0].tx_bytes / (1024 * 1024)); percent = Math.round((down / 1000) * 100); });
+    })();
+
+    ( async () => {
+        await fsSize().then(data => { disk = data[0].use; });
+    })();
+}
+
+
+setInterval(async() => {
+    await getMetrics();
+}, 1000);
+
+
 
 
 
@@ -127,7 +147,9 @@ async function createCard (details) {
     if (title_link.link != '') { title_link = `<a href="${title_link.link}" class="nav-link" target="_blank">${containerTitle}</a>`; }
     else { title_link = containerTitle; }
     
-    let [port_link, created_link] = await ServerSettings.findOrCreate({ where: { key: 'custom_link' }, defaults: { key: 'custom_link', value: 'http://localhost' } });
+    if (created) { console.log(`title_link: Created entry for container ${containerName}`); }
+    
+    let [port_link, created_link] = await ServerSettings.findOrCreate({ where: { key: 'port_link' }, defaults: { key: 'port_link', value: 'http://localhost' } });
     port_link = port_link.value;
 
     let exposed_ports = '';
@@ -206,11 +228,89 @@ export const SSE = async (req, res) => {
 
     }
     
-    docker.getEvents({}, async function (err, data) {
-        data.on('data', async function () {
-            await eventCheck();
-        });
-    });
+    // check which hosts are enabled in the database and create a event stream for each one
+    let hosts = await Hosts.findAll();
+
+
+    if (hosts[0]) {
+        if (hosts[0].state == 'enabled') {
+            docker.getEvents({}, async function (err, data) {
+                data.on('data', async function () {
+                    await eventCheck();
+                });
+            });
+        }
+    }
+
+    if (hosts[1]) {
+        if (hosts[1].state == 'enabled') {
+            docker2.getEvents({}, async function (err, data) {
+                data.on('data', async function () {
+                    await eventCheck();
+                });
+            });
+        }
+    }
+
+    if (hosts[2]) {
+        if (hosts[2].state == 'enabled') {
+            docker3.getEvents({}, async function (err, data) {
+                data.on('data', async function () {
+                    await eventCheck();
+                });
+            });
+        }
+    }
+
+    if (hosts[3]) {
+        if (hosts[3].state == 'enabled') {
+            docker4.getEvents({}, async function (err, data) {
+                data.on('data', async function () {
+                    await eventCheck();
+                });
+            });
+        }
+    }
+
+    if (hosts[4]) {
+        if (hosts[4].state == 'enabled') {
+            docker5.getEvents({}, async function (err, data) {
+                data.on('data', async function () {
+                    await eventCheck();
+                });
+            });
+        }
+    }
+
+    if (hosts[5]) {
+        if (hosts[5].state == 'enabled') {
+            docker6.getEvents({}, async function (err, data) {
+                data.on('data', async function () {
+                    await eventCheck();
+                });
+            });
+        }
+    }
+
+    if (hosts[6]) {
+        if (hosts[6].state == 'enabled') {
+            docker7.getEvents({}, async function (err, data) {
+                data.on('data', async function () {
+                    await eventCheck();
+                });
+            });
+        }
+    }
+
+    if (hosts[7]) {
+        if (hosts[7].state == 'enabled') {
+            docker8.getEvents({}, async function (err, data) {
+                data.on('data', async function () {
+                    await eventCheck();
+                });
+            });
+        }
+    }
 
     req.on('close', async () => {
     });
@@ -361,6 +461,9 @@ export const DashboardView = async function (req, res) {
 
     if (view == 'link_modal') {
         const [container, created] = await Container.findOrCreate({ where: { containerID: containerID }, defaults: { containerName: container_name, containerID: containerID, link: '' } });
+
+        if (created) { console.log(`Link_modal: Created entry for container ${container_name}`); }
+
         let modal = readFileSync('./views/partials/link.html', 'utf8');
         modal = modal.replace(/AppName/g, container_name);
         modal = modal.replace(/ContainerID/g, containerID);
@@ -428,8 +531,11 @@ export const DashboardAction = async (req, res) => {
 
     // console.log(`[container_name] ${container_name} [action] ${action} [containerID] ${containerID}`);
 
+    // Reset view settings
     if (action == 'reset') { 
+        console.log('Resetting view');
         await Permission.update({ hide: false }, { where: { userID: req.session.userID } });
+        req.session.alert = Alert('success', 'View settings reset.');
         res.redirect('/dashboard');
         return;
     } else if (action == 'update_link') {

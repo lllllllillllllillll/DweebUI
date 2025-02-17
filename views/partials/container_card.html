@@ -22,21 +22,21 @@
                 <a href="#" class="container-action dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <svg xmlns="http://www.w3.org/2000/svg" class="" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle><circle cx="12" cy="5" r="1"></circle></svg>
                 </a>
-                <div class="dropdown-menu dropdown-menu-end">
-                    <button class="dropdown-item text-secondary" name="AppName" data-hx-get="/dashboard/view/details/ContainerID" data-hx-trigger="mousedown" hx-target="#medium_modal_content" hx-swap="innerHTML" data-bs-toggle="modal" data-bs-target="#medium_modal">Details</button>
-                    <button class="dropdown-item text-secondary" name="AppName" data-hx-get="/dashboard/view/logs/ContainerID" data-hx-trigger="mousedown" hx-target="#wide_modal_content"  hx-swap="innerHTML"  data-bs-toggle="modal" data-bs-target="#wide_modal">Logs</button>
-                    <button class="dropdown-item text-secondary" name="AppName" data-hx-get="/dashboard/view/edit/ContainerID" data-hx-trigger="mousedown" hx-target="#wide_modal_content" hx-swap="innerHTML" data-bs-toggle="modal" data-bs-target="#wide_modal">Edit</button>
-                    <button class="dropdown-item text-primary" name="AppName" id="update" disabled="">Update</button>
-                    <button class="dropdown-item text-danger" name="AppName" hx-trigger="mousedown" data-hx-get="/dashboard/view/uninstall/ContainerID" hx-swap="innerHTML" data-hx-target="#modal_content"  data-bs-toggle="modal" data-bs-target="#scrolling_modal">Uninstall</button>
+                <div class="slim-menu dropdown-menu dropdown-menu-end">
+                    <button class="menu-option dropdown-item text-secondary" name="AppName" data-hx-get="/dashboard/view/details/ContainerID" data-hx-trigger="mousedown" hx-target="#medium_modal_content" hx-swap="innerHTML" data-bs-toggle="modal" data-bs-target="#medium_modal">Details</button>
+                    <button class="menu-option dropdown-item text-secondary" name="AppName" data-hx-get="/dashboard/view/logs/ContainerID" data-hx-trigger="mousedown" hx-target="#wide_modal_content"  hx-swap="innerHTML"  data-bs-toggle="modal" data-bs-target="#wide_modal">Logs</button>
+                    <button class="menu-option dropdown-item text-secondary" name="AppName" data-hx-get="/dashboard/view/edit/ContainerID" data-hx-trigger="mousedown" hx-target="#wide_modal_content" hx-swap="innerHTML" data-bs-toggle="modal" data-bs-target="#wide_modal">Edit</button>
+                    <button class="menu-option dropdown-item text-primary" name="AppName" id="update" disabled="">Update</button>
+                    <button class="menu-option dropdown-item text-danger" name="AppName" hx-trigger="mousedown" data-hx-get="/dashboard/view/uninstall/ContainerID" hx-swap="innerHTML" data-hx-target="#modal_content"  data-bs-toggle="modal" data-bs-target="#scrolling_modal">Uninstall</button>
                 </div>
                 
                 <a href="#" class="container-action dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-eye" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"/> <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /> <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" /> </svg>
                 </a>
-                <div class="dropdown-menu dropdown-menu-end">
-                    <button class="dropdown-item text-secondary" name="AppName" data-hx-post="/dashboard/action/hide/ContainerID" data-hx-trigger="mousedown" data-hx-swap="delete" data-hx-target="#AltID">Hide</button>
-                    <button class="dropdown-item text-secondary" name="AppName" data-hx-get="/dashboard/view/link_modal/ContainerID" hx-trigger="mousedown" hx-swap="innerHTML" data-hx-target="#modal_content"  data-bs-toggle="modal" data-bs-target="#scrolling_modal">Edit Link</button>
-                    <button class="dropdown-item text-secondary" name="AppName" data-hx-get="/dashboard/view/permissions/ContainerID" hx-target="#modal_content"  hx-swap="innerHTML" data-bs-toggle="modal" data-bs-target="#scrolling_modal">Permissions</button>
+                <div class="slim-menu dropdown-menu dropdown-menu-end">
+                    <button class="py-1 menu-option dropdown-item text-secondary" name="AppName" data-hx-post="/dashboard/action/hide/ContainerID" data-hx-trigger="mousedown" data-hx-swap="delete" data-hx-target="#AltID">Hide</button>
+                    <button class="py-1 menu-option dropdown-item text-secondary" name="AppName" data-hx-get="/dashboard/view/link_modal/ContainerID" hx-trigger="mousedown" hx-swap="innerHTML" data-hx-target="#modal_content"  data-bs-toggle="modal" data-bs-target="#scrolling_modal">Edit Link</button>
+                    <button class="py-1 menu-option dropdown-item text-secondary" name="AppName" data-hx-get="/dashboard/view/permissions/ContainerID" hx-target="#modal_content"  hx-swap="innerHTML" data-bs-toggle="modal" data-bs-target="#scrolling_modal">Permissions</button>
                 </div>
                 
             </div>

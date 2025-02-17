@@ -8,11 +8,19 @@ export const Credits = async function (req, res) {
     let Language = Capitalize(language);
     let selected = `<option value="${language}" selected hidden>${Language}</option>`;
 
-    let user = await User.findOne({ where: { userID: req.session.userID }});
-    let preferences = JSON.parse(user.preferences);
-    let hide_profile = preferences.hide_profile;
+    let user = '';
+    let preferences = '';
+    let hide_profile = '';
+    let checked = '';
 
-    let checked = ''; if (hide_profile == true) { checked = 'checked'; }
+    try {
+        user = await User.findOne({ where: { userID: req.session.userID }});
+        preferences = JSON.parse(user.preferences);
+        hide_profile = preferences.hide_profile;
+        checked = ''; if (hide_profile == true) { checked = 'checked'; }
+    } catch (error) {
+        console.log(`Error getting preferences: ${error}`);
+    }
 
     res.render("credits",{ 
         alert: '',

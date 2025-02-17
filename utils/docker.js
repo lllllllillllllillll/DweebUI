@@ -1,129 +1,388 @@
 import Docker from 'dockerode';
 import { dockerContainerStats } from 'systeminformation';
-import { Container, ServerSettings } from '../db/config.js'
-import stream from 'stream';
+import { Container, Hosts } from '../db/config.js'
 
 export var docker;
-var docker2;
-var docker3;
-var docker4;
+export var docker2;
+export var docker3;
+export var docker4;
+export var docker5;
+export var docker6;
+export var docker7;
+export var docker8;
 
-if (process.env.DOCKER_HOST && process.env.DOCKER_PORT) {
-    console.log('Connecting to Docker with environment variables.');
-    docker = new Docker({ host: process.env.DOCKER_HOST, port: process.env.DOCKER_PORT });
-    console.log('Docker host connected.');
-} else {
-    console.log('Connecting to default Docker host.');
-    docker = new Docker();
-    console.log('Docker host connected.');
+// Runs once to configure docker hosts
+export async function check_configured_hosts () {
+
+    // Check how many entries are in the Hosts table.
+    let hosts = await Hosts.findAll();
+
+    if ((hosts.length == 0) && (process.env.DOCKER_HOST && process.env.DOCKER_PORT)) {
+        await Hosts.create({ state: 'enabled', host: process.env.DOCKER_HOST, port: process.env.DOCKER_PORT, protocol: 'http', tag: 'Host 1' });
+    }
+    else if (hosts.length == 0) {
+        await Hosts.create({ state: 'enabled', host: '/var/run/docker.sock', port: '', protocol: 'http', tag: 'Host 1' });
+    }
+
+    hosts = await Hosts.findAll();
+    
+    // console.log(`Found ${hosts.length} entries in the Hosts table.`);
+
+    // Configure each host.
+    for (let i = 0; i < hosts.length; i++) {
+        let host = hosts[i];
+        if (host.state != 'enabled') { continue; }
+        configureHost(host.id, host.host, host.port, host.protocol, host.tag);
+    }
 }
+
+
+export async function configureHost(id, host, port, protocol, tag) {
+
+    console.log(`Configuring host #${id} with ${host} and port ${port}.`);
+
+    if ((id == 1) && (host == '/var/run/docker.sock')) {
+        docker = new Docker();
+
+        setTimeout(async () => {
+            console.log('Attempting to connect to host 1...');
+            let containers = await docker.listContainers({ all: true });
+            console.log(`Host 1 connected. ${containers.length} containers found.`);
+        }, 2000);
+    } 
+
+    else if (id == 1) {
+        docker = new Docker({ host: host, port: port });
+
+        setTimeout(async () => {
+            console.log('Attempting to connect to host 1...');
+            let containers = await docker.listContainers({ all: true });
+            console.log(`Host 1 connected. ${containers.length} containers found.`);
+        }, 2000);
+    }
+
+    else if (id == 2) {
+        docker2 = new Docker({ host: host, port: port });
+
+        setTimeout(async () => {
+            console.log('Attempting to connect to host 2...');
+            let containers = await docker2.listContainers({ all: true });
+            console.log(`Host 2 connected. ${containers.length} containers found.`);
+        }, 2000);
+    } 
+
+    else if (id == 3) {
+        docker3 = new Docker({ host: host, port: port });
+
+        setTimeout(async () => {
+            console.log('Attempting to connect to host 3...');
+            let containers = await docker3.listContainers({ all: true });
+            console.log(`Host 3 connected. ${containers.length} containers found.`);
+        }, 2000);
+    } 
+
+    else if (id == 4) {
+        docker4 = new Docker({ host: host, port: port });
+
+        setTimeout(async () => {
+            console.log('Attempting to connect to host 4...');
+            let containers = await docker4.listContainers({ all: true });
+            console.log(`Host 4 connected. ${containers.length} containers found.`);
+        }, 2000);
+    }
+}
+
+
 
 export async function GetContainerLists(hostid) {
 
     let host = hostid || 1;
-
     let containers; 
+    let hosts = await Hosts.findAll();
 
+    // If host is 0, get all containers from each host that has state = 'enabled'.
     if (host == 0) {
         containers = await docker.listContainers({ all: true });
-    }
-
-    if ((host == 0) && docker2) {
-        let containers2 = await docker2.listContainers({ all: true });
-        containers = containers.concat(containers2);
-    }
-
-    if ((host == 0) && docker3) {
-        let containers3 = await docker3.listContainers({ all: true });
-        containers = containers.concat(containers3);
-    }
-
-    if ((host == 0) && docker4) {
-        let containers4 = await docker4.listContainers({ all: true });
-        containers = containers.concat(containers4);
+        for (let i = 1; i < hosts.length; i++) {
+            if (hosts[i].state == 'enabled') {
+                let host_containers = await docker.listContainers({ all: true });
+                containers = containers.concat(host_containers);
+            }
+        }
     }
 
     if (host == 1) {
         containers = await docker.listContainers({ all: true });
     }
-    
-    if (host == 2 && docker2) {
+
+    if (host == 2) {
         containers = await docker2.listContainers({ all: true });
     }
 
-    if (host == 3 && docker3) {
+    if (host == 3) {
         containers = await docker3.listContainers({ all: true });
     }
 
-    if (host == 4 && docker4) {
+    if (host == 4) {
         containers = await docker4.listContainers({ all: true });
+    }
+
+    if (host == 5) {
+        containers = await docker5.listContainers({ all: true });
+    }
+
+    if (host == 6) {
+        containers = await docker6.listContainers({ all: true });
+    }
+
+    if (host == 7) {
+        containers = await docker7.listContainers({ all: true });
+    }
+
+    if (host == 8) {
+        containers = await docker8.listContainers({ all: true });
     }
 
     return containers;
 }
 
 
+export async function imageList(hostID) {
+    
+    let host = hostID || 1;
 
-export async function configureHost(hostid, ip, port) {
+    let images; 
 
-    if (hostid == 2) {
-        docker2 = new Docker({ host: ip, port: port });
-        try {
-            let containers = await docker2.listContainers({ all: true });
-            console.log(`Host 2 connected. ${containers.length} containers found.`);
-        }
-        catch {
-            console.log('Host 2 connection failed.');
-            docker2;
-        }
-    } else if (hostid == 3) {
-        docker3 = new Docker({ host: ip, port: port });
-        try {
-            let containers = await docker3.listContainers({ all: true });
-            console.log(`Host 3 connected. ${containers.length} containers found.`);
-        }
-        catch {
-            console.log('Host 3 connection failed.');
-            docker3;
-        }
-    } else if (hostid == 4) {
-        docker4 = new Docker({ host: ip, port: port });
-        try {
-            let containers = await docker4.listContainers({ all: true });
-            console.log(`Host 4 connected. ${containers.length} containers found.`);
-        }
-        catch {
-            console.log('Host 4 connection failed.');
-            docker4;
-        }
+    if (host == 0) {
+        images = await docker.listImages({ all: true });
     }
-}
 
-export async function imageList() {
-    let images = await docker.listImages({ all: true });
+    if ((host == 0) && docker2) {
+        let images2 = await docker2.listImages({ all: true });
+        images = images.concat(images2);
+    }
+
+    if ((host == 0) && docker3) {
+        let images3 = await docker3.listImages({ all: true });
+        images = images.concat(images3);
+    }
+
+    if ((host == 0) && docker4) {
+        let images4 = await docker4.listImages({ all: true });
+        images = images.concat(images4);
+    }
+
+    if (host == 1) {
+        images = await docker.listImages({ all: true });
+    }
+    
+    if (host == 2 && docker2) {
+        images = await docker2.listImages({ all: true });
+    }
+
+    if (host == 3 && docker3) {
+        images = await docker3.listImages({ all: true });
+    }
+
+    if (host == 4 && docker4) {
+        images = await docker4.listImages({ all: true });
+    }
+
     return images;
 }
 
-export async function volumeList() {
-    let volumes = await docker.listVolumes();
+export async function removeImage(imageID, hostID) {
+        
+    let host = hostID || 1;
+    let image_name = '';
+
+    if (host == 0) {
+        try {
+            let image = docker.getImage(imageID);
+            let info = await image.inspect();
+            image_name = info.RepoTags[0];
+            await image.remove();
+            console.log(`Image ${image_name} removed from host 1.`);
+        } catch { console.log(`Image ${image_name} not found on host 1.`); }
+
+        try {
+            let image2 = docker2.getImage(imageID);
+            let info = await image2.inspect();
+            image_name = info.RepoTags[0];
+            await image2.remove();
+            console.log(`Image ${image_name} removed from host 2.`);
+        } catch { console.log(`Image ${image_name} not found on host 2.`); }
+
+        try {
+            let image3 = docker3.getImage(imageID);
+            image3 = await image3.inspect();
+            image_name = image3.RepoTags[0];
+            await image3.remove();
+            console.log(`Image ${image_name} removed from host 3.`);
+        } catch { console.log(`Image ${image_name} not found on host 3.`); }
+
+        try {
+            let image4 = docker4.getImage(imageID);
+            image4 = await image4.inspect();
+            image_name = image4.RepoTags[0];
+            await image4.remove();
+            console.log(`Image ${image_name} removed from host 4.`);
+        } catch { console.log(`Image ${image_name} not found on host 4.`); }
+    }
+
+    if (host == 1) {
+        try {
+            let image = docker.getImage(imageID);
+            let info = await image.inspect();
+            image_name = info.RepoTags[0];
+            await image.remove();
+            console.log(`Image ${image_name} removed from host 1.`);
+        } catch { console.log(`Image ${image_name} not found on host 1.`); }
+    }
+
+    if (host == 2) {
+        try {
+            let image = docker2.getImage(imageID);
+            image = await image.inspect();
+            image_name = image.RepoTags[0];
+            await image.remove();
+            console.log(`Image ${image_name} removed from host 2.`);
+        } catch { console.log(`Image ${image_name} not found on host 2.`); }
+    }
+
+    if (host == 3) {
+        try {
+            let image = docker3.getImage(imageID);
+            image = await image.inspect();
+            image_name = image.RepoTags[0];
+            await image.remove();
+            console.log(`Image ${image_name} removed from host 3.`);
+        } catch { console.log(`Image ${image_name} not found on host 3.`); }
+    }
+
+    if (host == 4) {
+        try {
+            let image = docker4.getImage(imageID);
+            image = await image.inspect();
+            image_name = image.RepoTags[0];
+            await image.remove();
+            console.log(`Image ${image_name} removed from host 4.`);
+        } catch { console.log(`Image ${image_name} not found on host 4.`); }
+    }
+
+}
+
+
+export async function imagePull(image, tag, hostID) {
+
+    console.log('[Image Pull]');
+    console.log(`Pulling image ${image}:${tag} on host ${hostID}.`);
+    console.log('Pull not yet implemented.');
+}
+
+
+
+export async function volumeList(hostid) {
+    
+    let host = hostid || 1;
+
+    let volumes; 
+
+    if (host == 0) {
+        volumes = await docker.listVolumes();
+    }
+
+    if ((host == 0) && docker2) {
+        let volumes2 = await docker2.listVolumes();
+        volumes = volumes.concat(volumes2);
+    }
+
+    if ((host == 0) && docker3) {
+        let volumes3 = await docker3.listVolumes();
+        volumes = volumes.concat(volumes3);
+    }
+
+    if ((host == 0) && docker4) {
+        let volumes4 = await docker4.listVolumes();
+        volumes = volumes.concat(volumes4);
+    }
+
+    if (host == 1) {
+        volumes = await docker.listVolumes();
+    }
+    
+    if (host == 2 && docker2) {
+        volumes = await docker2.listVolumes();
+    }
+
+    if (host == 3 && docker3) {
+        volumes = await docker3.listVolumes();
+    }
+
+    if (host == 4 && docker4) {
+        volumes = await docker4.listVolumes();
+    }
+
     return volumes;
 }
 
-export async function networkList() {
-    let networks = await docker.listNetworks();
+
+export async function networkList(hostid) {
+        
+    let host = hostid || 1;
+
+    let networks; 
+
+    if (host == 0) {
+        networks = await docker.listNetworks();
+    }
+
+    if ((host == 0) && docker2) {
+        let networks2 = await docker2.listNetworks();
+        networks = networks.concat(networks2);
+    }
+
+    if ((host == 0) && docker3) {
+        let networks3 = await docker3.listNetworks();
+        networks = networks.concat(networks3);
+    }
+
+    if ((host == 0) && docker4) {
+        let networks4 = await docker4.listNetworks();
+        networks = networks.concat(networks4);
+    }
+
+    if (host == 1) {
+        networks = await docker.listNetworks();
+    }
+    
+    if (host == 2 && docker2) {
+        networks = await docker2.listNetworks();
+    }
+
+    if (host == 3 && docker3) {
+        networks = await docker3.listNetworks();
+    }
+
+    if (host == 4 && docker4) {
+        networks = await docker4.listNetworks();
+    }
+
     return networks;
 }
 
-export async function GetContainer(containerID) {
-    let container = docker.getContainer(containerID);
-    return container;
-}
 
 export async function containerInfo (containerID) {
+    
+    let container;
+    let host;
 
-    // get the container info
-    let info = docker.getContainer(containerID);
-    let container = await info.inspect();
+    try { container = docker.getContainer(containerID); host = 1; } catch {}
+    try { container = docker2.getContainer(containerID); host = 2; } catch {}
+    try { container = docker3.getContainer(containerID); host = 3; } catch {}
+    try { container = docker4.getContainer(containerID); host = 4; } catch {}
+    
+    container = await container.inspect();
 
     let container_name = container.Name.slice(1);
     let container_image = container.Config.Image;
@@ -146,6 +405,9 @@ export async function containerInfo (containerID) {
     } catch {}
 
     try { external = ports_list[0].external; internal = ports_list[0].internal; } catch { }
+
+    // Make sure there is an entry in the database for this container.
+    await Container.findOrCreate({ where: { containerID: containerID }, defaults: { containerName: container_name, containerID: containerID, link: '', cpu: '[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]', ram: '[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]', host: host } });
 
     let container_info = {
         containerName: container_name,
@@ -174,22 +436,10 @@ export async function containerLogs(containerID) {
 }
 
 
-let available_versions = '';
-async function version_check () {
-	const resp = await fetch('https://registry.hub.docker.com/v2/namespaces/lllllllillllllillll/repositories/dweebui/tags/?page_size=10000');
-    let hub = await resp.json();
-    for (let i = 0; i < hub.results.length; i++) {
-        available_versions += '| ' + hub.results[i].name + ' ';
-    }
-    console.log('Available versions:');
-    console.log(available_versions);
-}
-version_check();
-
 
 // Creates then destroys a docker volume to trigger a docker event.
 export async function trigger_docker_event () {
-    let volume = await docker.createVolume({ Name: 'dweebui_test_volume' });
+    let volume = await docker.createVolume({ Name: 'dweebui_event_trigger' });
     setTimeout(async() => {
         await volume.remove();
     }, 200);
@@ -208,34 +458,129 @@ export async function containerStats (containerID) {
 
 
 
-export async function removeNetwork(networkID) {
-    let network = docker.getNetwork(networkID);
-    await network.remove();
-    console.log(`Network ${networkID} removed.`);
+export async function removeNetwork(networkID, hostID) {
+    let host = hostID || 1;
+
+    if (host == 0) {
+        try {
+            let network = docker.getNetwork(networkID);
+            await network.remove();
+            console.log(`Network ${networkID} removed from host 1.`);
+        } catch { console.log(`Network ${networkID} not found on host 1.`); }
+
+        try {
+            let network2 = docker2.getNetwork(networkID);
+            await network2.remove();
+            console.log(`Network ${networkID} removed from host 2.`);
+        } catch { console.log(`Network ${networkID} not found on host 2.`); }
+
+        try {
+            let network3 = docker3.getNetwork(networkID);
+            await network3.remove();
+            console.log(`Network ${networkID} removed from host 3.`);
+        } catch { console.log(`Network ${networkID} not found on host 3.`); }
+
+        try {
+            let network4 = docker4.getNetwork(networkID);
+            await network4.remove();
+            console.log(`Network ${networkID} removed from host 4.`);
+        } catch { console.log(`Network ${networkID} not found on host 4.`); }
+    }
+
+    if (host == 1) {
+        let network = docker.getNetwork(networkID);
+        await network.remove();
+        console.log(`Network ${networkID} removed from host 1.`);
+    }
+
+    if (host == 2) {
+        let network = docker2.getNetwork(networkID);
+        await network.remove();
+        console.log(`Network ${networkID} removed from host 2.`);
+    }
+
+    if (host == 3) {
+        let network = docker3.getNetwork(networkID);
+        await network.remove();
+        console.log(`Network ${networkID} removed from host 3.`);
+    }
 }
 
+export async function removeVolume(volumeName, hostID) {
 
+    let host = hostID || 1;
+    let volume;
+    let results = 0;
 
-export async function check_configured_hosts () {
+    console.log(volumeName);
+    console.log(host);
 
-    let [host2, created] = await ServerSettings.findOrCreate({ where: {key: 'host2'}, defaults: { key: 'host2', value: '' } });
-    if (host2.value != '') {
-        let [tag2, ip2, port2] = host2.value.split(',');
-        configureHost(2, ip2, port2);
-        console.log('Host 2 configured.');
+    if (host == 0) {
+
+        // Check each host for the volume.
+        try {
+            volume = docker.getVolume(volumeName);
+            results++;
+        } catch { console.log(`Volume ${volumeName} not found on host 1.`); }
+
+        try {
+            volume = docker2.getVolume(volumeName);
+            results++;
+        } catch { console.log(`Volume ${volumeName} not found on host 2.`); }
+
+        try {
+            volume = docker3.getVolume(volumeName);
+            results++;
+        } catch { console.log(`Volume ${volumeName} not found on host 3.`); }
+
+        try {
+            volume = docker4.getVolume(volumeName);
+            results++;
+        } catch { console.log(`Volume ${volumeName} not found on host 4.`); }
+
+        // Make sure there is only one result.
+        if (results > 1) {
+            console.log(`Found volume with name ${volumeName} on multiple hosts. Cancelling action.`);
+        }
+        else if (results == 0) {
+            console.log(`Volume ${volumeName} not found on any host.`);
+        }
+        else if (results == 1) {
+            await volume.remove();
+            console.log(`Volume ${volumeName} removed.`);
+        }
     }
 
-    let [host3, created3] = await ServerSettings.findOrCreate({ where: {key: 'host3'}, defaults: { key: 'host3', value: '' } });
-    if (host3.value != '') {
-        let [tag3, ip3, port3] = host3.value.split(',');
-        configureHost(3, ip3, port3);
-        console.log('Host 3 configured.');
+    if (host == 1) {
+        volume = docker.getVolume(volumeName);
+        console.log(`Removing volume ${volumeName} from host 1.`);
+        await volume.remove();
     }
-
-    let [host4, created4] = await ServerSettings.findOrCreate({ where: {key: 'host4'}, defaults: { key: 'host4', value: '' } });
-    if (host4.value != '') {
-        let [tag4, ip4, port4] = host4.value.split(',');
-        configureHost(4, ip4, port4);
-        console.log('Host 4 configured.');
+    else if (host == 2) {
+        volume = docker2.getVolume(volumeName);
+        console.log(`Removing volume ${volumeName} from host 2.`);
+        await volume.remove();
     }
+    else if (host == 3) {
+        volume = docker3.getVolume(volumeName);
+        console.log(`Removing volume ${volumeName} from host 3.`);
+        await volume.remove();
+    }
+    else if (host == 4) {
+        volume = docker4.getVolume(volumeName);
+        console.log(`Removing volume ${volumeName} from host 4.`);
+        await volume.remove();
+    }
+    console.log(`Volume ${volumeName} removed.`);
 }
+
+let available_versions = '';
+async function version_check () {
+	const resp = await fetch('https://registry.hub.docker.com/v2/namespaces/lllllllillllllillll/repositories/dweebui/tags/?page_size=10000');
+    let hub = await resp.json();
+    for (let i = 0; i < hub.results.length; i++) {
+        available_versions += '| ' + hub.results[i].name + ' ';
+    }
+    console.log(`\x1b[33mAvailable versions: ${available_versions}\x1b[0m`);
+}
+// version_check();

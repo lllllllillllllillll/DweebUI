@@ -6,10 +6,7 @@ export const Login = async function (req, res) {
 
     if (req.session.userID) { res.redirect("/dashboard"); return; }
 
-    // Check authentication settings
-    let authentication = await ServerSettings.findOne({ where: { key: 'authentication' }});
-    if (!authentication) { await ServerSettings.create({ key: 'authentication', value: 'default' }); }
-    authentication = await ServerSettings.findOne({ where: { key: 'authentication' }});
+    let [authentication, created] = await ServerSettings.findOrCreate({ where: {key: 'authentication'}, defaults: { key: 'authentication', value: 'default' } });
 
     // Create an empty session and redirect if authentication is disabled
     if (authentication.value == 'localhost' && req.hostname == 'localhost') {
@@ -49,6 +46,12 @@ export const submitLogin = async function (req, res) {
         res.render("login",{ "error": "Invalid credentials." });
         return;
     }
+
+    if (user.status == 'disabled') {
+        res.render("login",{ "error": "Account disabled." });
+        return;
+    }
+
     // Log the user in.
     else {
         req.session.username = user.username;
@@ -56,9 +59,6 @@ export const submitLogin = async function (req, res) {
         req.session.role = user.role;
         let newLogin = new Date().toLocaleString();
         await User.update({ lastLogin: newLogin }, { where: { email: email } });
-
-        console.log(`${req.session.username} logged in`);
-
         await Syslog.create({ username: user.username, uniqueID: email, event: "Login", message: "User logged in", ip: req.ip });
         res.redirect("/dashboard");
         return;

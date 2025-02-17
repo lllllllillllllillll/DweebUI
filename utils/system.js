@@ -1,4 +1,4 @@
-import { User, ServerSettings } from '../db/config.js';
+import { User, ServerSettings, Hosts } from '../db/config.js';
 import { readFileSync } from 'fs';
 
 
@@ -9,7 +9,8 @@ export async function Navbar (req) {
     let userID = req.session.userID;
     let username = req.session.username;
     let role = req.session.role;
-    let host = req.session.host;
+    let host = req.session.host || 1;
+    let alert = req.session.alert || '';
 
     let language = await getLanguage(userID);
 
@@ -23,43 +24,37 @@ export async function Navbar (req) {
     let sponsored = await ServerSettings.findOne({ where: { key: 'sponsored' }});
     if (sponsored) { username = `<label class="text-yellow">${username}</label>`; }
 
-    let [host0_active, host0_toggle, host0_tag, host0_ip, host0_port] = ['', '', '', '', ''];
-    let [host1_active, host1_toggle, host1_tag, host1_ip, host1_port] = ['', '', '', '', ''];
-    let [host2_active, host2_toggle, host2_tag, host2_ip, host2_port] = ['', '', '', '', ''];
-    let [host3_active, host3_toggle, host3_tag, host3_ip, host3_port] = ['', '', '', '', ''];
-    let [host4_active, host4_toggle, host4_tag, host4_ip, host4_port] = ['', '', '', '', ''];
-
-    const [host2, created2] = await ServerSettings.findOrCreate({ where: { key: 'host2' }, defaults: { key: 'host2', value: '' }});
-    const [host3, created3] = await ServerSettings.findOrCreate({ where: { key: 'host3' }, defaults: { key: 'host3', value: '' }});
-    const [host4, created4] = await ServerSettings.findOrCreate({ where: { key: 'host4' }, defaults: { key: 'host4', value: '' }});
-
-    if (host2.value) { host2_toggle = 'checked'; [host2_tag, host2_ip, host2_port] = host2.value.split(','); }
-    if (host3.value) { host3_toggle = 'checked'; [host3_tag, host3_ip, host3_port] = host3.value.split(','); }
-    if (host4.value) { host4_toggle = 'checked'; [host4_tag, host4_ip, host4_port] = host4.value.split(','); }
-    
+    // Get all hosts where state = 'enabled'
+    let hosts = await Hosts.findAll({ where: { state: 'enabled' }});
     let host_buttons = '<form action="/dashboard/action/switch_host/hostid" method="post">';
     let nav_link = '';
 
-    if (host == '0') { host0_active = 'text-yellow'; nav_link = '/0'; }
-    if (host == '1') { host1_active = 'text-yellow'; }
-    if (host == '2') { host2_active = 'text-yellow'; nav_link = '/2'; }
-    if (host == '3') { host3_active = 'text-yellow'; nav_link = '/3'; }
-    if (host == '4') { host4_active = 'text-yellow'; nav_link = '/4'; }
+    // Create a button for each host
+    if (hosts.length > 1) {
 
-    if (host2_toggle || host3_toggle || host4_toggle) { host_buttons += `<button type="submit" name="host" value="0" class="btn ${host0_active}" title="All">All</button>  <button type="submit" name="host" value="1" hx-swap="none" class="btn ${host1_active}" title="Host 1">Host 1</button>`; }
-    if (host2_toggle) { host_buttons += `<button type="submit" name="host" value="2" class="btn ${host2_active}" title="${host2_tag}">${host2_tag}</button>`; }
-    if (host3_toggle) { host_buttons += `<button type="submit" name="host" value="3" hx-swap="none" class="btn ${host3_active}" title="${host3_tag}">${host3_tag}</button>`; }
-    if (host4_toggle) { host_buttons += `<button type="submit" name="host" value="4" hx-swap="none" class="btn ${host4_active}" title="${host4_tag}">${host4_tag}</button>`; }
+        if (host == 0) { host_buttons += `<button type="submit" name="host" value="0" class="btn text-yellow mx-1" title="All">All</button>`; }
+        else { host_buttons += `<button type="submit" name="host" value="0" class="btn mx-1" title="All">All</button>`; }
+        
 
-    host_buttons += '</form>';
+        for (let i = 0; i < hosts.length; i++) {
+            let host_id = hosts[i].id;
+            let host_tag = hosts[i].tag;
+            let host_active = '';
+            if (host == host_id) { host_active = 'text-yellow'; nav_link = `/${host_id}`; }
+            host_buttons += `<button type="submit" name="host" value="${host_id}" class="btn mx-1 ${host_active}" title="${host_tag}">${host_tag}</button>`;
+        }
+        host_buttons += '</form>';
+    } else { host_buttons = ''; }
 
     let navbar = readFileSync('./views/partials/navbar.html', 'utf8');
 
-    if (language == 'english') {
+    if (language == 'English') {
         navbar = navbar.replace(/Username/g, username);
         navbar = navbar.replace(/Userrole/g, role);
         navbar = navbar.replace(/HostButtons/g, host_buttons);
         navbar = navbar.replace(/HOSTID/g, nav_link);
+        navbar = navbar.replace(/NavAlert/g, alert);
+        req.session.alert = '';
         return navbar;
     } else {
         let lang = readFileSync(`./languages/${language}.json`, 'utf8');
@@ -84,6 +79,8 @@ export async function Navbar (req) {
         navbar = navbar.replace(/Username/g, username);
         navbar = navbar.replace(/Userrole/g, role);
         navbar = navbar.replace(/HostButtons/g, host_buttons);
+        navbar = navbar.replace(/NavAlert/g, alert);
+        req.session.alert = '';
         return navbar;
     }
 }
@@ -96,7 +93,7 @@ export async function Sidebar (req) {
 
     let sidebar = readFileSync('./views/partials/sidebar.html', 'utf8');
 
-    if (language == 'english') {
+    if (language == 'English') {
         return sidebar;
     } else {
         let lang = readFileSync(`./languages/${language}.json`, 'utf8');
@@ -122,18 +119,20 @@ export async function Footer (req) {
 
     let package_info = readFileSync(`package.json`, 'utf8');
     package_info = JSON.parse(package_info);
-    let build_version = package_info.version.split('.').pop();
+    let version = package_info.version;
+    let build = package_info.build;
 
-    footer = footer.replace(/BuildVersion/g, build_version);
+    footer = footer.replace(/Version/g, version);
+    footer = footer.replace(/Build/g, `Build ${build}`);
 
-    if (language == 'english') {
-        return footer;
-    } else {
+    if (language == 'English') { return footer;}
+    else {
         let lang = readFileSync(`./languages/${language}.json`, 'utf8');
         lang = JSON.parse(lang);
-        
         footer = footer.replace(/Documentation/g, lang.Documentation);
-
+        footer = footer.replace(/License/g, lang.License);
+        footer = footer.replace(/Source Code/g, lang.Source_Code);
+        footer = footer.replace(/Sponsor/g, lang.Sponsor);
         return footer;
     }
 }

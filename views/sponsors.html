@@ -29,43 +29,21 @@
                 <%- sidebar %>
                 
                 <div class="col-12 col-md-9 d-flex flex-column">
-                <div class="card-body">
-
-                  <!-- HTMX - Submits the form and replaces the target with the response. Replaces the submit button with "Updated" -->
-                  <form id="preferences" hx-post="/preferences" hx-target="#submit" hx-swap="outerHTML">
-
-                  <h1 class="">Sponsors</h1>
-                  <label class="text-muted mb-3">Some awesome people who have donated to DweebUI.</label>
-                  
-                  <div class="table-group-divider mb-3"></div>
-
-
-                  <span type="button" class="btn avatar avatar-xl bg-green-lt" hx-trigger="load, click" hx-post="/thank" hx-target="#count" name="MM"  title="MM" style="margin-right: 5px;">MM</span>
-
-                  <span type="button" class="btn avatar avatar-xl bg-azure-lt" hx-trigger="click" hx-post="/thank" hx-target="#count" name="PD" title="PD" style="margin-right: 5px;">PD</span>
-
-                  <span type="button" class="btn avatar avatar-xl bg-teal-lt" hx-trigger="click" hx-post="/thank" hx-target="#count" name="C" title="C" style="margin-right: 5px;">C</span>
-
-                  <span type="button" class="btn avatar avatar-xl bg-indigo-lt" hx-trigger="click" hx-post="/thank" hx-target="#count" name="AD" title="AD" style="margin-right: 5px;">AD</span>
-
-
+                  <div class="card-body">
+                    <h1 class="">Sponsors</h1>
+                    <label class="text-muted mb-3">Some awesome people who have donated to DweebUI.</label>
+                    <div class="table-group-divider mb-3"></div>
+                    <span type="button" class="btn avatar avatar-xl bg-green-lt mx-1" hx-trigger="mousedown" hx-post="/sponsors/action/thank" hx-target="#counter" name="MM"  title="MM">MM</span>
+                    <span type="button" class="btn avatar avatar-xl bg-azure-lt mx-1" hx-trigger="mousedown" hx-post="/sponsors/action/thank" hx-target="#counter" name="PD" title="PD">PD</span>
+                    <span type="button" class="btn avatar avatar-xl bg-teal-lt mx-1" hx-trigger="mousedown" hx-post="/sponsors/action/thank" hx-target="#counter" name="C" title="C">C</span>
+                    <span type="button" class="btn avatar avatar-xl bg-indigo-lt mx-1" hx-trigger="mousedown" hx-post="/sponsors/action/thank" hx-target="#counter" name="AD" title="AD">AD</span>
                   </div>
-
-                  <!-- <div class="card-footer bg-transparent mt-auto">
-                    <div class="btn-list justify-content-end">
-                      <a href="#" class="btn">
-                        Cancel
-                      </a>
-                      <button class="btn btn-primary" id="submit">
-                        Update
-                      </button>
-                    </div>
-                  </div> -->
-
-
-                  
+                  <div class="row m-2 p-2">
+                    <label class="text-muted mb-1 p-0">Thanks counter:</label>
+                    <span type="button" class="btn avatar avatar-xl bg-yellow-lt mx-2" id="counter" hx-trigger="load" hx-get="/sponsors/view/thanks" hx-target="#counter">0</span>
+                  </div>
                 </div>
-              </form>
+
               </div>
             </div>
           </div>

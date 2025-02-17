@@ -1,9 +1,7 @@
-import { Alert, getLanguage, Navbar, Footer } from '../utils/system.js';
+import { Alert, Navbar, Footer } from '../utils/system.js';
 import { networkList, GetContainerLists, removeNetwork } from '../utils/docker.js';
 
 export const Networks = async function(req, res) {
-
-    req.session.host = `${req.params.host || 1}`;
     
     let container_networks = [];
     let network_name = '';
@@ -21,9 +19,15 @@ export const Networks = async function(req, res) {
     let network_list = '';
 
     for (let i = 0; i < networks.length; i++) {
+
         let status = '';
+
         // Check if the network is in use
         try { if (container_networks.includes(networks[i].Id)) { status = `In use`; } } catch {}
+
+        let date = new Date(networks[i].Created);
+        let created = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
         // Create the row for the network entry
         let details = `
             <tr>
@@ -31,7 +35,7 @@ export const Networks = async function(req, res) {
                 <td class="sort-name">${networks[i].Name}</td>
                 <td class="sort-city">${networks[i].Id}</td>
                 <td class="sort-score text-green">${status}</td>
-                <td class="sort-date" data-date="1628122643">${networks[i].Created}</td>
+                <td class="sort-date" data-date="1628122643">${created}</td>
                 <td class=""><button class="badge badge-outline text-grey" id="" data-hx-get="/users/usersModals/user/" hx-target="#modal_content"  hx-swap="innerHTML" data-bs-toggle="modal" data-bs-target="#scrolling_modal">Details</button></td>
             </tr>`
             // Add the row to the network list
@@ -39,10 +43,10 @@ export const Networks = async function(req, res) {
     }
 
     res.render("networks",{ 
-        alert: '',
+        alert: req.session.alert,
         username: req.session.username,
         role: req.session.role,
-        network_count: '',
+        network_count: networks.length,
         network_list: network_list,
         navbar: await Navbar(req),
         footer: await Footer(req),
@@ -51,31 +55,40 @@ export const Networks = async function(req, res) {
 
 
 
-export const NetworkAction = async function(req,res){
+export const NetworksAction = async function(req,res){
 
-    // let trigger_name = req.header('hx-trigger-name');
-    // let trigger_id = req.header('hx-trigger');
-    // console.log(`trigger_name: ${trigger_name} - trigger_id: ${trigger_id}`);
-    // console.log(req.body);
+    let action = req.params.action;
+    let id = req.params.id;
 
-
+    console.log(`Action: ${action} - ID: ${id}`);
+    
     // Grab the list of networks
     let networks = req.body.select;
+
     // Make sure the value is an array
     if (typeof(networks) == 'string') { networks = [networks]; }
+
     // Loop through the array
     for (let i = 0; i < networks.length; i++) {
-        if (networks[i] != 'on') {
+
+        // Ignore the selectAll checkbox
+        if (networks[i] == 'on') { continue; }
+
+        // Remove
+        if (action == 'remove') {
             try {
                 await removeNetwork(networks[i]);
-                console.log(`Network removed: ${networks[i]}`);
             } 
-            catch {
-                console.log(`Unable to remove network: ${networks[i]}`);
-            }
+            catch {            }
         }
+
+
     }
 
+    // Create an alert
+    req.session.alert = Alert('success', 'Networks updated');
+
+    // Refresh the page
     res.redirect("/networks");
 }
 

@@ -4,13 +4,19 @@ import { Alert, getLanguage, Navbar, Sidebar, Footer, Capitalize } from '../util
 export const Preferences = async function(req,res){
 
     let language = await getLanguage(req.session.userID);
-    let Language = Capitalize(language);
-    let selected = `<option value="${language}" selected hidden>${Language}</option>`;
+    let selected = `<option value="${language}" selected hidden>${language}</option>`;
 
-    let user = await User.findOne({ where: { userID: req.session.userID }});
-    let preferences = JSON.parse(user.preferences);
-    let hide_profile = preferences.hide_profile;
-    let checked = ''; if (hide_profile == true) { checked = 'checked'; }
+    let user = '';
+    let preferences = '';
+    let hide_profile = '';
+    let checked = '';
+
+    try {
+        user = await User.findOne({ where: { userID: req.session.userID }});
+        preferences = JSON.parse(user.preferences);
+        hide_profile = preferences.hide_profile;
+        checked = ''; if (hide_profile == true) { checked = 'checked'; }
+    } catch {}
 
     res.render("preferences",{ 
         alert: '',

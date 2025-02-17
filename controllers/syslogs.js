@@ -2,8 +2,6 @@ import { Syslog } from '../db/config.js';
 import { Alert, getLanguage, Navbar, Footer } from '../utils/system.js';
 
 export const Syslogs = async function(req, res) {
-
-    req.session.host = `${req.params.host || 1}`;
     
     let logs = '';
 

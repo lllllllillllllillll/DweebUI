@@ -2,9 +2,14 @@ import express from 'express';
 import ejs from 'ejs';
 import { router } from './router.js';
 import { sessionMiddleware } from './db/config.js';
+import { readFileSync } from 'fs';
 
 const app = express();
 const PORT = process.env.PORT || 8000;
+
+let app_info = JSON.parse(readFileSync(`package.json`, 'utf8'));
+console.log(`\x1b[33m DweebUI v${app_info.version}\n Author: ${app_info.author}\n License: ${app_info.license}\n Description: ${app_info.description}\x1b[0m`);
+console.log('\x1b[31m * Breaking changes may require you to remove the DweebUI volume and start fresh. \n \x1b[0m');
 
 app.set('view engine', 'html');
 app.set('trust proxy', true);

@@ -799,6 +799,9 @@
       "image": "linuxserver/kodi-headless:latest",
       "logo": "https://raw.githubusercontent.com/lllllllillllllillll/DweebUI-Icons/main/kodi.png",
       "platform": "linux",
+      "categories": [
+        "Media"
+      ],
       "ports": [
         "8080/tcp",
         "9777/udp"

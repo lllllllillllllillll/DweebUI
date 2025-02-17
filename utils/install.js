@@ -7,6 +7,48 @@ import yaml from 'js-yaml';
 import { Alert } from "./system.js";
 
 
+
+
+
+
+
+async function composeInstall (compose) {
+    try {
+        console.log('Starting image pull...');
+        await Promise.race([
+            compose.pull(),
+            new Promise((_, reject) => 
+                setTimeout(() => reject(new Error('Pull timeout')), 60000)
+            )
+        ]);
+        console.log('Image pull complete');
+
+        console.log('Starting compose up...');
+        await compose.up();
+        console.log('Compose up complete');
+    } catch (err) {
+        console.error('Error in composeInstall');
+        if (err.message === 'Pull timeout') {
+            console.log('Pull timed out, attempting compose up anyway...');
+        } else {
+            console.log('Trying again...');
+        }
+        
+        try {
+            await compose.up();
+            console.log('Compose up complete');
+        } catch (upErr) {
+            console.error('Final compose up attempt failed');
+            throw upErr;
+        }
+    }
+}
+
+
+
+
+
+
 export const Install = async (req, res) => {
 
     let data = req.body;
@@ -24,6 +66,8 @@ export const Install = async (req, res) => {
     
     let docker_volumes = [];
 
+    console.log(name);
+
     // Make sure there isn't a container already running that has the same name
     let containers = await docker.listContainers({ all: true });
     for (let i = 0; i < containers.length; i++) {
@@ -34,43 +78,6 @@ export const Install = async (req, res) => {
             return;
         }
     }
-
-
-    // async function composeInstall (name, compose, req) {
-
-    //     console.log('[composeInstall]');
-
-    //     // try {
-    //     //     await compose.pull().then(() => {
-
-    //     //         compose.up();
-
-
-    //     //         Syslog.create({
-    //     //             user: req.session.user,
-    //     //             email: null,
-    //     //             event: "App Installation",
-    //     //             message: `${name} installed successfully`,
-    //     //             ip: req.socket.remoteAddress
-    //     //         }); 
-
-    //     //     });
-    //     // } catch (err) {
-    //     //     await Syslog.create({
-    //     //         user: req.session.user,
-    //     //         email: null,
-    //     //         event: "App Installation",
-    //     //         message: `${name} installation failed: ${err}`,
-    //     //         ip: req.socket.remoteAddress
-    //     //     });
-    //     // }
-
-    //     await compose.pull();
-    //     await compose.up();
-    //     console.log('compose.up');
-    // }
-
-
 
 
     // Compose file installation
@@ -201,16 +208,9 @@ export const Install = async (req, res) => {
 
     console.log(`Installing ${name}. It should appear on the dashboard shortly.`);
 
-    // composeInstall(name, compose, req);
-
     var compose = new DockerodeCompose(docker, `./appdata/${name}/compose.yaml`, `${name}`);
 
-    (async () => {
-        console.log('Pulling image');
-        await compose.pull();
-        console.log('Starting container');
-        await compose.up();
-    })();
+    composeInstall(compose);
 
     let alert = Alert('success', `Installing ${name}. It should appear on the dashboard shortly.`);
 

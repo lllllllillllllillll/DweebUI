@@ -31,8 +31,7 @@
                 <div class="col-12 col-md-9 d-flex flex-column">
                 <div class="card-body">
 
-                  <!-- HTMX - Submits the form and replaces the target with the response. Replaces the submit button with "Updated" -->
-                  <form id="settings" hx-post="/settings/action/update" hx-target="#submit" hx-swap="outerHTML">
+                  <form id="settings" method="POST" action="/settings/action/update">
 
                   <h1 class="">Settings</h1>
                   <label class="text-muted mb-3">Configure server settings. Admin only.</label>
@@ -45,7 +44,7 @@
                     <div class="row align-items-center">
                       <div class="col-auto">
                         <label class="form-check form-switch form-switch-lg">
-                          <input class="form-check-input" type="checkbox" name="user_registration" <%= user_registration %>>
+                          <input class="form-check-input" type="checkbox" name="user_registration" value="true" <%= user_registration %>>
                           <span class="form-check-label form-check-label-on text-success">
                             Enabled
                           </span>
@@ -55,7 +54,7 @@
                         </label>
                       </div>
                       <div class="col-5">
-                        <input type="text" class="form-control" name="registration_secret" placeholder="multiple-words-strong-passphrase" value="<%= registration_secret %>">
+                        <input type="text" class="form-control" name="registration_secret" value="<%= registration_secret %>">
                       </div>
                     </div>
 
@@ -66,7 +65,7 @@
                     <div class="row align-items-center">
                       <div class="col-auto">
                         <label class="form-check form-switch form-switch-lg">
-                          <input class="form-check-input" type="checkbox" name="custom_link" <%= custom_link %>>
+                          <input class="form-check-input" type="checkbox" name="port_link" <%= port_link %>>
                           <span class="form-check-label form-check-label-on text-warning">
                             Custom
                           </span>
@@ -76,7 +75,7 @@
                         </label>
                       </div>
                       <div class="col-5">
-                        <input type="text" class="form-control" name="link_url" placeholder="IP Address or Domain" value="<%= link_url %>">
+                        <input type="text" class="form-control" name="port_url" placeholder="IP Address or Domain" value="<%= port_url %>">
                       </div>
                     </div>
 
@@ -87,6 +86,7 @@
                     <div class="row align-items-center">
                       <div class="col-auto">
                         <select class="form-select" name="authentication">
+                          <%- selected_auth %>
                           <option value="default">Username and Password - Default</option>
                           <option value="localhost">Localhost</option>
                           <option value="no_auth">Disabled - No Authentication</option>
@@ -102,10 +102,79 @@
                     <div class="row g-2">
                       <div class="col-3">
                         <select class="form-control form-select" name="language_input">
-                          <option value="english" selected="" hidden="">English</option>
-                          <%- selected %>
-                          <option value="english">English</option>
-                          <option value="chinese">Chinese</option>
+                          <option value="<%= selected %>" selected="" hidden=""><%= selected %></option>
+                          <option value="Afrikaans">Afrikaans</option>
+                          <option value="Albanian">Albanian</option>
+                          <option value="Arabic">Arabic</option>
+                          <option value="Armenian">Armenian</option>
+                          <option value="Basque">Basque</option>
+                          <option value="Bengali">Bengali</option>
+                          <option value="Bulgarian">Bulgarian</option>
+                          <option value="Catalan">Catalan</option>
+                          <option value="Cambodian">Cambodian</option>
+                          <option value="Chinese">Chinese (Mandarin)</option>
+                          <option value="Croatian">Croatian</option>
+                          <option value="Czech">Czech</option>
+                          <option value="Danish">Danish</option>
+                          <option value="Dutch">Dutch</option>
+                          <option value="English">English</option>
+                          <option value="Estonian">Estonian</option>
+                          <option value="Fiji">Fiji</option>
+                          <option value="Finnish">Finnish</option>
+                          <option value="French">French</option>
+                          <option value="Georgian">Georgian</option>
+                          <option value="German">German</option>
+                          <option value="Greek">Greek</option>
+                          <option value="Gujarati">Gujarati</option>
+                          <option value="Hebrew">Hebrew</option>
+                          <option value="Hindi">Hindi</option>
+                          <option value="Hungarian">Hungarian</option>
+                          <option value="Icelandic">Icelandic</option>
+                          <option value="Indonesian">Indonesian</option>
+                          <option value="Irish">Irish</option>
+                          <option value="Italian">Italian</option>
+                          <option value="Japanese">Japanese</option>
+                          <option value="Javanese">Javanese</option>
+                          <option value="Korean">Korean</option>
+                          <option value="Latin">Latin</option>
+                          <option value="Latvian">Latvian</option>
+                          <option value="Lithuanian">Lithuanian</option>
+                          <option value="Macedonian">Macedonian</option>
+                          <option value="Malay">Malay</option>
+                          <option value="Malayalam">Malayalam</option>
+                          <option value="Maltese">Maltese</option>
+                          <option value="Maori">Maori</option>
+                          <option value="Marathi">Marathi</option>
+                          <option value="Mongolian">Mongolian</option>
+                          <option value="Nepali">Nepali</option>
+                          <option value="Norwegian">Norwegian</option>
+                          <option value="Persian">Persian</option>
+                          <option value="Polish">Polish</option>
+                          <option value="Portuguese">Portuguese</option>
+                          <option value="Punjabi">Punjabi</option>
+                          <option value="Quechua">Quechua</option>
+                          <option value="Romanian">Romanian</option>
+                          <option value="Russian">Russian</option>
+                          <option value="Samoan">Samoan</option>
+                          <option value="Serbian">Serbian</option>
+                          <option value="Slovak">Slovak</option>
+                          <option value="Slovenian">Slovenian</option>
+                          <option value="Spanish">Spanish</option>
+                          <option value="Swahili">Swahili</option>
+                          <option value="Swedish ">Swedish </option>
+                          <option value="Tamil">Tamil</option>
+                          <option value="Tatar">Tatar</option>
+                          <option value="Telugu">Telugu</option>
+                          <option value="Thai">Thai</option>
+                          <option value="Tibetan">Tibetan</option>
+                          <option value="Tonga">Tonga</option>
+                          <option value="Turkish">Turkish</option>
+                          <option value="Ukrainian">Ukrainian</option>
+                          <option value="Urdu">Urdu</option>
+                          <option value="Uzbek">Uzbek</option>
+                          <option value="Vietnamese">Vietnamese</option>
+                          <option value="Welsh">Welsh</option>
+                          <option value="Xhosa">Xhosa</option>
                         </select>
                       </div>
                       <div class="col-auto">
@@ -153,118 +222,29 @@
                     <h3 class="mt-4">Hosts</h3>
 
 
-                    <label class="text-muted mb-2">Host #1</label>
-                    <div class="row align-items-center">
-                      <div class="col-auto">
-                        <label class="form-check form-switch form-switch-lg">
-                          <input class="form-check-input" type="checkbox" name="host1" checked disabled>
-                          <span class="form-check-label form-check-label-on text-success">
-                            Enabled
-                          </span>
-                          <span class="form-check-label form-check-label-off text-danger">
-                            Disabled
-                          </span>
-                        </label>
-                      </div>
-                      <div class="col-2">
-                        <input type="text" class="form-control" placeholder="Host 1" readonly>
-                      </div>
-                      <div class="col-4">
-                        <input type="text" class="form-control" placeholder="/var/run/docker.sock" readonly>
-                      </div>
-                      <div class="col-2">
-                        <input type="text" class="form-control" readonly>
-                      </div>
-                    </div>
+
+                    <%- host_list %>
 
 
 
-                    <label class="text-muted mb-2">Host #2</label>
-                    <div class="row align-items-center">
-                      <div class="col-auto">
-                        <label class="form-check form-switch form-switch-lg">
-                          <input class="form-check-input" type="checkbox" name="host2" <%= host2_toggle %> >
-                          <span class="form-check-label form-check-label-on text-success">
-                            Enabled
-                          </span>
-                          <span class="form-check-label form-check-label-off text-danger">
-                            Disabled
-                          </span>
-                        </label>
-                      </div>
-                      <div class="col-2">
-                        <input type="text" class="form-control" name="tag2" value="<%= host2_tag %>" placeholder="Tag">
-                      </div>
-                      <div class="col-4">
-                        <input type="text" class="form-control" name="ip2" value="<%= host2_ip %>" placeholder="Host IP">
-                      </div>
-                      <div class="col-2">
-                        <input type="text" class="form-control" name="port2" value="<%= host2_port %>" placeholder="PORT">
-                      </div>
-                    </div>
-                    
+                    <div class="row align-items-center py-4 col-12" id="add_host">
+                      
+                      <button class="btn" hx-get="/settings/view/add_host" hx-swap="beforebegin" hx-target="#add_host">
+                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-plus mx-2"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
+                        Add Host
+                      </button>
 
-
-                    <label class="text-muted mb-2">Host #3</label>
-                    <div class="row align-items-center">
-                      <div class="col-auto">
-                        <label class="form-check form-switch form-switch-lg">
-                          <input class="form-check-input" type="checkbox" name="host3" <%= host3_toggle %> >
-                          <span class="form-check-label form-check-label-on text-success">
-                            Enabled
-                          </span>
-                          <span class="form-check-label form-check-label-off text-danger">
-                            Disabled
-                          </span>
-                        </label>
-                      </div>
-                      <div class="col-2">
-                        <input type="text" class="form-control" name="tag3" value="<%= host3_tag %>" placeholder="Tag">
-                      </div>
-                      <div class="col-4">
-                        <input type="text" class="form-control" name="ip3" value="<%= host3_ip %>" placeholder="Host IP">
-                      </div>
-                      <div class="col-2">
-                        <input type="text" class="form-control" name="port3" value="<%= host3_port %>" placeholder="PORT">
-                      </div>
-                    </div>
-
-
-
-                    <label class="text-muted mb-2">Host #4</label>
-                    <div class="row align-items-center">
-                      <div class="col-auto">
-                        <label class="form-check form-switch form-switch-lg">
-                          <input class="form-check-input" type="checkbox" name="host4" <%= host4_toggle %> >
-                          <span class="form-check-label form-check-label-on text-success">
-                            Enabled
-                          </span>
-                          <span class="form-check-label form-check-label-off text-danger">
-                            Disabled
-                          </span>
-                        </label>
-                      </div>
-                      <div class="col-2">
-                        <input type="text" class="form-control" name="tag4" value="<%= host4_tag %>" placeholder="Tag">
-                      </div>
-                      <div class="col-4">
-                        <input type="text" class="form-control" name="ip4" value="<%= host4_ip %>" placeholder="Host IP">
-                      </div>
-                      <div class="col-2">
-                        <input type="text" class="form-control" name="port4" value="<%= host4_port %>" placeholder="PORT">
-                      </div>
                     </div>
 
 
 
                   </div>
+
+
                   <div class="card-footer bg-transparent mt-auto">
                     <div class="btn-list justify-content-end">
-                      <a href="#" class="btn">
-                        Cancel
-                      </a>
-                      <button class="btn btn-primary" id="submit">
-                        Update
+                      <button class="btn btn-success" type="submit">
+                        Save Changes
                       </button>
                     </div>
                   </div>
@@ -276,6 +256,14 @@
           </div>
         </div>
         
+        <div class="modal modal-blur fade" style="display: none" aria-hidden="false" tabindex="-1" id="modal" >
+          <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+            <div class="modal-content" id="modal_content">
+              <!-- Modal content gets swapped in with HTMX trigger -->
+            </div>
+          </div>
+        </div>
+
         <!-- EJS -->
         <%- footer %>
 

@@ -190,3 +190,21 @@ body {
   text-overflow: ellipsis " [..]";
   line-height: 1.5em; /* Adjust based on font size */
 }
+
+
+.menu-option {
+  min-width: 8rem;
+  filter: brightness(80%);
+  font-weight: var(--tblr-font-weight-bold);
+  padding-top: 0.25rem !important;
+  padding-bottom: 0.25rem !important;
+}
+
+.menu-option:hover {
+  color: var(--tblr-body-color);
+  filter: brightness(200%);
+}
+
+.slim-menu {
+  --tblr-dropdown-min-width: 8rem;
+}

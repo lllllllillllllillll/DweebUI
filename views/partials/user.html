@@ -3,7 +3,7 @@
 
         <div class="modal-header">
             <h5 class="modal-title px-2">Username</h5>
-            <div class="me-auto badge badge-outline text-green">Active</div>
+                UserStatus
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         
@@ -35,21 +35,19 @@
             
             <div class="row mb-3">
                 <div class="col-lg-6">
-                    <label class="mb-1">Last Login: </label>
-                    <input type="text" class="form-control" name="last_login" value="LastLogin"/>
+                    <label class="mb-1">Created: </label>
+                    <input type="text" class="form-control" name="created" value="CreatedAt"/>
                 </div> 
 
                 <div class="col-lg-6">
-                    <label class="mb-1">Created: </label>
-                    <input type="text" class="form-control" name="created" value="CreatedAt"/>
+                    <label class="mb-1">Last Login: </label>
+                    <input type="text" class="form-control" name="last_login" value="LastLogin"/>
                 </div> 
             </div>
 
 
             <div class="col mb-2">
-                <a href="#" class="btn w-100" data-bs-dismiss="modal">
-                    Reset Permissions
-                </a>
+                <button type="submit" name="change" value="reset_permissions" class="btn w-100" hx-confirm="Are you sure you want to reset permissions for this account?">Reset Permissions</button>
             </div>
 
         </div>
@@ -70,11 +68,11 @@
                     </div>
 
                     <div class="col">
-                        <button type="submit" name="change" value="disable" class="btn btn-secondary w-100" hx-confirm="Are you sure you want to disable this account?">Disable</button>
+                        StatusToggle
                     </div>
 
                     <div class="col">
-                        <button type="submit" name="change" value="update" class="btn btn-primary w-100" hx-confirm="Update account?">Update</button>
+                        <button type="submit" name="change" value="update" class="btn btn-primary w-100" hx-confirm="Update account?" disabled>Update</button>
                     </div>
 
                 </div>

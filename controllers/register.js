@@ -7,12 +7,11 @@ export const Register = async function(req,res){
 
     if (req.session.username) { res.redirect("/dashboard"); }
 
-    let secret_input = '';
-    let user_registration = await ServerSettings.findOne({ where: { key: 'user_registration' }});
-    if (user_registration == null ) { user_registration = false; }
-    else { user_registration = user_registration.value; }
+    let [authentication, created] = await ServerSettings.findOrCreate({ where: {key: 'authentication'}, defaults: { key: 'authentication', value: 'default' } });
+    let [user_registration, created2] = await ServerSettings.findOrCreate({ where: {key: 'user_registration'}, defaults: { key: 'user_registration', value: false } });
     
-    if (user_registration) {
+    let secret_input = '';
+    if (user_registration.value == true) {
         secret_input = `<div class="mb-3"><label class="form-label">Secret</label>
                                 <div class="input-group input-group-flat">
                                     <input type="text" class="form-control" autocomplete="off" name="registration_secret">
@@ -20,11 +19,11 @@ export const Register = async function(req,res){
                             </div>`}
 
     // If there are no users, or registration has been enabled, display the registration page.
-    if ((await User.count() == 0) || (user_registration)) {
+    if ((await User.count() == 0) || (user_registration.value == true)) {
         res.render("register",{ 
             "error": "",
             "reg_secret": secret_input,
-        }); 
+        });
     } else {
         res.render("login", { 
             "error": "User registration is disabled." 

@@ -13,9 +13,8 @@
           </h1>
 
           
-          <div id="alert"></div>
-
-
+          <div id="alert">NavAlert</div>
+          
           <div class="navbar-nav flex-row order-md-last">
 
             <div class="nav-item d-none d-md-flex">
@@ -37,7 +36,7 @@
               </button>
               <div class="nav-item dropdown d-none d-md-flex">
 
-                <a  class="nav-link px-0 text-muted" data-bs-toggle="dropdown" tabindex="-1" aria-label="Show notifications">
+                <a  class="nav-link px-0 text-muted" data-bs-toggle="dropdown" tabindex="-1" aria-label="Show notifications" disabled>
 
                   <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" /><path d="M9 17v1a3 3 0 0 0 6 0v-1" /></svg>
                   <!-- <span class="badge bg-red"></span> -->
@@ -108,13 +107,13 @@
                   <div class="mt-1 small text-secondary">Userrole</div>
                 </div>
               </a>
-              <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                <a href="/account" class="dropdown-item">Account</a>
-                <a class="dropdown-item text-muted">Notifications</a>
+              <div class="slim-menu dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                <a href="/account" class="py-1 slim-item dropdown-item text-secondary menu-option">Account</a>
+                <a class="py-1 slim-item dropdown-item text-secondary menu-option">Notifications</a>
                 <!-- <div class="dropdown-divider"></div> -->
-                <a href="/preferences" class="dropdown-item">Preferences</a>
-                <a href="/settings" class="dropdown-item">Settings</a>
-                <a href="/logout" class="dropdown-item">Logout</a>
+                <a href="/preferences" class="py-1 slim-item dropdown-item text-secondary menu-option">Preferences</a>
+                <a href="/settings" class="py-1 slim-item dropdown-item text-secondary menu-option">Settings</a>
+                <a href="/logout" class="py-1 slim-item dropdown-item text-secondary menu-option">Logout</a>
               </div>
             </div>
           </div>
@@ -217,7 +216,7 @@
               <div class="my-2 my-md-0 flex-grow-1 flex-md-grow-0 order-first order-md-last">
                 <div class="card-actions btn-actions">
 
-                  <input type="search" class="form-control mx-2" placeholder="Search..." aria-label="search" name="search" hx-post="/search" hx-trigger="input changed delay:500ms, search" hx-swap="none">
+                  <input type="search" class="form-control mx-2" placeholder="Search..." aria-label="search" name="search" hx-target="#page_content" hx-post="/search" hx-trigger="input changed delay:500ms, search" hx-swap="none">
 
                   <button class="btn-action mx-1 text-muted" title="Grid View" data-hx-post="/dashboard/view" data-hx-trigger="mousedown" data-hx-target="#" name="grid" id="AppState" disabled>
                     <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="1.5"  stroke-linecap="round"  stroke-linejoin="round"  class="icon-tabler icons-tabler-outline icon-tabler-layout-grid"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" /><path d="M14 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" /><path d="M4 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" /><path d="M14 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" /></svg>
@@ -231,13 +230,11 @@
                     <a href="#" class="btn-action dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       <svg xmlns="http://www.w3.org/2000/svg" class="" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle><circle cx="12" cy="5" r="1"></circle></svg>
                     </a>
-                    
-                    <div class="dropdown-menu dropdown-menu-end">
+                    <div class="slim-menu dropdown-menu dropdown-menu-end">
                       <form action="/dashboard/action/reset/000" method="post">
-                        <button class="dropdown-item text-secondary" name="reset">Reset View</button>
+                        <button class="menu-option dropdown-item text-secondary" type="submit" name="reset">Reset View</button>
                       </form>
                     </div>
-                    
                   </div>
 
                 </div>

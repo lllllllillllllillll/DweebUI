@@ -1,8 +1,8 @@
 import session from 'express-session';
 import SessionSequelize from 'connect-session-sequelize';
 import { Sequelize, DataTypes} from 'sequelize';
-import { readFileSync } from 'fs';
 import { check_configured_hosts } from '../utils/docker.js';
+import { getMetrics } from '../controllers/dashboard.js';
 
 const SECURE = process.env.HTTPS || false;
 
@@ -14,6 +14,14 @@ const sessionData = new Sequelize('database', 'username', 'password', {
     logging: false,
 });
 const SessionStore = new SequelizeStore({ db: sessionData });
+
+// Server settings
+const settings = new Sequelize('database', 'username', 'password', {
+  dialect: 'sqlite',
+  storage: 'data/settings.sqlite',
+  logging: false,
+});
+const SettingsDB = new SequelizeStore({ db: settings });
 
 export const sessionMiddleware = session({
   secret: 'not keyboard cat',
@@ -27,27 +35,6 @@ export const sessionMiddleware = session({
   },
 });
 
-// Server settings
-const settings = new Sequelize('database', 'username', 'password', {
-    dialect: 'sqlite',
-    storage: 'data/settings.sqlite',
-    logging: false,
-});
-const SettingsDB = new SequelizeStore({ db: settings });
-
-// Display package information
-let package_info = readFileSync(`package.json`, 'utf8');
-package_info = JSON.parse(package_info);
-console.log('\n');
-console.log(`\x1b[33mDweebUI v${package_info.version}\x1b[0m`);
-console.log(`\x1b[33mAuthor: ${package_info.author}\x1b[0m`);
-console.log(`\x1b[33mLicense: ${package_info.license}\x1b[0m`);
-console.log(`\x1b[33mDescription: ${package_info.description}\x1b[0m`);
-console.log('');
-// console.log in red
-console.log('\x1b[31m * Only Docker volumes are supported. No bind mounts.\n \x1b[0m');
-console.log('\x1b[31m * Breaking changes may require you to remove the DweebUI volume and start fresh. \n \x1b[0m');
-
 // Test database connection
 try {
     await sessionData.authenticate();
@@ -60,6 +47,11 @@ try {
 } catch (error) {
     console.error('\x1b[31mDatabase connection failed:', error, '\x1b[0m');
 }
+
+// Run once
+getMetrics().then(()  => {
+  console.log(`\x1b[32mMetrics updated.\x1b[0m`);
+});
 
 // Models
 export const User = settings.define('User', {
@@ -88,7 +80,8 @@ export const User = settings.define('User', {
       allowNull: false
     },
     status: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      defaultValue: 'active'
     },
     role: {
       type: DataTypes.STRING
@@ -104,7 +97,7 @@ export const User = settings.define('User', {
     },
     language: {
       type: DataTypes.STRING,
-      defaultValue: 'english'
+      defaultValue: 'English'
     },
     preferences : {
       type: DataTypes.STRING
@@ -379,4 +372,37 @@ export const ContainerLists = settings.define('ContainerLists', {
   sent: {
     type: DataTypes.STRING,
   },
+});
+
+
+export const Hosts = settings.define('Host', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
+  },
+  state: {
+    type: DataTypes.STRING,
+  },
+  tag: {
+    type: DataTypes.STRING,
+  },
+  protocol: {
+    type: DataTypes.STRING,
+  },
+  host: {
+    type: DataTypes.STRING,
+  },
+  port: {
+    type: DataTypes.STRING,
+  },
+  version: {
+    type: DataTypes.STRING,
+  },
+  mode: {
+    type: DataTypes.STRING,
+  },
+  options: {
+    type: DataTypes.STRING
+  }
 });

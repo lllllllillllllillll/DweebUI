@@ -1,24 +1,28 @@
 import { User, Permission, ContainerLists, Container, ServerSettings } from '../db/config.js';
 import { Alert, Navbar, Footer } from '../utils/system.js';
+import { trigger_docker_event } from '../utils/docker.js';
 import { readFileSync } from 'fs';
 
-export const Users = async function(req,res){
 
-    req.session.host = `${req.params.host || 1}`;
+export const Users = async function(req,res){
     
     let user_list = '';
 
     let allUsers = await User.findAll();
     allUsers.forEach((account) => {
 
-        let active = '<span class="badge badge-outline text-green" title="User has logged-in within the last 30 days.">Active</span>'
         let lastLogin = new Date(account.lastLogin);
         let currentDate = new Date();
         let days = Math.floor((currentDate - lastLogin) / (1000 * 60 * 60 * 24));
         let avatar = account.username.charAt(0);
 
-        if (days > 30) {
+        let active = '<span class="badge badge-outline text-green" title="User has logged-in within the last 30 days.">Active</span>'
+
+        if ((days > 30) && (account.status == 'active')) {
             active = '<span class="badge badge-outline text-grey" title="User has not logged-in within the last 30 days.">Inactive</span>';
+        }
+        else if (account.status == 'disabled') {
+            active = '<span class="badge badge-outline text-grey" title="User is disabled.">Disabled</span>';
         }
 
         let info = `
@@ -41,45 +45,16 @@ export const Users = async function(req,res){
     });
 
     res.render("users",{ 
-        alert: '',
+        alert: req.session.alert,
         username: req.session.username,
         role: req.session.role,
+        user_count: allUsers.length,
         user_list: user_list,
         navbar: await Navbar(req),
         footer: await Footer(req),
     });
 }
 
-
-
-export const submitUsers = async function(req,res){
-
-    // console.log(req.body);
-
-    let trigger_name = req.header('hx-trigger-name');
-    let trigger_id = req.header('hx-trigger');
-
-    console.log(`trigger_name: ${trigger_name} - trigger_id: ${trigger_id}`);
-
-
-    // [HTMX Triggered] Changes the update button.
-    if(trigger_id == 'settings'){
-        res.send(`<button class="btn btn-success" hx-post="/settings" hx-trigger="load delay:2s" hx-swap="outerHTML" id="submit" hx-target="#submit">Updated</button>`);
-        return;
-    } else if (trigger_id == 'submit'){
-        res.send(`<button class="btn btn-primary" id="submit" form="settings">Update</button>`);
-        return;
-    }
-
-    res.render("users",{
-        alert: '',
-        username: req.session.username,
-        role: req.session.role,
-        navbar: await Navbar(req),
-        footer: await Footer(req),
-    });
-
-}
 
 
 
@@ -89,9 +64,6 @@ export const searchUsers = async function (req, res) {
     res.send('ok');
     return;
 }
-
-
-
 
 
 
@@ -105,13 +77,29 @@ export const UsersView = async (req, res) => {
 
     if (view == 'user') {
         let user = await User.findOne({ where: { userID: userID } });
+
+        let status = '';
+        let status_toggle = '';
+
+        if (user.status == 'active') {
+            status = '<div class="me-auto badge badge-outline text-green">Active</div>';
+            status_toggle = '<button type="submit" name="change" value="disable" class="btn btn-secondary w-100" hx-confirm="Are you sure you want to disable this account?">Disable</button>';
+        } else {
+            status = '<div class="me-auto badge badge-outline text-grey">Disabled</div>';
+            status_toggle = '<button type="submit" name="change" value="enable" class="btn btn-success w-100" hx-confirm="Are you sure you want to enable this account?">Enable</button>';
+        }
+
+        
+        
         let modal = readFileSync('./views/partials/user.html', 'utf8');
         modal = modal.replace(/Username/g, username);
+        modal = modal.replace(/UserStatus/g, status);
         modal = modal.replace(/USERID/g, user.userID);
         modal = modal.replace(/FullName/g, user.name);
         modal = modal.replace(/EmailAddress/g, user.email);
         modal = modal.replace(/LastLogin/g, user.lastLogin);
         modal = modal.replace(/CreatedAt/g, user.createdAt);
+        modal = modal.replace(/StatusToggle/g, status_toggle);
         res.send(modal);
         return;
     }
@@ -125,12 +113,14 @@ export const UsersAction = async (req, res) => {
     let userID = req.params.id;
     let change = req.body.change;
 
-    console.log(`[action] ${action} [change] ${change} - [userID] ${userID}`);
+    // console.log(`[action] ${action} [change] ${change} - [userID] ${userID}`);
 
     if (change == 'remove') {
         
         let container_lists = await ContainerLists.findAll({ where: { userID: userID } });
-        container_lists.destroy();
+        container_lists.forEach(async (container_list) => {
+            await container_list.destroy();
+        });
 
         let permissions = await Permission.findAll({ where: { userID: userID } });
         permissions.forEach(async (permission) => {
@@ -139,9 +129,28 @@ export const UsersAction = async (req, res) => {
 
         let user = await User.findOne({ where: { userID: userID } });
         await user.destroy();
-
-        console.log(`User removed.`);
+        req.session.alert = Alert('success', `User ${user.username} removed.`);
+    } 
+    else if (change == 'reset_permissions') {
+        let user = await User.findOne({ where: { userID: userID } });
+        let permissions = await Permission.findAll({ where: { userID: userID } });
+        permissions.forEach(async (permission) => {
+            await permission.destroy();
+        });
+        req.session.alert = Alert('success', `Permissions reset for ${user.username}.`);
+        trigger_docker_event();
     }
+    else if (change == 'disable') {
+        let user = await User.findOne({ where: { userID: userID } });
+        user.update({ status: 'disabled' });
+        req.session.alert = Alert('success', `User ${user.username} disabled.`);
+    }
+    else if (change == 'enable') {
+        let user = await User.findOne({ where: { userID: userID } });
+        user.update({ status: 'active' });
+        req.session.alert = Alert('success', `User ${user.username} enabled.`);
+    }
+
 
     res.redirect('/users');
 

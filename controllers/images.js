@@ -1,29 +1,28 @@
-import { Alert, getLanguage, Navbar, Footer } from '../utils/system.js';
-import { imageList, GetContainerLists } from '../utils/docker.js';
+import { Alert, Navbar, Footer } from '../utils/system.js';
+import { imageList, GetContainerLists, removeImage, imagePull } from '../utils/docker.js';
 
 export const Images = async function(req,res){
 
-    req.session.host = `${req.params.host || 1}`;
-
+    // Get a list of running containers then push the image names to container_images
     let container_images = [];
-    let image_list = '';
 
-    let containers = await GetContainerLists();
+    let containers = await GetContainerLists(req.session.host);
     for (let i = 0; i < containers.length; i++) {
         container_images.push(containers[i].Image);
     }
 
-    let images = await imageList();
+    // Get a list of images
+    let image_list = '';
+    let images = await imageList(req.session.host);
 
+    // Create an entry for each image
     for (let i = 0; i < images.length; i++) {
+        let [ full_image_name, image_name, tag ] = ['', '', ''];
 
-
-        let name = '';
-        let tag = ''; 
-        try { name = images[i].RepoTags[0].split(':')[0]; } catch {}
+        try { full_image_name = images[i].RepoTags[0]; } catch {}
+        try { image_name = images[i].RepoTags[0].split(':')[0]; } catch {}
         try { tag = images[i].RepoTags[0].split(':')[1]; } catch {}
 
-        // let image_id = images[i].Id.split(':')[1].substring(0, 12);
         let image_id = images[i].Id.split(':')[1];
 
         let date = new Date(images[i].Created * 1000);
@@ -34,21 +33,28 @@ export const Images = async function(req,res){
 
         let status = '';
         try {
-            if (container_images.includes(images[i].RepoTags[0])) {
+            if (container_images.includes(full_image_name)) {
                 status = 'In use';
+            }
+            else if (container_images.includes(image_name)) {
+                // console.log(`Modified match found for ${image_name}`);
+                status = 'In use';
+            }
+            else {
+                // console.log(`Not found in list: ${full_image_name}`);
             }
         } catch {}
 
         let details = `
             <tr>
                 <td><input class="form-check-input m-0 align-middle" name="select" value="${images[i].Id}" type="checkbox" aria-label="Select"></td>
-                <td class="sort-name">${name}</td>
+                <td class="sort-name">${image_name}</td>
                 <td class="sort-type">${tag}</td>
                 <td class="sort-city">${image_id}</td>
                 <td class="sort-score text-green">${status}</td>
                 <td class="sort-quantity">${size} MB</td>
                 <td class="sort-date" data-date="1628122643">${created}</td>
-                <td class=""><a class="container-action" href="#"><svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-player-play" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M7 4v16l13 -8z"></path></svg></a></td>
+                <td class=""><button class="badge badge-outline text-grey" id="" data-hx-get="/users/usersModals/user/" hx-target="#modal_content"  hx-swap="innerHTML" data-bs-toggle="modal" data-bs-target="#scrolling_modal">Details</button></td>
             </tr>`
         image_list += details;
     }
@@ -57,7 +63,7 @@ export const Images = async function(req,res){
         alert: '',
         username: req.session.username,
         role: req.session.role,
-        image_count: '',
+        image_count: images.length,
         image_list: image_list,
         navbar: await Navbar(req),
         footer: await Footer(req),
@@ -71,22 +77,55 @@ export const searchImages = async function (req, res) {
 }
 
 
-export const submitImages = async function(req,res){
+export const ImagesView = async function(req,res){
+    // something
+}
 
-    // console.log(req.body);
+export const ImagesAction = async function(req,res){
 
-    let trigger_name = req.header('hx-trigger-name');
-    let trigger_id = req.header('hx-trigger');
+    let action = req.params.action;
+    let id = req.params.id;
+    let host = req.session.host || 1;
 
-    console.log(`trigger_name: ${trigger_name} - trigger_id: ${trigger_id}`);
+    // Pull
+    if (action == 'pull') {
+        try {
+            await imagePull(req.body.image, req.body.tag, host);
+        } 
+        catch {
+            console.log(`Unable to pull image: ${req.body.image}`);
+        }
+        req.session.alert = Alert('success', `Image pulled successfully.`);
+        res.redirect('/images');
+        return;
+    }
 
 
-    res.render("images",{
-        alert: '',
-        username: req.session.username,
-        role: req.session.role,
-        navbar: await Navbar(req),
-        footer: await Footer(req),
-    });
+    // Grab the list of images
+    let images = req.body.select;
 
+    console.log(`Action: ${action} - ID: ${id}`);
+    
+    // Make sure the value is an array
+    if (typeof(images) == 'string') { images = [images]; }
+    
+    // Loop through the array
+    for (let i = 0; i < images.length; i++) {
+
+        // Ignore the selectAll checkbox
+        if (images[i] == 'on') { continue; }
+
+        // Remove
+        if (action == 'remove') {
+            try {
+                await removeImage(images[i], req.session.host);
+            } 
+            catch {
+                console.log(`Unable to remove image: ${images[i]}`);
+            }
+        }
+    }
+
+    req.session.alert = Alert('success', `Images removed successfully.`);
+    res.redirect('/images');
 }
