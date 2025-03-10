@@ -29,7 +29,7 @@
                 <%- sidebar %>
                 
                 <div class="col-12 col-md-9 d-flex flex-column">
-                <div class="card-body">
+                <div class="card-body" id="page_content">
 
                   <!-- HTMX - Submits the form and replaces the target with the response. Replaces the submit button with "Updated" -->
                   <form id="preferences" action="/preferences" method="POST">
@@ -162,7 +162,7 @@
       </div>
     </div>
 
-    <script src="/js/dweebui.js" defer></script>
+    <script src="/js/dweebui.js"></script>
     <script src="/js/htmx.min.js"></script>
 
     <!-- Tabler Core -->

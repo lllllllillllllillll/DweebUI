@@ -174,18 +174,16 @@ export const SettingsAction = async function (req, res) {
 
     // Set all host entries to disabled before updating
     await Hosts.update({ state: 'disabled' }, { where: { state: 'enabled' } });
-    
+
     // Loop through all the fields on the page to look for host entries.
     for (let i = 0; i < form_fields; i++) {
         let id = i + 1;
         if (req.body[`toggled${id}`]) {
 
-            console.log(`${id} is toggled`);
-
             // Skip if toggle is on but the fields are empty
             if (!req.body[`tag${id}`] && !req.body[`host${id}`] && !req.body[`port${id}`]) { continue; }
 
-            const [ entry, created] = await Hosts.findOrCreate({ where: { id: id }, defaults: { state: 'enabled', tag: req.body[`tag${id}`], host: req.body[`host${id}`], port: req.body[`port${id}`] } });
+            const [ entry, created] = await Hosts.findOrCreate({ where: { id: id }, defaults: { state: 'enabled', tag: req.body[`tag${id}`], host: req.body[`host${id}`], port: req.body[`port${id}`], protocol: 'http' } });
             if (!created) { await Hosts.update({ state: 'enabled', tag: req.body[`tag${id}`], host: req.body[`host${id}`], port: req.body[`port${id}`] }, { where: { id: id } }); }
             await configureHost(id, req.body[`host${id}`], req.body[`port${id}`], 'http', req.body[`tag${id}`]);
         }
@@ -273,7 +271,8 @@ export const SettingsView = async function (req, res) {
     
     let view = req.params.view;
     let id = req.params.id || hostcount + 1;
-    console.log(`SettingsView - View: ${view} ID: ${id}`);
+
+    // console.log(`SettingsView - View: ${view} ID: ${id}`);
 
     // HTTP modal
     if (view == 'http') {
@@ -353,7 +352,7 @@ export const SettingsView = async function (req, res) {
                         <input type="text" class="form-control" name="host${hostcount + 1}">
                         </div>
                         <div class="col-2">
-                        <input type="text" class="form-control" name="port${hostcount + 1}">
+                        <input type="text" class="form-control" name="port${hostcount + 1}" value="2375">
                         </div>
                         <div class="col-auto">
                         <button class="btn text-red" hx-get="/something" hx-swap="none" hx-target="#import_modal" data-bs-toggle="modal" data-bs-target="#no_host" disabled title="Update host list">

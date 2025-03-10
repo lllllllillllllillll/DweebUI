@@ -5,7 +5,7 @@ import { Login, submitLogin, Logout } from './controllers/login.js';
 import { Register, submitRegister } from './controllers/register.js';
 
 import { Dashboard, searchDashboard, ServerMetrics, SSE, DashboardView, DashboardAction } from './controllers/dashboard.js';
-import { Images, ImagesView, ImagesAction } from './controllers/images.js';
+import { Images, ImagesView, ImagesAction, searchImages } from './controllers/images.js';
 import { Volumes, VolumesAction, searchVolumes } from './controllers/volumes.js';
 import { Networks, NetworksAction, searchNetworks } from './controllers/networks.js';
 import { Apps, AppsView, AppsAction, searchApps } from './controllers/apps.js';
@@ -83,44 +83,29 @@ router.post("/uninstall", adminOnly, Uninstall);
 router.post('/update_languages', adminOnly, updateLanguages);
 
 
+router.post("/switch_host", function (req, res) {
+    req.session.host = req.body.host;
+    console.log(`Switched to host ${req.session.host}`);
+    res.redirect(req.get("Referrer") || "/")
+});
+
 router.post("/search", function (req, res) {
     // req.header('hx-current-url') == http://localhost:8000/dashboard
     let page = (req.header('hx-current-url')).split("/").pop();
-    switch(page) {
-        case "dashboard":
-            searchDashboard(req, res);
-            break;
-        case "images":
-            searchImages(req, res);
-            break;
-        case "volumes":
-            searchVolumes(req, res);
-            break;
-        case "networks":
-            searchNetworks(req, res);
-            break;
-        case "apps":
-            searchApps(req, res);
-            break;
-        case "users":
-            searchUsers(req, res);
-            break;
-        case "syslogs":
-            searchSyslogs(req, res);
-            break;
-        case "preferences":
-            searchPreferences(req, res);
-            break;
-        case "settings":
-            searchSettings(req, res);
-            break;
-        case "account":
-            searchAccount(req, res);
-        case "sponsors":
-            searchSponsors(req, res);
-            break;
-        default:
-            console.log(`[Search] ${req.body.search}`);
-            res.send('ok');
+
+    if (page == "dashboard") { searchDashboard(req, res); }
+    else if (page == "images") { searchImages(req, res); }
+    else if (page == "volumes") { searchVolumes(req, res); }
+    else if (page == "networks") { searchNetworks(req, res); }
+    else if (page == "apps") { searchApps(req, res); }
+    else if (page == "users") { searchUsers(req, res); }
+    else if (page == "syslogs") { searchSyslogs(req, res); }
+    else if (page == "preferences") { searchPreferences(req, res); }
+    else if (page == "settings") { searchSettings(req, res); }
+    else if (page == "account") { searchAccount(req, res); }
+    else if (page == "sponsors") { searchSponsors(req, res); }
+    else {
+        console.log(`[Search] ${req.body.search}`);
+        res.send('ok');
     }
 });

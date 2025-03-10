@@ -26,16 +26,14 @@ export async function Navbar (req) {
 
     // Get all hosts where state = 'enabled'
     let hosts = await Hosts.findAll({ where: { state: 'enabled' }});
-    let host_buttons = '<form action="/dashboard/action/switch_host/hostid" method="post">';
+    let host_buttons = '<form action="/switch_host" method="post">';
     let nav_link = '';
 
     // Create a button for each host
     if (hosts.length > 1) {
-
         if (host == 0) { host_buttons += `<button type="submit" name="host" value="0" class="btn text-yellow mx-1" title="All">All</button>`; }
         else { host_buttons += `<button type="submit" name="host" value="0" class="btn mx-1" title="All">All</button>`; }
         
-
         for (let i = 0; i < hosts.length; i++) {
             let host_id = hosts[i].id;
             let host_tag = hosts[i].tag;

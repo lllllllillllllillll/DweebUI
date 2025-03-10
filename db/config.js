@@ -399,8 +399,9 @@ export const Hosts = settings.define('Host', {
   version: {
     type: DataTypes.STRING,
   },
-  mode: {
+  connected: {
     type: DataTypes.STRING,
+    defaultValue: false
   },
   options: {
     type: DataTypes.STRING
