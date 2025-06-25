@@ -47,11 +47,17 @@
 * CSS tweaks for dashboard and container cards. [build.481]
 * New - Multi-host support. Lots of refactoring and new UI elements. [build.490]
 * Added alerts for uninstall and reset view. [build.491]
-
-
-
-
-
+* Updated thanks counter saves to database. [build.492]
+* Fixed container actions and dashboard event triggers. [build.498]
+* Error handling for uncaught exceptions and unhanded promise rejections. [build.499]
+* Refactored permissionCheck. [build.501]
+* Fixed app count and pagination on Apps page. [build.503]
+* Refactored install and uninstall functions. [build.506]
+* Reorganized file structure, getting rid of the 'appdata' folder and moving files into 'data' or 'sys'. [build.508]
+* Improved host selection and host management. [build.510]
+* Cleaned up console.log and syslogs from install function. Removed unnecessary awaits. [build.511]
+* Fixed readwrite/read-only issue with app template volumes. [build.512]
+* Tidy up of account.js, credits.js, and sponsors.js. [build.512]
 
 ## v0.60 (June 9th 2024) - Permissions system and import templates
 * Converted JS template literals into HTML.

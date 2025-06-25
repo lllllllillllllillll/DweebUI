@@ -1,29 +1,16 @@
-import { User, ServerSettings } from '../db/config.js';
-import { Alert, getLanguage, Navbar, Sidebar, Footer } from '../utils/system.js';
+import { User } from '../sys/db.js';
+import { Alert, Navbar, Sidebar, Footer } from '../sys/utils.js';
 
 export const Account = async function(req,res){
 
-    let container_links = await ServerSettings.findOne({ where: {key: 'container_links'}});
-    let user_registration = await ServerSettings.findOne({ where: {key: 'user_registration'}});
-
     let user = await User.findOne({ where: {userID: req.session.userID}});
-
-    let name = '';
-    let email = '';
-    let avatar = '';
-
-    try {
-        name = user.name;
-        email = user.email;
-        avatar = user.avatar;
-    } catch {}
 
     res.render("account",{ 
         alert: '',
-        name: name,
+        name: user.name,
         username: req.session.username,
-        email: email,
-        avatar: avatar,
+        email: user.email,
+        avatar: user.avatar,
         role: req.session.role,
         navbar: await Navbar(req),
         sidebar: await Sidebar(req),

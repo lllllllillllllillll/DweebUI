@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import { Op } from "sequelize";
-import { User, ServerSettings, Permission, Syslog } from "../db/config.js";
+import { User, ServerSettings, Permission, Syslog } from '../sys/db.js';
 
 
 export const Register = async function(req,res){
@@ -44,12 +44,12 @@ export const submitRegister = async function(req,res){
 
     else if (registration_secret && secret !== registration_secret) { 
         error = "Invalid secret";
-        await Syslog.create({ username: user.username, uniqueID: email, event: "Failed Registration", message: "Invalid Secret", ip: req.ip });
+        Syslog.create({ username: user.username, uniqueID: email, event: "Failed Registration", message: "Invalid Secret", ip: req.ip });
     }
 
     else if (await User.findOne({ where: { [Op.or]: [{ username: username }, { email: email }] }})) { 
         error = "Username or email already exists"; 
-        await Syslog.create({ username: username, uniqueID: email, event: "Failed Registration", message: "Username or email already exists", ip: req.ip });
+        Syslog.create({ username: username, uniqueID: email, event: "Failed Registration", message: "Username or email already exists", ip: req.ip });
     }
 
     if (error != '') { 
@@ -99,13 +99,13 @@ export const submitRegister = async function(req,res){
         req.session.userID = user.userID;
         req.session.role = user.role;
         
-        await Syslog.create({ username: user.username, uniqueID: user.email, event: "Registration", message: "User created", ip: req.ip });
+        Syslog.create({ username: user.username, uniqueID: user.email, event: "Registration", message: "User created", ip: req.ip });
 
         console.log(`User ${username} created`);
 
         res.redirect("/dashboard");
     } else {
-        await Syslog.create({ username: user.username, uniqueID: user.email, event: "Failed Registration", message: "Error. User not created", ip: req.ip });
+        Syslog.create({ username: user.username, uniqueID: user.email, event: "Failed Registration", message: "Error. User not created", ip: req.ip });
         res.render("register", { "error": "Error. User not created" });
     }
 }

@@ -1,11 +1,8 @@
-import { ServerSettings, Hosts } from '../db/config.js';
-import { configureHost } from '../utils/docker.js';
-import { Alert, Navbar, Sidebar, Footer, getLanguage } from '../utils/system.js';
+import { ServerSettings, Hosts } from '../sys/db.js';
+import { configureHost } from '../sys/docker.js';
+import { Alert, Navbar, Sidebar, Footer, getLanguage } from '../sys/utils.js';
 import { readFileSync, writeFileSync } from 'fs';
-// import { readFileSync, readdirSync, renameSync, mkdirSync, unlinkSync, existsSync } from 'fs';
-import { parse } from 'yaml';
 import multer from 'multer';
-import AdmZip from 'adm-zip';
 
 const upload = multer({storage: multer.diskStorage({
     destination: function (req, file, cb) { cb(null, 'data/tmp/') },
@@ -147,42 +144,30 @@ export const SettingsAction = async function (req, res) {
     }
 
     // User registration
-    const [registration_enabled, created] = await ServerSettings.findOrCreate({
-        where: { key: 'user_registration' },
-        defaults: { value: user_registration },
-    });
-    if (created) { console.log('ServerSettings: Key created -> user_registration'); }
+    const [registration_enabled, created] = await ServerSettings.findOrCreate({ where: { key: 'user_registration' }, defaults: { value: user_registration }, });
+    if (created) { console.log(`[SQLite] Created key 'user_registration' in ServerSettings`); }
     if (!user_registration) { await ServerSettings.update({value: false}, {where: {key: 'user_registration'}}); }
     else if (user_registration) { await ServerSettings.update({value: true}, {where: {key: 'user_registration'}}); }
 
-
     // Registration secret
-    const [secret, created2] = await ServerSettings.findOrCreate({
-        where: { key: 'registration_secret' },
-        defaults: { value: registration_secret },
-    });
-    if (created2) { console.log('ServerSettings: Key created -> registration_secret'); }
+    const [secret, created2] = await ServerSettings.findOrCreate({ where: { key: 'registration_secret' }, defaults: { value: registration_secret }, });
+    if (created2) { console.log(`[SQLite] Created key 'registration_secret' in ServerSettings`); }
     await ServerSettings.update({value: registration_secret}, {where: {key: 'registration_secret'}});
-
 
     // Custom port link
     if (port_link) { await ServerSettings.update({value: port_url}, {where: {key: 'port_link'}}); }
     else if (!port_link) { await ServerSettings.update({value: 'http://localhost'}, {where: {key: 'port_link'}}); }
 
-
+    // Hosts
     let form_fields = Object.keys(req.body).length;
-
     // Set all host entries to disabled before updating
     await Hosts.update({ state: 'disabled' }, { where: { state: 'enabled' } });
-
     // Loop through all the fields on the page to look for host entries.
     for (let i = 0; i < form_fields; i++) {
         let id = i + 1;
         if (req.body[`toggled${id}`]) {
-
-            // Skip if toggle is on but the fields are empty
-            if (!req.body[`tag${id}`] && !req.body[`host${id}`] && !req.body[`port${id}`]) { continue; }
-
+            // Skip if 'host' or 'port' is not set. Default value of 'port' is 2375 from the form.
+            if ((!req.body[`host${id}`] || !req.body[`port${id}`]) && req.body[`host${id}`] != '/var/run/docker.sock') { continue; }
             const [ entry, created] = await Hosts.findOrCreate({ where: { id: id }, defaults: { state: 'enabled', tag: req.body[`tag${id}`], host: req.body[`host${id}`], port: req.body[`port${id}`], protocol: 'http' } });
             if (!created) { await Hosts.update({ state: 'enabled', tag: req.body[`tag${id}`], host: req.body[`host${id}`], port: req.body[`port${id}`] }, { where: { id: id } }); }
             await configureHost(id, req.body[`host${id}`], req.body[`port${id}`], 'http', req.body[`tag${id}`]);
@@ -222,7 +207,7 @@ export const updateLanguages = async function(req,res){
         inProgress = true;
         res.send('<button class="btn" aria-label="button" id="checking" hx-post="/update_languages" hx-swap="outerHTML" hx-target="#checking" hx-trigger="every 2s">Checking For Updates<div class="mx-2 spinner-border spinner-border-sm"></div></button>');
 
-        const resp = await fetch(`https://api.github.com/repos/lllllllillllllillll/DweebUI/contents/languages?ref=dev`);
+        const resp = await fetch(`https://api.github.com/repos/lllllllillllllillll/DweebUI/contents/sys/languages?ref=dev`);
         const data = await resp.json();
         let languages = [];
         data.forEach((lang) => {
@@ -233,12 +218,12 @@ export const updateLanguages = async function(req,res){
             let language_dev = await fetch(languages[i].download_url);
             language_dev = await language_dev.text();
     
-            let language_local = readFileSync(`./languages/${languages[i].language}`, 'utf8');
+            let language_local = readFileSync(`./sys/languages/${languages[i].language}`, 'utf8');
             
             if (language_dev != language_local) {
                 console.log(`\x1b[31mLanguage: ${languages[i].language} is out of date.\x1b[0m`);
                 console.log(`\x1b[31mUpdating ${languages[i].language}...\x1b[0m`);
-                writeFileSync(`./languages/${languages[i].language}`, language_dev);
+                writeFileSync(`./sys/languages/${languages[i].language}`, language_dev);
                 console.log(`\x1b[32mLanguage: ${languages[i].language} has been updated.\x1b[0m`);
             } else {
                 console.log(`\x1b[32mLanguage: ${languages[i].language} is up to date.\x1b[0m`);

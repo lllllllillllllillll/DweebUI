@@ -1,7 +1,7 @@
 import session from 'express-session';
 import SessionSequelize from 'connect-session-sequelize';
 import { Sequelize, DataTypes} from 'sequelize';
-import { check_configured_hosts } from '../utils/docker.js';
+import { check_configured_hosts } from './docker.js';
 import { getMetrics } from '../controllers/dashboard.js';
 
 const SECURE = process.env.HTTPS || false;
@@ -165,6 +165,10 @@ export const Permission = settings.define('Permission', {
     defaultValue: false
   },
   view: {
+    type: DataTypes.STRING,
+    defaultValue: false
+  },
+  details: {
     type: DataTypes.STRING,
     defaultValue: false
   },
@@ -370,6 +374,9 @@ export const ContainerLists = settings.define('ContainerLists', {
     type: DataTypes.STRING,
   },
   sent: {
+    type: DataTypes.STRING,
+  },
+  host: {
     type: DataTypes.STRING,
   },
 });

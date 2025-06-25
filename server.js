@@ -1,7 +1,7 @@
 import express from 'express';
 import ejs from 'ejs';
 import { router } from './router.js';
-import { sessionMiddleware } from './db/config.js';
+import { sessionMiddleware } from './sys/db.js';
 import { readFileSync } from 'fs';
 
 const app = express();
@@ -25,3 +25,7 @@ app.listen(PORT, async () => {
     console.log(`\x1b[32mListening on http://localhost:${PORT}\x1b[0m`);
     console.log('');
 });
+
+// Error handling for uncaught exceptions and unhandled promise rejections
+process.on('uncaughtException', (err, origin) => { console.error('Unhandled Exception:', err); });
+process.on('unhandledRejection', (reason, promise) => { console.error('Unhandled Rejection:', reason); });

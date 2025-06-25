@@ -1,4 +1,4 @@
-import { User, ServerSettings, Hosts } from '../db/config.js';
+import { User, ServerSettings, Hosts } from './db.js';
 import { readFileSync } from 'fs';
 
 
@@ -24,8 +24,8 @@ export async function Navbar (req) {
     let sponsored = await ServerSettings.findOne({ where: { key: 'sponsored' }});
     if (sponsored) { username = `<label class="text-yellow">${username}</label>`; }
 
-    // Get all hosts where state = 'enabled'
-    let hosts = await Hosts.findAll({ where: { state: 'enabled' }});
+    // Get all hosts where state = 'enabled' and connected = 'true'
+    let hosts = await Hosts.findAll({ where: { state: 'enabled', connected: 'true' }});
     let host_buttons = '<form action="/switch_host" method="post">';
     let nav_link = '';
 
@@ -55,7 +55,7 @@ export async function Navbar (req) {
         req.session.alert = '';
         return navbar;
     } else {
-        let lang = readFileSync(`./languages/${language}.json`, 'utf8');
+        let lang = readFileSync(`./sys/languages/${language}.json`, 'utf8');
         lang = JSON.parse(lang);
         
         navbar = navbar.replace(/Dashboard/g, lang.Dashboard);
@@ -94,7 +94,7 @@ export async function Sidebar (req) {
     if (language == 'English') {
         return sidebar;
     } else {
-        let lang = readFileSync(`./languages/${language}.json`, 'utf8');
+        let lang = readFileSync(`./sys/languages/${language}.json`, 'utf8');
         lang = JSON.parse(lang);
         
         sidebar = sidebar.replace(/Account/g, lang.Account);
@@ -120,12 +120,12 @@ export async function Footer (req) {
     let version = package_info.version;
     let build = package_info.build;
 
-    footer = footer.replace(/Version/g, version);
+    footer = footer.replace(/Version/g, `v${version}`);
     footer = footer.replace(/Build/g, `Build ${build}`);
 
     if (language == 'English') { return footer;}
     else {
-        let lang = readFileSync(`./languages/${language}.json`, 'utf8');
+        let lang = readFileSync(`./sys/languages/${language}.json`, 'utf8');
         lang = JSON.parse(lang);
         footer = footer.replace(/Documentation/g, lang.Documentation);
         footer = footer.replace(/License/g, lang.License);

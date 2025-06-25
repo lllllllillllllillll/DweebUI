@@ -1,7 +1,6 @@
 import Docker from 'dockerode';
 import { dockerContainerStats } from 'systeminformation';
-import { Container, Hosts } from '../db/config.js'
-
+import { Container, Hosts } from './db.js'
 
 
 export var docker;
@@ -12,7 +11,6 @@ export var docker5;
 export var docker6;
 export var docker7;
 export var docker8;
-
 
 
 export async function check_configured_hosts () {
@@ -36,58 +34,45 @@ export async function configureHost(id, host, port, protocol, tag) {
 
     console.log(`Configuring host #${id} with ${host} and port ${port}.`);
 
+    // Host 1
     if ((id == 1) && (host == '/var/run/docker.sock')) {
         let host1 = await Hosts.findOne({ where: { id: 1 } });
-        host1.connected = 'false';
-        await host1.save();
-
+        await host1.update({ connected: 'false' });
         docker = new Docker();
-
         setTimeout(async () => {
             console.log('Attempting to connect to host 1...');
             try {
                 let containers = await docker.listContainers({ all: true });
                 console.log(`Host 1 connected. ${containers.length} containers found.`);
-
                 for (const container of containers) {
                     await Container.findOrCreate({ where: { containerID: container.Id }, defaults: { containerName: container.Names[0].slice(1), containerID: container.Id, link: '', cpu: '[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]', ram: '[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]', host: 1 } });
                 }
-
-                host1.connected = 'true';
-                await host1.save();
+                await host1.update({ connected: 'true' });
             } catch { console.log('\x1b[31m Host 1 connection FAILED \x1b[0m'); }
         }, 2000);
     } 
-
     else if (id == 1) {
         let host1 = await Hosts.findOne({ where: { id: 1 } });
-        host1.connected = 'false';
-        await host1.save();
-
+        await host1.update({ connected: 'false' });
         docker = new Docker({ host: host, port: port });
-
         setTimeout(async () => {
             console.log('Attempting to connect to host 1...');
             try {
                 let containers = await docker.listContainers({ all: true });
                 console.log(`Host 1 connected. ${containers.length} containers found.`);
-
                 for (const container of containers) {
                     await Container.findOrCreate({ where: { containerID: container.Id }, defaults: { containerName: container.Names[0].slice(1), containerID: container.Id, link: '', cpu: '[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]', ram: '[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]', host: 1 } });
                 }
-
-                host1.connected = 'true';
-                await host1.save();
+                await host1.update({ connected: 'true' });
             } catch { console.log('\x1b[31m Host 1 connection FAILED \x1b[0m'); }
         }, 2000);
     }
-
+    // Host 2
     else if (id == 2) {
-
-        // Find host2 in the database and set the 'connected' field to 'false'
         let host2 = await Hosts.findOne({ where: { id: 2 } });
         host2.connected = 'false';
         await host2.save();
+        
 
         docker2 = new Docker({ host: host, port: port });
 
@@ -261,7 +246,7 @@ export async function GetContainerLists(hostid) {
     let host = hostid || 1;
     let containers; 
 
-    console.log(`[GetContainerLists] Host: ${host}`);
+    // console.log(`[GetContainerLists] Host: ${host}`);
 
     // If host is 0, get all containers from each host that has state = 'enabled'.
     if (host == 0) {
@@ -608,11 +593,11 @@ export async function networkList(hostid) {
 
 export async function containerInfo (containerID) {
 
-    console.log(`Getting info for container ${containerID}.`);
+    // console.log(`Getting info for container ${containerID}.`);
     
     let container;
     
-    // Find the container's host, which is saved in the GetContainerLists function.
+    // Find the container's host, which is added to the Container db in configureHost().
     let container_host = await Container.findOne({ where: { containerID: containerID } });
         container_host = container_host.host;
 
@@ -626,6 +611,8 @@ export async function containerInfo (containerID) {
     else if (container_host == 8) { container = docker8.getContainer(containerID); }
 
     container = await container.inspect();
+
+    const networks = container.NetworkSettings.Networks
 
     let container_name = container.Name.slice(1);
     let container_image = container.Config.Image;
@@ -655,6 +642,7 @@ export async function containerInfo (containerID) {
         containerImage: container_image,
         containerService: container_service,
         containerState: container.State.Status,
+        networks: networks,
         external_port: external,
         internal_port: internal,
         ports: ports_list,

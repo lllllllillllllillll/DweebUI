@@ -1,5 +1,5 @@
-import { Alert, Navbar, Footer } from '../utils/system.js';
-import { networkList, GetContainerLists, removeNetwork } from '../utils/docker.js';
+import { Alert, Navbar, Footer } from '../sys/utils.js';
+import { networkList, GetContainerLists, removeNetwork } from '../sys/docker.js';
 
 export const Networks = async function(req, res) {
     

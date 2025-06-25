@@ -17,10 +17,10 @@ import { Settings, SettingsAction, SettingsView, updateLanguages, searchSettings
 import { Sponsors, searchSponsors, SponsorsAction, SponsorsView } from './controllers/sponsors.js';
 import { Credits } from './controllers/credits.js';
 
-import { Install } from './utils/install.js';
-import { Uninstall } from './utils/uninstall.js';
+import { Install } from './sys/install.js';
+import { Uninstall } from './sys/uninstall.js';
 
-import { sessionCheck, adminOnly, permissionCheck } from './utils/permissions.js';
+import { sessionCheck, adminOnly, permissionCheck } from './sys/permissions.js';
 
 // DEBUGGING
 // router.get('*', (req, res, next) => { console.log(`[GET] ${req.url}`); next(); });
@@ -35,8 +35,8 @@ router.post('/register', submitRegister);
 router.get("/", sessionCheck, Dashboard);
 
 router.get("/dashboard", sessionCheck, Dashboard);
-router.get("/dashboard/view/:view/:id?", sessionCheck, DashboardView);
-router.post("/dashboard/action/:action/:id?", sessionCheck, DashboardAction);
+router.get("/dashboard/view/:view/:id?", permissionCheck, DashboardView);
+router.post("/dashboard/action/:action/:id?", permissionCheck, DashboardAction);
 router.get("/server_metrics", sessionCheck, ServerMetrics);
 router.get("/sse", permissionCheck, SSE);
 

@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { User, Syslog, ServerSettings } from '../db/config.js';
+import { User, Syslog, ServerSettings } from '../sys/db.js';
 
 
 export const Login = async function (req, res) {

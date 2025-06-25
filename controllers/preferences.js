@@ -1,5 +1,5 @@
-import { ServerSettings, User } from '../db/config.js';
-import { Alert, getLanguage, Navbar, Sidebar, Footer, Capitalize } from '../utils/system.js';
+import { User } from '../sys/db.js';
+import { getLanguage, Navbar, Sidebar, Footer } from '../sys/utils.js';
 
 export const Preferences = async function(req,res){
 
@@ -15,7 +15,8 @@ export const Preferences = async function(req,res){
         user = await User.findOne({ where: { userID: req.session.userID }});
         preferences = JSON.parse(user.preferences);
         hide_profile = preferences.hide_profile;
-        checked = ''; if (hide_profile == true) { checked = 'checked'; }
+        checked = ''; 
+        if (hide_profile == true) { checked = 'checked'; }
     } catch {}
 
     res.render("preferences",{ 

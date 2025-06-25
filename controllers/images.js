@@ -1,5 +1,5 @@
-import { Alert, Navbar, Footer } from '../utils/system.js';
-import { imageList, GetContainerLists, removeImage, imagePull } from '../utils/docker.js';
+import { Alert, Navbar, Footer } from '../sys/utils.js';
+import { imageList, GetContainerLists, removeImage, imagePull } from '../sys/docker.js';
 
 export const Images = async function(req,res){
 

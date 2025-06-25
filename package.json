@@ -1,7 +1,7 @@
 {
   "name": "dweebui",
-  "version": "v0.70",
-  "build": "499",
+  "version": "0.70",
+  "build": "512",
   "main": "server.js",
   "type": "module",
   "scripts": {

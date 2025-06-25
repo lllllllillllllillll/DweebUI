@@ -1,18 +1,27 @@
 import { currentLoad, mem, networkStats, fsSize } from 'systeminformation';
-import { docker, docker2, docker3, docker4, docker5, docker6, docker7, docker8, containerInfo, containerLogs, GetContainerLists, containerStats, trigger_docker_event } from '../utils/docker.js';
+import { docker, docker2, docker3, docker4, docker5, docker6, docker7, docker8, containerInfo, containerLogs, GetContainerLists, containerStats, trigger_docker_event } from '../sys/docker.js';
 import { readFileSync } from 'fs';
-import { User, Permission, ServerSettings, ContainerLists, Container, Hosts } from '../db/config.js';
-import { Alert, Navbar, Footer, Capitalize } from '../utils/system.js';
+import { User, Permission, ServerSettings, ContainerLists, Container, Hosts } from '../sys/db.js';
+import { Alert, Navbar, Footer, Capitalize } from '../sys/utils.js';
 import { Op } from 'sequelize';
 
 
 
 export const Dashboard = async function (req, res) {
 
-    // Create the lists needed for the dashboard.
-    await ContainerLists.findOrCreate({ where: { userID: req.session.userID }, defaults: { userID: req.session.userID, username: req.session.username, containers: '[]', new: '[]', updates: '[]', sent: '[]', }, });
     // Make sure host is set.
     if (!req.session.host) { req.session.host = 1; }
+
+    // Create the lists needed for the dashboard.
+    await ContainerLists.findOrCreate({ where: { userID: req.session.userID, host: 0 }, defaults: { userID: req.session.userID, username: req.session.username, containers: '[]', new: '[]', updates: '[]', sent: '[]'}, });
+    await ContainerLists.findOrCreate({ where: { userID: req.session.userID, host: 1 }, defaults: { userID: req.session.userID, username: req.session.username, containers: '[]', new: '[]', updates: '[]', sent: '[]'}, });
+    await ContainerLists.findOrCreate({ where: { userID: req.session.userID, host: 2 }, defaults: { userID: req.session.userID, username: req.session.username, containers: '[]', new: '[]', updates: '[]', sent: '[]'}, });
+    await ContainerLists.findOrCreate({ where: { userID: req.session.userID, host: 3 }, defaults: { userID: req.session.userID, username: req.session.username, containers: '[]', new: '[]', updates: '[]', sent: '[]'}, });
+    await ContainerLists.findOrCreate({ where: { userID: req.session.userID, host: 4 }, defaults: { userID: req.session.userID, username: req.session.username, containers: '[]', new: '[]', updates: '[]', sent: '[]'}, });
+    await ContainerLists.findOrCreate({ where: { userID: req.session.userID, host: 5 }, defaults: { userID: req.session.userID, username: req.session.username, containers: '[]', new: '[]', updates: '[]', sent: '[]'}, });
+    await ContainerLists.findOrCreate({ where: { userID: req.session.userID, host: 6 }, defaults: { userID: req.session.userID, username: req.session.username, containers: '[]', new: '[]', updates: '[]', sent: '[]'}, });
+    await ContainerLists.findOrCreate({ where: { userID: req.session.userID, host: 7 }, defaults: { userID: req.session.userID, username: req.session.username, containers: '[]', new: '[]', updates: '[]', sent: '[]'}, });
+    await ContainerLists.findOrCreate({ where: { userID: req.session.userID, host: 8 }, defaults: { userID: req.session.userID, username: req.session.username, containers: '[]', new: '[]', updates: '[]', sent: '[]'}, });
 
     // Load the dashboard page which will trigger 'card_list' in DashboardView.
     res.render("dashboard",{ 
@@ -27,7 +36,7 @@ export const Dashboard = async function (req, res) {
 
 async function userCards (req) {
 
-    console.log('[userCards]');
+    // console.log('[userCards]');
     let container_list = [];
 
     // Check what containers the user has hidden.
@@ -35,7 +44,7 @@ async function userCards (req) {
     hidden = hidden.map((container) => container.containerID);
     
     // Check what containers the user has permission for.
-    let visable = await Permission.findAll({ where: { userID: req.session.userID, [Op.or]: [{ uninstall: true }, { edit: true }, { upgrade: true }, { start: true }, { stop: true }, { pause: true }, { restart: true }, { logs: true }, { view: true }] }, attributes: ['containerID'] });
+    let visable = await Permission.findAll({ where: { userID: req.session.userID, [Op.or]: [{ uninstall: true }, { edit: true }, { upgrade: true }, { start: true }, { stop: true }, { pause: true }, { restart: true }, { logs: true }, { view: true }, { details: true}] }, attributes: ['containerID'] });
     visable = visable.map((container) => container.containerID);
 
     let containers = await GetContainerLists(req.session.host);
@@ -67,14 +76,14 @@ export const SSE = async (req, res) => {
 
         let [new_cards, update_list, sent_cards] = [[], [], []];
 
-        let list = await ContainerLists.findOne({ where: { userID: req.session.userID }, attributes: ['sent'] });
+        let list = await ContainerLists.findOne({ where: { userID: req.session.userID, host: req.session.host }, attributes: ['sent'] });
         sent_cards = JSON.parse(list.sent);
 
         let container_list = await userCards(req);
         
         if (JSON.stringify(container_list) == list.sent) { return; }
 
-        console.log(`Update for ${req.session.username}`);
+        // console.log(`Update for ${req.session.username}`);
 
         // loop through the containers list to see if any new containers have been added or changed
         container_list.forEach(container => {
@@ -93,7 +102,7 @@ export const SSE = async (req, res) => {
             if (!found) { update_list.push(containerID); }
         });
 
-        await ContainerLists.update({ new: JSON.stringify(new_cards), sent: JSON.stringify(container_list), containers: JSON.stringify(container_list) }, { where: { userID: req.session.userID } });
+        await ContainerLists.update({ new: JSON.stringify(new_cards), sent: JSON.stringify(container_list), containers: JSON.stringify(container_list) }, { where: { userID: req.session.userID, host: req.session.host } });
         
         if (update_list.length > 0 ) {
             for (let i = 0; i < update_list.length; i++) {
@@ -113,11 +122,9 @@ export const SSE = async (req, res) => {
     let hosts = await Hosts.findAll();
 
     if (hosts[0]) {
-        if (hosts[0].state == 'enabled' && hosts[0].connected == 'true') {
-            console.log('Listening for Host 1 events');
+        if (hosts[0].state == 'enabled' && hosts[0].connected == 'true' && (req.session.host == 0 || req.session.host == 1)) {
             await docker.getEvents({}, async function (err, data) {
                 data.on('data', async function () {
-                    console.log('Host 1 event');
                     await eventCheck();
                 });
             });
@@ -125,11 +132,9 @@ export const SSE = async (req, res) => {
     }
 
     if (hosts[1]) {
-        if (hosts[1].state == 'enabled' && hosts[1].connected == 'true') {
-            console.log('Listening for Host 2 events');
+        if (hosts[1].state == 'enabled' && hosts[1].connected == 'true' && (req.session.host == 0 || req.session.host == 2)) {
             await docker2.getEvents({}, async function (err, data) {
                 data.on('data', async function () {
-                    console.log('Host 2 event');
                     await eventCheck();
                 });
             });
@@ -137,11 +142,9 @@ export const SSE = async (req, res) => {
     }
 
     if (hosts[2]) {
-        if (hosts[2].state == 'enabled' && hosts[2].connected == 'true') {
-            console.log('Listening for Host 3 events');
+        if (hosts[2].state == 'enabled' && hosts[2].connected == 'true' && (req.session.host == 0 || req.session.host == 3)) {
             await docker3.getEvents({}, async function (err, data) {
                 data.on('data', async function () {
-                    console.log('Host 3 event');
                     await eventCheck();
                 });
             });
@@ -149,11 +152,9 @@ export const SSE = async (req, res) => {
     }
 
     if (hosts[3]) {
-        if (hosts[3].state == 'enabled' && hosts[3].connected == 'true') {
-            console.log('Listening for Host 4 events');
+        if (hosts[3].state == 'enabled' && hosts[3].connected == 'true' && (req.session.host == 0 || req.session.host == 4)) {
             await docker4.getEvents({}, async function (err, data) {
                 data.on('data', async function () {
-                    console.log('Host 4 event');
                     await eventCheck();
                 });
             });
@@ -161,11 +162,9 @@ export const SSE = async (req, res) => {
     }
 
     if (hosts[4]) {
-        if (hosts[4].state == 'enabled' && hosts[4].connected == 'true') {
-            console.log('Listening for Host 5 events');
+        if (hosts[4].state == 'enabled' && hosts[4].connected == 'true' && (req.session.host == 0 || req.session.host == 5)) {
             await docker5.getEvents({}, async function (err, data) {
                 data.on('data', async function () {
-                    console.log('Host 5 event');
                     await eventCheck();
                 });
             });
@@ -173,11 +172,9 @@ export const SSE = async (req, res) => {
     }
 
     if (hosts[5]) {
-        if (hosts[5].state == 'enabled' && hosts[5].connected == 'true') {
-            console.log('Listening for Host 6 events');
+        if (hosts[5].state == 'enabled' && hosts[5].connected == 'true' && (req.session.host == 0 || req.session.host == 6)) {
             await docker6.getEvents({}, async function (err, data) {
                 data.on('data', async function () {
-                    console.log('Host 6 event');
                     await eventCheck();
                 });
             });
@@ -185,11 +182,9 @@ export const SSE = async (req, res) => {
     }
 
     if (hosts[6]) {
-        if (hosts[6].state == 'enabled' && hosts[6].connected == 'true') {
-            console.log('Listening for Host 7 events');
+        if (hosts[6].state == 'enabled' && hosts[6].connected == 'true' && (req.session.host == 0 || req.session.host == 7)) {
             await docker7.getEvents({}, async function (err, data) {
                 data.on('data', async function () {
-                    console.log('Host 7 event');
                     await eventCheck();
                 });
             });
@@ -197,11 +192,9 @@ export const SSE = async (req, res) => {
     }
 
     if (hosts[7]) {
-        if (hosts[7].state == 'enabled' && hosts[7].connected == 'true') {
-            console.log('Listening for Host 8 events');
+        if (hosts[7].state == 'enabled' && hosts[7].connected == 'true' && (req.session.host == 0 || req.session.host == 8)) {
             await docker8.getEvents({}, async function (err, data) {
                 data.on('data', async function () {
-                    console.log('Host 8 event');
                     await eventCheck();
                 });
             });
@@ -277,6 +270,7 @@ export const DashboardView = async function (req, res) {
             if (permissions.restart == true) { user_permissions = user_permissions.replace(/data-RestartCheck/g, 'checked'); }
             if (permissions.logs == true) { user_permissions = user_permissions.replace(/data-LogsCheck/g, 'checked'); }
             if (permissions.view == true) { user_permissions = user_permissions.replace(/data-ViewCheck/g, 'checked'); }
+            if (permissions.details == true) { user_permissions = user_permissions.replace(/data-DetailsCheck/g, 'checked'); }
             user_permissions = user_permissions.replace(/Entry/g, i);
             user_permissions = user_permissions.replace(/Entry/g, i);
             user_permissions = user_permissions.replace(/Entry/g, i);
@@ -314,9 +308,30 @@ export const DashboardView = async function (req, res) {
     // Details modal
     if (view == 'details') {
         let container = await containerInfo(containerID);
+        
+        // if (container.networks.bridge) {
+        //     console.log(`Container ${container_name} is connected to the bridge network.`);
+        // } else if (container.networks.host) {
+        //     console.log(`Container ${container_name} is connected to the host network.`);
+        // } else if (container.networks['container']) {
+        //     console.log(`Container ${container_name} is connected to another container.`);
+        // } else {
+        //     console.log(`Container ${container_name} is connected to a custom network.`);
+        // }
+
+        let NetHost = container.networks.host ? 'checked' : '';
+        let NetBridge = container.networks.bridge ? 'checked' : ''; 
+        let NetDocker = container.networks['container'] ? 'checked' : '';
+        let NetCustom = container.networks.custom ? 'checked' : '';
+
         let modal = readFileSync('./views/partials/details.html', 'utf8');
         modal = modal.replace(/AppName/g, container.containerName);
         modal = modal.replace(/AppImage/g, container.containerImage);
+        modal = modal.replace(/AppID/g, container.containerID);
+        modal = modal.replace(/NetHost/g, NetHost);
+        modal = modal.replace(/NetBridge/g, NetBridge);
+        modal = modal.replace(/NetDocker/g, NetDocker);
+
         for (let i = 0; i <= 6; i++) {
             modal = modal.replaceAll(`Port${i}Check`, container.ports[i]?.check || '');
             modal = modal.replaceAll(`Port${i}External`, container.ports[i]?.external || '');
@@ -352,9 +367,7 @@ export const DashboardView = async function (req, res) {
     // Update link modal
     if (view == 'link_modal') {
         const [container, created] = await Container.findOrCreate({ where: { containerID: containerID }, defaults: { containerName: container_name, containerID: containerID, link: '' } });
-
-        if (created) { console.log(`Link_modal: Created entry for container ${container_name}`); }
-
+        // if (created) { console.log(`Link_modal: Created entry for container ${container_name}`); }
         let modal = readFileSync('./views/partials/link.html', 'utf8');
         modal = modal.replace(/AppName/g, container_name);
         modal = modal.replace(/ContainerID/g, containerID);
@@ -365,12 +378,11 @@ export const DashboardView = async function (req, res) {
 
     // Update container_card
     if (view == 'update_card'){
-
-        let lists = await ContainerLists.findOne({ where: { userID: req.session.userID }, attributes: ['containers'] });
+        let lists = await ContainerLists.findOne({ where: { userID: req.session.userID, host: req.session.host }, attributes: ['containers'] });
         let container_list = JSON.parse(lists.containers);
-
         let found = container_list.find(c => c.containerID === containerID);
-        if (!found) { res.send(''); console.log(`[update_card] card not found in ContainerLists[db]`); return; }
+        // Send back an empty string if the container is not found, which replaces the card with nothing.
+        if (!found) { res.send(''); return; }
         let details = await containerInfo(containerID);
         let card = await createCard(details);
         res.send(card);
@@ -381,7 +393,7 @@ export const DashboardView = async function (req, res) {
     if (view == 'card_list'){
         let cards_list = '';
         // Check if there are any new cards in queue.
-        let new_cards = await ContainerLists.findOne({ where: { userID: req.session.userID }, attributes: ['new'] });
+        let new_cards = await ContainerLists.findOne({ where: { userID: req.session.userID, host: req.session.host }, attributes: ['new'] });
         new_cards = JSON.parse(new_cards.new);
         // Check what containers the user should see.
         let containers = await userCards(req);
@@ -400,7 +412,7 @@ export const DashboardView = async function (req, res) {
             }
         }
         // Update lists, clear the queue, and send the cards.
-        await ContainerLists.update({ containers: JSON.stringify(containers), sent: JSON.stringify(containers), new: '[]' }, { where: { userID: req.session.userID } });
+        await ContainerLists.update({ containers: JSON.stringify(containers), sent: JSON.stringify(containers), new: '[]' }, { where: { userID: req.session.userID, host: req.session.host } });
         res.send(cards_list);
         return;
     }
@@ -422,7 +434,6 @@ export const DashboardAction = async (req, res) => {
 
     // Reset view settings
     if (action == 'reset') { 
-        console.log('Resetting view');
         await Permission.update({ hide: false }, { where: { userID: req.session.userID } });
         req.session.alert = Alert('success', 'View settings reset.');
         res.redirect('/dashboard');
@@ -438,12 +449,13 @@ export const DashboardAction = async (req, res) => {
         let button_id = req.header('hx-trigger');
         // Replaces the update button if it's been pressed.
         if (button_id == 'confirmed') { res.send(`<button class="btn" type="button" id="submit" hx-post="/dashboard/action/update_permissions/${containerID}" hx-swap="outerHTML">Update  </button>`); return; }
-        // Reset all permissions for the container.
-        if (reset_permissions == '') { await Permission.update({ uninstall: false, edit: false, upgrade: false, start: false, stop: false, pause: false, restart: false, logs: false, view: false }, { where: { containerID: containerID } }); trigger_docker_event(); return; }
         // Make sure req.body[select] is an array
         if (typeof req.body[select] == 'string') { req.body[select] = [req.body[select]]; }
-    
-        await Permission.update({ uninstall: false, edit: false, upgrade: false, start: false, stop: false, pause: false, restart: false, logs: false, view: false }, { where: { containerID: containerID, userID: userID } });
+        // Reset all permissions before updating with new values.
+        await Permission.update({ uninstall: false, edit: false, upgrade: false, start: false, stop: false, pause: false, restart: false, logs: false, view: false, details: false }, { where: { containerID: containerID, userID: userID } });
+        // If 'Reset Permissions' was selected.
+        if (reset_permissions == '') { trigger_docker_event(); return; }
+        // Update permissions with new values.
         if (req.body[select]) {
             for (let i = 0; i < req.body[select].length; i++) {
                 let permissions = req.body[select][i];
@@ -456,6 +468,7 @@ export const DashboardAction = async (req, res) => {
                 if (permissions == 'restart') { await Permission.update({ restart: true }, { where: {containerID: containerID, userID: userID}}); }   
                 if (permissions == 'logs') { await Permission.update({ logs: true }, { where: {containerID: containerID, userID: userID}}); }
                 if (permissions == 'view') { await Permission.update({ view: true }, { where: {containerID: containerID, userID: userID}}); }
+                if (permissions == 'details') { await Permission.update({ details: true }, { where: {containerID: containerID, userID: userID}}); }
             }
         }
         trigger_docker_event();

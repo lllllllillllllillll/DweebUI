@@ -1,5 +1,5 @@
-import { Alert, Navbar, Footer } from '../utils/system.js';
-import { volumeList, removeVolume, GetContainerLists } from '../utils/docker.js';
+import { Alert, Navbar, Footer } from '../sys/utils.js';
+import { volumeList, removeVolume, GetContainerLists } from '../sys/docker.js';
 
 export const Volumes = async function(req, res) {
 

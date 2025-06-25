@@ -1,14 +1,12 @@
-import { Syslog } from '../db/config.js';
-import { Alert, getLanguage, Navbar, Footer } from '../utils/system.js';
+import { Syslog } from '../sys/db.js';
+import { Navbar, Footer } from '../sys/utils.js';
 
 export const Syslogs = async function(req, res) {
     
     let logs = '';
 
     const syslogs = await Syslog.findAll({
-        order: [
-            ['id', 'DESC']
-        ]
+        order: [ ['id', 'DESC'] ]
     });
 
 
