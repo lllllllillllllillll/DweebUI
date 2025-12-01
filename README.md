@@ -51,7 +51,7 @@ services:
     ports:
       - 8000:8000
     volumes:
-      - dweebui:/app
+      - dweebui:/app/config
       # Docker socket
       - /var/run/docker.sock:/var/run/docker.sock
       # Podman socket
@@ -93,3 +93,4 @@ Configuration:
 
 * MM (Patreon)
 * PD (Buymeacoffee)
+
